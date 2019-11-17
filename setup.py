@@ -19,7 +19,7 @@ except FileNotFoundError:
 
 setuptools.setup(
     name='fortnite-api',
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages('tests*',),
     version=version,
     license='MIT',
     description='Wrapper for Fortnite-API.com',
