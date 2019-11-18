@@ -26,7 +26,6 @@ class NewsEntry:
     def __init__(self, data):
         self.image_url = data.get('image')
         self.hidden = data.get('hidden')
-        self.layout = data.get('layout')
         self.message_type = data.get('messageType')
         self.type = data.get('type')
         self.banner = data.get('adspace')
