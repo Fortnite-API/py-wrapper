@@ -1,3 +1,7 @@
 import fortnite_api
 
-fortnite_api.FortniteAPI()
+fn = fortnite_api.FortniteAPI()
+
+
+if __name__ == '__main__':
+    pass

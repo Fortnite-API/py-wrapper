@@ -21,6 +21,8 @@ class SyncCosmeticsEndpoints:
             parameters['backendType'] = search_parameters['backend_type']
         if search_parameters.__contains__('rarity'):
             parameters['rarity'] = search_parameters['rarity']
+        if search_parameters.__contains__('display_rarity'):
+            parameters['displayRarity'] = search_parameters['display_rarity']
         if search_parameters.__contains__('backend_rarity'):
             parameters['backendRarity'] = search_parameters['backend_rarity']
         if search_parameters.__contains__('name'):
@@ -31,6 +33,8 @@ class SyncCosmeticsEndpoints:
             parameters['description'] = search_parameters['description']
         if search_parameters.__contains__('set'):
             parameters['set'] = search_parameters['set']
+        if search_parameters.__contains__('set_text'):
+            parameters['setText'] = search_parameters['setText']
         if search_parameters.__contains__('series'):
             parameters['series'] = search_parameters['series']
         if search_parameters.__contains__('has_small_icon'):
