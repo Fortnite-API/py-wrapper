@@ -1,5 +1,10 @@
-# Python wrapper for [Fortnite-API.com](https://fortnite-api.com)
-
+# Sync/Async Python wrapper for [Fortnite-API.com](https://fortnite-api.com)
+![GitHub issues](https://img.shields.io/github/issues/Fortnite-API/py-wrapper?logo=github)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/fortnite-api)
+![PyPI](https://img.shields.io/pypi/v/fortnite-api)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fortnite-api?label=python%20version&logo=python&logoColor=yellow)
+[![Support](https://discordapp.com/api/guilds/621452110558527502/widget.png?style=shield)](https://discord.gg/T4tyYDK)
+<br><br>
 This library offers a complete **sync** and **async** wrapper around the endpoints of [Fortnite-API.com](https://fortnite-api.com)
 
 ## Installation
@@ -10,10 +15,10 @@ pip install fortnite-api
 ## Documentation
 Here is a quick overview how to start.<br><br>
 First we need to import the api and initialize client.
-```python
-import fortnite-api
+```
+import fortnite_api
 
-fortnite_client = fortnite-api.FortniteClient()
+fortnite_client = fortnite_api.FortniteAPI()
 ```
 ###### Parameters
 - `api_key` [str] (Optional) - Enter the API key you will get if you requested a higher rate limit
@@ -26,8 +31,8 @@ fortnite_client = fortnite-api.FortniteClient()
 <br><br>
 Now we can use the client:
 ### Cosmetics
-```python
-fortnite_client.cosmetics.fetch_all()
+```
+api.cosmetics.fetch_all()
 ```
 Get all Br cosmetics.
 ###### Parameters
@@ -37,8 +42,8 @@ Returns a list of `BrCosmetic` objects.
 
 ___
 
-```python
-fortnite_client.cosmetics.search_by_id()
+```
+api.cosmetics.search_by_id()
 ```
 Search one o multiple items by their id.
 ###### Parameters
@@ -49,8 +54,8 @@ Returns a list of `BrCosmetic` objects. `None` if not found.
 
 ___
 
-```python
-fortnite_client.cosmetics.search_all()
+```
+api.cosmetics.search_all()
 ```
 Search all cosmetics which fit to the search parameters
 ###### Parameters
@@ -61,8 +66,8 @@ Returns a list of `BrCosmetic` objects. `None` if not found.
 
 ___
 
-```python
-fortnite_client.cosmetics.search_first()
+```
+api.cosmetics.search_first()
 ```
 Search the first cosmetics which fit to the search parameters
 ###### Parameters
@@ -72,8 +77,8 @@ Search the first cosmetics which fit to the search parameters
 Returns a `BrCosmetic` objects. `None` if not found.
 ___
 ### Shop 
-```python
-fortnite_client.shop.fetch()
+```
+api.shop.fetch()
 ```
 Get the latest Fortnite shop.
 ###### Parameters
@@ -83,8 +88,8 @@ Get the latest Fortnite shop.
 Returns a `Shop` object.
 ___
 ### News
-```python
-fortnite_client.news.fetch()
+```
+api.news.fetch()
 ```
 Get the latest Fortnite news of all game modes.
 ###### Parameters
@@ -96,8 +101,8 @@ Returns a `News` object.
 ___
 
 
-```python
-fortnite_client.news.fetch_by_type()
+```
+api.news.fetch_by_type()
 ```
 Get the latest Fortnite news of a specified game mode.
 ###### Parameters

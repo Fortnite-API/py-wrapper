@@ -26,6 +26,7 @@ setuptools.setup(
     author='Luc1412',
     author_email='Luc1412.lh@gmail.com',
     url="https://github.com/Fortnite-API/py-wrapper",
+    download_url='https://github.com/Fortnite-API/py-wrapper/archive/v0.0.1.tar.gz',
     keywords=['fortnite', 'fortnite-api.com', 'shop', 'cosmetics'],
     install_requires=requirements,
     project_urls={
