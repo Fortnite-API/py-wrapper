@@ -18,13 +18,6 @@ readme = ''
 with open('README.md') as f:
     readme = f.read()
 
-
-try:
-    with open('requirements.txt') as f:
-        requirements = f.read().splitlines()
-except FileNotFoundError:
-    pass
-
 setup(
     name='fortnite-api',
     author='Luc1412',
