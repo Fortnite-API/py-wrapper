@@ -1,4 +1,4 @@
-__version__ = '1.0.0-post2'
+__version__ = '1.0.0-post3'
 
 from .api import FortniteAPI
 from .enums import *

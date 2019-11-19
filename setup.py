@@ -3,10 +3,6 @@ import re
 import setuptools
 from setuptools import setup
 
-requirements = []
-with open('requirements.txt') as f:
-  requirements = f.read().splitlines()
-
 version = ''
 with open('fortnite_api/__init__.py') as f:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
@@ -34,9 +30,9 @@ setup(
     description='A python wrapper for Fortnite-API.com',
     long_description=readme,
     long_description_content_type="text/markdown",
-    install_requires=requirements,
+    install_requires=['requests>=2.22.0', 'aiohttp>=3.3.0,<3.6.0'],
     python_requires='>=3.5.3',
-    download_url='https://github.com/Fortnite-API/py-wrapper/archive/v1.0.0-post1.tar.gz',
+    download_url='https://github.com/Fortnite-API/py-wrapper/archive/v1.0.0-post2.tar.gz',
     keywords=['fortnite', 'fortnite-api.com', 'shop', 'cosmetics'],
     classifiers=[
         'License :: OSI Approved :: MIT License',
