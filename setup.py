@@ -1,5 +1,6 @@
 import re
 
+import setuptools
 from setuptools import setup
 
 requirements = []
@@ -28,14 +29,14 @@ setup(
         "Issue tracker": "https://github.com/Fortnite-API/py-wrapper/issues",
     },
     version=version,
-    packages=['fortnite_api'],
+    packages=setuptools.find_packages(),
     license='MIT',
     description='A python wrapper for Fortnite-API.com',
     long_description=readme,
     long_description_content_type="text/markdown",
     install_requires=requirements,
     python_requires='>=3.5.3',
-    download_url='https://github.com/Fortnite-API/py-wrapper/archive/v1.0.0.tar.gz',
+    download_url='https://github.com/Fortnite-API/py-wrapper/archive/v1.0.0-post1.tar.gz',
     keywords=['fortnite', 'fortnite-api.com', 'shop', 'cosmetics'],
     classifiers=[
         'License :: OSI Approved :: MIT License',
