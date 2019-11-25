@@ -4,4 +4,4 @@ fn = fortnite_api.FortniteAPI()
 
 
 if __name__ == '__main__':
-    pass
+    fn.creator_code.fetch('uhide')

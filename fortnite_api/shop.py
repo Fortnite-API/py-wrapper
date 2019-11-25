@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fortnite_api.item import BrCosmetic
+from fortnite_api.cosmetics import BrCosmetic
 
 
 class BrShop:

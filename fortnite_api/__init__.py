@@ -1,7 +1,8 @@
-__version__ = '1.0.0-post3'
+__version__ = '1.0.1'
 
 from .api import FortniteAPI
+from .cosmetics import *
 from .enums import *
-from .item import *
+from .errors import *
 from .news import *
 from .shop import *

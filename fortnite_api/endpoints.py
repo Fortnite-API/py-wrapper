@@ -1,5 +1,7 @@
+from .creator_code import CreatorCode
 from .enums import GameLanguage, MatchMethod, NewsType
-from .item import BrCosmetic
+from .errors import NotFound
+from .cosmetics import BrCosmetic
 from .news import GameModeNews, News
 from .shop import BrShop
 
@@ -178,6 +180,69 @@ class AsyncCosmeticsEndpoints:
         if data is None:
             return None
         return BrCosmetic(data['data'])
+
+
+class SyncCreatorCodeEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    def fetch(self, creator_code: str):
+        params = {'slug': creator_code}
+        data = self._client.http.get('creatorcode', params=params)
+        if data['status'] == 400:
+            raise NotFound('The requested Creator Code was not found.')
+        return CreatorCode(data['data'])
+
+    def exists(self, creator_code: str):
+        try:
+            self.fetch(creator_code)
+            return True
+        except NotFound:
+            return False
+
+    def search_first(self, creator_code: str):
+        params = {'slug': creator_code}
+        data = self._client.http.get('creatorcode/search', params=params)
+        if data['status'] == 400:
+            raise NotFound('The requested Creator Code was not found.')
+        return CreatorCode(data['data'])
+
+    def search_all(self, creator_code: str):
+        params = {'slug': creator_code}
+        data = self._client.http.get('creatorcode/search/all', params=params)
+        creator_codes = [CreatorCode(creator_code_data) for creator_code_data in data['data']]
+        if len(creator_codes) == 0:
+            raise NotFound('The requested Creator Code was not found.')
+        return creator_codes
+
+
+class AsyncCreatorCodeEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    async def fetch(self, creator_code: str):
+        params = {'slug': creator_code}
+        data = await self._client.http.get('creatorcode', params=params)
+        if data['status'] == 400:
+            raise NotFound('The requested Creator Code was not found.')
+        return CreatorCode(data['data'])
+
+    async def search_first(self, creator_code: str):
+        params = {'slug': creator_code}
+        data = await self._client.http.get('creatorcode/search', params=params)
+        if data['status'] == 400:
+            raise NotFound('The requested Creator Code was not found.')
+        return CreatorCode(data['data'])
+
+    async def search_all(self, creator_code: str):
+        params = {'slug': creator_code}
+        data = await self._client.http.get('creatorcode/search/all', params=params)
+        creator_codes = [CreatorCode(creator_code_data) for creator_code_data in data['data']]
+        if len(creator_codes) == 0:
+            raise NotFound('The requested Creator Code was not found.')
+        return creator_codes
 
 
 class SyncNewsEndpoints:

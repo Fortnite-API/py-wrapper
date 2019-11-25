@@ -1,7 +1,10 @@
 from io import BytesIO
+from json import JSONDecodeError
 
 import aiohttp
 import requests
+
+from .errors import ServerOutage
 
 BASE_URL = 'https://fortnite-api.com/'
 
@@ -17,20 +20,13 @@ class SyncHTTPClient:
     def remove_header(self, key):
         return self.headers.pop(key)
 
-    def get(self, endpoint, params=None, json=True):
+    def get(self, endpoint, params=None):
         response = requests.get(BASE_URL + endpoint, params=params, headers=self.headers)
-        if response.status_code != 200:
-            return None  # TODO: Mby raise Error
-        if json:
-            return response.json()
-        else:
-            return response.content
-
-    def download_image(self, url):
-        response = requests.get(url, stream=True)
-        if response.status_code != 200:
-            return None  # TODO: Mby raise Error
-        return BytesIO(response.content)
+        try:
+            data = response.json()
+            return data
+        except JSONDecodeError:
+            raise ServerOutage('The Fortnite-API.com server is currently unavailable.')
 
 
 class AsyncHTTPClient:
@@ -45,17 +41,10 @@ class AsyncHTTPClient:
     def remove_header(self, key):
         return self.headers.pop(key)
 
-    async def get(self, endpoint, params=None, json=True):
+    async def get(self, endpoint, params=None):
         async with self.session.get(BASE_URL + endpoint, params=params, headers=self.headers) as response:
-            if response.status != 200:
-                return None  # TODO: Mby raise Error
-            if json:
-                return await response.json()
-            else:
-                return await response.text()
+            try:
+                return response.json()
+            except aiohttp.ContentTypeError:
+                raise ServerOutage('The Fortnite-API.com server is currently unavailable.')
 
-    async def download_image(self, url):
-        async with self.session.get(url) as response:
-            if response.status != 200:
-                return None  # TODO: Mby raise Error
-            return BytesIO(await response.read())

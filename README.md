@@ -39,6 +39,8 @@ Get all Br cosmetics.
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
 Returns a list of `BrCosmetic` objects.
+###### Raises
+- `ServerOutage` when the servers are not available 
 
 ___
 
@@ -50,7 +52,11 @@ Search one o multiple items by their id.
 - `*cosmetic_id` - One or multiple cosmetic ids.
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
-Returns a list of `BrCosmetic` objects. `None` if not found.
+Returns a list of `BrCosmetic` objects.
+###### Raises
+- `ServerOutage` if the servers are not available 
+- `NotFound` if the cosmetic with the given id wasn't found
+- `MissingIDParameter` if no id was provided
 
 ___
 
@@ -62,7 +68,10 @@ Search all cosmetics which fit to the search parameters
 - `**search_parameters` - All search parameters are listed on the [Fortnite-API.com Docs](https://fortnite-api.com/documentation). Remember that Python does not use a camel case. So e.g. `searchLanguage` becomes `search_language`
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
-Returns a list of `BrCosmetic` objects. `None` if not found.
+Returns a list of `BrCosmetic` objects.
+###### Raises
+- `ServerOutage` if the servers are not available 
+- `MissingSearchParameter` if no search parameter was provided
 
 ___
 
@@ -74,8 +83,13 @@ Search the first cosmetics which fit to the search parameters
 - `**search_parameters` (Optional) - All search parameters are listed on the [Fortnite-API.com Docs](https://fortnite-api.com/documentation). Remember that Python does not use a camel case. So e.g. `searchLanguage` becomes `search_language`
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
-Returns a `BrCosmetic` objects. `None` if not found.
+Returns a `BrCosmetic` objects.
+###### Raises
+- `ServerOutage` if the servers are not available 
+- `MissingIDParameter` if no id was provided
+
 ___
+
 ### Shop 
 ```
 api.shop.fetch()
@@ -83,10 +97,13 @@ api.shop.fetch()
 Get the latest Fortnite shop.
 ###### Parameters
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
-
 ###### Returns
 Returns a `Shop` object.
+###### Raises
+- `Server Outage` if the servers are not available 
+
 ___
+
 ### News
 ```
 api.news.fetch()
@@ -94,9 +111,10 @@ api.news.fetch()
 Get the latest Fortnite news of all game modes.
 ###### Parameters
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
-
 ###### Returns
 Returns a `News` object.
+###### Raises
+- `ServerOutage` if the servers are not available 
 
 ___
 
@@ -108,9 +126,68 @@ Get the latest Fortnite news of a specified game mode.
 ###### Parameters
 - `news_type` [NewsType] - Specify the news type.
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
-
 ###### Returns
 Returns a `GameModeNews` object.
+###### Raises
+- `ServerOutage` if the servers are not available 
+
+___
+
+### Creator Code
+```
+api.creator_code.fetch()
+```
+Get information about a creator code.
+###### Parameters
+- `creator_code` [str] - Specify a creator code.
+###### Returns
+Returns a `CreatorCode` object.
+###### Raises
+- `ServerOutage` if the servers are not available 
+- `NotFound` if the creator code wasn't found
+
+___
+
+```
+api.creator_code.exists()
+```
+Check if a creator code exists.
+###### Parameters
+- `creator_code` [str] - Specify a creator code.
+###### Returns
+Returns a `bool` object.
+###### Raises
+- `ServerOutage` if the servers are not available 
+
+___
+
+
+```
+aapi.creator_code.search_all()
+```
+Search a creator code by name. All results are provided.
+###### Parameters
+- `creator_code` [str] - Specify a creator code.
+###### Returns
+Returns a `list` of `CreatorCode` objects.
+###### Raises
+- `ServerOutage` if the servers are not available 
+- `NotFound` if the creator code wasn't found
+
+___
+
+
+```
+aapi.creator_code.search_first()
+```
+Search a creator code by name. Only the first result is provided.
+###### Parameters
+- `creator_code` [str] - Specify a creator code.
+###### Returns
+Returns a `CreatorCode` object.
+###### Raises
+- `ServerOutage` if the servers are not available 
+- `NotFound` if the creator code wasn't found
 
 ## Contribute
 Every type of contribution is appreciated!
