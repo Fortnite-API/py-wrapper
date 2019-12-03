@@ -11,6 +11,7 @@ This library offers a complete **sync** and **async** wrapper around the endpoin
 ```
 pip install fortnite-api
 ```
+- Get a API key on https://fortnite-api.com/profile
 
 ## Documentation
 Here is a quick overview how to start.<br><br>
@@ -21,7 +22,7 @@ import fortnite_api
 fortnite_client = fortnite_api.FortniteAPI()
 ```
 ###### Parameters
-- `api_key` [str] (Optional) - Enter the API key you will get if you requested a higher rate limit
+- `api_key` [str]  - Insert your API key from https://fortnite-api.com/profile
 - `run_async` [bool] (Optional) - Specify if the API should run async. Default is set to `false`
 ###### Attributes
 - `cosmetics` - All cosmetic endpoints
@@ -41,6 +42,8 @@ Get all Br cosmetics.
 Returns a list of `BrCosmetic` objects.
 ###### Raises
 - `ServerOutage` when the servers are not available 
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 
 ___
 
@@ -55,6 +58,8 @@ Search one o multiple items by their id.
 Returns a list of `BrCosmetic` objects.
 ###### Raises
 - `ServerOutage` if the servers are not available 
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 - `NotFound` if the cosmetic with the given id wasn't found
 - `MissingIDParameter` if no id was provided
 
@@ -71,6 +76,8 @@ Search all cosmetics which fit to the search parameters
 Returns a list of `BrCosmetic` objects.
 ###### Raises
 - `ServerOutage` if the servers are not available 
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 - `MissingSearchParameter` if no search parameter was provided
 
 ___
@@ -86,6 +93,8 @@ Search the first cosmetics which fit to the search parameters
 Returns a `BrCosmetic` objects.
 ###### Raises
 - `ServerOutage` if the servers are not available 
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 - `MissingIDParameter` if no id was provided
 
 ___
@@ -100,7 +109,9 @@ Get the latest Fortnite shop.
 ###### Returns
 Returns a `Shop` object.
 ###### Raises
-- `Server Outage` if the servers are not available 
+- `Server Outage` if the servers are not available
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided 
 
 ___
 
@@ -114,7 +125,9 @@ Get the latest Fortnite news of all game modes.
 ###### Returns
 Returns a `News` object.
 ###### Raises
-- `ServerOutage` if the servers are not available 
+- `ServerOutage` if the servers are not available
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 
 ___
 
@@ -129,7 +142,9 @@ Get the latest Fortnite news of a specified game mode.
 ###### Returns
 Returns a `GameModeNews` object.
 ###### Raises
-- `ServerOutage` if the servers are not available 
+- `ServerOutage` if the servers are not available
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 
 ___
 
@@ -144,6 +159,8 @@ Get information about a creator code.
 Returns a `CreatorCode` object.
 ###### Raises
 - `ServerOutage` if the servers are not available 
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 - `NotFound` if the creator code wasn't found
 
 ___
@@ -158,6 +175,8 @@ Check if a creator code exists.
 Returns a `bool` object.
 ###### Raises
 - `ServerOutage` if the servers are not available 
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 
 ___
 
@@ -172,6 +191,8 @@ Search a creator code by name. All results are provided.
 Returns a `list` of `CreatorCode` objects.
 ###### Raises
 - `ServerOutage` if the servers are not available 
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 - `NotFound` if the creator code wasn't found
 
 ___
@@ -186,7 +207,9 @@ Search a creator code by name. Only the first result is provided.
 ###### Returns
 Returns a `CreatorCode` object.
 ###### Raises
-- `ServerOutage` if the servers are not available 
+- `ServerOutage` if the servers are not available
+- `RateLimted` when the rate limit has been hit
+- `Unauthorized` when no or a wrong API key has been provided
 - `NotFound` if the creator code wasn't found
 
 ## Contribute

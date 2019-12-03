@@ -12,3 +12,11 @@ class MissingIDParameter(Exception):
 
 class ServerOutage(Exception):
     pass
+
+
+class RateLimited(Exception):
+    pass
+
+
+class Unauthorized(Exception):
+    pass

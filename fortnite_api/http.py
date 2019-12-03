@@ -4,7 +4,7 @@ from json import JSONDecodeError
 import aiohttp
 import requests
 
-from .errors import ServerOutage
+from .errors import ServerOutage, RateLimited, Unauthorized
 
 BASE_URL = 'https://fortnite-api.com/'
 
@@ -24,6 +24,10 @@ class SyncHTTPClient:
         response = requests.get(BASE_URL + endpoint, params=params, headers=self.headers)
         try:
             data = response.json()
+            if response.status_code == 401:
+                raise Unauthorized(data.get('error', 'Error message not provided!'))
+            elif response.status_code == 429:
+                raise RateLimited(data.get('error', 'Error message not provided!'))
             return data
         except JSONDecodeError:
             raise ServerOutage('The Fortnite-API.com server is currently unavailable.')
