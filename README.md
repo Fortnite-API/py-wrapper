@@ -19,7 +19,7 @@ First we need to import the api and initialize client.
 ```
 import fortnite_api
 
-fortnite_client = fortnite_api.FortniteAPI()
+api = fortnite_api.FortniteAPI()
 ```
 ###### Parameters
 - `api_key` [str]  - Insert your API key from https://fortnite-api.com/profile
