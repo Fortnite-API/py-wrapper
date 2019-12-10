@@ -182,7 +182,7 @@ ___
 
 
 ```
-aapi.creator_code.search_all()
+api.creator_code.search_all()
 ```
 Search a creator code by name. All results are provided.
 ###### Parameters
@@ -199,7 +199,7 @@ ___
 
 
 ```
-aapi.creator_code.search_first()
+api.creator_code.search_first()
 ```
 Search a creator code by name. Only the first result is provided.
 ###### Parameters
