@@ -40,10 +40,6 @@ Get all Br cosmetics.
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
 Returns a list of `BrCosmetic` objects.
-###### Raises
-- `ServerOutage` when the servers are not available 
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
 
 ___
 
@@ -56,12 +52,6 @@ Search one o multiple items by their id.
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
 Returns a list of `BrCosmetic` objects.
-###### Raises
-- `ServerOutage` if the servers are not available 
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
-- `NotFound` if the cosmetic with the given id wasn't found
-- `MissingIDParameter` if no id was provided
 
 ___
 
@@ -74,11 +64,6 @@ Search all cosmetics which fit to the search parameters
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
 Returns a list of `BrCosmetic` objects.
-###### Raises
-- `ServerOutage` if the servers are not available 
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
-- `MissingSearchParameter` if no search parameter was provided
 
 ___
 
@@ -91,11 +76,6 @@ Search the first cosmetics which fit to the search parameters
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
 Returns a `BrCosmetic` objects.
-###### Raises
-- `ServerOutage` if the servers are not available 
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
-- `MissingIDParameter` if no id was provided
 
 ___
 
@@ -107,11 +87,7 @@ Get the latest Fortnite shop.
 ###### Parameters
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
-Returns a `Shop` object.
-###### Raises
-- `Server Outage` if the servers are not available
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided 
+Returns a `Shop` object. 
 
 ___
 
@@ -124,10 +100,6 @@ Get the latest Fortnite news of all game modes.
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
 Returns a `News` object.
-###### Raises
-- `ServerOutage` if the servers are not available
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
 
 ___
 
@@ -141,10 +113,6 @@ Get the latest Fortnite news of a specified game mode.
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
 ###### Returns
 Returns a `GameModeNews` object.
-###### Raises
-- `ServerOutage` if the servers are not available
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
 
 ___
 
@@ -154,14 +122,9 @@ api.creator_code.fetch()
 ```
 Get information about a creator code.
 ###### Parameters
-- `creator_code` [str] - Specify a creator code.
+- `slug` [str] - Specify a creator code.
 ###### Returns
 Returns a `CreatorCode` object.
-###### Raises
-- `ServerOutage` if the servers are not available 
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
-- `NotFound` if the creator code wasn't found
 
 ___
 
@@ -170,13 +133,9 @@ api.creator_code.exists()
 ```
 Check if a creator code exists.
 ###### Parameters
-- `creator_code` [str] - Specify a creator code.
+- `slug` [str] - Specify a creator code.
 ###### Returns
 Returns a `bool` object.
-###### Raises
-- `ServerOutage` if the servers are not available 
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
 
 ___
 
@@ -186,14 +145,9 @@ api.creator_code.search_all()
 ```
 Search a creator code by name. All results are provided.
 ###### Parameters
-- `creator_code` [str] - Specify a creator code.
+- `slug` [str] - Specify a creator code.
 ###### Returns
 Returns a `list` of `CreatorCode` objects.
-###### Raises
-- `ServerOutage` if the servers are not available 
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
-- `NotFound` if the creator code wasn't found
 
 ___
 
@@ -203,14 +157,9 @@ api.creator_code.search_first()
 ```
 Search a creator code by name. Only the first result is provided.
 ###### Parameters
-- `creator_code` [str] - Specify a creator code.
+- `slug` [str] - Specify a creator code.
 ###### Returns
 Returns a `CreatorCode` object.
-###### Raises
-- `ServerOutage` if the servers are not available
-- `RateLimted` when the rate limit has been hit
-- `Unauthorized` when no or a wrong API key has been provided
-- `NotFound` if the creator code wasn't found
 
 ## Contribute
 Every type of contribution is appreciated!

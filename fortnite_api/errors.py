@@ -1,22 +1,26 @@
-class NotFound(Exception):  # Add to search by ID
+class FortniteAPIException(Exception):
     pass
 
 
-class MissingSearchParameter(Exception):
+class NotFound(FortniteAPIException):
     pass
 
 
-class MissingIDParameter(Exception):
+class MissingSearchParameter(FortniteAPIException):
     pass
 
 
-class ServerOutage(Exception):
+class MissingIDParameter(FortniteAPIException):
     pass
 
 
-class RateLimited(Exception):
+class ServiceUnavailable(FortniteAPIException):
     pass
 
 
-class Unauthorized(Exception):
+class RateLimited(FortniteAPIException):
+    pass
+
+
+class Unauthorized(FortniteAPIException):
     pass
