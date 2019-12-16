@@ -26,6 +26,7 @@ class BrShopEntry:
         self.final_price = data.get('finalPrice')
         self.discount = self.regular_price - self.final_price
         self.is_bundle = data.get('isBundle')
+        self.is_special = data.get('isSpecial')
         self.refundable = data.get('refundable')
         self.giftable = data.get('giftable')
         self.panel = data.get('panel')

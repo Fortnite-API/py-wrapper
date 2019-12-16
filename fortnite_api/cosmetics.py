@@ -56,6 +56,7 @@ class BRCosmeticImage:
 class BrCosmeticVariant:
 
     def __init__(self, data):
+        self.channel = data.get('channel')
         self.type = data.get('type')
         self.options = None
         self.raw_data = data
@@ -69,6 +70,7 @@ class BrCosmeticVariant:
 class BrCosmeticVariantOption:
 
     def __init__(self, data):
+        self.tag = data.get('tag')
         self.name = data.get('name')
         self.image = BRCosmeticImage(data.get('image'))
         self.raw_data = data
