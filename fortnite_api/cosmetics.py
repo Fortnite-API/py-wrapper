@@ -18,13 +18,14 @@ class BrCosmetic:
         self.set = data.get('set')
         self.set_text = data.get('setText')
         self.series = data.get('series')
+        self.backend_series = data.get('backendSeries')
         images = data.get('images', {})
-        self.small_icon = BRCosmeticImage(images.get('smallIcon')) if images.get('smallIcon') is not None else None
-        self.icon = BRCosmeticImage(images.get('icon')) if images.get('icon') is not None else None
-        self.featured = BRCosmeticImage(images.get('featured')) if images.get('featured') is not None else None
-        self.background = BRCosmeticImage(images.get('background')) if images.get('background') is not None else None
-        self.cover_art = BRCosmeticImage(images.get('coverArt')) if images.get('coverArt') is not None else None
-        self.decal = BRCosmeticImage(images.get('decal')) if images.get('decal') is not None else None
+        self.small_icon = BrCosmeticImage(images.get('smallIcon')) if images.get('smallIcon') is not None else None
+        self.icon = BrCosmeticImage(images.get('icon')) if images.get('icon') is not None else None
+        self.featured = BrCosmeticImage(images.get('featured')) if images.get('featured') is not None else None
+        self.background = BrCosmeticImage(images.get('background')) if images.get('background') is not None else None
+        self.cover_art = BrCosmeticImage(images.get('coverArt')) if images.get('coverArt') is not None else None
+        self.decal = BrCosmeticImage(images.get('decal')) if images.get('decal') is not None else None
         self.variants = [BrCosmeticVariant(variant) for variant in data.get('variants')] \
             if data.get('variants') is not None else None
         self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
@@ -35,9 +36,9 @@ class BrCosmetic:
         self.built_in_emote_id = data.get('builtInEmoteId')
         self.path = data.get('path')
         try:
-            self.last_updated = datetime.strptime(data.get('lastUpdate'), '%Y-%m-%dT%H:%M:%S%z')
+            self.last_update = datetime.strptime(data.get('lastUpdate'), '%Y-%m-%dT%H:%M:%S%z')
         except ValueError:
-            self.last_updated = None
+            self.last_update = None
         try:
             self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
         except ValueError:
@@ -45,7 +46,18 @@ class BrCosmetic:
         self.raw_data = data
 
 
-class BRCosmeticImage:
+class BrCosmeticImage:
+    """Represents a Battle Royale cosmetic image.
+
+    Attributes
+    -----------
+    hash: :class:`str`
+        The hash of the image.
+    url: :class:`str`
+        The hash of the image.
+    raw_data: :class:`dict`
+        The raw data from request. Can be used for saving and re-creating the class.
+    """
 
     def __init__(self, data):
         self.hash = data.get('hash')
@@ -72,6 +84,6 @@ class BrCosmeticVariantOption:
     def __init__(self, data):
         self.tag = data.get('tag')
         self.name = data.get('name')
-        self.image = BRCosmeticImage(data.get('image'))
+        self.image = BrCosmeticImage(data.get('image'))
         self.raw_data = data
 

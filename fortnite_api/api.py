@@ -1,5 +1,7 @@
-from .http import *
+# -*- coding: utf-8 -*-
+
 from .endpoints import *
+from .http import SyncHTTPClient, AsyncHTTPClient
 
 
 class FortniteAPI:
