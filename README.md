@@ -91,6 +91,16 @@ Returns a `Shop` object.
 
 ___
 
+### AES 
+```
+api.shop.fetch()
+```
+Get the latest Fortnite AES Key. This also include version and build information.
+###### Returns
+Returns a `AES` object. 
+
+___
+
 ### News
 ```
 api.news.fetch()

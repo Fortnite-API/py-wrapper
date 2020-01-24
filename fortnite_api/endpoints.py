@@ -1,6 +1,7 @@
 import typing
 from enum import Enum
 
+from .aes import AES
 from .cosmetics import BrCosmetic
 from .creator_code import CreatorCode
 from .enums import GameLanguage, MatchMethod, NewsType
@@ -51,6 +52,26 @@ def _parse_search_parameter(**search_parameters):
     if len(parameters) == 0:
         raise MissingSearchParameter('at least one search parameter is required')
     return parameters
+
+
+class SyncAESEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    def fetch(self):
+        data = self._client.http.get('aes')
+        return AES(data)
+
+
+class AsyncAESEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    async def fetch(self):
+        data = await self._client.http.get('aes')
+        return AES(data)
 
 
 class SyncCosmeticsEndpoints:

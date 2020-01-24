@@ -1,5 +1,6 @@
-__version__ = '1.0.6'
+__version__ = '1.0.7'
 
+from .aes import *
 from .api import FortniteAPI
 from .cosmetics import *
 from .creator_code import *
