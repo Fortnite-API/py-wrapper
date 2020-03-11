@@ -61,7 +61,7 @@ class SyncAESEndpoints:
 
     def fetch(self):
         data = self._client.http.get('aes')
-        return AES(data)
+        return AES(data['data'])
 
 
 class AsyncAESEndpoints:
@@ -71,7 +71,7 @@ class AsyncAESEndpoints:
 
     async def fetch(self):
         data = await self._client.http.get('aes')
-        return AES(data)
+        return AES(data['data'])
 
 
 class SyncCosmeticsEndpoints:

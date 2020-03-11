@@ -55,6 +55,7 @@ class BrCosmeticType(Enum):
     MUSIC ='music'
     PET ='pet'
     PICKAXE = 'pickaxe'
+    SHOUT = 'shout'
     SPRAY = 'spray'
     TOY = 'toy'
 

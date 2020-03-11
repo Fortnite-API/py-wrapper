@@ -12,6 +12,7 @@ def sync_test():
     print(fn.cosmetics.search_first(name='Drift').id)
     print(fn.creator_code.search_first('EasyFnStats').user.name)
     print(fn.news.fetch())
+    print(fn.aes.fetch())
 
 
 async def async_test():
@@ -21,6 +22,7 @@ async def async_test():
     print((await fn.cosmetics.search_first(name='Drift')).id)
     print((await fn.creator_code.search_first('EasyFnStats')).user.name)
     print(await fn.news.fetch())
+    print(await fn.aes.fetch())
 
 
 if __name__ == '__main__':
