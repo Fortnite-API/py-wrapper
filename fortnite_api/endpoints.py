@@ -1,10 +1,11 @@
+import datetime
 import typing
 from enum import Enum
 
 from .aes import AES
 from .cosmetics import BrCosmetic
 from .creator_code import CreatorCode
-from .enums import GameLanguage, MatchMethod, NewsType
+from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat
 from .errors import MissingSearchParameter, MissingIDParameter, NotFound
 from .news import GameModeNews, News
 from .shop import BrShop
@@ -13,27 +14,32 @@ _SEARCH_PARAMETERS = {
     'language': [None, [GameLanguage]],
     'search_language': ['searchLanguage', [GameLanguage]],
     'match_method': ['matchMethod', [MatchMethod]],
+    'name': [None, [str, None]],
+    'description': [None, [str, None]],
     'type': [None, [str, None]],
+    'display_type': [None, [str, None]],
     'backend_type': ['backendType', [str, None]],
     'rarity': [None, [str, None]],
     'display_rarity': ['displayRarity', [str, None]],
     'backend_rarity': ['backendRarity', [str, None]],
-    'name': [None, [str, None]],
-    'short_description': ['shortDescription', [str, None]],
-    'description': [None, [str, None]],
-    'set': ['set', [str, None]],
-    'set_text': ['setText', [str, None]],
+    'has_series': ['hasSeries', [bool, None]],
     'series': [None, [str, None]],
     'backend_series': ['backendSeries', [str, None]],
+    'has_set': ['hasSet', [bool, None]],
+    'set': ['set', [str, None]],
+    'set_text': ['setText', [str, None]],
+    'backend_set': ['backendSet', [str, None]],
+    'has_introduction': ['hasIntroduction', [bool, None]],
+    'introduction_chapter': ['introductionChapter', [str, None]],
+    'introduction_season': ['introductionSeason', [str, None]],
     'has_small_icon': ['hasSmallIcon', [bool, None]],
     'has_icon': ['hasIcon', [bool, None]],
     'has_featured_image': ['hasFeaturedImage', [bool, None]],
-    'has_background_image': ['hasBackgroundImage', [bool, None]],
-    'has_cover_art': ['hasCoverArt', [bool, None]],
-    'has_decal': ['hasDecal', [bool, None]],
     'has_variants': ['hasVariants', [bool, None]],
     'has_gameplay_tags': ['hasGameplayTags', [bool, None]],
-    'gameplay_tag': ['gameplayTag', [str, None]]
+    'gameplay_tag': ['gameplayTag', [str, None]],
+    'unseen_for': ['unseenFor', [int, None]],
+    'last_appearance': ['lastAppearance', [datetime.datetime, None]]
 }
 
 
@@ -47,8 +53,13 @@ def _parse_search_parameter(**search_parameters):
             types = ' or '.join([str(t) for t in search_parameter_data[1]])
             raise TypeError('{0} require a value of type {1}'.format(key, types))
         key = search_parameter_data[0] if search_parameter_data[0] else key
-        value = value if not isinstance(value, Enum) else value.value if value is not None else '<null>'
-        parameters[key] = str(value) if value is not None else '<null>'
+        if value is None:
+            value = '<null>'
+        elif type(value) == Enum:
+            value = value.value
+        elif type(value) == datetime.datetime:
+            value = int(value.timestamp())
+        parameters[key] = value
     if len(parameters) == 0:
         raise MissingSearchParameter('at least one search parameter is required')
     return parameters
@@ -59,8 +70,9 @@ class SyncAESEndpoints:
     def __init__(self, client):
         self._client = client
 
-    def fetch(self):
-        data = self._client.http.get('aes')
+    def fetch(self, key_format: KeyFormat = KeyFormat.HEX) -> AES:
+        params = {'keyFormat': key_format.value}
+        data = self._client.http.get('aes', params=params)
         return AES(data['data'])
 
 
@@ -69,8 +81,9 @@ class AsyncAESEndpoints:
     def __init__(self, client):
         self._client = client
 
-    async def fetch(self):
-        data = await self._client.http.get('aes')
+    async def fetch(self, key_format: KeyFormat = KeyFormat.HEX) -> AES:
+        params = {'keyFormat': key_format.value}
+        data = await self._client.http.get('aes', params=params)
         return AES(data['data'])
 
 
@@ -190,25 +203,25 @@ class SyncCreatorCodeEndpoints:
     def __init__(self, client):
         self._client = client
 
-    def fetch(self, slug: str) -> CreatorCode:
-        params = {'slug': slug}
+    def fetch(self, name: str) -> CreatorCode:
+        params = {'name': name}
         data = self._client.http.get('creatorcode', params=params)
         return CreatorCode(data['data'])
 
-    def exists(self, slug: str) -> bool:
+    def exists(self, name: str) -> bool:
         try:
-            self.fetch(slug)
+            self.fetch(name)
             return True
         except NotFound:
             return False
 
-    def search_first(self, slug: str) -> CreatorCode:
-        params = {'slug': slug}
+    def search_first(self, name: str) -> CreatorCode:
+        params = {'name': name}
         data = self._client.http.get('creatorcode/search', params=params)
         return CreatorCode(data['data'])
 
-    def search_all(self, slug: str) -> typing.List[CreatorCode]:
-        params = {'slug': slug}
+    def search_all(self, name: str) -> typing.List[CreatorCode]:
+        params = {'name': name}
         data = self._client.http.get('creatorcode/search/all', params=params)
         return [CreatorCode(creator_code_data) for creator_code_data in data['data']]
 
@@ -218,25 +231,25 @@ class AsyncCreatorCodeEndpoints:
     def __init__(self, client):
         self._client = client
 
-    async def fetch(self, slug: str) -> CreatorCode:
-        params = {'slug': slug}
+    async def fetch(self, name: str) -> CreatorCode:
+        params = {'name': name}
         data = await self._client.http.get('creatorcode', params=params)
         return CreatorCode(data['data'])
 
-    async def exists(self, slug: str) -> bool:
+    async def exists(self, name: str) -> bool:
         try:
-            await self.fetch(slug)
+            await self.fetch(name)
             return True
         except NotFound:
             return False
 
-    async def search_first(self, slug: str) -> CreatorCode:
-        params = {'slug': slug}
+    async def search_first(self, name: str) -> CreatorCode:
+        params = {'name': name}
         data = await self._client.http.get('creatorcode/search', params=params)
         return CreatorCode(data['data'])
 
-    async def search_all(self, slug: str) -> typing.List[CreatorCode]:
-        params = {'slug': slug}
+    async def search_all(self, name: str) -> typing.List[CreatorCode]:
+        params = {'name': name}
         data = await self._client.http.get('creatorcode/search/all', params=params)
         return [CreatorCode(creator_code_data) for creator_code_data in data['data']]
 

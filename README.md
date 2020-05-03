@@ -22,7 +22,7 @@ import fortnite_api
 api = fortnite_api.FortniteAPI()
 ```
 ###### Parameters
-- `api_key` [str]  - Insert your API key from https://fortnite-api.com/profile
+- `api_key` [str] (Optional) - Insert your API key from https://fortnite-api.com/profile
 - `run_async` [bool] (Optional) - Specify if the API should run async. Default is set to `false`
 ###### Attributes
 - `cosmetics` - All cosmetic endpoints
@@ -96,6 +96,8 @@ ___
 api.shop.fetch()
 ```
 Get the latest Fortnite AES Key. This also include version and build information.
+###### Parameters
+- `key_format` [KeyFormat] (Optional) - Specify the AES key format. Default is set to HEX
 ###### Returns
 Returns a `AES` object. 
 
@@ -132,7 +134,7 @@ api.creator_code.fetch()
 ```
 Get information about a creator code.
 ###### Parameters
-- `slug` [str] - Specify a creator code.
+- `name` [str] - Specify a creator code.
 ###### Returns
 Returns a `CreatorCode` object.
 
@@ -143,7 +145,7 @@ api.creator_code.exists()
 ```
 Check if a creator code exists.
 ###### Parameters
-- `slug` [str] - Specify a creator code.
+- `name` [str] - Specify a creator code.
 ###### Returns
 Returns a `bool` object.
 
@@ -155,7 +157,7 @@ api.creator_code.search_all()
 ```
 Search a creator code by name. All results are provided.
 ###### Parameters
-- `slug` [str] - Specify a creator code.
+- `name` [str] - Specify a creator code.
 ###### Returns
 Returns a `list` of `CreatorCode` objects.
 
@@ -167,7 +169,7 @@ api.creator_code.search_first()
 ```
 Search a creator code by name. Only the first result is provided.
 ###### Parameters
-- `slug` [str] - Specify a creator code.
+- `name` [str] - Specify a creator code.
 ###### Returns
 Returns a `CreatorCode` object.
 

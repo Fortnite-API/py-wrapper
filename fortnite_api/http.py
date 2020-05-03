@@ -3,7 +3,7 @@ import requests
 
 from .errors import ServiceUnavailable, RateLimited, Unauthorized, NotFound
 
-BASE_URL = 'https://fortnite-api.com/'
+BASE_URL = 'https://fortnite-api.com/v2/'
 
 
 class SyncHTTPClient:

@@ -1,6 +1,11 @@
 from enum import Enum
 
 
+class KeyFormat(Enum):
+    HEX = 'hex'
+    BASE64 = 'base64'
+
+
 class GameLanguage(Enum):
     ARABIC = 'ar'
     GERMAN = 'de'

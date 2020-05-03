@@ -2,6 +2,19 @@ from datetime import datetime
 
 
 class News:
+    """Represents Game News.
+
+    Attributes
+    -----------
+    br: List[:class:`GameModeNews`]
+        A list of Battle Royale news.
+    stw: List[:class:`GameModeNews`]
+        A list of Save the World news.
+    creative: List[:class:`GameModeNews`]
+        A list of Creative news.
+    raw_data: :class:`dict`
+        The raw data from request. Can be used for saving and re-creating the class.
+    """
 
     def __init__(self, data):
         self.br = GameModeNews(data.get('br'))
@@ -11,12 +24,25 @@ class News:
 
 
 class GameModeNews:
+    """Represents News of a specific game mode.
+
+    Attributes
+    -----------
+    last_modified: :class:`datetime.datetime`
+        The timestamp when the news where modified.
+    entries: List[:class:`NewsEntry`]
+        A list of news entries.
+    raw_data: :class:`dict`
+        The raw data from request. Can be used for saving and re-creating the class.
+    """
 
     def __init__(self, data):
+        self.hash = data.get('hash')
         try:
-            self.last_modified = datetime.strptime(data.get('lastModified'), '%Y-%m-%dT%H:%M:%S%z')
+            self.date = datetime.strptime(data.get('date'), '%Y-%m-%dT%H:%M:%S%z')
         except ValueError:
-            self.last_modified = None
+            self.date = None
+        self.image = data.get('image')
         self.motds = [NewsMotd(item_data) for item_data in data.get('motds')] if data.get('motds') else None
         self.messages = [NewsMessage(item_data) for item_data in data.get('messages')] if data.get('messages') else None
         self.raw_data = data
@@ -53,10 +79,7 @@ class NewsMotd:
         self.body = data.get('body')
         self.image_url = data.get('image')
         self.tile_image_url = data.get('tileImage')
-        self.hidden = data.get('hidden')
-        self.spotlight = data.get('spotlight')
-        self.type = data.get('type')
-        self.entry_type = data.get('entryType')
+        self.sorting_priority = data.get('sortingPriority')
         self.raw_data = data
 
 
@@ -86,12 +109,8 @@ class NewsMessage:
     """
 
     def __init__(self, data):
-        self.image_url = data.get('image')
-        self.hidden = data.get('hidden')
-        self.message_type = data.get('messageType')
-        self.type = data.get('type')
-        self.banner = data.get('adspace')
         self.title = data.get('title')
         self.body = data.get('body')
-        self.spotlight = data.get('spotlight')
+        self.image_url = data.get('image')
+        self.adspace = data.get('adspace')
         self.raw_data = data
