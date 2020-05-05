@@ -117,14 +117,14 @@ class BrCosmetic:
         self.path = data.get('path')
         try:
             self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
-        except ValueError:
+        except (ValueError, ValueError):
             self.added = None
 
         self.shop_history = []
         for date in data.get('shopHistory', []) if data.get('shopHistory') else []:
             try:
                 self.shop_history.append(datetime.strptime(date, '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo=None))
-            except ValueError:
+            except (ValueError, ValueError):
                 pass
         self.appearances = len(self.shop_history)
         self.first_appearance = self.shop_history[0] if self.appearances > 0 else None

@@ -40,7 +40,7 @@ class GameModeNews:
         self.hash = data.get('hash')
         try:
             self.date = datetime.strptime(data.get('date'), '%Y-%m-%dT%H:%M:%S%z')
-        except ValueError:
+        except (ValueError, ValueError):
             self.date = None
         self.image = data.get('image')
         self.motds = [NewsMotd(item_data) for item_data in data.get('motds')] if data.get('motds') else None

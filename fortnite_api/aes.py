@@ -28,7 +28,7 @@ class AES:
 
         try:
             self.updated = datetime.strptime(data.get('updated'), '%Y-%m-%dT%H:%M:%S%z')
-        except ValueError:
+        except (ValueError, ValueError):
             self.updated = None
 
         self.dynamic_keys = []
