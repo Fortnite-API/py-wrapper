@@ -291,9 +291,9 @@ class SyncShopEndpoints:
     def __init__(self, client):
         self._client = client
 
-    def fetch(self, language: GameLanguage = GameLanguage.ENGLISH) -> BrShop:
+    def fetch(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
         params = {'language': language.value}
-        data = self._client.http.get('shop/br', params=params)
+        data = self._client.http.get('shop/br' if not combined else 'shop/br/combined', params=params)
         return BrShop(data['data'])
 
 
@@ -302,7 +302,7 @@ class AsyncShopEndpoints:
     def __init__(self, client):
         self._client = client
 
-    async def fetch(self, language: GameLanguage = GameLanguage.ENGLISH) -> BrShop:
+    async def fetch(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
         params = {'language': language.value}
-        data = await self._client.http.get('shop/br', params=params)
+        data = await self._client.http.get('shop/br' if not combined else 'shop/br/combined', params=params)
         return BrShop(data['data'])

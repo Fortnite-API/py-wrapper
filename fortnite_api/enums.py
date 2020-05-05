@@ -41,6 +41,7 @@ class BrCosmeticRarity(Enum):
     DC = 'dc'
     ICON_SERIES = 'icon'
     SHADOW = 'shadow'
+    SLURP = 'slurp'
     EPIC = 'epic'
     RARE = 'rare'
     UNCOMMON = 'uncommon'
