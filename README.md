@@ -86,6 +86,7 @@ api.shop.fetch()
 Get the latest Fortnite shop.
 ###### Parameters
 - `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
+- `combined` [bool] (Optional) - Enable that `special_featured` and `special_daily` are moved into `featured` and `daily`
 ###### Returns
 Returns a `Shop` object. 
 
