@@ -13,6 +13,7 @@ def sync_test():
     print(fn.creator_code.search_first('GetOnMyLvl').user.name)
     print(fn.news.fetch())
     print(fn.aes.fetch())
+    print(fn.stats.fetch_by_name('Luc1412'))
 
 
 async def async_test():
@@ -23,6 +24,7 @@ async def async_test():
     print((await fn.creator_code.search_first('GetOnMyLvl')).user.name)
     print(await fn.news.fetch())
     print(await fn.aes.fetch())
+    print(await fn.stats.fetch_by_name('Luc1412'))
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from .user import User
+from .account import Account
 
 
 class CreatorCode:
@@ -10,7 +10,7 @@ class CreatorCode:
         The user of the creator code.
     disabled: :class:`bool`
         Whether the Creator Code is disabled or not.
-    slug: :class:`str`
+    code: :class:`str`
         The slug of the Creator Code
     verified: :class:`bool`
         Whether the Creator Code is verified or not.
@@ -20,7 +20,7 @@ class CreatorCode:
 
     def __init__(self, data):
         self.code = data.get('code')
-        self.user = User({'id': data.get('id'), 'displayName': data.get('displayName')})
+        self.user = Account(data.get('account')) if data.get('account') else None
         self.disabled = data.get('status', '').lower() == 'disabled'
         self.verified = data.get('verified', False)
         self.raw_data = data

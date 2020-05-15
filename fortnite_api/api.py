@@ -39,3 +39,4 @@ class FortniteAPI:
         self.creator_code = SyncCreatorCodeEndpoints(self) if not run_async else AsyncCreatorCodeEndpoints(self)
         self.news = SyncNewsEndpoints(self) if not run_async else AsyncNewsEndpoints(self)
         self.shop = SyncShopEndpoints(self) if not run_async else AsyncShopEndpoints(self)
+        self.stats = SyncStatsEndpoints(self) if not run_async else AsyncStatsEndpoints(self)

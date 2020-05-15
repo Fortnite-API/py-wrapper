@@ -6,6 +6,10 @@ class NotFound(FortniteAPIException):
     pass
 
 
+class Forbidden(FortniteAPIException):
+    pass
+
+
 class MissingSearchParameter(FortniteAPIException):
     pass
 

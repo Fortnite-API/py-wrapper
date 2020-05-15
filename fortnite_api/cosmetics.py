@@ -21,8 +21,6 @@ class BrCosmetic:
         The internal rarity of the cosmetic.
     name: :class:`str`
         The name of the cosmetic in the chosen language.
-    short_description: Optional[:class:`str`]
-        The short description of the cosmetic in the chosen language.
     description: :class:`str`
         The description of the cosmetic in the chosen language.
     set: Optional[:class:`str`]
@@ -51,16 +49,8 @@ class BrCosmetic:
         A :class:`list` of gameplay tags of the cosmetics.
     display_asset_path: Optional[:class:`str`]
         The path of the display asset.
-    definition: Optional[:class:`str`]
-        The definition of the cosmetic.
-    required_item_id: Optional[:class:`str`]
-        The id of the cosmetic which is required to get this cosmetic.
-    built_in_emote_id: Optional[:class:`str`]
-        The id of the emote which is built-in into the cosmetic.
     path: :class:`str`
         The path of the asset.
-    last_update: :class:`datetime.datetime`
-        The timestamp of the last update of the cosmetic.
     added: :class:`datetime.datetime`
         The timestamp when the item was added to the Fortnite-API.com database.
     raw_data: :class:`dict`
@@ -78,7 +68,10 @@ class BrCosmetic:
         self.backend_type = cosmetic_type.get('backendValue')
 
         rarity = data.get('rarity', {}) if data.get('rarity') else {}
-        self.rarity = BrCosmeticRarity(rarity.get('value'))
+        try:
+            self.rarity = BrCosmeticRarity(rarity.get('value'))
+        except ValueError:
+            self.rarity = BrCosmeticRarity.UNKNOWN
         self.rarity_text = rarity.get('text')
         self.backend_rarity = rarity.get('backendValue')
 

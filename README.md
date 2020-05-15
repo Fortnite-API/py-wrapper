@@ -174,6 +174,34 @@ Search a creator code by name. Only the first result is provided.
 ###### Returns
 Returns a `CreatorCode` object.
 
+___
+
+### BR Stats
+```
+api.creator_code.fetch_by_name()
+```
+Returns stats of the requested player account.
+###### Parameters
+- `name` [str] - Sets the account name.
+- `account_type` [AccountType] (Optional) - Sets the account type.
+- `time_window` [TimeWindow] (Optional) - Sets the time window.
+- `account_type` [StatsImageType] (Optional) - Sets the image platform.
+###### Returns
+Returns a `BrPlayerStats` object.
+
+___
+
+```
+api.creator_code.exists()
+```
+Returns stats of the requested player account by its account id.
+###### Parameters
+- `account_id` [str] - Sets the account id.
+- `time_window` [TimeWindow] (Optional) - Sets the time window.
+- `account_type` [StatsImageType] (Optional) - Sets the image platform.
+###### Returns
+Returns a `BrPlayerStats` object.
+
 ## Contribute
 Every type of contribution is appreciated!
 

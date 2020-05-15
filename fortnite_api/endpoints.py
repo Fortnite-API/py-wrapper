@@ -5,10 +5,11 @@ from enum import Enum
 from .aes import AES
 from .cosmetics import BrCosmetic
 from .creator_code import CreatorCode
-from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat
+from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType
 from .errors import MissingSearchParameter, MissingIDParameter, NotFound
 from .news import GameModeNews, News
 from .shop import BrShop
+from .stats import BrPlayerStats
 
 _SEARCH_PARAMETERS = {
     'language': [None, [GameLanguage]],
@@ -72,7 +73,7 @@ class SyncAESEndpoints:
 
     def fetch(self, key_format: KeyFormat = KeyFormat.HEX) -> AES:
         params = {'keyFormat': key_format.value}
-        data = self._client.http.get('aes', params=params)
+        data = self._client.http.get('v2/aes', params=params)
         return AES(data['data'])
 
 
@@ -83,7 +84,7 @@ class AsyncAESEndpoints:
 
     async def fetch(self, key_format: KeyFormat = KeyFormat.HEX) -> AES:
         params = {'keyFormat': key_format.value}
-        data = await self._client.http.get('aes', params=params)
+        data = await self._client.http.get('v2/aes', params=params)
         return AES(data['data'])
 
 
@@ -115,7 +116,7 @@ class SyncCosmeticsEndpoints:
             The Fortnite-API.com server is currently not available.
         """
         params = {'language': language.value}
-        data = self._client.http.get('cosmetics/br', params=params)
+        data = self._client.http.get('v2/cosmetics/br', params=params)
         return [BrCosmetic(item_data) for item_data in data['data']]
 
     def search_by_id(self, *cosmetic_ids, language=GameLanguage.ENGLISH):
@@ -154,12 +155,12 @@ class SyncCosmeticsEndpoints:
         return [BrCosmetic(item_data) for item_data in data['data']]
 
     def search_all(self, **search_parameters) -> typing.List[BrCosmetic]:
-        data = self._client.http.get('cosmetics/br/search/all',
+        data = self._client.http.get('v2/cosmetics/br/search/all',
                                      params=_parse_search_parameter(**search_parameters))
         return [BrCosmetic(item_data) for item_data in data['data']]
 
     def search_first(self, **search_parameters) -> BrCosmetic:
-        data = self._client.http.get('cosmetics/br/search',
+        data = self._client.http.get('v2/cosmetics/br/search',
                                      params=_parse_search_parameter(**search_parameters))
         return BrCosmetic(data['data'])
 
@@ -171,10 +172,11 @@ class AsyncCosmeticsEndpoints:
 
     async def fetch_all(self, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[BrCosmetic]:
         params = {'language': language.value}
-        data = await self._client.http.get('cosmetics/br', params=params)
+        data = await self._client.http.get('v2/cosmetics/br', params=params)
         return [BrCosmetic(item_data) for item_data in data['data']]
 
-    async def search_by_id(self, *cosmetic_id: str, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[BrCosmetic]:
+    async def search_by_id(self, *cosmetic_id: str, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[
+        BrCosmetic]:
         cosmetic_ids = list(cosmetic_id)
         params = {'language': language.value}
 
@@ -189,12 +191,13 @@ class AsyncCosmeticsEndpoints:
         return [BrCosmetic(item_data) for item_data in data['data']]
 
     async def search_all(self, **search_parameters) -> typing.List[BrCosmetic]:
-        data = await self._client.http.get('cosmetics/br/search/all',
+        data = await self._client.http.get('v2/cosmetics/br/search/all',
                                            params=_parse_search_parameter(**search_parameters))
         return [BrCosmetic(item_data) for item_data in data['data']]
 
     async def search_first(self, **search_parameters) -> BrCosmetic:
-        data = await self._client.http.get('cosmetics/br/search', params=_parse_search_parameter(**search_parameters))
+        data = await self._client.http.get('v2/cosmetics/br/search',
+                                           params=_parse_search_parameter(**search_parameters))
         return BrCosmetic(data['data'])
 
 
@@ -205,7 +208,7 @@ class SyncCreatorCodeEndpoints:
 
     def fetch(self, name: str) -> CreatorCode:
         params = {'name': name}
-        data = self._client.http.get('creatorcode', params=params)
+        data = self._client.http.get('v2/creatorcode', params=params)
         return CreatorCode(data['data'])
 
     def exists(self, name: str) -> bool:
@@ -217,12 +220,12 @@ class SyncCreatorCodeEndpoints:
 
     def search_first(self, name: str) -> CreatorCode:
         params = {'name': name}
-        data = self._client.http.get('creatorcode/search', params=params)
+        data = self._client.http.get('v2/creatorcode/search', params=params)
         return CreatorCode(data['data'])
 
     def search_all(self, name: str) -> typing.List[CreatorCode]:
         params = {'name': name}
-        data = self._client.http.get('creatorcode/search/all', params=params)
+        data = self._client.http.get('v2/creatorcode/search/all', params=params)
         return [CreatorCode(creator_code_data) for creator_code_data in data['data']]
 
 
@@ -233,7 +236,7 @@ class AsyncCreatorCodeEndpoints:
 
     async def fetch(self, name: str) -> CreatorCode:
         params = {'name': name}
-        data = await self._client.http.get('creatorcode', params=params)
+        data = await self._client.http.get('v2/creatorcode', params=params)
         return CreatorCode(data['data'])
 
     async def exists(self, name: str) -> bool:
@@ -245,12 +248,12 @@ class AsyncCreatorCodeEndpoints:
 
     async def search_first(self, name: str) -> CreatorCode:
         params = {'name': name}
-        data = await self._client.http.get('creatorcode/search', params=params)
+        data = await self._client.http.get('v2/creatorcode/search', params=params)
         return CreatorCode(data['data'])
 
     async def search_all(self, name: str) -> typing.List[CreatorCode]:
         params = {'name': name}
-        data = await self._client.http.get('creatorcode/search/all', params=params)
+        data = await self._client.http.get('v2/creatorcode/search/all', params=params)
         return [CreatorCode(creator_code_data) for creator_code_data in data['data']]
 
 
@@ -261,12 +264,12 @@ class SyncNewsEndpoints:
 
     def fetch(self, language: GameLanguage = GameLanguage.ENGLISH) -> News:
         params = {'language': language.value}
-        data = self._client.http.get('news', params=params)
+        data = self._client.http.get('v2/news', params=params)
         return News(data['data'])
 
     def fetch_by_type(self, news_type: NewsType, language=GameLanguage.ENGLISH) -> GameModeNews:
         params = {'language': language.value}
-        data = self._client.http.get('news/' + news_type.value, params=params)
+        data = self._client.http.get('v2/news/' + news_type.value, params=params)
         return GameModeNews(data['data'])
 
 
@@ -277,12 +280,12 @@ class AsyncNewsEndpoints:
 
     async def fetch(self, language: GameLanguage = GameLanguage.ENGLISH) -> News:
         params = {'language': language.value}
-        data = await self._client.http.get('news', params=params)
+        data = await self._client.http.get('v2/news', params=params)
         return News(data['data'])
 
     async def fetch_by_type(self, news_type: NewsType, language: GameLanguage = GameLanguage.ENGLISH) -> GameModeNews:
         params = {'language': language.value}
-        data = await self._client.http.get('news/' + news_type.value, params=params)
+        data = await self._client.http.get('v2/news/' + news_type.value, params=params)
         return GameModeNews(data['data'])
 
 
@@ -293,7 +296,7 @@ class SyncShopEndpoints:
 
     def fetch(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
         params = {'language': language.value}
-        data = self._client.http.get('shop/br' if not combined else 'shop/br/combined', params=params)
+        data = self._client.http.get('v2/shop/br' if not combined else 'v2/shop/br/combined', params=params)
         return BrShop(data['data'])
 
 
@@ -304,5 +307,49 @@ class AsyncShopEndpoints:
 
     async def fetch(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
         params = {'language': language.value}
-        data = await self._client.http.get('shop/br' if not combined else 'shop/br/combined', params=params)
+        data = await self._client.http.get('v2/shop/br' if not combined else 'v2/shop/br/combined', params=params)
         return BrShop(data['data'])
+
+
+class SyncStatsEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    def fetch_by_name(self, name: str,
+                      account_type: AccountType = AccountType.EPIC,
+                      time_window: TimeWindow = TimeWindow.LIFETIME,
+                      image: StatsImageType = StatsImageType.NONE) -> BrPlayerStats:
+        params = {'name': name, 'accountType': account_type.value, 'timeWindow': time_window.value,
+                  'image': image.value}
+        data = self._client.http.get('v1/stats/br/v2', params=params)
+        return BrPlayerStats(data['data'])
+
+    def fetch_by_id(self, account_id: str,
+                    time_window: TimeWindow = TimeWindow.LIFETIME,
+                    image: StatsImageType = StatsImageType.NONE) -> BrPlayerStats:
+        params = {'timeWindow': time_window.value, 'image': image.value}
+        data = self._client.http.get('v1/stats/br/v2/{account_id}'.format(account_id=account_id), params=params)
+        return BrPlayerStats(data['data'])
+
+
+class AsyncStatsEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    async def fetch_by_name(self, name: str,
+                            account_type: AccountType = AccountType.EPIC,
+                            time_window: TimeWindow = TimeWindow.LIFETIME,
+                            image: StatsImageType = StatsImageType.NONE) -> BrPlayerStats:
+        params = {'name': name, 'accountType': account_type.value, 'timeWindow': time_window.value,
+                  'image': image.value}
+        data = await self._client.http.get('v1/stats/br/v2', params=params)
+        return BrPlayerStats(data['data'])
+
+    async def fetch_by_id(self, account_id: str,
+                          time_window: TimeWindow = TimeWindow.LIFETIME,
+                          image: StatsImageType = StatsImageType.NONE) -> BrPlayerStats:
+        params = {'timeWindow': time_window.value, 'image': image.value}
+        data = await self._client.http.get('v1/stats/br/v2/{account_id}'.format(account_id=account_id), params=params)
+        return BrPlayerStats(data['data'])

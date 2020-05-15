@@ -46,6 +46,7 @@ class BrCosmeticRarity(Enum):
     RARE = 'rare'
     UNCOMMON = 'uncommon'
     COMMON = 'common'
+    UNKNOWN = 'unknown'
 
 
 class BrCosmeticType(Enum):
@@ -64,9 +65,29 @@ class BrCosmeticType(Enum):
     SHOUT = 'shout'
     SPRAY = 'spray'
     TOY = 'toy'
+    UNKNOWN = 'unknown'
 
 
 class NewsType(Enum):
     BATTLE_ROYALE = 'br'
     SAVE_THE_WORLD = 'stw'
     CREATIVE = 'creative'
+
+
+class AccountType(Enum):
+    EPIC = 'epic'
+    PSN = 'psn'
+    XBL = 'xbl'
+
+
+class TimeWindow(Enum):
+    SEASON = 'season'
+    LIFETIME = 'lifetime'
+
+
+class StatsImageType(Enum):
+    ALL = 'all'
+    KEYBOARD_MOUSE = 'keyboardMouse'
+    GAMEPAD = 'gamepad'
+    TOUCH = 'touch'
+    NONE = 'none'
