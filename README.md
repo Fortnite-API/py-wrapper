@@ -94,7 +94,7 @@ ___
 
 ### AES 
 ```
-api.shop.fetch()
+api.aes.fetch()
 ```
 Get the latest Fortnite AES Key. This also include version and build information.
 ###### Parameters
