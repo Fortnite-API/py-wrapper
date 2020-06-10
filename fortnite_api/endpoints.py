@@ -5,7 +5,8 @@ from enum import Enum
 from .aes import AES
 from .cosmetics import BrCosmetic
 from .creator_code import CreatorCode
-from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType
+from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType, \
+    BrCosmeticRarity, BrCosmeticType
 from .errors import MissingSearchParameter, MissingIDParameter, NotFound
 from .news import GameModeNews, News
 from .shop import BrShop
@@ -17,10 +18,10 @@ _SEARCH_PARAMETERS = {
     'match_method': ['matchMethod', [MatchMethod]],
     'name': [None, [str, None]],
     'description': [None, [str, None]],
-    'type': [None, [str, None]],
+    'type': [None, [BrCosmeticType, None]],
     'display_type': [None, [str, None]],
     'backend_type': ['backendType', [str, None]],
-    'rarity': [None, [str, None]],
+    'rarity': [None, [BrCosmeticRarity, None]],
     'display_rarity': ['displayRarity', [str, None]],
     'backend_rarity': ['backendRarity', [str, None]],
     'has_series': ['hasSeries', [bool, None]],

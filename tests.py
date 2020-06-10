@@ -6,7 +6,7 @@ api_key = ''
 
 
 def sync_test():
-    fn = fortnite_api.FortniteAPI(api_key)
+    fn = fortnite_api.FortniteAPI()
     print(fn.shop.fetch(combined=True))
     print([[i.name, i.type.value] for i in fn.cosmetics.search_all(name='Drift')])
     print(fn.cosmetics.search_first(name='Drift').id)
@@ -17,7 +17,7 @@ def sync_test():
 
 
 async def async_test():
-    fn = fortnite_api.FortniteAPI(api_key, run_async=True)
+    fn = fortnite_api.FortniteAPI(run_async=True)
     print(await fn.shop.fetch(combined=True))
     print([[i.name, i.type.value] for i in (await fn.cosmetics.search_all(unseen_for=800))])
     print((await fn.cosmetics.search_first(name='Drift')).id)

@@ -28,8 +28,6 @@ class FortniteAPI:
     """
 
     def __init__(self, api_key: str = None, run_async: bool = False):
-        if type(api_key) is not str:
-            raise TypeError('api_key require a value of type {0}'.format(str(str)))
         self.http = SyncHTTPClient() if not run_async else AsyncHTTPClient()
         if api_key:
             self.http.add_header('x-api-key', api_key)
