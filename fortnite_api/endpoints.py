@@ -57,9 +57,9 @@ def _parse_search_parameter(**search_parameters):
         key = search_parameter_data[0] if search_parameter_data[0] else key
         if value is None:
             value = '<null>'
-        elif type(value) == Enum:
+        elif isinstance(value, Enum):
             value = value.value
-        elif type(value) == datetime.datetime:
+        elif isinstance(value, datetime.datetime):
             value = int(value.timestamp())
         parameters[key] = value
     if len(parameters) == 0:
@@ -161,6 +161,7 @@ class SyncCosmeticsEndpoints:
         return [BrCosmetic(item_data) for item_data in data['data']]
 
     def search_first(self, **search_parameters) -> BrCosmetic:
+        print(_parse_search_parameter(**search_parameters))
         data = self._client.http.get('v2/cosmetics/br/search',
                                      params=_parse_search_parameter(**search_parameters))
         return BrCosmetic(data['data'])
