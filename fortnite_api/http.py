@@ -30,6 +30,8 @@ class SyncHTTPClient:
             return data
         elif response.status_code == 401:
             raise Unauthorized(data.get('error', 'Error message not provided!'))
+        elif response.status_code == 403:
+            raise Forbidden(data.get('error', 'Error message not provided!'))
         elif response.status_code == 404:
             raise NotFound(data.get('error', 'Error message not provided!'))
         elif response.status_code == 429:
@@ -64,9 +66,9 @@ class AsyncHTTPClient:
                 if response.status == 401:
                     raise Unauthorized(data.get('error', 'Error message not provided!'))
                 elif response.status == 403:
-                    raise NotFound(data.get('error', 'Error message not provided!'))
-                elif response.status == 404:
                     raise Forbidden(data.get('error', 'Error message not provided!'))
+                elif response.status == 404:
+                    raise NotFound(data.get('error', 'Error message not provided!'))
                 elif response.status == 429:
                     raise RateLimited(data.get('error', 'Error message not provided!'))
                 elif response.status == 503:
