@@ -9,7 +9,18 @@ api_key = ''
 def sync_test():
     fn = fortnite_api.FortniteAPI()
     print(fn.shop.fetch(combined=True))
-    print([[i.name, i.type.value] for i in fn.cosmetics.search_all(name='Drift')])
+    for c in fn.cosmetics.fetch_all():
+        if not c.variants:
+            continue
+        i = 0
+        for v in c.variants:
+            for o in v.options:
+                i += 1
+        if i > 20:
+            print(i)
+            print(c.raw_data)
+
+    print([[i.name, i.type.value, i.variants, i.raw_data] for i in fn.cosmetics.search_all(name='bash')])
     print(fn.cosmetics.search_first(language=GameLanguage.ENGLISH, name='Drift').id)
     print(fn.creator_code.search_first('GetOnMyLvl').user.name)
     print(fn.news.fetch())

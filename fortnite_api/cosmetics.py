@@ -166,13 +166,9 @@ class BrCosmeticVariant:
     def __init__(self, data):
         self.channel = data.get('channel')
         self.type = data.get('type')
-        self.options = None
+        self.options = [BrCosmeticVariantOption(option) for option in data.get('options')] \
+            if data.get('options') is not None else None
         self.raw_data = data
-
-        if data.get('options'):
-            self.options = []
-            for variant in data.get('options'):
-                self.options.append(variant)
 
 
 class BrCosmeticVariantOption:

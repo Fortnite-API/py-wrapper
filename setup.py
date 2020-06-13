@@ -33,7 +33,7 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=['requests>=2.22.0', 'aiohttp>=3.3.0'],
     python_requires='>=3.5.3',
-    download_url='https://github.com/Fortnite-API/py-wrapper/archive/v2.1.2.tar.gz',
+    download_url='https://github.com/Fortnite-API/py-wrapper/archive/v2.1.3.tar.gz',
     keywords=['fortnite', 'fortnite-api.com', 'shop', 'cosmetics', 'fortnite api', 'fortnite shop'],
     classifiers=[
         'License :: OSI Approved :: MIT License',
