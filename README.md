@@ -41,6 +41,16 @@ Get all Br cosmetics.
 ###### Returns
 Returns a list of `BrCosmetic` objects.
 
+### Cosmetics
+```
+api.cosmetics.fetch_new()
+```
+Get all new Br cosmetics.
+###### Parameters
+- `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
+###### Returns
+Returns a `NewBrCosmetics` object.
+
 ___
 
 ```
