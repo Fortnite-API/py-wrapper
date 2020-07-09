@@ -16,7 +16,7 @@ _SEARCH_PARAMETERS = {
     'language': [None, [GameLanguage]],
     'search_language': ['searchLanguage', [GameLanguage]],
     'match_method': ['matchMethod', [MatchMethod]],
-    'id': [None, [int, None]],
+    'id': [None, [str, None]],
     'name': [None, [str, None]],
     'description': [None, [str, None]],
     'type': [None, [BrCosmeticType, None]],
