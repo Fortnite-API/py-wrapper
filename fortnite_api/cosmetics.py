@@ -4,6 +4,24 @@ from datetime import datetime
 from fortnite_api.enums import BrCosmeticType, BrCosmeticRarity
 
 
+class NewBrCosmetics:
+
+    def __init__(self, data):
+        self.build = data.get('build')
+        self.previous_build = data.get('previousBuild')
+        self.hash = data.get('hash')
+        try:
+            self.date = datetime.strptime(data.get('date'), '%Y-%m-%dT%H:%M:%S%z')
+        except (ValueError, ValueError):
+            self.date = None
+        try:
+            self.last_addition = datetime.strptime(data.get('lastAddition'), '%Y-%m-%dT%H:%M:%S%z')
+        except (ValueError, ValueError):
+            self.last_addition = None
+        self.items = [BrCosmetic(i) for i in data.get('items')] if data.get('items') else None
+        self.raw_data = data
+
+
 class BrCosmetic:
     """Represents a Battle Royale Cosmetic.
 
@@ -105,6 +123,8 @@ class BrCosmetic:
             if data.get('variants') is not None else None
         self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
             if data.get('gameplayTags') is not None else None
+        self.showcase_video = 'https://youtube.com/watch?v=' + data.get('showcaseVideo') \
+            if data.get('showcaseVideo') else None
         self.display_asset_path = data.get('displayAssetPath')
         self.definition_path = data.get('definitionPath')
         self.path = data.get('path')

@@ -3,7 +3,7 @@ import typing
 from enum import Enum
 
 from .aes import AES
-from .cosmetics import BrCosmetic
+from .cosmetics import BrCosmetic, NewBrCosmetics
 from .creator_code import CreatorCode
 from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType, \
     BrCosmeticRarity, BrCosmeticType
@@ -16,6 +16,7 @@ _SEARCH_PARAMETERS = {
     'language': [None, [GameLanguage]],
     'search_language': ['searchLanguage', [GameLanguage]],
     'match_method': ['matchMethod', [MatchMethod]],
+    'id': [None, [int, None]],
     'name': [None, [str, None]],
     'description': [None, [str, None]],
     'type': [None, [BrCosmeticType, None]],
@@ -40,6 +41,8 @@ _SEARCH_PARAMETERS = {
     'has_variants': ['hasVariants', [bool, None]],
     'has_gameplay_tags': ['hasGameplayTags', [bool, None]],
     'gameplay_tag': ['gameplayTag', [str, None]],
+    'added': [None, [datetime.datetime, None]],
+    'added_since': ['addedSince', [datetime.datetime, None]],
     'unseen_for': ['unseenFor', [int, None]],
     'last_appearance': ['lastAppearance', [datetime.datetime, None]]
 }
@@ -120,6 +123,11 @@ class SyncCosmeticsEndpoints:
         data = self._client.http.get('v2/cosmetics/br', params=params)
         return [BrCosmetic(item_data) for item_data in data['data']]
 
+    def fetch_new(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/br/new', params=params)
+        return NewBrCosmetics(data['data'])
+
     def search_by_id(self, *cosmetic_ids, language=GameLanguage.ENGLISH):
         """Returns an list of the requested battle royale cosmetic ids.
 
@@ -176,6 +184,11 @@ class AsyncCosmeticsEndpoints:
         params = {'language': language.value}
         data = await self._client.http.get('v2/cosmetics/br', params=params)
         return [BrCosmetic(item_data) for item_data in data['data']]
+
+    async def fetch_new(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics/br/new', params=params)
+        return NewBrCosmetics(data['data'])
 
     async def search_by_id(self, *cosmetic_id: str, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[
         BrCosmetic]:
