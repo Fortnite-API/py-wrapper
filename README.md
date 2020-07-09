@@ -212,6 +212,25 @@ Returns stats of the requested player account by its account id.
 ###### Returns
 Returns a `BrPlayerStats` object.
 
+### Banner
+```
+api.cosmetics.fetch()
+```
+Get all banners.
+###### Parameters
+- `language` [GameLanguage] (Optional) - Specify the language of the banners. Default is set to english
+###### Returns
+Returns a `Banner` object.
+
+___
+
+```
+api.cosmetics.fetch_colors()
+```
+Get all banner colors.
+###### Returns
+Returns a list of `BannerColor` objects.
+
 ## Contribute
 Every type of contribution is appreciated!
 

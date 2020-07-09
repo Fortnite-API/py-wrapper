@@ -3,6 +3,7 @@ import typing
 from enum import Enum
 
 from .aes import AES
+from .banner import Banner, BannerColor
 from .cosmetics import BrCosmetic, NewBrCosmetics
 from .creator_code import CreatorCode
 from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType, \
@@ -90,6 +91,36 @@ class AsyncAESEndpoints:
         params = {'keyFormat': key_format.value}
         data = await self._client.http.get('v2/aes', params=params)
         return AES(data['data'])
+
+
+class SyncBannerEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    def fetch(self, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[Banner]:
+        params = {'language': language.value}
+        data = self._client.http.get('v1/banners', params=params)
+        return [Banner(item_data) for item_data in data['data']]
+
+    def fetch_colors(self) -> typing.List[BannerColor]:
+        data = self._client.http.get('v1/banners/colors')
+        return [BannerColor(item_data) for item_data in data['data']]
+
+
+class AsyncBannerEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    async def fetch(self, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[Banner]:
+        params = {'language': language.value}
+        data = await self._client.http.get('v1/banners', params=params)
+        return [Banner(item_data) for item_data in data['data']]
+
+    async def fetch_colors(self) -> typing.List[BannerColor]:
+        data = await self._client.http.get('v1/banners/colors')
+        return [BannerColor(item_data) for item_data in data['data']]
 
 
 class SyncCosmeticsEndpoints:

@@ -33,6 +33,7 @@ class FortniteAPI:
             self.http.add_header('x-api-key', api_key)
 
         self.aes = SyncAESEndpoints(self) if not run_async else AsyncAESEndpoints(self)
+        self.banner = SyncBannerEndpoints(self) if not run_async else AsyncBannerEndpoints(self)
         self.cosmetics = SyncCosmeticsEndpoints(self) if not run_async else AsyncCosmeticsEndpoints(self)
         self.creator_code = SyncCreatorCodeEndpoints(self) if not run_async else AsyncCreatorCodeEndpoints(self)
         self.news = SyncNewsEndpoints(self) if not run_async else AsyncNewsEndpoints(self)
