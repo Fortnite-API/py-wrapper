@@ -11,7 +11,7 @@ class GameLanguage(Enum):
     GERMAN = 'de'
     ENGLISH = 'en'
     SPANISH = 'es'
-    SPANISH_LATIN = 'es'
+    SPANISH_LATIN = 'es-419'
     FRENCH = 'fr'
     ITALIAN = 'it'
     JAPANESE = 'ja'
