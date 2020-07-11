@@ -8,6 +8,7 @@ api_key = ''
 
 def sync_test():
     fn = fortnite_api.FortniteAPI()
+    print(fn.cosmetics.fetch_all())
     print(fn.banner.fetch()[0].id)
     print(fn.shop.fetch(combined=True))
     print([[i.name, i.type.value, i.variants, i.raw_data] for i in fn.cosmetics.search_all(name='bash')])
