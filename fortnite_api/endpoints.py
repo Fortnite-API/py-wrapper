@@ -188,9 +188,7 @@ class SyncCosmeticsEndpoints:
             raise MissingIDParameter('at least one cosmetic id is required')
 
         endpoint = 'v2/cosmetics/br/search/ids'
-        endpoint += '?id=' + cosmetic_ids[0]
-        del cosmetic_ids[0]
-        endpoint += '&id='.join(cosmetic_ids)
+        endpoint += '?id=' + '&id='.join(cosmetic_ids)
         data = self._client.http.get(endpoint, params=params)
         return [BrCosmetic(item_data) for item_data in data['data']]
 
