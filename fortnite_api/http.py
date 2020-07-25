@@ -21,7 +21,6 @@ class SyncHTTPClient:
 
     def get(self, endpoint, params=None):
         response = requests.get(BASE_URL + endpoint, params=params, headers=self.headers)
-        print(response.url)
         try:
             data = response.json()
         except json.JSONDecodeError:

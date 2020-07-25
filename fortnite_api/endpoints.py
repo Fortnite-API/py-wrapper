@@ -187,7 +187,7 @@ class SyncCosmeticsEndpoints:
         if len(cosmetic_ids) == 0:
             raise MissingIDParameter('at least one cosmetic id is required')
 
-        endpoint = 'cosmetics/br/search/ids'
+        endpoint = 'v2/cosmetics/br/search/ids'
         endpoint += '?id=' + cosmetic_ids[0]
         del cosmetic_ids[0]
         endpoint += '&id='.join(cosmetic_ids)
@@ -229,7 +229,7 @@ class AsyncCosmeticsEndpoints:
         if len(cosmetic_ids) == 0:
             raise MissingIDParameter('at least one cosmetic id is required')
 
-        endpoint = 'cosmetics/br/search/ids'
+        endpoint = 'v2/cosmetics/br/search/ids'
         endpoint += '?id=' + cosmetic_ids[0]
         del cosmetic_ids[0]
         endpoint += '&id='.join(cosmetic_ids)

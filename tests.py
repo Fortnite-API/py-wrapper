@@ -13,6 +13,7 @@ def sync_test():
     print(fn.shop.fetch(combined=True))
     print([[i.name, i.type.value, i.variants, i.raw_data] for i in fn.cosmetics.search_all(name='bash')])
     print(fn.cosmetics.search_first(language=GameLanguage.ENGLISH, name='Drift').id)
+    print(fn.cosmetics.search_by_id('CID_675_Athena_Commando_M_TheGoldenSkeleton'))
     print(fn.cosmetics.fetch_new().items[0].name)
     print(fn.creator_code.search_first('GetOnMyLvl').user.name)
     print(fn.news.fetch())
