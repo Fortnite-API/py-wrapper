@@ -1,6 +1,7 @@
 import datetime
 import typing
 from enum import Enum
+from typing import List
 
 from .aes import AES
 from .banner import Banner, BannerColor
@@ -9,7 +10,9 @@ from .creator_code import CreatorCode
 from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType, \
     BrCosmeticRarity, BrCosmeticType
 from .errors import MissingSearchParameter, MissingIDParameter, NotFound
+from .map import Map
 from .news import GameModeNews, News
+from .playlist import Playlist
 from .shop import BrShop
 from .stats import BrPlayerStats
 
@@ -299,6 +302,28 @@ class AsyncCreatorCodeEndpoints:
         return [CreatorCode(creator_code_data) for creator_code_data in data['data']]
 
 
+class SyncMapEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    def fetch(self, language: GameLanguage = GameLanguage.ENGLISH) -> Map:
+        params = {'language': language.value}
+        data = self._client.http.get('v1/map', params=params)
+        return Map(data['data'])
+
+
+class AsyncMapEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    async def fetch(self, language: GameLanguage = GameLanguage.ENGLISH) -> Map:
+        params = {'language': language.value}
+        data = await self._client.http.get('v1/map', params=params)
+        return Map(data['data'])
+
+
 class SyncNewsEndpoints:
 
     def __init__(self, client):
@@ -329,6 +354,38 @@ class AsyncNewsEndpoints:
         params = {'language': language.value}
         data = await self._client.http.get('v2/news/' + news_type.value, params=params)
         return GameModeNews(data['data'])
+
+
+class SyncPlaylistEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    def fetch_all(self, language: GameLanguage = GameLanguage.ENGLISH) -> List[Playlist]:
+        params = {'language': language.value}
+        data = self._client.http.get('v1/playlists', params=params)
+        return [Playlist(playlist) for playlist in data['data']]
+
+    def fetch_by_id(self, playlist_id, language: GameLanguage = GameLanguage.ENGLISH) -> Playlist:
+        params = {'language': language.value}
+        data = self._client.http.get(f'v1/playlists/{playlist_id}', params=params)
+        return Playlist(data['data'])
+
+
+class AsyncPlaylistEndpoints:
+
+    def __init__(self, client):
+        self._client = client
+
+    async def fetch_all(self, language: GameLanguage = GameLanguage.ENGLISH) -> List[Playlist]:
+        params = {'language': language.value}
+        data = await self._client.http.get('v1/playlists', params=params)
+        return [Playlist(playlist) for playlist in data['data']]
+
+    async def fetch_by_id(self, playlist_id, language: GameLanguage = GameLanguage.ENGLISH) -> Playlist:
+        params = {'language': language.value}
+        data = await self._client.http.get(f'v1/playlists/{playlist_id}', params=params)
+        return Playlist(data['data'])
 
 
 class SyncShopEndpoints:

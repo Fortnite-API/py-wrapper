@@ -19,6 +19,8 @@ def sync_test():
     print(fn.news.fetch())
     print(fn.aes.fetch())
     print(fn.stats.fetch_by_name('Luc1412'))
+    print(fn.playlist.fetch_all()[0])
+    print(fn.map.fetch())
 
 
 async def async_test():
@@ -34,6 +36,8 @@ async def async_test():
     print(await fn.news.fetch())
     print(await fn.aes.fetch())
     print(await fn.stats.fetch_by_name('Luc1412'))
+    print((await fn.playlist.fetch_all())[0])
+    print(await fn.map.fetch())
 
 
 if __name__ == '__main__':

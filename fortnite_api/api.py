@@ -36,6 +36,8 @@ class FortniteAPI:
         self.banner = SyncBannerEndpoints(self) if not run_async else AsyncBannerEndpoints(self)
         self.cosmetics = SyncCosmeticsEndpoints(self) if not run_async else AsyncCosmeticsEndpoints(self)
         self.creator_code = SyncCreatorCodeEndpoints(self) if not run_async else AsyncCreatorCodeEndpoints(self)
+        self.map = SyncMapEndpoints(self) if not run_async else AsyncMapEndpoints(self)
         self.news = SyncNewsEndpoints(self) if not run_async else AsyncNewsEndpoints(self)
+        self.playlist = SyncPlaylistEndpoints(self) if not run_async else AsyncPlaylistEndpoints(self)
         self.shop = SyncShopEndpoints(self) if not run_async else AsyncShopEndpoints(self)
         self.stats = SyncStatsEndpoints(self) if not run_async else AsyncStatsEndpoints(self)

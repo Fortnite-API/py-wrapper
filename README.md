@@ -41,7 +41,6 @@ Get all Br cosmetics.
 ###### Returns
 Returns a list of `BrCosmetic` objects.
 
-### Cosmetics
 ```
 api.cosmetics.fetch_new()
 ```
@@ -88,6 +87,29 @@ Search the first cosmetics which fit to the search parameters
 Returns a `BrCosmetic` objects.
 
 ___
+
+### Playlist
+```
+api.playlists.fetch_all()
+```
+Get all Br playlists.
+###### Parameters
+- `language` [GameLanguage] (Optional) - Specify the language of the playlists. Default is set to english
+###### Returns
+Returns a list of `Playlist` objects.
+
+```
+api.cosmetics.fetch_by_id()
+```
+Get a playlist by id.
+###### Parameters
+- `id` [str] - Specify the playlist id.
+- `language` [GameLanguage] (Optional) - Specify the language of the shop. Default is set to english
+###### Returns
+Returns a `Playlist` object.
+
+___
+
 
 ### Shop 
 ```
@@ -230,6 +252,21 @@ api.cosmetics.fetch_colors()
 Get all banner colors.
 ###### Returns
 Returns a list of `BannerColor` objects.
+
+
+### Map
+```
+api.map.fetch()
+```
+Get the current map information.
+###### Parameters
+- `language` [GameLanguage] (Optional) - Specify the language of the map pois. Default is set to english.
+###### Returns
+Returns a `Map` object.
+
+___
+
+
 
 ## Contribute
 Every type of contribution is appreciated!
