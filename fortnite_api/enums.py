@@ -35,6 +35,7 @@ class BrCosmeticRarity(Enum):
     FROZEN = 'frozen'
     LAVA = 'lava'
     LEGENDARY = 'legendary'
+    GAMING_LEGENDS = 'gaminglegends'
     DARK = 'dark'
     STARWARS = 'starwars'
     MARVEL = 'marvel'

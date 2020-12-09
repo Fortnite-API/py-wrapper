@@ -28,7 +28,7 @@ class BrShop:
         self.hash = data.get('hash')
         try:
             self.date = datetime.strptime(data.get('date'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, ValueError):
+        except (ValueError, TypeError):
             self.date = None
         self.featured = BrShopSection(data.get('featured')) if data.get('featured') else None
         self.daily = BrShopSection(data.get('daily')) if data.get('daily') else None

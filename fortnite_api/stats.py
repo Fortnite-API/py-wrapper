@@ -61,5 +61,5 @@ class BrGameModeStats:
         self.players_outlived = data.get('playersOutlived')
         try:
             self.last_modified = datetime.strptime(data.get('lastModified'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, ValueError):
+        except (ValueError, TypeError):
             self.updated = None

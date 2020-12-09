@@ -33,6 +33,6 @@ class Playlist:
         self.path = data['path']
         try:
             self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, ValueError):
+        except (ValueError, TypeError):
             self.added = None
         self.raw_data = data

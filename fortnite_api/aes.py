@@ -27,7 +27,7 @@ class AES:
         self.version = re.search(r'\d\d.\d\d', self.build)[0] if self.build else None
         try:
             self.updated = datetime.strptime(data.get('updated'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, ValueError):
+        except (ValueError, TypeError):
             self.updated = None
 
         self.dynamic_keys = []

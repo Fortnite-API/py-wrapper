@@ -12,11 +12,11 @@ class NewBrCosmetics:
         self.hash = data.get('hash')
         try:
             self.date = datetime.strptime(data.get('date'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, ValueError):
+        except (ValueError, TypeError):
             self.date = None
         try:
             self.last_addition = datetime.strptime(data.get('lastAddition'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, ValueError):
+        except (ValueError, TypeError):
             self.last_addition = None
         self.items = [BrCosmetic(i) for i in data.get('items')] if data.get('items') else None
         self.raw_data = data
@@ -81,7 +81,10 @@ class BrCosmetic:
         self.description = data.get('description')
 
         cosmetic_type = data.get('type', {}) if data.get('type') else {}
-        self.type = BrCosmeticType(cosmetic_type.get('value'))
+        try:
+            self.type = BrCosmeticType(cosmetic_type.get('value'))
+        except ValueError:
+            self.type = BrCosmeticType.UNKNOWN
         self.display_type = cosmetic_type.get('displayValue')
         self.backend_type = cosmetic_type.get('backendValue')
 
@@ -130,14 +133,14 @@ class BrCosmetic:
         self.path = data.get('path')
         try:
             self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, ValueError):
+        except (ValueError, TypeError):
             self.added = None
 
         self.shop_history = []
         for date in data.get('shopHistory', []) if data.get('shopHistory') else []:
             try:
                 self.shop_history.append(datetime.strptime(date, '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo=None))
-            except (ValueError, ValueError):
+            except (ValueError, TypeError):
                 pass
         self.appearances = len(self.shop_history)
         self.first_appearance = self.shop_history[0] if self.appearances > 0 else None
