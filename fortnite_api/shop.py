@@ -95,6 +95,7 @@ class BrShopBundle:
 
     def __init__(self, data):
         self.name = data.get('name')
+        self.info = data.get('info')
         self.image = data.get('image')
         self.raw_data = data
 

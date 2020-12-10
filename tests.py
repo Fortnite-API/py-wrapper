@@ -16,7 +16,7 @@ def sync_test():
     print(fn.cosmetics.search_by_id('CID_461_Athena_Commando_M_DriftSummer', 'CID_298_Athena_Commando_F_IceMaiden'))
     print(fn.cosmetics.fetch_new().items[0].name)
     print(fn.creator_code.search_first('GetOnMyLvl').user.name)
-    print(fn.news.fetch())
+    print('News:', fn.news.fetch(GameLanguage.CHINESE_SIMPLIFIED))
     print(fn.aes.fetch())
     print(fn.stats.fetch_by_name('Luc1412'))
     print(fn.playlist.fetch_all()[0])
