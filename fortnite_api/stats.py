@@ -9,7 +9,7 @@ class BrPlayerStats:
         self.user = Account(data.get('account')) if data.get('account') else None
         self.battle_pass = data.get('battlePass') if data.get('battlePass') else None
         self.image_url = data.get('image')
-        self.stats = None
+        self.stats = data.get('stats')
         self.raw_data = data
 
 
