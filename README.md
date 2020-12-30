@@ -210,7 +210,7 @@ ___
 
 ### BR Stats
 ```
-api.creator_code.fetch_by_name()
+api.stats.fetch_by_name()
 ```
 Returns stats of the requested player account.
 ###### Parameters
@@ -224,7 +224,7 @@ Returns a `BrPlayerStats` object.
 ___
 
 ```
-api.creator_code.exists()
+api.stats.exists()
 ```
 Returns stats of the requested player account by its account id.
 ###### Parameters
