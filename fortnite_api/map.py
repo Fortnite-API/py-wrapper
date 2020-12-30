@@ -2,7 +2,7 @@ class Map:
 
     def __init__(self, data):
         self.blank_image = data['images']['blank']
-        self.poi_image = data['images']['blank']
+        self.poi_image = data['images']['pois']
         self.pois = [POI(x) for x in data['pois']]
         self.raw_data = data
 
