@@ -217,7 +217,7 @@ Returns stats of the requested player account.
 - `name` [str] - Sets the account name.
 - `account_type` [AccountType] (Optional) - Sets the account type.
 - `time_window` [TimeWindow] (Optional) - Sets the time window.
-- `account_type` [StatsImageType] (Optional) - Sets the image platform.
+- `image` [StatsImageType] (Optional) - Sets the image platform.
 ###### Returns
 Returns a `BrPlayerStats` object.
 
