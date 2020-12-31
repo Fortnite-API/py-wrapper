@@ -7,9 +7,9 @@ class BrPlayerStats:
 
     def __init__(self, data):
         self.user = Account(data.get('account')) if data.get('account') else None
-        self.battle_pass = data.get('battlePass') if data.get('battlePass') else None
+        self.battle_pass = BrBattlePass(data['battlePass']) if data.get('battlePass') else None
         self.image_url = data.get('image')
-        self.stats = None
+        self.stats = BrInputs(data['stats']) if data.get('stats') else None
         self.raw_data = data
 
 
