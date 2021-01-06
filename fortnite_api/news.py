@@ -17,7 +17,6 @@ class News:
     """
 
     def __init__(self, data):
-        print(data)
         self.br = GameModeNews(data.get('br')) if data.get('br') else None
         self.stw = GameModeNews(data.get('stw')) if data.get('stw') else None
         self.creative = GameModeNews(data.get('creative')) if data.get('creative') else None
