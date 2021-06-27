@@ -126,6 +126,8 @@ class BrCosmetic:
             if data.get('variants') is not None else None
         self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
             if data.get('gameplayTags') is not None else None
+        self.meta_tags = [meta_tag for meta_tag in data.get('metaTags')] \
+            if data.get('metaTags') is not None else None
         self.showcase_video = 'https://youtube.com/watch?v=' + data.get('showcaseVideo') \
             if data.get('showcaseVideo') else None
         self.display_asset_path = data.get('displayAssetPath')
