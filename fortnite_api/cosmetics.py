@@ -93,7 +93,7 @@ class BrCosmetic:
             self.rarity = BrCosmeticRarity(rarity.get('value'))
         except ValueError:
             self.rarity = BrCosmeticRarity.UNKNOWN
-        self.rarity_text = rarity.get('text')
+        self.rarity_text = rarity.get('displayValue')
         self.backend_rarity = rarity.get('backendValue')
 
         series = data.get('series', {}) if data.get('series') else {}
