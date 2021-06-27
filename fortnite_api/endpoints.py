@@ -37,6 +37,7 @@ _SEARCH_PARAMETERS = {
     'set_text': ['setText', [str, None]],
     'backend_set': ['backendSet', [str, None]],
     'has_introduction': ['hasIntroduction', [bool, None]],
+    'backendIntroduction': ['backendIntroduction', [int, None]],
     'introduction_chapter': ['introductionChapter', [str, None]],
     'introduction_season': ['introductionSeason', [str, None]],
     'has_small_icon': ['hasSmallIcon', [bool, None]],
