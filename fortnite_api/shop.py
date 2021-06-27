@@ -84,9 +84,14 @@ class BrShopEntry:
         self.refundable = data.get('refundable')
         self.sort_priority = data.get('sortPriority')
         self.categories = data.get('categories')
+        self.section_id = data.get('sectionId')
+        self.section = BrShopSectionNew(data.get('section')) if data.get('section') else None
         self.dev_name = data.get('devName')
         self.offer_id = data.get('offerId')
         self.display_asset_path = data.get('displayAssetPath')
+        self.tile_size = data.get('tileSize')
+        self.new_display_asset_path = data.get('newDisplayAssetPath')
+        self.new_display_asset = data.get('newDisplayAsset')
         self.items = [BrCosmetic(item_data) for item_data in data.get('items')]
         self.raw_data = data
 
@@ -104,5 +109,37 @@ class BrShopBanner:
 
     def __init__(self, data):
         self.value = data.get('value')
+        self.intensity = data.get('intensity')
         self.backend_value = data.get('backendValue')
         self.raw_data = data
+
+
+class BrShopSectionNew:
+
+    def __init__(self, data):
+        self.id = data.get('id')
+        self.name = data.get('name')
+        self.index = data.get('index')
+        self.landing_priority = data.get('landingPriority')
+        self.sort_offers_by_ownership = data.get('sortOffersByOwnership')
+        self.show_ineligible_offers = data.get('showIneligibleOffers')
+        self.show_ineligible_offers_if_giftable = data.get('showIneligibleOffersIfGiftable')
+        self.show_timer = data.get('showTimer')
+        self.enable_toast_notification = data.get('enableToastNotification')
+        self.hidden = data.get('hidden')
+
+
+class BrShopNewDisplayAsset:
+
+    def __init__(self, data):
+        self.id = data.get('id')
+        self.material_instances = [BrShopMaterialInstance(mi) for mi in data.get('materialInstances')]
+
+
+class BrShopMaterialInstance:
+
+    def __init__(self, data):
+        self.id = data.get('id')
+        self.images = data.get('images')
+        self.colors = data.get('colors')
+        self.scalings = data.get('scalings')
