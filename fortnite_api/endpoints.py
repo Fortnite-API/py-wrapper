@@ -426,14 +426,14 @@ class SyncStatsEndpoints:
                       image: StatsImageType = StatsImageType.NONE) -> BrPlayerStats:
         params = {'name': name, 'accountType': account_type.value, 'timeWindow': time_window.value,
                   'image': image.value}
-        data = self._client.http.get('v1/stats/br/v2', params=params)
+        data = self._client.http.get('v2/stats/br/v2', params=params)
         return BrPlayerStats(data['data'])
 
     def fetch_by_id(self, account_id: str,
                     time_window: TimeWindow = TimeWindow.LIFETIME,
                     image: StatsImageType = StatsImageType.NONE) -> BrPlayerStats:
         params = {'timeWindow': time_window.value, 'image': image.value}
-        data = self._client.http.get('v1/stats/br/v2/{account_id}'.format(account_id=account_id), params=params)
+        data = self._client.http.get('v2/stats/br/v2/{account_id}'.format(account_id=account_id), params=params)
         return BrPlayerStats(data['data'])
 
 
@@ -448,12 +448,12 @@ class AsyncStatsEndpoints:
                             image: StatsImageType = StatsImageType.NONE) -> BrPlayerStats:
         params = {'name': name, 'accountType': account_type.value, 'timeWindow': time_window.value,
                   'image': image.value}
-        data = await self._client.http.get('v1/stats/br/v2', params=params)
+        data = await self._client.http.get('v2/stats/br/v2', params=params)
         return BrPlayerStats(data['data'])
 
     async def fetch_by_id(self, account_id: str,
                           time_window: TimeWindow = TimeWindow.LIFETIME,
                           image: StatsImageType = StatsImageType.NONE) -> BrPlayerStats:
         params = {'timeWindow': time_window.value, 'image': image.value}
-        data = await self._client.http.get('v1/stats/br/v2/{account_id}'.format(account_id=account_id), params=params)
+        data = await self._client.http.get('v2/stats/br/v2/{account_id}'.format(account_id=account_id), params=params)
         return BrPlayerStats(data['data'])
