@@ -11,7 +11,7 @@ This library offers a complete **sync** and **async** wrapper around the endpoin
 ```
 pip install fortnite-api
 ```
-- Get a API key on https://fortnite-api.com/profile
+- Get a API key on https://dash.fortnite-api.com/account
 
 ## Documentation
 Here is a quick overview how to start.<br><br>
@@ -22,7 +22,7 @@ import fortnite_api
 api = fortnite_api.FortniteAPI()
 ```
 ###### Parameters
-- `api_key` [str] (Optional) - Insert your API key from https://fortnite-api.com/profile
+- `api_key` [str] (Optional) - Insert your API key from https://dash.fortnite-api.com/account
 - `run_async` [bool] (Optional) - Specify if the API should run async. Default is set to `false`
 ###### Attributes
 - `cosmetics` - All cosmetic endpoints
