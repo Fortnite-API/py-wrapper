@@ -30,7 +30,7 @@ class FortniteAPI:
     def __init__(self, api_key: str = None, run_async: bool = False):
         self.http = SyncHTTPClient() if not run_async else AsyncHTTPClient()
         if api_key:
-            self.http.add_header('x-api-key', api_key)
+            self.http.add_header('Authorization', api_key)
 
         self.aes = SyncAESEndpoints(self) if not run_async else AsyncAESEndpoints(self)
         self.banner = SyncBannerEndpoints(self) if not run_async else AsyncBannerEndpoints(self)
