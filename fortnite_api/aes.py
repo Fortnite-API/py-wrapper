@@ -23,7 +23,7 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 import re
 from datetime import datetime
@@ -68,8 +68,53 @@ class AES:
 
 
 class DynamicKey:
+    """Represents a dynamic key.
+    
+    .. containter:: operations
+    
+        .. describe:: x == y
+
+            Checks if the two dynamic key's are equal.
+        
+        .. describe:: x != y
+
+            Checks if two dynamic key's are not equal.
+        
+        .. describe:: str(x)
+            
+            Returns the dynamic key's pak filename.
+        
+        .. describe:: hash(x)
+
+            Returns the dynamic key's hash.
+    
+    Attributes
+    -----------
+    pak_filename: :class:`str`
+        The pak's filename.
+    pak_guid: :class:`str`
+        The pak's guid.
+    key: :class:`str`
+        The key.
+    """
+    __slots__: Tuple[str, ...] = ('pak_filename', 'pak_guid', 'key')
 
     def __init__(self, data):
-        self.pak_filename = data.get('pakFilename')
-        self.pak_guid = data.get('pakGuid')
-        self.key = data.get('key')
+        self.pak_filename: str = data.get('pakFilename')
+        self.pak_guid: str = data.get('pakGuid')
+        self.key: str = data.get('key')
+
+    def __hash__(self) -> int:
+        return hash((self.pak_filename, self.pak_guid, self.key))
+
+    def __eq__(self, o: Union[object, DynamicKey]) -> bool:
+        if not isinstance(o, DynamicKey):
+            return False
+        
+        return self.pak_filename == o.pak_filename and self.pak_guid == o.pak_guid and self.key == o.key
+    
+    def __ne__(self, o: object) -> bool:
+        return not self.__eq__(o)
+    
+    def __str__(self) -> str:
+        return self.pak_filename
