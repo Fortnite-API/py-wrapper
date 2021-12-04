@@ -52,7 +52,7 @@ class AES:
     def __init__(self, data):
         self.main_key: str = data.get('mainKey')
         self.build: str = data.get('build')
-        self.version = re.search(r'\d\d.\d\d', self.build)[0] if self.build else None
+        self.version = re.search(r'\d\d.\d\d', self.build)[0] if self.build else None # type: ignore
         try:
             self.updated = datetime.strptime(data.get('updated'), '%Y-%m-%dT%H:%M:%S%z')
         except (ValueError, TypeError):
