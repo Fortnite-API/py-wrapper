@@ -23,7 +23,7 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Tuple, List
 
 import re
 from datetime import datetime
@@ -42,7 +42,7 @@ class AES:
         The current version where the AES key refers to.
     updated: :class:`datetime.datetime`
         The date where the AES was updates.
-    dynamic_keys: :class:`datetime.datetime`
+    dynamic_keys: List[:class:`DynamicKey`]
         All current dynamic keys
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
@@ -58,7 +58,7 @@ class AES:
         except (ValueError, TypeError):
             self.updated = None
 
-        self.dynamic_keys = []
+        self.dynamic_keys: List[DynamicKey] = []
         for key_data in data.get('dynamicKeys', []) if data.get('dynamicKeys') else []:
             self.dynamic_keys.append(DynamicKey(key_data))
         self.raw_data = data
