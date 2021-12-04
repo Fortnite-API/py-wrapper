@@ -23,6 +23,8 @@ SOFTWARE.
 """
 from __future__ import annotations
 
+from typing import Tuple
+
 import re
 from datetime import datetime
 
@@ -45,10 +47,11 @@ class AES:
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     """
+    __slots__: Tuple[str, ...] = ('main_key', 'build', 'version', 'updated', 'dynamic_keys', 'raw_data')
 
     def __init__(self, data):
-        self.main_key = data.get('mainKey')
-        self.build = data.get('build')
+        self.main_key: str = data.get('mainKey')
+        self.build: str = data.get('build')
         self.version = re.search(r'\d\d.\d\d', self.build)[0] if self.build else None
         try:
             self.updated = datetime.strptime(data.get('updated'), '%Y-%m-%dT%H:%M:%S%z')
