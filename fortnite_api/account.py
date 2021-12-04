@@ -23,7 +23,7 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Union
+from typing import TYPE_CHECKING, Any, Dict, Union, Tuple
 
 class Account:
     """Represents a account.
@@ -57,6 +57,8 @@ class Account:
     """
     if TYPE_CHECKING:
         external_auths: Dict # Adding when User lookup feature is enabled
+        
+    __slots__: Tuple[str, ...] = ('id', 'name', 'raw_data')
 
     def __init__(self, data):
         self.id: str = data.get('id')
