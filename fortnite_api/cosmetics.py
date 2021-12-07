@@ -120,7 +120,6 @@ class BrCosmetic:
         self.background = BrCosmeticImage(other_images.get('background')) if other_images.get('background') else None
         self.cover_art = BrCosmeticImage(other_images.get('coverart')) if other_images.get('coverart') else None
         self.decal = BrCosmeticImage(other_images.get('decal')) if other_images.get('decal') else None
-        self.background = BrCosmeticImage(other_images.get('background')) if other_images.get('background') else None
 
         self.variants = [BrCosmeticVariant(variant) for variant in data.get('variants')] \
             if data.get('variants') is not None else None
