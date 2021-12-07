@@ -57,7 +57,7 @@ class BrCosmetic:
         The featured image in 1024x1024 resolution of the cosmetic.
     background: Optional[:class:`BrCosmeticImage`]
         The background image in 2048x1024 resolution of a loading screen.
-    cover_art: Optional[:class:`BrCosmeticImage`]
+    coverart: Optional[:class:`BrCosmeticImage`]
         The cover art image in 512x512 resolution of a music pack.
     decal: Optional[:class:`BrCosmeticImage`]
         The decal in 512x512 resolution of a spray.
@@ -118,7 +118,7 @@ class BrCosmetic:
         self.featured = BrCosmeticImage(images.get('featured')) if images.get('featured') else None
         other_images = images.get('other', {}) if images.get('other') else {}
         self.background = BrCosmeticImage(other_images.get('background')) if other_images.get('background') else None
-        self.cover_art = BrCosmeticImage(other_images.get('coverart')) if other_images.get('coverart') else None
+        self.coverart = BrCosmeticImage(other_images.get('coverart')) if other_images.get('coverart') else None
         self.decal = BrCosmeticImage(other_images.get('decal')) if other_images.get('decal') else None
 
         self.variants = [BrCosmeticVariant(variant) for variant in data.get('variants')] \
