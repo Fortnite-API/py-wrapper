@@ -123,6 +123,8 @@ class BrCosmetic:
 
         self.variants = [BrCosmeticVariant(variant) for variant in data.get('variants')] \
             if data.get('variants') is not None else None
+        self.search_tags = [st for st in data.get('searchTags')] \
+            if data.get('searchTags') is not None else None
         self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
             if data.get('gameplayTags') is not None else None
         self.meta_tags = [meta_tag for meta_tag in data.get('metaTags')] \
