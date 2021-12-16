@@ -23,7 +23,7 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-from typing import Tuple, List, Union
+from typing import Tuple, List, Union, Dict
 
 import re
 from datetime import datetime
@@ -31,6 +31,24 @@ from datetime import datetime
 
 class AES:
     """Represents a AES Code.
+    
+    .. container:: operations
+    
+        .. describe:: x == y
+
+            Checks if the two AES objects are equal.
+        
+        .. describe:: x != y
+
+            Checks if two AES objects are not equal.
+
+        .. describe:: str(x)
+            
+            Returns the AES main key.
+            
+        .. describe:: hash(x)
+
+            Returns the AES main key and build's hash.
 
     Attributes
     -----------
@@ -52,7 +70,7 @@ class AES:
     def __init__(self, data):
         self.main_key: str = data.get('mainKey')
         self.build: str = data.get('build')
-        self.version = re.search(r'\d\d.\d\d', self.build)[0] if self.build else None # type: ignore
+        self.version: str = re.search(r'\d\d.\d\d', self.build)[0] if self.build else None 
         try:
             self.updated = datetime.strptime(data.get('updated'), '%Y-%m-%dT%H:%M:%S%z')
         except (ValueError, TypeError):
@@ -61,10 +79,22 @@ class AES:
         self.dynamic_keys: List[DynamicKey] = []
         for key_data in data.get('dynamicKeys', []) if data.get('dynamicKeys') else []:
             self.dynamic_keys.append(DynamicKey(key_data))
-        self.raw_data = data
+            
+        self.raw_data: Dict = data
 
     def __str__(self):
         return self.main_key
+    
+    def __eq__(self, o: Union[object, AES]):
+        if not isinstance(o, AES):
+            return False
+        return self.build == o.build and self.main_key == o.main_key and self.dynamic_keys == o.dynamic_keys
+
+    def __ne__(self, o: Union[object, AES]) -> bool:
+        return not self.__eq__(o)
+    
+    def __hash__(self) -> int:
+        return hash((self.build, self.main_key))
 
 
 class DynamicKey:
