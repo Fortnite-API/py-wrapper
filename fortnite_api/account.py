@@ -64,7 +64,7 @@ class Account:
     """
     __slots__: Tuple[str, ...] = ('id', 'name', 'raw_data', 'external_auths')
 
-    def __init__(self, data: AccountPayload):
+    def __init__(self, data: AccountPayload) -> None:
         self.id: str = data['id']
         self.name: str = data['name']
         self.raw_data: AccountPayload = data
