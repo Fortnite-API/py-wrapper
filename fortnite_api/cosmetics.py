@@ -79,6 +79,9 @@ class BrCosmetic:
         self.id = data.get('id')
         self.name = data.get('name')
         self.description = data.get('description')
+        self.exclusive_description = data.get('exclusiveDescription')
+        self.unlock_requirements = data.get('unlockRequirements')
+        self.custom_exclusive_callout = data.get('customExclusiveCallout')
 
         cosmetic_type = data.get('type', {}) if data.get('type') else {}
         try:
@@ -123,6 +126,8 @@ class BrCosmetic:
 
         self.variants = [BrCosmeticVariant(variant) for variant in data.get('variants')] \
             if data.get('variants') is not None else None
+        self.built_in_emote_ids = [be for be in data.get('builtInEmoteIds')] \
+            if data.get('builtInEmoteIds') is not None else None
         self.search_tags = [st for st in data.get('searchTags')] \
             if data.get('searchTags') is not None else None
         self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
@@ -132,6 +137,7 @@ class BrCosmetic:
         self.showcase_video_url = 'https://youtube.com/watch?v=' + data.get('showcaseVideo') \
             if data.get('showcaseVideo') else None
         self.dynamic_pak_id = data.get('dynamicPakId')
+        self.item_preview_hero_path = data.get('itemPreviewHeroPath')
         self.display_asset_path = data.get('displayAssetPath')
         self.definition_path = data.get('definitionPath')
         self.path = data.get('path')
@@ -217,4 +223,5 @@ class BrCosmeticVariantOption:
         self.tag = data.get('tag')
         self.name = data.get('name')
         self.image = BrCosmeticImage(data.get('image'))
+        self.unlock_requirements = data.get('unlockRequirements')
         self.raw_data = data
