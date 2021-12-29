@@ -23,7 +23,11 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, Union, Tuple
+from typing import TYPE_CHECKING, Any, Dict, Union, Tuple
+
+if TYPE_CHECKING:
+    from .types.account import Account as AccountPayload
+
 
 class Account:
     """Represents a account.
@@ -54,14 +58,17 @@ class Account:
         The display name of the user.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
+    external_auths: Dict[Any, Any]
+        The external auths of the user. Please note this will be empty until the User
+        lookup feature is enabled.
     """
     __slots__: Tuple[str, ...] = ('id', 'name', 'raw_data', 'external_auths')
 
-    def __init__(self, data):
-        self.id: str = data.get('id')
-        self.name: str = data.get('name')
-        self.raw_data: Dict[Any, Any] = data
-        self.external_auths: Dict[Any, Any] = {} # Adding when User lookup feature is enabled
+    def __init__(self, data: AccountPayload):
+        self.id: str = data['id']
+        self.name: str = data['name']
+        self.raw_data: AccountPayload = data
+        self.external_auths: Dict[Any, Any] = data.get('external_auths', {}) # Adding when User lookup feature is enabled
         
     def __str__(self) -> str:
         return self.name
