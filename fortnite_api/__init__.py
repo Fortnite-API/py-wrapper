@@ -1,4 +1,4 @@
-__version__ = '2.5.1'
+__version__ = '2.5.2'
 
 from .account import *
 from .aes import *
