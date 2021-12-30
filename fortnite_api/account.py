@@ -51,7 +51,7 @@ class Account:
             Returns the account's hash.
 
     Attributes
-    -----------
+    ----------
     id: :class:`str`
         The id of the user.
     name: :class:`str`
