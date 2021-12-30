@@ -1,162 +1,217 @@
 import math
-from datetime import datetime
+from datetime import datetime, timezone
+from typing import Optional, List, Dict, Any
 
 from fortnite_api.enums import BrCosmeticType, BrCosmeticRarity
 
 
 class NewBrCosmetics:
+    """Represents a new Battle Royal cosmetic response.
+
+    Attributes
+    ----------
+    build: :class:`str`
+        The build of which are the latest cosmetics from
+    previous_build: :class:`str`
+        The previous build
+    hash: :class:`str`
+        The hash of the response
+    date: :class:`datetime.datetime`
+        The date of the response
+    last_addition: :class:`datetime.datetime`
+        The date of the last addition
+    items: List[:class:`BrCosmetic`]
+        A :class:`list` of :class:`BrCosmetic` objects.
+    raw_data: Dict[:class:`str`, Any]
+        The raw data from request. Can be used for saving and recreating the class.
+
+    """
 
     def __init__(self, data):
-        self.build = data.get('build')
-        self.previous_build = data.get('previousBuild')
-        self.hash = data.get('hash')
-        try:
-            self.date = datetime.strptime(data.get('date'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, TypeError):
-            self.date = None
-        try:
-            self.last_addition = datetime.strptime(data.get('lastAddition'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, TypeError):
-            self.last_addition = None
-        self.items = [BrCosmetic(i) for i in data.get('items')] if data.get('items') else None
-        self.raw_data = data
+        self.build: str = data['build']
+        self.previous_build: str = data['previousBuild']
+        self.hash: str = data['hash']
+        self.date: datetime = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S%z')
+        self.last_addition: datetime = datetime.strptime(data['lastAddition'], '%Y-%m-%dT%H:%M:%S%z')
+        self.items: List[BrCosmetic] = [BrCosmetic(i) for i in data['items'] or []]
+        self.raw_data: Dict[str, Any] = data
 
 
 class BrCosmetic:
-    """Represents a Battle Royale Cosmetic.
+    """Represents a Battle Royal cosmetic.
 
     Attributes
     -----------
     id: :class:`str`
         The id of the cosmetic.
-    type: :class:`BrCosmeticType`
-        The type of the cosmetic.
-    backend_type: :class:`str`
-        The internal type of the cosmetic.
-    rarity: :class:`BrCosmeticRarity`
-        The rarity of the cosmetic.
-    backend_rarity: :class:`str`
-        The internal rarity of the cosmetic.
     name: :class:`str`
         The name of the cosmetic in the chosen language.
     description: :class:`str`
         The description of the cosmetic in the chosen language.
+    exclusive_description: Optional[:class:`str`]
+        The exclusive description describing extra cosmetic features of the cosmetic in the chosen language.
+    unlock_requirements: Optional[:class:`str`]
+        The unlock requirements of the cosmetic in the chosen language.
+    custom_exclusive_callout: Optional[:class:`str`]
+        The custom exclusive callout of the cosmetic in the chosen language.
+    type: :class:`BrCosmeticType`
+        The type of the cosmetic.
+    type_text: :class:`str`
+        The display type of the cosmetic.
+    backend_type: :class:`str`
+        The internal type of the cosmetic.
+    rarity: :class:`BrCosmeticRarity`
+        The rarity of the cosmetic.
+    rarity_text: :class:`str`
+        The display rarity of the cosmetic.
+    backend_rarity: :class:`str`
+        The internal rarity of the cosmetic.
+    series: Optional[:class:`str`]
+        The series of the cosmetic.
+    series_image: Optional[:class:`BrCosmeticImage`]
+        The series image of the cosmetic.
+    backend_series: Optional[:class:`str`]
+        The backend series value of the cosmetic.
     set: Optional[:class:`str`]
         The set of the cosmetic in the chosen language.
     set_text: Optional[:class:`str`]
         The text of the set of the cosmetic in the chosen language.
-    series: Optional[:class:`str`]
-        The series of the cosmetic in the chosen language.
-    backend_series: Optional[:class:`str`]
-        The internal series of the cosmetic.
-    small_icon: :class:`BrCosmeticImage`
-        The icon image in 128x128 resolution of the cosmetic.
+    backend_set: Optional[:class:`str`]
+        The backend set value of the cosmetic.
+    introduction_chapter: Optional[:class:`str`]
+        The introduction chapter of the cosmetic.
+    introduction_season: Optional[:class:`str`]
+        The introduction season of the cosmetic.
+    introduction_text: Optional[:class:`str`]
+        The introduction text of the cosmetic in the chosen language.
+    backend_introduction: Optional[:class:`int`]
+        The backend introduction value of the cosmetic.
+    small_icon : Optional[:class:`BrCosmeticImage`]
+        The small icon of the cosmetic. The maximum size is 128x128.
     icon: Optional[:class:`BrCosmeticImage`]
-        The icon image in 512x512 resolution of the cosmetic.
+        The icon of the cosmetic. The maximum size is 512x512.
     featured: Optional[:class:`BrCosmeticImage`]
-        The featured image in 1024x1024 resolution of the cosmetic.
+        The featured image of the cosmetic. The maximum size is 1024x1024.
     background: Optional[:class:`BrCosmeticImage`]
-        The background image in 2048x1024 resolution of a loading screen.
+        The background image of the cosmetic. The maximum size is 2048x1024.
     coverart: Optional[:class:`BrCosmeticImage`]
-        The cover art image in 512x512 resolution of a music pack.
+        The coverart image of the cosmetic. The maximum size is 512x512.
     decal: Optional[:class:`BrCosmeticImage`]
-        The decal in 512x512 resolution of a spray.
-    variants: Optional[List[:class:`BrCosmeticVariant`]]
-        A :class:`list` of :class:`BrCosmeticVariant` of the cosmetic.
-    gameplay_tags: Optional[List[:class:`str`]]
-        A :class:`list` of gameplay tags of the cosmetics.
+        The decal image of the cosmetic. The maximum size is 128x128.
+    variants: List[:class:`BrCosmeticVariant`]
+        A :class:`list` of :class:`BrCosmeticVariant`.
+    built_in_emote_ids: List[:class:`str`]
+        A :class:`list` of built-in emote ids.
+    search_tags: List[:class:`str`]
+        A :class:`list` of search tags.
+    gameplay_tags: List[:class:`str`]
+        A :class:`list` of gameplay tags.
+    meta_tags: List[:class:`str`]
+        A :class:`list` of meta tags.
+    showcase_video_url: Optional[:class:`str`]
+        The showcase YouTube video url of the cosmetic.
+    dynamic_pak_id: Optional[:class:`str`]
+        The dynamic pak id of the cosmetic.
+    item_preview_hero_path: Optional[:class:`str`]
+        The item preview hero path of the cosmetic.
     display_asset_path: Optional[:class:`str`]
-        The path of the display asset.
+        The display asset path of the cosmetic.
+    definition_path: Optional[:class:`str`]
+        The definition path of the cosmetic.
     path: :class:`str`
         The path of the asset.
     added: :class:`datetime.datetime`
         The timestamp when the item was added to the Fortnite-API.com database.
+    shop_history: List[:class:`datetime.datetime`]
+        A :class:`list` of :class:`datetime.datetime` when the cosmetic was published in the item shop.
+    appearances: :class:`int`
+        The amount of appearances in the item shop of the cosmetic.
+    first_appearance: Optional[:class:`datetime.datetime`]
+        The timestamp when the cosmetic was first published in the item shop.
+    last_appearance: Optional[:class:`datetime.datetime`]
+        The timestamp when the cosmetic was last published in the item shop.
+    unseen_for: Optional[:class:`int`]
+        The amount of days since the cosmetic was last published in the item shop.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and recreating the class.
     """
 
-    def __init__(self, data):
-        self.id = data.get('id')
-        self.name = data.get('name')
-        self.description = data.get('description')
-        self.exclusive_description = data.get('exclusiveDescription')
-        self.unlock_requirements = data.get('unlockRequirements')
-        self.custom_exclusive_callout = data.get('customExclusiveCallout')
+    def __init__(self, data: Dict[str, Any]):
+        self.id: str = data['id']
+        self.name: str = data['name']
+        self.description: str = data['description']
+        self.exclusive_description: Optional[str] = data.get('exclusiveDescription')
+        self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
+        self.custom_exclusive_callout: Optional[str] = data.get('customExclusiveCallout')
 
-        cosmetic_type = data.get('type', {}) if data.get('type') else {}
         try:
-            self.type = BrCosmeticType(cosmetic_type.get('value'))
+            self.type: BrCosmeticType = BrCosmeticType(data['type']['value'])
         except ValueError:
-            self.type = BrCosmeticType.UNKNOWN
-        self.display_type = cosmetic_type.get('displayValue')
-        self.backend_type = cosmetic_type.get('backendValue')
+            self.type: BrCosmeticType = BrCosmeticType.UNKNOWN
+        self.type_text: str = data['type']['displayValue']
+        self.backend_type: str = data['type']['backendValue']
 
-        rarity = data.get('rarity', {}) if data.get('rarity') else {}
         try:
-            self.rarity = BrCosmeticRarity(rarity.get('value'))
+            self.rarity: BrCosmeticRarity = BrCosmeticRarity(data['rarity']['value'])
         except ValueError:
-            self.rarity = BrCosmeticRarity.UNKNOWN
-        self.rarity_text = rarity.get('displayValue')
-        self.backend_rarity = rarity.get('backendValue')
+            self.rarity: BrCosmeticRarity = BrCosmeticRarity.UNKNOWN
+        self.rarity_text: str = data['rarity']['displayValue']
+        self.backend_rarity: str = data['rarity']['backendValue']
 
-        series = data.get('series', {}) if data.get('series') else {}
-        self.series = series.get('value')
-        self.series_image = series.get('image')
-        self.backend_series = series.get('backendValue')
+        series = data['series'] or {}
+        self.series: Optional[str] = series.get('value')
+        self.series_image: Optional[BrCosmeticImage] = \
+            BrCosmeticImage(series['image'], 512) if series.get('image') else None
+        self.backend_series: Optional[str] = series.get('backendValue')
 
-        cosmetic_set = data.get('set', {}) if data.get('set') else {}
-        self.set = cosmetic_set.get('value')
-        self.set_text = cosmetic_set.get('text')
-        self.backend_set = cosmetic_set.get('backendValue')
+        cosmetic_set = data['set'] or {}
+        self.set: Optional[str] = cosmetic_set.get('value')
+        self.set_text: Optional[str] = cosmetic_set.get('text')
+        self.backend_set: Optional[str] = cosmetic_set.get('backendValue')
 
-        introduction = data.get('introduction', {}) if data.get('introduction') else {}
-        self.introduction_chapter = introduction.get('chapter')
-        self.introduction_season = introduction.get('season')
-        self.introduction_text = introduction.get('text')
-        self.backend_introduction = introduction.get('backendValue')
+        introduction = data['introduction'] or {}
+        self.introduction_chapter: Optional[str] = introduction.get('chapter')
+        self.introduction_season: Optional[str] = introduction.get('season')
+        self.introduction_text: Optional[str] = introduction.get('text')
+        self.backend_introduction: Optional[int] = introduction.get('backendValue')
 
-        images = data.get('images', {}) if data.get('images') else {}
-        self.small_icon = BrCosmeticImage(images.get('smallIcon')) if images.get('smallIcon') else None
-        self.icon = BrCosmeticImage(images.get('icon')) if images.get('icon') else None
-        self.featured = BrCosmeticImage(images.get('featured')) if images.get('featured') else None
-        other_images = images.get('other', {}) if images.get('other') else {}
-        self.background = BrCosmeticImage(other_images.get('background')) if other_images.get('background') else None
-        self.coverart = BrCosmeticImage(other_images.get('coverart')) if other_images.get('coverart') else None
-        self.decal = BrCosmeticImage(other_images.get('decal')) if other_images.get('decal') else None
+        images = data['images'] or {}
+        self.small_icon: Optional[BrCosmeticImage] = \
+            BrCosmeticImage(images['smallIcon'], 128) if images.get('smallIcon') else None
+        self.icon: Optional[BrCosmeticImage] = BrCosmeticImage(images['icon'], 512) if images.get('icon') else None
+        self.featured: Optional[BrCosmeticImage] = \
+            BrCosmeticImage(images['featured'], 1024) if images.get('featured') else None
+        other_images = images.get('other', {})
+        self.background: Optional[BrCosmeticImage] = \
+            BrCosmeticImage(other_images['background'], 2048) if other_images.get('background') else None
+        self.coverart: Optional[BrCosmeticImage] = \
+            BrCosmeticImage(other_images['coverart'], 512) if other_images.get('coverart') else None
+        self.decal: Optional[BrCosmeticImage] = \
+            BrCosmeticImage(other_images['decal'], 128) if other_images.get('decal') else None
 
-        self.variants = [BrCosmeticVariant(variant) for variant in data.get('variants')] \
-            if data.get('variants') is not None else None
-        self.built_in_emote_ids = [be for be in data.get('builtInEmoteIds')] \
-            if data.get('builtInEmoteIds') is not None else None
-        self.search_tags = [st for st in data.get('searchTags')] \
-            if data.get('searchTags') is not None else None
-        self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
-            if data.get('gameplayTags') is not None else None
-        self.meta_tags = [meta_tag for meta_tag in data.get('metaTags')] \
-            if data.get('metaTags') is not None else None
-        self.showcase_video_url = 'https://youtube.com/watch?v=' + data.get('showcaseVideo') \
-            if data.get('showcaseVideo') else None
-        self.dynamic_pak_id = data.get('dynamicPakId')
-        self.item_preview_hero_path = data.get('itemPreviewHeroPath')
-        self.display_asset_path = data.get('displayAssetPath')
-        self.definition_path = data.get('definitionPath')
-        self.path = data.get('path')
-        try:
-            self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, TypeError):
-            self.added = None
+        self.variants: List[BrCosmeticVariant] = [BrCosmeticVariant(va) for va in data['variants'] or []]
+        self.built_in_emote_ids: List[str] = [be for be in data['builtInEmoteIds'] or []]
+        self.search_tags: List[str] = [st for st in data['searchTags'] or []]
+        self.gameplay_tags: List[str] = [gt for gt in data['gameplayTags'] or []]
+        self.meta_tags: List[str] = [mt for mt in data['metaTags'] or []]
+        self.showcase_video_url: Optional[str] = f'https://youtube.com/watch?v={data["showcaseVideo"]}' \
+            if data['showcaseVideo'] else None
+        self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId')
+        self.item_preview_hero_path: Optional[str] = data.get('itemPreviewHeroPath')
+        self.display_asset_path: Optional[str] = data.get('displayAssetPath')
+        self.definition_path: Optional[str] = data.get('definitionPath')
+        self.path: str = data['path']
+        self.added = datetime.strptime(data['added'], '%Y-%m-%dT%H:%M:%S%z')
 
-        self.shop_history = []
-        for date in data.get('shopHistory', []) if data.get('shopHistory') else []:
-            try:
-                self.shop_history.append(datetime.strptime(date, '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo=None))
-            except (ValueError, TypeError):
-                pass
-        self.appearances = len(self.shop_history)
-        self.first_appearance = self.shop_history[0] if self.appearances > 0 else None
-        self.last_appearance = self.shop_history[self.appearances - 1] if self.appearances > 0 else None
-        self.unseen_for = (datetime.utcnow() - self.last_appearance).days if self.last_appearance else None
-        self.raw_data = data
+        self.shop_history: List[datetime] = []
+        for date in data['shopHistory'] or []:
+            self.shop_history.append(datetime.strptime(date, '%Y-%m-%dT%H:%M:%S%z'))
+        self.appearances: int = len(self.shop_history)
+        self.first_appearance: Optional[datetime] = self.shop_history[0] if self.appearances > 0 else None
+        self.last_appearance: Optional[datetime] = self.shop_history[-1] if self.appearances > 0 else None
+        self.unseen_for: Optional[int] = (datetime.now(timezone.utc) - self.last_appearance).days \
+            if self.last_appearance else None
+        self.raw_data: Dict[str, Any] = data
 
 
 class BrCosmeticImage:
@@ -168,21 +223,28 @@ class BrCosmeticImage:
         The hash of the image.
     """
 
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, url: str, max_size: Optional[int]):
+        self.url: str = url
+        self._max_size: Optional[int] = max_size
 
-    def url_as(self, size):
+    def url_as(self, size: int) -> str:
+        if self._max_size is None:
+            raise ValueError('This image isn\'t resizable.')
         if size < 0 or type(math.sqrt(size)) is float:
             raise TypeError('Size must be a power of 2.')
+        if size < 32 or size > self._max_size:
+            raise TypeError(f'Size must be between 32 and {self._max_size}.')
+        if size == self._max_size:
+            return self.url
         url_without_type = self.url.replace('.png', '')
-        return url_without_type + '_' + size + '.png'
+        return f'{url_without_type}_{size}.png'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.url
 
 
 class BrCosmeticVariant:
-    """Represents a Battle Royale cosmetic image.
+    """Represents a Battle Royale cosmetic variant.
 
     Attributes
     -----------
@@ -191,21 +253,20 @@ class BrCosmeticVariant:
     type: Optional[:class:`str`]
         The type of the variant in the chosen language.
     options: List[:class:`BrCosmeticVariantOption`]
-        A :class:`list` of :class:`BrCosmeticVariantOption` of the variant.
+        A :class:`list` of :class:`BrCosmeticVariantOption`.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
-        self.channel = data.get('channel')
-        self.type = data.get('type')
-        self.options = [BrCosmeticVariantOption(option) for option in data.get('options')] \
-            if data.get('options') is not None else None
-        self.raw_data = data
+    def __init__(self, data: Dict[str, Any]):
+        self.channel: str = data['channel']
+        self.type: Optional[str] = data['type']
+        self.options: List[BrCosmeticVariantOption] = [BrCosmeticVariantOption(op) for op in data['options']]
+        self.raw_data: Dict[str, Any] = data
 
 
 class BrCosmeticVariantOption:
-    """Represents a Battle Royale cosmetic image.
+    """Represents a Battle Royale cosmetic variant option.
 
     Attributes
     -----------
@@ -214,14 +275,16 @@ class BrCosmeticVariantOption:
     name: :class:`str`
         The name of the option in the chosen language.
     image: :class:`BrCosmeticImage`
-        A image of the option.
+        A image of the option. The size is 256x256.
+    unlock_requirements: Optional[:class:`str`]
+        The unlock requirements of the option in the chosen language.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
-        self.tag = data.get('tag')
-        self.name = data.get('name')
-        self.image = BrCosmeticImage(data.get('image'))
-        self.unlock_requirements = data.get('unlockRequirements')
-        self.raw_data = data
+    def __init__(self, data: Dict[str, Any]):
+        self.tag: str = data['tag']
+        self.name: Optional[str] = data['name']
+        self.image: BrCosmeticImage = BrCosmeticImage(data['image'], None)
+        self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
+        self.raw_data: Dict[str, Any] = data
