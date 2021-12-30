@@ -30,7 +30,11 @@ class DynamicKey(TypedDict):
     key: str
 
 
-class Aes(TypedDict):
+class _Aes_Optional(TypedDict, total=False):
+    updated: str
+    
+    
+class Aes(_Aes_Optional):
     build: str
     mainKey: str
     dynamicKeys: List[DynamicKey]
