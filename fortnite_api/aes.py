@@ -71,7 +71,7 @@ class AES:
         The current build where the AES key refers to.
     version: :class:`str`
         The current version where the AES key refers to.
-    updated: Optional[:class:`datetime.datetime`]
+    updated: :class:`datetime.datetime`
         The date where the AES was updates, if available.
     dynamic_keys: List[:class:`DynamicKey`]
         All current dynamic keys
@@ -84,12 +84,7 @@ class AES:
         self.main_key: str = data['mainKey']
         self.build: str = data['build']
         self.version: str = re.findall(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})', self.build)[0]
-
-        self.updated: Optional[datetime.datetime]
-        try:
-            self.updated = _parse_time(data['updated']) 
-        except KeyError:
-            self.updated = None
+        self.updated: Optional[datetime.datetime] = _parse_time(data['updated']) 
         
         self.dynamic_keys: List[DynamicKey] = []
         for key_data in data.get('dynamicKeys', []):
