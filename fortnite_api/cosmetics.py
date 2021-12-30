@@ -181,7 +181,7 @@ class BrCosmetic:
         self.icon: Optional[BrCosmeticImage] = BrCosmeticImage(images['icon'], 512) if images.get('icon') else None
         self.featured: Optional[BrCosmeticImage] = \
             BrCosmeticImage(images['featured'], 1024) if images.get('featured') else None
-        other_images = images.get('other', {})
+        other_images = images.get('other') or {}
         self.background: Optional[BrCosmeticImage] = \
             BrCosmeticImage(other_images['background'], 2048) if other_images.get('background') else None
         self.coverart: Optional[BrCosmeticImage] = \
@@ -190,7 +190,7 @@ class BrCosmetic:
             BrCosmeticImage(other_images['decal'], 128) if other_images.get('decal') else None
 
         self.variants: List[BrCosmeticVariant] = [BrCosmeticVariant(va) for va in data['variants'] or []]
-        self.built_in_emote_ids: List[str] = [be for be in data['builtInEmoteIds'] or []]
+        self.built_in_emote_ids: List[str] = [be for be in data.get('builtInEmoteIds') or []]
         self.search_tags: List[str] = [st for st in data['searchTags'] or []]
         self.gameplay_tags: List[str] = [gt for gt in data['gameplayTags'] or []]
         self.meta_tags: List[str] = [mt for mt in data['metaTags'] or []]
