@@ -72,7 +72,7 @@ class AES:
     version: :class:`str`
         The current version where the AES key refers to.
     updated: :class:`datetime.datetime`
-        The date where the AES was updates, if available.
+        The date where the AES was updates.
     dynamic_keys: List[:class:`DynamicKey`]
         All current dynamic keys
     raw_data: :class:`dict`
