@@ -23,7 +23,7 @@ api = fortnite_api.FortniteAPI()
 ```
 ###### Parameters
 - `api_key` [str] (Optional) - Insert your API key from https://dash.fortnite-api.com/account
-- `run_async` [bool] (Optional) - Specify if the API should run async. Default is set to `false`
+- `run_async` [bool] (Optional) - Specify if the API should run async. Default value is `False`
 ###### Attributes
 - `cosmetics` - All cosmetic endpoints
 - `shop` - All shop endpoints
