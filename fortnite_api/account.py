@@ -29,6 +29,9 @@ from typing import TYPE_CHECKING, Any, Dict, Union, Tuple
 if TYPE_CHECKING:
     from .types.account import Account as AccountPayload
 
+__all__: Tuple[str, ...] = (
+    'Account',
+)
 
 class Account:
     """Represents a account.
@@ -52,7 +55,7 @@ class Account:
             Returns the account's hash.
 
     Attributes
-    -----------
+    ----------
     id: :class:`str`
         The id of the user.
     name: :class:`str`

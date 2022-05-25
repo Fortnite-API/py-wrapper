@@ -1,7 +1,7 @@
 """
 MIT License
 
-Copyright (c) 2019-present Luc1412
+Copyright (c) 2019 Lucas Hardt
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from typing import List, TypedDict
 
-__version__ = '2.5.1'
 
-from .account import *
-from .aes import *
-from .api import FortniteAPI
-from .banner import *
-from .cosmetics import *
-from .creator_code import *
-from .endpoints import *
-from .enums import *
-from .errors import *
-from .map import *
-from .news import *
-from .playlist import *
-from .shop import *
-from .stats import *
-from .utils import *
+class DynamicKey(TypedDict):
+    pakFilename: str
+    pakGuid: str
+    key: str
+    
+    
+class Aes(TypedDict):
+    build: str
+    mainKey: str
+    updated: str
+    dynamicKeys: List[DynamicKey]
+    
+    
