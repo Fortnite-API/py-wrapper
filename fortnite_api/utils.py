@@ -27,8 +27,8 @@ from typing import Tuple
 import datetime
 
 __all__: Tuple[str, ...] = (
-    '_parse_time',
+    'parse_time',
 )
 
-def _parse_time(timestamp: str) -> datetime.datetime:
+def parse_time(timestamp: str) -> datetime.datetime:
     return datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S%z')

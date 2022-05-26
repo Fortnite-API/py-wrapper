@@ -27,7 +27,7 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING, Optional, Tuple, List, Union
 
-from .utils import _parse_time
+from .utils import parse_time
 
 if TYPE_CHECKING:
     from .types.aes import (
@@ -85,7 +85,7 @@ class AES:
         self.main_key: str = data['mainKey']
         self.build: str = data['build']
         self.version: str = re.findall(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})', self.build)[0]
-        self.updated: Optional[datetime.datetime] = _parse_time(data['updated']) 
+        self.updated: Optional[datetime.datetime] = parse_time(data['updated']) 
         
         self.dynamic_keys: List[DynamicKey] = []
         for key_data in data.get('dynamicKeys', []):
