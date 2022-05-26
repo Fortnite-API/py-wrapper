@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Optional, Tuple, List, Union
+from typing import TYPE_CHECKING, Tuple, List, Union
 
 from .utils import parse_time
 
@@ -42,6 +42,7 @@ __all__: Tuple[str, ...] = (
     'DynamicKey'
 )
 
+VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})')
 
 class AES:
     """Represents a AES Code.
@@ -84,13 +85,9 @@ class AES:
     def __init__(self, data: AesPayload):
         self.main_key: str = data['mainKey']
         self.build: str = data['build']
-        self.version: str = re.findall(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})', self.build)[0]
-        self.updated: Optional[datetime.datetime] = parse_time(data['updated']) 
-        
-        self.dynamic_keys: List[DynamicKey] = []
-        for key_data in data.get('dynamicKeys', []):
-            self.dynamic_keys.append(DynamicKey(key_data))
-            
+        self.version: str = VERSION_REGEX.findall(self.build)[0]
+        self.updated: datetime.datetime = parse_time(data['updated']) 
+        self.dynamic_keys: List[DynamicKey] = [DynamicKey(entry) for entry in data.get('dynamicKeys', [])]
         self.raw_data: AesPayload = data
 
     def __str__(self):
