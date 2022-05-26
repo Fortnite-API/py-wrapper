@@ -26,7 +26,6 @@ __version__ = '2.5.1'
 
 from .account import *
 from .aes import *
-from .api import FortniteAPI
 from .banner import *
 from .cosmetics import *
 from .creator_code import *
@@ -39,3 +38,4 @@ from .playlist import *
 from .shop import *
 from .stats import *
 from .utils import *
+from .api import FortniteAPI as FortniteAPI
