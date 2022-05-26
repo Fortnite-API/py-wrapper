@@ -21,28 +21,50 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
 
 import math
+from typing import Any, Dict, Optional, Tuple
 
+__all__: Tuple[str, ...] = (
+    'Banner',
+    'BannerColor',
+    'BrBannerImage'
+)
 
 class Banner:
 
-    def __init__(self, data):
-        self.id = data.get('id')
-        self.name = data.get('name')
-        self.description = data.get('description')
-        self.category = data.get('category')
-        self.full_usage_rights = data.get('fullUsageRights')
+    __slots__: Tuple[str, ...] = (
+        'id',
+        'name',
+        'description',
+        'category',
+        'full_usage_rights',
+        'dev_name',
+        'small_icon',
+        'icon',
+        'raw_data',
+    )
 
-        images = data.get('images', {}) if data.get('images') else {}
-        self.small_icon = BrBannerImage(images.get('smallIcon')) if images.get('smallIcon') else None
-        self.icon = BrBannerImage(images.get('icon')) if images.get('icon') else None
-        self.raw_data = data
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.id: str = data['id']
+        self.name: str = data['str']
+        self.description: str = data['category']
+        self.category: str = data['category']
+        self.full_usage_rights = data['fullUsageRights']
+        self.dev_name: str = data['devName']
+
+        images: Dict[str, Any] = data['images']
+        self.small_icon: Optional[BrBannerImage] = BrBannerImage(smi) if (smi := images.get('smallIcon')) else None
+        self.icon: Optional[BrBannerImage] = BrBannerImage(i) if (i := images.get('icon')) else None
+        self.raw_data: Dict[str, Any] = data
 
 
 class BannerColor:
 
-    def __init__(self, data):
+    __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
         self.id = data.get('id')
         self.color = data.get('color')
         self.category = data.get('category')
@@ -59,14 +81,17 @@ class BrBannerImage:
         The hash of the image.
     """
 
-    def __init__(self, url):
+    __slots__: Tuple[str, ...] = ('url',)
+
+    def __init__(self, url: str) -> None:
         self.url = url
 
-    def url_as(self, size):
+    def url_as(self, size: int) -> str:
         if size < 0 or type(math.sqrt(size)) is float:
             raise TypeError('Size must be a power of 2.')
+
         url_without_type = self.url.replace('.png', '')
-        return url_without_type + '_' + size + '.png'
+        return f'{url_without_type}_{size}.png'
 
     def __str__(self):
         return self.url
