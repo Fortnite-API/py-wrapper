@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from typing import Optional
 from .endpoints import *
 from .http import SyncHTTPClient, AsyncHTTPClient
 
@@ -49,7 +50,7 @@ class FortniteAPI:
         The Shop endpoints. The class depends whether the api runs sync or async.
     """
 
-    def __init__(self, api_key: str = None, run_async: bool = False):
+    def __init__(self, api_key: Optional[str] = None, run_async: bool = False) -> None:
         self.http = SyncHTTPClient() if not run_async else AsyncHTTPClient()
         if api_key:
             self.http.add_header('Authorization', api_key)
