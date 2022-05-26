@@ -21,12 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
 
 import math
-from datetime import datetime, timezone
-from typing import Optional, List, Dict, Any
+import datetime
+from typing import Optional, List, Dict, Any, Tuple
 
-from fortnite_api.enums import BrCosmeticType, BrCosmeticRarity
+from .enums import BrCosmeticType, BrCosmeticRarity
+from .utils import parse_time
 
 
 class NewBrCosmetics:
@@ -48,15 +50,17 @@ class NewBrCosmetics:
         A :class:`list` of :class:`BrCosmetic` objects.
     raw_data: Dict[:class:`str`, Any]
         The raw data from request. Can be used for saving and recreating the class.
-
     """
 
-    def __init__(self, data):
+    __slots__: Tuple[str, ...] = ('build', 'previous_build', 'hash', 'date', 'last_addition', 'items', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
         self.build: str = data['build']
         self.previous_build: str = data['previousBuild']
         self.hash: str = data['hash']
-        self.date: datetime = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S%z')
-        self.last_addition: datetime = datetime.strptime(data['lastAddition'], '%Y-%m-%dT%H:%M:%S%z')
+
+        self.date: datetime.datetime = parse_time(data['date'])
+        self.last_addition: datetime.datetime = parse_time(data['lastAddition'])
         self.items: List[BrCosmetic] = [BrCosmetic(i) for i in data['items'] or []]
         self.raw_data: Dict[str, Any] = data
 
@@ -160,6 +164,51 @@ class BrCosmetic:
         The raw data from request. Can be used for saving and recreating the class.
     """
 
+    __slots__: Tuple[str, ...] = (
+        'id',
+        'name',
+        'description',
+        'exclusive_description',
+        'unlock_requirements',
+        'custom_exclusive_callout',
+        'type',
+        'type_text',
+        'backend_type',
+        'rarity',
+        'rarity_text',
+        'backend_rarity',
+        'series',
+        'series_image',
+        'backend_series',
+        'set',
+        'set_text',
+        'backend_set',
+        'introduction_chapter',
+        'introduction_season',
+        'introduction_text',
+        'backend_introduction',
+        'small_icon',
+        'icon',
+        'featured',
+        'background',
+        'coverart',
+        'decal',
+        'variants',
+        'built_in_emote_ids',
+        'search_tags',
+        'gameplay_tags',
+        'meta_tags',
+        'showcase_video_url',
+        'dynamic_pak_id',
+        'item_preview_hero_path',
+        'display_asset_path',
+        'definition_path',
+        'path',
+        'added',
+        'shop_history',
+        'raw_data',
+    )
+
     def __init__(self, data: Dict[str, Any]):
         self.id: str = data['id']
         self.name: str = data['name']
@@ -184,8 +233,7 @@ class BrCosmetic:
 
         series = data['series'] or {}
         self.series: Optional[str] = series.get('value')
-        self.series_image: Optional[BrCosmeticImage] = \
-            BrCosmeticImage(series['image'], 512) if series.get('image') else None
+        self.series_image: Optional[BrCosmeticImage] = BrCosmeticImage(series['image'], 512) if series.get('image') else None
         self.backend_series: Optional[str] = series.get('backendValue')
 
         cosmetic_set = data['set'] or {}
@@ -200,42 +248,64 @@ class BrCosmetic:
         self.backend_introduction: Optional[int] = introduction.get('backendValue')
 
         images = data['images'] or {}
-        self.small_icon: Optional[BrCosmeticImage] = \
+        self.small_icon: Optional[BrCosmeticImage] = (
             BrCosmeticImage(images['smallIcon'], 128) if images.get('smallIcon') else None
+        )
         self.icon: Optional[BrCosmeticImage] = BrCosmeticImage(images['icon'], 512) if images.get('icon') else None
-        self.featured: Optional[BrCosmeticImage] = \
+        self.featured: Optional[BrCosmeticImage] = (
             BrCosmeticImage(images['featured'], 1024) if images.get('featured') else None
+        )
+
         other_images = images.get('other') or {}
-        self.background: Optional[BrCosmeticImage] = \
+        self.background: Optional[BrCosmeticImage] = (
             BrCosmeticImage(other_images['background'], 2048) if other_images.get('background') else None
-        self.coverart: Optional[BrCosmeticImage] = \
+        )
+        self.coverart: Optional[BrCosmeticImage] = (
             BrCosmeticImage(other_images['coverart'], 512) if other_images.get('coverart') else None
-        self.decal: Optional[BrCosmeticImage] = \
+        )
+        self.decal: Optional[BrCosmeticImage] = (
             BrCosmeticImage(other_images['decal'], 128) if other_images.get('decal') else None
+        )
 
         self.variants: List[BrCosmeticVariant] = [BrCosmeticVariant(va) for va in data['variants'] or []]
         self.built_in_emote_ids: List[str] = [be for be in data.get('builtInEmoteIds') or []]
         self.search_tags: List[str] = [st for st in data['searchTags'] or []]
         self.gameplay_tags: List[str] = [gt for gt in data['gameplayTags'] or []]
         self.meta_tags: List[str] = [mt for mt in data['metaTags'] or []]
-        self.showcase_video_url: Optional[str] = f'https://youtube.com/watch?v={data["showcaseVideo"]}' \
-            if data['showcaseVideo'] else None
+        self.showcase_video_url: Optional[str] = (
+            f'https://youtube.com/watch?v={data["showcaseVideo"]}' if data['showcaseVideo'] else None
+        )
         self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId')
         self.item_preview_hero_path: Optional[str] = data.get('itemPreviewHeroPath')
         self.display_asset_path: Optional[str] = data.get('displayAssetPath')
         self.definition_path: Optional[str] = data.get('definitionPath')
         self.path: str = data['path']
-        self.added = datetime.strptime(data['added'], '%Y-%m-%dT%H:%M:%S%z')
+        self.added: datetime.datetime = parse_time(data['added'])
 
-        self.shop_history: List[datetime] = []
-        for date in data['shopHistory'] or []:
-            self.shop_history.append(datetime.strptime(date, '%Y-%m-%dT%H:%M:%S%z'))
-        self.appearances: int = len(self.shop_history)
-        self.first_appearance: Optional[datetime] = self.shop_history[0] if self.appearances > 0 else None
-        self.last_appearance: Optional[datetime] = self.shop_history[-1] if self.appearances > 0 else None
-        self.unseen_for: Optional[int] = (datetime.now(timezone.utc) - self.last_appearance).days \
-            if self.last_appearance else None
+        self.shop_history: List[datetime.datetime] = [parse_time(date) for date in data['shopHistory'] or []]
         self.raw_data: Dict[str, Any] = data
+
+    @property
+    def first_appearance(self) -> Optional[datetime.datetime]:
+        if not self.shop_history:
+            return None
+
+        return self.shop_history[0]
+
+    @property
+    def last_appearance(self) -> Optional[datetime.datetime]:
+        if not self.shop_history:
+            return None
+
+        return self.shop_history[-1]
+
+    @property
+    def appearances(self) -> int:
+        return len(self.shop_history)
+
+    @property
+    def unseen_for(self) -> Optional[int]:
+        return (datetime.datetime.utcnow() - self.last_appearance).days if self.last_appearance else None
 
 
 class BrCosmeticImage:
@@ -247,7 +317,9 @@ class BrCosmeticImage:
         The hash of the image.
     """
 
-    def __init__(self, url: str, max_size: Optional[int]):
+    __slots__: Tuple[str, ...] = ('url', '_max_size')
+
+    def __init__(self, url: str, max_size: Optional[int]) -> None:
         self.url: str = url
         self._max_size: Optional[int] = max_size
 
@@ -258,8 +330,10 @@ class BrCosmeticImage:
             raise TypeError('Size must be a power of 2.')
         if size < 32 or size > self._max_size:
             raise TypeError(f'Size must be between 32 and {self._max_size}.')
+
         if size == self._max_size:
             return self.url
+
         url_without_type = self.url.replace('.png', '')
         return f'{url_without_type}_{size}.png'
 
