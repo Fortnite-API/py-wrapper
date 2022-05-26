@@ -21,8 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
+
+from typing import Tuple, Dict, Any
 
 from .account import Account
+
+__all__: Tuple[str, ...] = ('CreatorCode',)
 
 
 class CreatorCode:
@@ -42,7 +47,9 @@ class CreatorCode:
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
+    __slots__: Tuple[str, ...] = ('code', 'user', 'disabled', 'verified', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
         self.code = data.get('code')
         self.user = Account(data.get('account')) if data.get('account') else None
         self.disabled = data.get('status', '').lower() == 'disabled'
