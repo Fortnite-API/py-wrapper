@@ -21,81 +21,357 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
 
-import json
-
+import abc
+import time
+import sys
 import aiohttp
+import asyncio
 import requests
+from typing import Any, Dict, List, Literal, Optional, Union, TypeVar
 
-from .errors import ServiceUnavailable, RateLimited, Unauthorized, NotFound, Forbidden
+from . import __version__
+from .utils import to_json
+from .errors import *
 
-BASE_URL = 'https://fortnite-api.com/'
+T = TypeVar('T', bound='Any')
+
+# Similar to how dpy manages routes, we'll follow this pattern as well
+class Route:
+
+    BASE_URL = 'https://fortnite-api.com/'
+
+    def __init__(self, method: str, endpoint: str, **params: Any) -> None:
+        self.method: str = method
+        self.endpoint: str = endpoint
+        self.params: Optional[Dict[str, Any]] = params
+
+        url = self.BASE_URL + endpoint
+        if params is not None:
+            url = url.format(params)
+
+        self.url: str = url
 
 
-class SyncHTTPClient:
+class BaseHTTPClient(abc.ABC):
+    def __init__(
+        self,
+        *,
+        token: Optional[str] = None,
+        run_async: bool = False,
+    ) -> None:
+        self.run_async: bool = run_async
 
-    def __init__(self):
-        self.headers = {}
+        self.headers: Dict[str, Any] = {'User-Agent': self.user_agent}
+        
+        self.token: Optional[str] = token
+        if self.token is not None:
+            self.headers['Authorization'] = self.token
+            
+        self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {}) Python/{1[0]}.{1[1]}'.format(
+            __version__, sys.version_info
+        )
+    
+    @abc.abstractmethod
+    def request(self, route: Route, **kwargs: Any) -> Any:
+        ...
 
-    def add_header(self, key, val):
-        self.headers[key] = val
+    def get_aes(self, key_format: str) -> Dict[Any, Any]:  # Note: replace with typed dict's when they're done
+        r: Route = Route('GET', '/v2/aes')
+        params: Dict[str, str] = {'keyFormat': key_format}
+        return self.request(r, params=params)
 
-    def remove_header(self, key):
-        return self.headers.pop(key)
+    def get_banners(self, language: Optional[str] = None) -> List[Dict[Any, Any]]: 
+        r: Route = Route('GET', '/v1/banners')
+        params: Dict[str, str] = {}
 
-    def get(self, endpoint, params=None):
-        response = requests.get(BASE_URL + endpoint, params=params, headers=self.headers)
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_banner_colors(self) -> List[Dict[Any, Any]]:
+        r: Route = Route('GET', '/v1/banners/colors')
+        return self.request(r) 
+
+    def get_cosmetics(self, language: Optional[str] = None) -> List[Dict[Any, Any]]:
+        r: Route = Route('GET', '/v2/cosmetics/br')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_new_cosmetics(self, language: Optional[str] = None) -> List[Dict[Any, Any]]:
+        r: Route = Route('GET', '/v2/cosmetics/br/new')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_cosmetic(self, id: str, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/cosmetics/br/{id}', id=id)
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+ 
+    # kwargs will be expanded upon in client so its understood what you can and cant pass
+    def search_cosmetic(self, **kwargs: Any) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/cosmetics/br/search')
+        return self.request(r, params=kwargs)
+    
+    def search_cosmetic_all(self, **kwargs: Any) -> List[Dict[Any, Any]]:
+        r: Route = Route('GET', '/v2/cosmetics/br/search/all')
+        return self.request(r, params=kwargs)
+
+    def get_creator_code(self, name: str) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/creatorcode', name=name)
+        params: Dict[str, str] = {'name': name}
+        return self.request(r, params=params)
+
+    def get_map(self, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v1/map')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_news(self, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/news')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_br_news(self, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/news/br')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_stw_news(self, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/news/stw')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_creative_news(self, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/news/creative')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_playlists(self, language: Optional[str] = None) -> List[Dict[Any, Any]]:
+        r: Route = Route('GET', '/v1/playlists')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_playlist(self, id: str, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v1/playlists/{id}', id=id)
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_br_shop(self, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/shop/br')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_br_shop_combined(self, language: Optional[str] = None) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/shop/br/combined')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    def get_br_stats(
+        self,
+        name: str,
+        account_type: Optional[Literal['epic', 'psn', 'xbl']] = None,
+        time_window: Optional[Literal['season', 'lifetime']] = None,
+        image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch']] = None,
+    ) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/stats/br/v2', name=name)
+        params: Dict[str, str] = {'name': name}
+
+        if account_type:
+            params['account_type'] = account_type
+
+        if time_window:
+            params['time_window'] = time_window
+
+        if image:
+            params['image'] = image
+
+        return self.request(r, params=params)
+    
+    def get_br_stats_by_id(
+        self,
+        account_id: str,
+        time_window: Optional[Literal['season', 'lifetime']] = None,
+        image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch']] = None,
+    ) -> Dict[Any, Any]:
+        r: Route = Route('GET', '/v2/stats/br/v2/{account_id}', account_id=account_id)
+        params: Dict[str, str] = {}
+
+        if time_window:
+            params['time_window'] = time_window
+
+        if image:
+            params['image'] = image
+
+        return self.request(r, params=params) 
+
+
+class AsyncHTTPClient(BaseHTTPClient):
+    
+    def __init__(self, *args: Any, session: Optional[aiohttp.ClientSession] = None, **kwargs: Any) -> None:
+        self.session: Optional[aiohttp.ClientSession] = session
+        self._http_lock: asyncio.Lock = asyncio.Lock()
+        super().__init__(*args, **kwargs)
+    
+    async def _parse_async_response(self, response: aiohttp.ClientResponse) -> Union[Dict[str, Any], str, bytes]:
         try:
-            data = response.json()
-        except json.JSONDecodeError:
-            data = {'error': response.text}
-        if response.status_code == 200:
-            return data
-        elif response.status_code == 401:
-            raise Unauthorized(data.get('error', 'Error message not provided!'))
-        elif response.status_code == 403:
-            raise Forbidden(data.get('error', 'Error message not provided!'))
-        elif response.status_code == 404:
-            raise NotFound(data.get('error', 'Error message not provided!'))
-        elif response.status_code == 429:
-            raise RateLimited(data.get('error', 'Error message not provided!'))
-        elif response.status_code == 503:
-            raise ServiceUnavailable(data.get('error', 'Error message not provided!'))
-        else:
-            raise Exception(data.get('error', 'Error message not provided') + '. Status Code: {0}'
-                            .format(str(response.status_code)))
+            text = await response.text()
+        except UnicodeDecodeError:
+            return await response.read()
+
+        if response.headers['Content-Type'].startswith('application/json'):
+            return to_json(text)
+
+        return text
+
+    async def request(self, route: Route, **kwargs: Any) -> Any:
+        if self.session is None:
+            self.session = aiohttp.ClientSession()
+
+        response: Optional[aiohttp.ClientResponse] = None
+        async with self._http_lock:
+            for tries in range(5):  # Just in case we get rate limited
+
+                async with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
+                    data = await self._parse_async_response(response)
+
+                    if 300 > response.status >= 200:  # Everything is ok
+                        if isinstance(data, dict):
+                            return data.get('data', data)
+
+                        return data
+
+                    # Let's try and find an error message
+                    error: str = 'Error message not provided!'
+                    if isinstance(data, dict):
+                        error = data.get('data', data).get('error', error)
+
+                    if response.status == 401:
+                        raise Unauthorized(error)
+
+                    if response.status == 403:
+                        raise Forbidden(error)
+
+                    if response.status == 404:
+                        raise NotFound(error)
+
+                    if response.status == 429:  # NOTE: Handle this better down the road
+                        raise RateLimited(error)
+
+                    if response.status in {500, 502, 504}:
+                        await asyncio.sleep(1 + tries * 2)
+                        continue
+
+                    if response.status > 500:
+                        raise ServiceUnavailable(error)
+
+        if response is not None:
+            raise ServiceUnavailable('Service unavailable')
+
+        raise RuntimeError('Unreachable code reached!')
 
 
-class AsyncHTTPClient:
-
-    def __init__(self):
-        self.headers = {}
-
-    def add_header(self, key, val):
-        self.headers[key] = val
-
-    def remove_header(self, key):
-        return self.headers.pop(key)
-
-    async def get(self, endpoint, params=None):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(BASE_URL + endpoint, params=params, headers=self.headers) as response:
-                try:
-                    data = await response.json()
-                except aiohttp.ContentTypeError:
-                    data = {'error': await response.text()}
-                if response.status == 200:
-                    return data
-                if response.status == 401:
-                    raise Unauthorized(data.get('error', 'Error message not provided!'))
-                elif response.status == 403:
-                    raise Forbidden(data.get('error', 'Error message not provided!'))
-                elif response.status == 404:
-                    raise NotFound(data.get('error', 'Error message not provided!'))
-                elif response.status == 429:
-                    raise RateLimited(data.get('error', 'Error message not provided!'))
-                elif response.status == 503:
-                    raise ServiceUnavailable(data.get('error', 'Error message not provided!'))
+class HTTPClient(BaseHTTPClient):
+    
+    def __init__(self, *args: Any, session: Optional[requests.Session] = None, **kwargs: Any) -> None:
+        self.session: requests.Session = session or requests.Session()
+        super().__init__(*args, **kwargs)
+    
+    def request(self, route: Route, **kwargs: Any) -> Any:
+        response: Optional[requests.Response] = None
+        for tries in range(5):
+            with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
+                # We arent able to parse the same as we are in async mode, so we'll need
+                # to use some other logic here
+                if response.headers['Content-Type'].startswith('application/json'):
+                    data = to_json(response.text)
                 else:
-                    raise Exception(data.get('error', 'Error message not provided') + '. Status Code: {0}'
-                                    .format(str(response.status)))
+                    try:
+                        data = response.text
+                    except Exception:
+                        data = response.content
+
+            if 300 > response.status_code >= 200:  # Everything is ok
+                if isinstance(data, dict):
+                    return data.get('data', data)
+
+                return data
+
+            # Let's try and find an error message
+            error: str = 'Error message not provided!'
+            if isinstance(data, dict):
+                error = data.get('error', error)
+
+            if response.status_code == 401:
+                raise Unauthorized(error)
+
+            if response.status_code == 403:
+                raise Forbidden(error)
+
+            if response.status_code == 404:
+                raise NotFound(error)
+
+            if response.status_code == 429:  # NOTE: Handle this better down the road
+                raise RateLimited(error)
+
+            if response.status_code in {500, 502, 504}:
+                time.sleep(1 + tries * 2)
+                continue
+
+            if response.status_code > 500:
+                raise ServiceUnavailable(error)
+
+        if response is not None:
+            raise ServiceUnavailable('Service unavailable')
+
+        raise RuntimeError('Unreachable code reached!')
