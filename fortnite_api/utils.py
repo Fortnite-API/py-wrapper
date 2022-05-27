@@ -23,12 +23,31 @@ SOFTWARE.
 """
 from __future__ import annotations 
 
-from typing import Tuple
 import datetime
+from typing import Any, Tuple, Dict
+
+try:
+    import orjson
+    _has_orjson: bool = True
+except ImportError:
+    import json
+    _has_orjson: bool = False
 
 __all__: Tuple[str, ...] = (
     'parse_time',
 )
 
+if _has_orjson:
+
+    def to_json(string: str) -> Dict[Any, Any]:
+        return orjson.loads(string)
+
+else:
+
+    def to_json(string: str) -> Dict[Any, Any]:
+        return json.loads(string)
+
 def parse_time(timestamp: str) -> datetime.datetime:
     return datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S%z')
+
+        
