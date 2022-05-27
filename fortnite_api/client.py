@@ -23,13 +23,26 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-from typing import Optional
+import inspect
+from typing import TYPE_CHECKING, Generic, Optional, Union, Type, Awaitable, TypeVar, Any, overload, Coroutine
+from typing_extensions import ParamSpec
 
 from .endpoints import *
-from .http import SyncHTTPClient, AsyncHTTPClient
+from .enums import *
+from .aes import AES
+from .http import HTTPClient, AsyncHTTPClient, BaseHTTPClient
+
+if TYPE_CHECKING:
+    import aiohttp
+    import requests
+
+T = TypeVar('T')
+TC = TypeVar('TC')
+P = ParamSpec('P')
+HttpT = TypeVar('HttpT', HTTPClient, AsyncHTTPClient)
 
 
-class FortniteAPI:
+class FortniteAPI(Generic[HttpT]):
     r"""A number of options can be passed to the :class:`FortniteAPI`.
 
     Parameters
@@ -52,17 +65,34 @@ class FortniteAPI:
         The Shop endpoints. The class depends whether the api runs sync or async.
     """
 
-    def __init__(self, api_key: Optional[str] = None, run_async: bool = False) -> None:
-        self.http = SyncHTTPClient() if not run_async else AsyncHTTPClient()
-        if api_key:
-            self.http.add_header('Authorization', api_key)
+    def __init__(
+        self, 
+        api_key: Optional[str] = None,
+        *,
+        run_async: bool = False,
+        session: Optional[Union[requests.Session, aiohttp.ClientSession]] = None
+    ) -> None:
+        self.http: BaseHTTPClient[Any] = BaseHTTPClient(
+            session=session,
+            token=api_key,
+            run_async=run_async
+        )
+        
+    async def _wrap_async_method(self, result: Awaitable[Any], object_cls: Type[T]) -> T:
+        data = await result
+        return object_cls(data=data)
+        
+    @overload
+    def fetch_aes(self: FortniteAPI[HTTPClient], key_format: KeyFormat) -> AES:
+        ...
+    
+    @overload
+    def fetch_aes(self: FortniteAPI[AsyncHTTPClient], key_format: KeyFormat) -> Coroutine[Any, Any, AES]:
+        ...
+        
+    def fetch_aes(self, key_format: KeyFormat) -> Union[Coroutine[Any, Any, AES], AES]:
+        data = self.http.get_aes(key_format.value)
+        if inspect.isawaitable(data):
+            return self._wrap_async_method(data, AES)
 
-        self.aes = SyncAESEndpoints(self) if not run_async else AsyncAESEndpoints(self)
-        self.banner = SyncBannerEndpoints(self) if not run_async else AsyncBannerEndpoints(self)
-        self.cosmetics = SyncCosmeticsEndpoints(self) if not run_async else AsyncCosmeticsEndpoints(self)
-        self.creator_code = SyncCreatorCodeEndpoints(self) if not run_async else AsyncCreatorCodeEndpoints(self)
-        self.map = SyncMapEndpoints(self) if not run_async else AsyncMapEndpoints(self)
-        self.news = SyncNewsEndpoints(self) if not run_async else AsyncNewsEndpoints(self)
-        self.playlist = SyncPlaylistEndpoints(self) if not run_async else AsyncPlaylistEndpoints(self)
-        self.shop = SyncShopEndpoints(self) if not run_async else AsyncShopEndpoints(self)
-        self.stats = SyncStatsEndpoints(self) if not run_async else AsyncStatsEndpoints(self)
+        return AES(data=data) # type: ignore
