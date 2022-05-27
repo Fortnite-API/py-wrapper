@@ -29,11 +29,16 @@ import sys
 import aiohttp
 import asyncio
 import requests
-from typing import Any, Dict, List, Literal, Optional, Union, TypeVar
+from typing import Any, Dict, List, Literal, Optional, Union, TypeVar, TYPE_CHECKING
 
 from . import __version__
 from .utils import to_json
 from .errors import *
+
+if TYPE_CHECKING:
+    from .types import (
+        aes
+    )
 
 T = TypeVar('T', bound='Any')
 
@@ -77,7 +82,7 @@ class BaseHTTPClient(abc.ABC):
     def request(self, route: Route, **kwargs: Any) -> Any:
         ...
 
-    def get_aes(self, key_format: str) -> Dict[Any, Any]:  # Note: replace with typed dict's when they're done
+    def get_aes(self, key_format: str) -> aes.Aes:  # Note: replace with typed dict's when they're done
         r: Route = Route('GET', '/v2/aes')
         params: Dict[str, str] = {'keyFormat': key_format}
         return self.request(r, params=params)
