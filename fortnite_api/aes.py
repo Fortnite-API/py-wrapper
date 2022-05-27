@@ -36,12 +36,12 @@ if TYPE_CHECKING:
 
     import datetime
 
-__all__: Tuple[str, ...] = ('AES', 'DynamicKey')
+__all__: Tuple[str, ...] = ('Aes', 'DynamicKey')
 
 VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})')
 
 
-class AES:
+class Aes:
     """Represents a AES Code.
 
     .. container:: operations
