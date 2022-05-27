@@ -21,16 +21,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
 
-from enum import Enum
+import enum
 
 
-class KeyFormat(Enum):
+class KeyFormat(enum.Enum):
     HEX = 'hex'
     BASE64 = 'base64'
 
 
-class GameLanguage(Enum):
+class GameLanguage(enum.Enum):
     ARABIC = 'ar'
     GERMAN = 'de'
     ENGLISH = 'en'
@@ -48,14 +49,14 @@ class GameLanguage(Enum):
     CHINESE_TRADITIONAL = 'zh-Hant'
 
 
-class MatchMethod(Enum):
+class MatchMethod(enum.Enum):
     FULL = 'full'
     CONTAINS = 'contains'
     STARTS = 'starts'
     ENDS = 'ends'
 
 
-class BrCosmeticRarity(Enum):
+class BrCosmeticRarity(enum.Enum):
     FROZEN = 'frozen'
     LAVA = 'lava'
     LEGENDARY = 'legendary'
@@ -74,7 +75,7 @@ class BrCosmeticRarity(Enum):
     UNKNOWN = 'unknown'
 
 
-class BrCosmeticType(Enum):
+class BrCosmeticType(enum.Enum):
     BANNER = 'banner'
     BACKPACK = 'backpack'
     CONTRAIL = 'contrail'
@@ -94,24 +95,24 @@ class BrCosmeticType(Enum):
     UNKNOWN = 'unknown'
 
 
-class NewsType(Enum):
+class NewsType(enum.Enum):
     BATTLE_ROYALE = 'br'
     SAVE_THE_WORLD = 'stw'
     CREATIVE = 'creative'
 
 
-class AccountType(Enum):
+class AccountType(enum.Enum):
     EPIC = 'epic'
     PSN = 'psn'
     XBL = 'xbl'
 
 
-class TimeWindow(Enum):
+class TimeWindow(enum.Enum):
     SEASON = 'season'
     LIFETIME = 'lifetime'
 
 
-class StatsImageType(Enum):
+class StatsImageType(enum.Enum):
     ALL = 'all'
     KEYBOARD_MOUSE = 'keyboardMouse'
     GAMEPAD = 'gamepad'
