@@ -29,7 +29,8 @@ import sys
 import aiohttp
 import asyncio
 import requests
-from typing import Any, Dict, List, Literal, Optional, Union, TypeVar, TYPE_CHECKING
+from typing import Any, Coroutine, Dict, List, Literal, Optional, Union, TypeVar, TYPE_CHECKING
+from typing_extensions import TypeAlias
 
 from . import __version__
 from .utils import to_json
@@ -41,6 +42,7 @@ if TYPE_CHECKING:
     )
 
 T = TypeVar('T', bound='Any')
+AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
 
 # Similar to how dpy manages routes, we'll follow this pattern as well
 class Route:
@@ -77,17 +79,17 @@ class BaseHTTPClient(abc.ABC):
         self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {}) Python/{1[0]}.{1[1]}'.format(
             __version__, sys.version_info
         )
-    
+        
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any:
         ...
 
-    def get_aes(self, key_format: str) -> aes.Aes:  # Note: replace with typed dict's when they're done
+    def get_aes(self, key_format: str): 
         r: Route = Route('GET', '/v2/aes')
         params: Dict[str, str] = {'keyFormat': key_format}
         return self.request(r, params=params)
 
-    def get_banners(self, language: Optional[str] = None) -> List[Dict[Any, Any]]: 
+    def get_banners(self, language: Optional[str] = None): 
         r: Route = Route('GET', '/v1/banners')
         params: Dict[str, str] = {}
 
@@ -96,11 +98,11 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_banner_colors(self) -> List[Dict[Any, Any]]:
+    def get_banner_colors(self):
         r: Route = Route('GET', '/v1/banners/colors')
         return self.request(r) 
 
-    def get_cosmetics(self, language: Optional[str] = None) -> List[Dict[Any, Any]]:
+    def get_cosmetics(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/br')
         params: Dict[str, str] = {}
 
@@ -109,7 +111,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_new_cosmetics(self, language: Optional[str] = None) -> List[Dict[Any, Any]]:
+    def get_new_cosmetics(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/br/new')
         params: Dict[str, str] = {}
 
@@ -118,7 +120,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetic(self, id: str, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_cosmetic(self, id: str, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/br/{id}', id=id)
         params: Dict[str, str] = {}
 
@@ -128,20 +130,20 @@ class BaseHTTPClient(abc.ABC):
         return self.request(r, params=params)
  
     # kwargs will be expanded upon in client so its understood what you can and cant pass
-    def search_cosmetic(self, **kwargs: Any) -> Dict[Any, Any]:
+    def search_cosmetic(self, **kwargs: Any):
         r: Route = Route('GET', '/v2/cosmetics/br/search')
         return self.request(r, params=kwargs)
     
-    def search_cosmetic_all(self, **kwargs: Any) -> List[Dict[Any, Any]]:
+    def search_cosmetic_all(self, **kwargs: Any):
         r: Route = Route('GET', '/v2/cosmetics/br/search/all')
         return self.request(r, params=kwargs)
 
-    def get_creator_code(self, name: str) -> Dict[Any, Any]:
+    def get_creator_code(self, name: str):
         r: Route = Route('GET', '/v2/creatorcode', name=name)
         params: Dict[str, str] = {'name': name}
         return self.request(r, params=params)
 
-    def get_map(self, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_map(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v1/map')
         params: Dict[str, str] = {}
 
@@ -150,7 +152,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_news(self, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_news(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/news')
         params: Dict[str, str] = {}
 
@@ -159,7 +161,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_br_news(self, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_br_news(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/news/br')
         params: Dict[str, str] = {}
 
@@ -168,7 +170,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_stw_news(self, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_stw_news(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/news/stw')
         params: Dict[str, str] = {}
 
@@ -177,7 +179,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_creative_news(self, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_creative_news(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/news/creative')
         params: Dict[str, str] = {}
 
@@ -186,7 +188,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_playlists(self, language: Optional[str] = None) -> List[Dict[Any, Any]]:
+    def get_playlists(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v1/playlists')
         params: Dict[str, str] = {}
 
@@ -195,7 +197,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_playlist(self, id: str, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_playlist(self, id: str, language: Optional[str] = None):
         r: Route = Route('GET', '/v1/playlists/{id}', id=id)
         params: Dict[str, str] = {}
 
@@ -204,7 +206,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_br_shop(self, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_br_shop(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/shop/br')
         params: Dict[str, str] = {}
 
@@ -213,7 +215,7 @@ class BaseHTTPClient(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_br_shop_combined(self, language: Optional[str] = None) -> Dict[Any, Any]:
+    def get_br_shop_combined(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/shop/br/combined')
         params: Dict[str, str] = {}
 
@@ -228,7 +230,7 @@ class BaseHTTPClient(abc.ABC):
         account_type: Optional[Literal['epic', 'psn', 'xbl']] = None,
         time_window: Optional[Literal['season', 'lifetime']] = None,
         image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch']] = None,
-    ) -> Dict[Any, Any]:
+    ):
         r: Route = Route('GET', '/v2/stats/br/v2', name=name)
         params: Dict[str, str] = {'name': name}
 
@@ -248,7 +250,7 @@ class BaseHTTPClient(abc.ABC):
         account_id: str,
         time_window: Optional[Literal['season', 'lifetime']] = None,
         image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch']] = None,
-    ) -> Dict[Any, Any]:
+    ):
         r: Route = Route('GET', '/v2/stats/br/v2/{account_id}', account_id=account_id)
         params: Dict[str, str] = {}
 
@@ -324,6 +326,74 @@ class AsyncHTTPClient(BaseHTTPClient):
             raise ServiceUnavailable('Service unavailable')
 
         raise RuntimeError('Unreachable code reached!')
+    
+    # NOTE: Excuse my french but this is *ass*. All this is doing is overriding 
+    # each function to correct the return annotation. In order to do this neatly, an
+    # overload would need to be on EVERY function in BaseHTTPClient. I'm leaving this
+    # for now but expect to hopefully remove it in the future with a better solution.
+    
+    # NOTE: Any annotation that is marked as "Any" will replaced
+    # with a TypedDict when they're fully implemented.
+
+    def get_aes(self, *args: Any, **kwargs: Any) -> AsyncResponse[aes.Aes]:
+        return super().get_aes(*args, **kwargs)
+    
+    def get_banners(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
+        return super().get_banners(*args, **kwargs)
+        
+    def get_banner_colors(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
+        return super().get_banner_colors(*args, **kwargs)
+
+    def get_cosmetics(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
+        return super().get_cosmetics(*args, **kwargs)
+    
+    def get_new_cosmetics(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
+        return super().get_new_cosmetics(*args, **kwargs)
+    
+    def get_cosmetic(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_cosmetic(*args, **kwargs)
+    
+    def search_cosmetic(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().search_cosmetic(*args, **kwargs)
+    
+    def search_cosmetic_all(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
+        return super().search_cosmetic_all(*args, **kwargs)
+    
+    def get_creator_code(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_creator_code(*args, **kwargs)
+
+    def get_map(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_map(*args, **kwargs)
+
+    def get_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_news(*args, **kwargs)
+    
+    def get_br_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_br_news(*args, **kwargs)
+
+    def get_stw_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_stw_news(*args, **kwargs)
+    
+    def get_creative_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_creative_news(*args, **kwargs)
+    
+    def get_playlists(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
+        return super().get_playlists(*args, **kwargs)
+
+    def get_playlist(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_playlist(*args, **kwargs)
+
+    def get_br_shop(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_br_shop(*args, **kwargs)
+
+    def get_br_shop_combined(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_br_shop_combined(*args, **kwargs)
+    
+    def get_br_stats(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_br_stats(*args, **kwargs)
+    
+    def get_br_stats_by_id(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_br_stats_by_id(*args, **kwargs)
 
 
 class HTTPClient(BaseHTTPClient):
@@ -380,3 +450,66 @@ class HTTPClient(BaseHTTPClient):
             raise ServiceUnavailable('Service unavailable')
 
         raise RuntimeError('Unreachable code reached!')
+
+    # NOTE: The same that goes for AsyncHTTPClient goes for this as well,
+    # we need to ensure the return annotation is correct.
+    
+    def get_aes(self, *args: Any, **kwargs: Any) -> aes.Aes:
+        return super().get_aes(*args, **kwargs)
+    
+    def get_banners(self, *args: Any, **kwargs: Any) -> List[Any]:
+        return super().get_banners(*args, **kwargs)
+        
+    def get_banner_colors(self, *args: Any, **kwargs: Any) -> List[Any]:
+        return super().get_banner_colors(*args, **kwargs)
+
+    def get_cosmetics(self, *args: Any, **kwargs: Any) -> List[Any]:
+        return super().get_cosmetics(*args, **kwargs)
+    
+    def get_new_cosmetics(self, *args: Any, **kwargs: Any) -> List[Any]:
+        return super().get_new_cosmetics(*args, **kwargs)
+    
+    def get_cosmetic(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_cosmetic(*args, **kwargs)
+    
+    def search_cosmetic(self, *args: Any, **kwargs: Any) -> Any:
+        return super().search_cosmetic(*args, **kwargs)
+    
+    def search_cosmetic_all(self, *args: Any, **kwargs: Any) -> List[Any]:
+        return super().search_cosmetic_all(*args, **kwargs)
+    
+    def get_creator_code(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_creator_code(*args, **kwargs)
+
+    def get_map(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_map(*args, **kwargs)
+
+    def get_news(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_news(*args, **kwargs)
+    
+    def get_br_news(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_br_news(*args, **kwargs)
+
+    def get_stw_news(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_stw_news(*args, **kwargs)
+    
+    def get_creative_news(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_creative_news(*args, **kwargs)
+    
+    def get_playlists(self, *args: Any, **kwargs: Any) -> List[Any]:
+        return super().get_playlists(*args, **kwargs)
+
+    def get_playlist(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_playlist(*args, **kwargs)
+
+    def get_br_shop(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_br_shop(*args, **kwargs)
+
+    def get_br_shop_combined(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_br_shop_combined(*args, **kwargs)
+    
+    def get_br_stats(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_br_stats(*args, **kwargs)
+    
+    def get_br_stats_by_id(self, *args: Any, **kwargs: Any) -> Any:
+        return super().get_br_stats_by_id(*args, **kwargs)
