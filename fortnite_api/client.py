@@ -23,14 +23,12 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-import inspect
-from typing import TYPE_CHECKING, Generic, Optional, Union, Type, Awaitable, TypeVar, Any, overload, Coroutine
+from typing import TYPE_CHECKING, Generic, Optional, TypeVar
 from typing_extensions import ParamSpec
 
-from .endpoints import *
 from .enums import *
-from .aes import AES
-from .http import HTTPClient, AsyncHTTPClient, BaseHTTPClient
+from .aes import Aes
+from .http import HTTPClient, AsyncHTTPClient
 
 if TYPE_CHECKING:
     import aiohttp
@@ -69,30 +67,30 @@ class FortniteAPI(Generic[HttpT]):
         self, 
         api_key: Optional[str] = None,
         *,
-        run_async: bool = False,
-        session: Optional[Union[requests.Session, aiohttp.ClientSession]] = None
+        session: Optional[requests.Session] = None
     ) -> None:
-        self.http: BaseHTTPClient[Any] = BaseHTTPClient(
+        self.http: HTTPClient = HTTPClient(
             session=session,
-            token=api_key,
-            run_async=run_async
+            token=api_key
+        ) 
+
+    def fetch_aes(self, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
+        data = self.http.get_aes(key_format.value)
+        return Aes(data=data) 
+    
+    
+class AsyncFortniteAPI:
+    def __init__(
+        self, 
+        api_key: Optional[str] = None,
+        *,
+        session: Optional[aiohttp.ClientSession] = None
+    ) -> None:
+        self.http: AsyncHTTPClient = AsyncHTTPClient(
+            session=session,
+            token=api_key
         )
         
-    async def _wrap_async_method(self, result: Awaitable[Any], object_cls: Type[T]) -> T:
-        data = await result
-        return object_cls(data=data)
-        
-    @overload
-    def fetch_aes(self: FortniteAPI[HTTPClient], key_format: KeyFormat) -> AES:
-        ...
-    
-    @overload
-    def fetch_aes(self: FortniteAPI[AsyncHTTPClient], key_format: KeyFormat) -> Coroutine[Any, Any, AES]:
-        ...
-        
-    def fetch_aes(self, key_format: KeyFormat) -> Union[Coroutine[Any, Any, AES], AES]:
-        data = self.http.get_aes(key_format.value)
-        if inspect.isawaitable(data):
-            return self._wrap_async_method(data, AES)
-
-        return AES(data=data) # type: ignore
+    async def fetch_aes(self, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
+        data = await self.http.get_aes(key_format.value) 
+        return Aes(data=data)
