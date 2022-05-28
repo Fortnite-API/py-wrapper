@@ -72,69 +72,53 @@ class FortniteAPI:
         The Shop endpoints. The class depends whether the api runs sync or async.
     """
 
-    def __init__(
-        self, 
-        api_key: Optional[str] = None,
-        *,
-        session: Optional[requests.Session] = None
-    ) -> None:
-        self.http: HTTPClient = HTTPClient(
-            session=session,
-            token=api_key
-        ) 
+    def __init__(self, api_key: Optional[str] = None, *, session: Optional[requests.Session] = None) -> None:
+        self.http: HTTPClient = HTTPClient(session=session, token=api_key)
 
     def fetch_aes(self, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
         data = self.http.get_aes(key_format.value)
-        return Aes(data=data) 
-    
+        return Aes(data=data)
+
     # NOTE: Finish implementing
-    
-    
+
+
 class AsyncFortniteAPI:
-    def __init__(
-        self, 
-        api_key: Optional[str] = None,
-        *,
-        session: Optional[aiohttp.ClientSession] = None
-    ) -> None:
-        self.http: AsyncHTTPClient = AsyncHTTPClient(
-            session=session,
-            token=api_key
-        )
-        
+    def __init__(self, api_key: Optional[str] = None, *, session: Optional[aiohttp.ClientSession] = None) -> None:
+        self.http: AsyncHTTPClient = AsyncHTTPClient(session=session, token=api_key)
+
     async def __aenter__(self) -> Self:
         if self.http.session is None:
             self.http.session = aiohttp.ClientSession()
-        
+
         return self
-    
+
     async def __aexit__(self, *args: Any) -> None:
         if self.http.session is not None:
             await self.http.session.close()
-        
+
     async def fetch_aes(self, *, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
-        data = await self.http.get_aes(key_format.value) 
+        data = await self.http.get_aes(key_format.value)
         return Aes(data=data)
-    
+
     async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner]:
         data = await self.http.get_banners(language=(language and language.value))
         return [Banner(data=entry) for entry in data]
-    
+
     async def fetch_banner_colors(self, *, language: Optional[GameLanguage] = None) -> List[BannerColor]:
         data = await self.http.get_banner_colors(language=(language and language.value))
         return [BannerColor(data=entry) for entry in data]
-    
+
     async def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[BrCosmetic]:
         data = await self.http.get_cosmetics(language=(language and language.value))
         return [BrCosmetic(data=entry) for entry in data]
-    
+
     async def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> BrCosmetic:
         data = await self.http.get_cosmetic(id, language=(language and language.value))
         return BrCosmetic(data=data)
 
     @overload
     async def search_cosmetic(
-        self, 
+        self,
         *,
         multiple: Literal[True] = True,
         language: Optional[GameLanguage] = None,
@@ -174,7 +158,7 @@ class AsyncFortniteAPI:
         last_appearance: Optional[int] = None,
     ) -> List[BrCosmetic]:
         ...
-    
+
     @overload
     async def search_cosmetic(
         self,
@@ -217,7 +201,7 @@ class AsyncFortniteAPI:
         last_appearance: Optional[int] = None,
     ) -> BrCosmetic:
         ...
-    
+
     async def search_cosmetic(
         self,
         *,
@@ -259,183 +243,170 @@ class AsyncFortniteAPI:
         last_appearance: Optional[int] = None,
     ) -> Union[BrCosmetic, List[BrCosmetic]]:
         params: Dict[str, Any] = {}
-        
+
         if language is not None:
             params['language'] = language.value
-            
+
         if search_language is not None:
             params['searchLanguage'] = search_language.value
-        
+
         if match_method is not None:
             params['matchMethod'] = match_method.value
-            
+
         if id is not None:
             params['id'] = id
-        
+
         if name is not None:
             params['name'] = name
-        
+
         if descripion is not None:
             params['description'] = descripion
-        
+
         if type is not None:
             params['type'] = type.value
-        
+
         if display_type is not None:
             params['displayType'] = display_type
-        
+
         if backend_type is not None:
             params['backendType'] = backend_type
-        
+
         if rarity is not None:
             params['rarity'] = rarity.value
-        
+
         if display_rarity is not None:
             params['displayRarity'] = display_rarity
-        
+
         if backend_rarity is not None:
             params['backendRarity'] = backend_rarity
-        
+
         if has_series is not None:
             params['hasSeries'] = has_series
-        
+
         if series is not None:
             params['series'] = series
-        
+
         if backend_series is not None:
             params['backendSeries'] = backend_series
-        
+
         if has_set is not None:
             params['hasSet'] = has_set
-        
+
         if set is not None:
             params['set'] = set
-        
+
         if set_text is not None:
             params['setText'] = set_text
-        
+
         if backend_set is not None:
             params['backendSet'] = backend_set
-        
+
         if has_introduction is not None:
             params['hasIntroduction'] = has_introduction
-        
+
         if backend_introduction is not None:
             params['backendIntroduction'] = backend_introduction
-        
+
         if introduction_chapter is not None:
             params['introductionChapter'] = introduction_chapter
-        
+
         if introduction_season is not None:
             params['introductionSeason'] = introduction_season
-        
+
         if has_featured_image is not None:
             params['hasFeaturedImage'] = has_featured_image
-            
+
         if has_variants is not None:
             params['hasVariants'] = has_variants
-        
+
         if has_gameplay_tags is not None:
             params['hasGameplayTags'] = has_gameplay_tags
-        
+
         if gameplay_tag is not None:
             params['gameplayTag'] = gameplay_tag
-        
+
         if has_meta_tags is not None:
             params['hasMetaTags'] = has_meta_tags
-        
+
         if meta_tag is not None:
             params['metaTag'] = meta_tag
-        
+
         if has_dynamic_pak_id is not None:
             params['hasDynamicPakId'] = has_dynamic_pak_id
-        
+
         if dynamic_pak_id is not None:
             params['dynamicPakId'] = dynamic_pak_id
-        
+
         if added is not None:
             params['added'] = time.mktime(added.timetuple())
-        
+
         if added_since is not None:
             params['addedSince'] = time.mktime(added_since.timetuple())
-            
+
         if unseen_for is not None:
             params['unseenFor'] = unseen_for
-        
+
         if last_appearance is not None:
             params['lastAppearance'] = last_appearance
-        
+
         if multiple is True:
             data = await self.http.search_cosmetic_all(**params)
             return [BrCosmetic(entry) for entry in data]
-            
+
         data = await self.http.search_cosmetic(**params)
         return BrCosmetic(data)
-    
+
     async def fetch_creator_code(self, name: str, /) -> CreatorCode:
         data = await self.http.get_creator_code(name)
         return CreatorCode(data=data)
-    
+
     async def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map:
         data = await self.http.get_map(language=(language and language.value))
         return Map(data=data)
-    
+
     async def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News:
         data = await self.http.get_news(language=(language and language.value))
         return News(data=data)
-    
+
     async def fetch_br_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
         data = await self.http.get_br_news(language=(language and language.value))
         return GameModeNews(data=data)
-    
+
     async def fetch_stw_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
         data = await self.http.get_stw_news(language=(language and language.value))
         return GameModeNews(data=data)
-    
+
     async def fetch_creative_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
         data = await self.http.get_creative_news(language=(language and language.value))
         return GameModeNews(data=data)
-    
+
     async def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
         data = await self.http.get_playlist(id, language=(language and language.value))
         return Playlist(data=data)
-    
+
     async def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
         data = await self.http.get_br_shop(language=(language and language.value))
         return BrShop(data=data)
-    
+
     async def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
         raise NotImplementedError('the fawk?')
-    
+
     async def fetch_br_stats(
-        self, 
+        self,
         name: str,
-        /, 
-        *, 
-        type: AccountType = AccountType.EPIC, 
+        /,
+        *,
+        type: AccountType = AccountType.EPIC,
         time_window: TimeWindow = TimeWindow.LIFETIME,
-        image: StatsImageType = StatsImageType.ALL
+        image: StatsImageType = StatsImageType.ALL,
     ) -> BrPlayerStats:
         data = await self.http.get_br_stats(
-            name=name,
-            account_type=type.value,
-            time_window=time_window.value,
-            image=image.value
+            name=name, account_type=type.value, time_window=time_window.value, image=image.value
         )
         return BrPlayerStats(data=data)
 
     async def fetch_br_stats_by_id(
-        self,
-        id: str,
-        /,
-        *,
-        time_window: TimeWindow = TimeWindow.LIFETIME,
-        image: StatsImageType = StatsImageType.ALL
+        self, id: str, /, *, time_window: TimeWindow = TimeWindow.LIFETIME, image: StatsImageType = StatsImageType.ALL
     ) -> BrPlayerStats:
-        data = await self.http.get_br_stats_by_id(
-            id=id,
-            time_window=time_window.value,
-            image=image.value
-        )
+        data = await self.http.get_br_stats_by_id(id=id, time_window=time_window.value, image=image.value)
         return BrPlayerStats(data=data)
-    

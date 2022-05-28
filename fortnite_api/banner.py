@@ -26,11 +26,8 @@ from __future__ import annotations
 import math
 from typing import Any, Dict, Optional, Tuple
 
-__all__: Tuple[str, ...] = (
-    'Banner',
-    'BannerColor',
-    'BrBannerImage'
-)
+__all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BrBannerImage')
+
 
 class Banner:
 

@@ -25,6 +25,7 @@ from __future__ import annotations
 
 # NOTE: Implement these further and add documentation
 
+
 class FortniteAPIException(Exception):
     pass
 

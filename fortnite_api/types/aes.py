@@ -28,12 +28,10 @@ class DynamicKey(TypedDict):
     pakFilename: str
     pakGuid: str
     key: str
-    
-    
+
+
 class Aes(TypedDict):
     build: str
     mainKey: str
     updated: str
     dynamicKeys: List[DynamicKey]
-    
-    
