@@ -7,3 +7,4 @@ asyncio_mode = "strict"
 testpaths = [
     "tests",
 ]
+addopts = "--import-mode=importlib"
