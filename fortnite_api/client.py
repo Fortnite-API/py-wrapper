@@ -79,7 +79,317 @@ class FortniteAPI:
         data = self.http.get_aes(key_format.value)
         return Aes(data=data)
 
-    # NOTE: Finish implementing
+    def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner]:
+        data = self.http.get_banners(language=(language and language.value))
+        return [Banner(data=entry) for entry in data]
+
+    def fetch_banner_colors(self, *, language: Optional[GameLanguage] = None) -> List[BannerColor]:
+        data = self.http.get_banner_colors(language=(language and language.value))
+        return [BannerColor(data=entry) for entry in data]
+
+    def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[BrCosmetic]:
+        data = self.http.get_cosmetics(language=(language and language.value))
+        return [BrCosmetic(data=entry) for entry in data]
+
+    def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> BrCosmetic:
+        data = self.http.get_cosmetic(id, language=(language and language.value))
+        return BrCosmetic(data=data)
+
+    @overload
+    def search_cosmetic(
+        self,
+        *,
+        multiple: Literal[True] = True,
+        language: Optional[GameLanguage] = None,
+        search_language: Optional[GameLanguage] = None,
+        match_method: Optional[MatchMethod] = None,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        descripion: Optional[str] = None,
+        type: Optional[BrCosmeticType] = None,
+        display_type: Optional[str] = None,
+        backend_type: Optional[str] = None,
+        rarity: Optional[BrCosmeticRarity] = None,
+        display_rarity: Optional[str] = None,
+        backend_rarity: Optional[str] = None,
+        has_series: Optional[bool] = None,
+        series: Optional[str] = None,
+        backend_series: Optional[str] = None,
+        has_set: Optional[bool] = None,
+        set: Optional[str] = None,
+        set_text: Optional[str] = None,
+        backend_set: Optional[str] = None,
+        has_introduction: Optional[bool] = None,
+        backend_introduction: Optional[int] = None,
+        introduction_chapter: Optional[str] = None,
+        introduction_season: Optional[str] = None,
+        has_featured_image: Optional[bool] = None,
+        has_variants: Optional[bool] = None,
+        has_gameplay_tags: Optional[bool] = None,
+        gameplay_tag: Optional[str] = None,
+        has_meta_tags: Optional[bool] = None,
+        meta_tag: Optional[str] = None,
+        has_dynamic_pak_id: Optional[bool] = None,
+        dynamic_pak_id: Optional[str] = None,
+        added: Optional[datetime.datetime] = None,
+        added_since: Optional[datetime.datetime] = None,
+        unseen_for: Optional[int] = None,
+        last_appearance: Optional[int] = None,
+    ) -> List[BrCosmetic]:
+        ...
+
+    @overload
+    def search_cosmetic(
+        self,
+        *,
+        multiple: Literal[False] = False,
+        language: Optional[GameLanguage] = None,
+        search_language: Optional[GameLanguage] = None,
+        match_method: Optional[MatchMethod] = None,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        descripion: Optional[str] = None,
+        type: Optional[BrCosmeticType] = None,
+        display_type: Optional[str] = None,
+        backend_type: Optional[str] = None,
+        rarity: Optional[BrCosmeticRarity] = None,
+        display_rarity: Optional[str] = None,
+        backend_rarity: Optional[str] = None,
+        has_series: Optional[bool] = None,
+        series: Optional[str] = None,
+        backend_series: Optional[str] = None,
+        has_set: Optional[bool] = None,
+        set: Optional[str] = None,
+        set_text: Optional[str] = None,
+        backend_set: Optional[str] = None,
+        has_introduction: Optional[bool] = None,
+        backend_introduction: Optional[int] = None,
+        introduction_chapter: Optional[str] = None,
+        introduction_season: Optional[str] = None,
+        has_featured_image: Optional[bool] = None,
+        has_variants: Optional[bool] = None,
+        has_gameplay_tags: Optional[bool] = None,
+        gameplay_tag: Optional[str] = None,
+        has_meta_tags: Optional[bool] = None,
+        meta_tag: Optional[str] = None,
+        has_dynamic_pak_id: Optional[bool] = None,
+        dynamic_pak_id: Optional[str] = None,
+        added: Optional[datetime.datetime] = None,
+        added_since: Optional[datetime.datetime] = None,
+        unseen_for: Optional[int] = None,
+        last_appearance: Optional[int] = None,
+    ) -> BrCosmetic:
+        ...
+
+    def search_cosmetic(
+        self,
+        *,
+        multiple: Optional[bool] = False,
+        language: Optional[GameLanguage] = None,
+        search_language: Optional[GameLanguage] = None,
+        match_method: Optional[MatchMethod] = None,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        descripion: Optional[str] = None,
+        type: Optional[BrCosmeticType] = None,
+        display_type: Optional[str] = None,
+        backend_type: Optional[str] = None,
+        rarity: Optional[BrCosmeticRarity] = None,
+        display_rarity: Optional[str] = None,
+        backend_rarity: Optional[str] = None,
+        has_series: Optional[bool] = None,
+        series: Optional[str] = None,
+        backend_series: Optional[str] = None,
+        has_set: Optional[bool] = None,
+        set: Optional[str] = None,
+        set_text: Optional[str] = None,
+        backend_set: Optional[str] = None,
+        has_introduction: Optional[bool] = None,
+        backend_introduction: Optional[int] = None,
+        introduction_chapter: Optional[str] = None,
+        introduction_season: Optional[str] = None,
+        has_featured_image: Optional[bool] = None,
+        has_variants: Optional[bool] = None,
+        has_gameplay_tags: Optional[bool] = None,
+        gameplay_tag: Optional[str] = None,
+        has_meta_tags: Optional[bool] = None,
+        meta_tag: Optional[str] = None,
+        has_dynamic_pak_id: Optional[bool] = None,
+        dynamic_pak_id: Optional[str] = None,
+        added: Optional[datetime.datetime] = None,
+        added_since: Optional[datetime.datetime] = None,
+        unseen_for: Optional[int] = None,
+        last_appearance: Optional[int] = None,
+    ) -> Union[BrCosmetic, List[BrCosmetic]]:
+        params: Dict[str, Any] = {}
+
+        if language is not None:
+            params['language'] = language.value
+
+        if search_language is not None:
+            params['searchLanguage'] = search_language.value
+
+        if match_method is not None:
+            params['matchMethod'] = match_method.value
+
+        if id is not None:
+            params['id'] = id
+
+        if name is not None:
+            params['name'] = name
+
+        if descripion is not None:
+            params['description'] = descripion
+
+        if type is not None:
+            params['type'] = type.value
+
+        if display_type is not None:
+            params['displayType'] = display_type
+
+        if backend_type is not None:
+            params['backendType'] = backend_type
+
+        if rarity is not None:
+            params['rarity'] = rarity.value
+
+        if display_rarity is not None:
+            params['displayRarity'] = display_rarity
+
+        if backend_rarity is not None:
+            params['backendRarity'] = backend_rarity
+
+        if has_series is not None:
+            params['hasSeries'] = has_series
+
+        if series is not None:
+            params['series'] = series
+
+        if backend_series is not None:
+            params['backendSeries'] = backend_series
+
+        if has_set is not None:
+            params['hasSet'] = has_set
+
+        if set is not None:
+            params['set'] = set
+
+        if set_text is not None:
+            params['setText'] = set_text
+
+        if backend_set is not None:
+            params['backendSet'] = backend_set
+
+        if has_introduction is not None:
+            params['hasIntroduction'] = has_introduction
+
+        if backend_introduction is not None:
+            params['backendIntroduction'] = backend_introduction
+
+        if introduction_chapter is not None:
+            params['introductionChapter'] = introduction_chapter
+
+        if introduction_season is not None:
+            params['introductionSeason'] = introduction_season
+
+        if has_featured_image is not None:
+            params['hasFeaturedImage'] = has_featured_image
+
+        if has_variants is not None:
+            params['hasVariants'] = has_variants
+
+        if has_gameplay_tags is not None:
+            params['hasGameplayTags'] = has_gameplay_tags
+
+        if gameplay_tag is not None:
+            params['gameplayTag'] = gameplay_tag
+
+        if has_meta_tags is not None:
+            params['hasMetaTags'] = has_meta_tags
+
+        if meta_tag is not None:
+            params['metaTag'] = meta_tag
+
+        if has_dynamic_pak_id is not None:
+            params['hasDynamicPakId'] = has_dynamic_pak_id
+
+        if dynamic_pak_id is not None:
+            params['dynamicPakId'] = dynamic_pak_id
+
+        if added is not None:
+            params['added'] = time.mktime(added.timetuple())
+
+        if added_since is not None:
+            params['addedSince'] = time.mktime(added_since.timetuple())
+
+        if unseen_for is not None:
+            params['unseenFor'] = unseen_for
+
+        if last_appearance is not None:
+            params['lastAppearance'] = last_appearance
+
+        if multiple is True:
+            data = self.http.search_cosmetic_all(**params)
+            return [BrCosmetic(entry) for entry in data]
+
+        data = self.http.search_cosmetic(**params)
+        return BrCosmetic(data)
+
+    def fetch_creator_code(self, name: str, /) -> CreatorCode:
+        data = self.http.get_creator_code(name)
+        return CreatorCode(data=data)
+
+    def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map:
+        data = self.http.get_map(language=(language and language.value))
+        return Map(data=data)
+
+    def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News:
+        data = self.http.get_news(language=(language and language.value))
+        return News(data=data)
+
+    def fetch_br_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        data = self.http.get_br_news(language=(language and language.value))
+        return GameModeNews(data=data)
+
+    def fetch_stw_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        data = self.http.get_stw_news(language=(language and language.value))
+        return GameModeNews(data=data)
+
+    def fetch_creative_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        data = self.http.get_creative_news(language=(language and language.value))
+        return GameModeNews(data=data)
+
+    def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
+        data = self.http.get_playlist(id, language=(language and language.value))
+        return Playlist(data=data)
+
+    def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
+        data = self.http.get_br_shop(language=(language and language.value))
+        return BrShop(data=data)
+
+    def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
+        raise NotImplementedError('the fawk?')
+
+    def fetch_br_stats(
+        self,
+        name: str,
+        /,
+        *,
+        type: AccountType = AccountType.EPIC,
+        time_window: TimeWindow = TimeWindow.LIFETIME,
+        image: StatsImageType = StatsImageType.ALL,
+    ) -> BrPlayerStats:
+        data = self.http.get_br_stats(
+            name=name, account_type=type.value, time_window=time_window.value, image=image.value
+        )
+        return BrPlayerStats(data=data)
+
+    def fetch_br_stats_by_id(
+        self, id: str, /, *, time_window: TimeWindow = TimeWindow.LIFETIME, image: StatsImageType = StatsImageType.ALL
+    ) -> BrPlayerStats:
+        data = self.http.get_br_stats_by_id(id=id, time_window=time_window.value, image=image.value)
+        return BrPlayerStats(data=data)
+
 
 
 class AsyncFortniteAPI:
