@@ -21,25 +21,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
 
-from datetime import datetime
+from typing import TYPE_CHECKING, Dict, Any, Optional, Tuple
 
-from fortnite_api import Account
+from .account import Account
+from .utils import parse_time
+
+if TYPE_CHECKING:
+    import datetime
 
 
 class BrPlayerStats:
 
-    def __init__(self, data):
-        self.user = Account(data.get('account')) if data.get('account') else None
-        self.battle_pass = BrBattlePass(data['battlePass']) if data.get('battlePass') else None
-        self.image_url = data.get('image')
-        self.stats = BrInputs(data['stats']) if data.get('stats') else None
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('user', 'battle_pass', 'image_url', 'stats', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+
+        self.user: Optional[Account] = (account := data.get('account')) and Account(data=account)
+        self.battle_pass: Optional[BrBattlePass] = (battle_pass := data.get('battlePass')) and BrBattlePass(data=battle_pass)
+        self.image_url: str = data['image']
+        self.stats: Optional[BrInputs] = (inputs := data.get('inputs')) and BrInputs(data=inputs)
+        self.raw_data: Dict[str, Any] = data
 
 
 class BrBattlePass:
 
-    def __init__(self, data):
+    __slots__: Tuple[str, ...] = ('level', 'progress', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
         self.level = data.get('level')
         self.progress = data.get('progress')
         self.raw_data = data
@@ -47,43 +57,65 @@ class BrBattlePass:
 
 class BrInputs:
 
-    def __init__(self, data):
-        self.all = BrInputStats(data.get('overall')) if data.get('overall') else None
-        self.keyboard_mouse = BrInputStats(data.get('keyboardMouse')) if data.get('keyboardMouse') else None
-        self.gamepad = BrInputStats(data.get('gamepad')) if data.get('gamepad') else None
-        self.touch = BrInputStats(data.get('touch')) if data.get('touch') else None
+    __slots__: Tuple[str, ...] = ('all', 'keyboard_mouse', 'gamepad', 'touch', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.all: Optional[BrInputStats] = (all := data.get('all')) and BrInputStats(data=all)
+        self.keyboard_mouse: Optional[BrInputStats] = (keyboard_mouse := data.get('keyboardMouse')) and BrInputStats(
+            data=keyboard_mouse
+        )
+        self.gamepad: Optional[BrInputStats] = (gamepad := data.get('gamepad')) and BrInputStats(data=gamepad)
+        self.touch: Optional[BrInputStats] = (touch := data.get('touch')) and BrInputStats(data=touch)
         self.raw_data = data
 
 
 class BrInputStats:
 
-    def __init__(self, data):
-        self.overall = BrGameModeStats(data.get('overall')) if data.get('overall') else None
-        self.solo = BrGameModeStats(data.get('solo')) if data.get('solo') else None
-        self.duo = BrGameModeStats(data.get('duo')) if data.get('duo') else None
-        self.trio = BrGameModeStats(data.get('trio')) if data.get('trio') else None
-        self.squad = BrGameModeStats(data.get('squad')) if data.get('squad') else None
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('overall', 'solo', 'duo', 'trio', 'squad', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.overall: Optional[BrGameModeStats] = (overall := data.get('overall')) and BrGameModeStats(data=overall)
+        self.solo: Optional[BrGameModeStats] = (solo := data.get('solo')) and BrGameModeStats(data=solo)
+        self.duo: Optional[BrGameModeStats] = (duo := data.get('duo')) and BrGameModeStats(data=duo)
+        self.trio: Optional[BrGameModeStats] = (trio := data.get('trio')) and BrGameModeStats(data=trio)
+        self.squad: Optional[BrGameModeStats] = (squad := data.get('squad')) and BrGameModeStats(data=squad)
+        self.raw_data: Dict[str, Any] = data
 
 
 class BrGameModeStats:
 
-    def __init__(self, data):
-        self.score = data.get('score')
-        self.score_per_min = data.get('scorePerMin')
-        self.scorePerMatch = data.get('scorePerMatch')
-        self.top5 = data.get('top5')
-        self.top12 = data.get('top12')
-        self.kills = data.get('kills')
-        self.kills_per_min = data.get('killsPerMin')
-        self.kills_per_match = data.get('killsPerMatch')
-        self.deaths = data.get('deaths')
-        self.kd = data.get('kd')
-        self.matches = data.get('matches')
-        self.win_rate = data.get('winRate')
-        self.minutes_played = data.get('minutesPlayed')
-        self.players_outlived = data.get('playersOutlived')
-        try:
-            self.last_modified = datetime.strptime(data.get('lastModified'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, TypeError):
-            self.updated = None
+    __slots__: Tuple[str, ...] = (
+        'score',
+        'score_per_min',
+        'score_per_match',
+        'top5',
+        'top12',
+        'kills',
+        'kills_per_min',
+        'kills_per_match',
+        'deaths',
+        'kd',
+        'matches',
+        'win_rate',
+        'minutes_played',
+        'players_outlived',
+        'last_modified',
+        'raw_data',
+    )
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.score: int = data['score']
+        self.score_per_min: int = data['scorePerMin']
+        self.score_per_match: int = data['scorePerMatch']
+        self.top5: int = data['top5']
+        self.top12: int = data['top12']
+        self.kills: int = data['kills']
+        self.kills_per_min: int = data['killsPerMin']
+        self.kills_per_match: int = data['killsPerMatch']
+        self.deaths: int = data['deaths']
+        self.kd: int = data['kd']
+        self.matches: int = data['matches']
+        self.win_rate: int = data['winRate']
+        self.minutes_played: int = data['minutesPlayed']
+        self.players_outlived: int = data['playersOutlived']
+        self.last_modified: datetime.datetime = parse_time(data['lastModified'])

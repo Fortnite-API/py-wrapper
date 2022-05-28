@@ -21,8 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
 
-from datetime import datetime
+from typing import TYPE_CHECKING, Dict, Any, Optional, List, Tuple
+
+from .utils import parse_time
+
+if TYPE_CHECKING:
+    import datetime
 
 
 class News:
@@ -40,11 +46,13 @@ class News:
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
-        self.br = GameModeNews(data.get('br')) if data.get('br') else None
-        self.stw = GameModeNews(data.get('stw')) if data.get('stw') else None
-        self.creative = GameModeNews(data.get('creative')) if data.get('creative') else None
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('br', 'stw', 'creative', 'raw_data')
+
+    def __init__(self, data: Dict[Any, Any]) -> None:
+        self.br: Optional[GameModeNews] = GameModeNews(entry) if (entry := data.get('br')) else None
+        self.stw: Optional[GameModeNews] = GameModeNews(entry) if (entry := data.get('stw')) else None
+        self.creative: Optional[GameModeNews] = GameModeNews(entry) if (entry := data.get('creative')) else None
+        self.raw_data: Dict[Any, Any] = data
 
 
 class GameModeNews:
@@ -60,16 +68,16 @@ class GameModeNews:
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
+    __slots__: Tuple[str, ...] = ('hash', 'date', 'image', 'motds', 'messages', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
         self.hash = data.get('hash')
-        try:
-            self.date = datetime.strptime(data.get('date'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, TypeError):
-            self.date = None
-        self.image = data.get('image')
-        self.motds = [NewsMotd(item_data) for item_data in data.get('motds')] if data.get('motds') else None
-        self.messages = [NewsMessage(item_data) for item_data in data.get('messages')] if data.get('messages') else None
-        self.raw_data = data
+
+        self.date: Optional[datetime.datetime] = parse_time(date) if (date := data.get('date')) else None
+        self.image: Optional[str] = data.get('image')
+        self.motds: List[NewsMotd] = [NewsMotd(item_data) for item_data in data.get('motds', [])]
+        self.messages: List[NewsMessage] = [NewsMessage(item_data) for item_data in data.get('messages', [])]
+        self.raw_data: Dict[str, Any] = data
 
 
 class NewsMotd:
@@ -97,14 +105,16 @@ class NewsMotd:
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
-        self.id = data.get('id')
-        self.title = data.get('title')
-        self.body = data.get('body')
-        self.image_url = data.get('image')
-        self.tile_image_url = data.get('tileImage')
-        self.sorting_priority = data.get('sortingPriority')
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('id', 'title', 'body', 'image_url', 'tile_image_url', 'sorting_priority', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.id: str = data['id']
+        self.title: str = data['title']
+        self.body: str = data['body']
+        self.image_url: str = data['image']
+        self.tile_image_url: str = data['tileImage']
+        self.sorting_priority: int = data['sortingPriority']
+        self.raw_data: Dict[str, Any] = data
 
 
 class NewsMessage:
@@ -132,9 +142,11 @@ class NewsMessage:
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
-        self.title = data.get('title')
-        self.body = data.get('body')
-        self.image_url = data.get('image')
-        self.adspace = data.get('adspace')
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('title', 'body', 'image_url', 'hidden', 'adspace', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.title: str = data['title']
+        self.body: str = data['body']
+        self.image_url: str = data['image']
+        self.adspace: str = data['adspace']
+        self.raw_data: Dict[str, Any] = data

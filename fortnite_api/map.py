@@ -21,19 +21,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
+
+from typing import Dict, Any, Tuple, List
+
+__all__: Tuple[str, ...] = ('Map', 'POI', 'POILocation')
+
 
 class Map:
 
-    def __init__(self, data):
-        self.blank_image = data['images']['blank']
-        self.poi_image = data['images']['pois']
-        self.pois = [POI(x) for x in data['pois']]
+    __slots__: Tuple[str, ...] = ('blank_image', 'poi_image', 'pois', 'raw_data')
+
+    def __init__(self, data: Dict[Any, Any]) -> None:
+        self.blank_image: str = data['images']['blank']
+        self.poi_image: str = data['images']['pois']
+        self.pois: List[POI] = [POI(x) for x in data['pois']]
         self.raw_data = data
 
 
 class POI:
 
-    def __init__(self, data):
+    __slots__: Tuple[str, ...] = ('id', 'name', 'location', 'raw_data')
+
+    def __init__(self, data: Dict[Any, Any]) -> None:
         self.id = data['id']
         self.name = data['name']
         self.location = POILocation(data['location'])
@@ -42,8 +52,10 @@ class POI:
 
 class POILocation:
 
-    def __init__(self, data):
-        self.x = data['x']
-        self.y = data['y']
-        self.z = data['z']
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('x', 'y', 'z', 'raw_data')
+
+    def __init__(self, data: Dict[Any, Any]) -> None:
+        self.x: int = data['x']
+        self.y: int = data['y']
+        self.z: int = data['z']
+        self.raw_data: Dict[Any, Any] = data
