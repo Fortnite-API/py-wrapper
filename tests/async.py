@@ -2,28 +2,27 @@ import pytest
 import aiohttp
 from pprint import pprint as print
 
-from ..fortnite_api import AsyncFortniteAPI
-
+import fortnite_api
 
 @pytest.mark.asyncio
 async def test_async_client():
     session = aiohttp.ClientSession()
-    async with AsyncFortniteAPI(session=session) as client:
+    async with fortnite_api.AsyncFortniteAPI(session=session) as client:
 
         cosmetics = await client.fetch_cosmetics()
         print(cosmetics[0].id)
 
         shop = await client.fetch_br_shop()
-        print(shop.raw_data)
+        print(shop)
 
         cosmetic = await client.fetch_cosmetic('CID_461_Athena_Commando_M_DriftSummer')
-        print(cosmetic.raw_data)
+        print(cosmetic)
 
         cosmetics = await client.search_cosmetic(multiple=True, id='CID_298_Athena_Commando_F_IceMaiden')
-        print([e.raw_data for e in cosmetics])
+        print(cosmetics)
 
         aes = await client.fetch_aes()
-        print(aes.raw_data)
+        print(aes)
 
         banners = await client.fetch_banners()
         print(len(banners))
@@ -32,10 +31,7 @@ async def test_async_client():
         print(len(banner_colors))
 
         code = await client.fetch_creator_code('Ninja')
-        print(code.raw_data)
+        print(code)
 
         fortnite_map = await client.fetch_map()
-        print(fortnite_map.raw_data)
-
-        user = await client.fetch_br_stats('Luc1412')
-        print(user)
+        print(fortnite_map)

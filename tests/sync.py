@@ -1,27 +1,27 @@
 import requests
 from pprint import pprint as print
 
-from ..fortnite_api import FortniteAPI
+import fortnite_api
 
 
-def main():
+def test_sync_client():
     session = requests.Session()
-    client = FortniteAPI(session=session)
+    client = fortnite_api.FortniteAPI(session=session)
 
     cosmetics = client.fetch_cosmetics()
     print(cosmetics[0].id)
 
     shop = client.fetch_br_shop()
-    print(shop.raw_data)
+    print(shop)
 
     cosmetic = client.fetch_cosmetic('CID_461_Athena_Commando_M_DriftSummer')
-    print(cosmetic.raw_data)
+    print(cosmetic)
 
     cosmetics = client.search_cosmetic(multiple=True, id='CID_298_Athena_Commando_F_IceMaiden')
-    print([e.raw_data for e in cosmetics])
+    print(cosmetics)
 
     aes = client.fetch_aes()
-    print(aes.raw_data)
+    print(aes)
 
     banners = client.fetch_banners()
     print(len(banners))
@@ -30,10 +30,7 @@ def main():
     print(len(banner_colors))
 
     code = client.fetch_creator_code('Ninja')
-    print(code.raw_data)
+    print(code)
 
     fortnite_map = client.fetch_map()
-    print(fortnite_map.raw_data)
-
-    user = client.fetch_br_stats('Luc1412')
-    print(user)
+    print(fortnite_map)
