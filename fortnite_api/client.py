@@ -83,8 +83,8 @@ class FortniteAPI:
         data = self.http.get_banners(language=(language and language.value))
         return [Banner(data=entry) for entry in data]
 
-    def fetch_banner_colors(self, *, language: Optional[GameLanguage] = None) -> List[BannerColor]:
-        data = self.http.get_banner_colors(language=(language and language.value))
+    def fetch_banner_colors(self) -> List[BannerColor]:
+        data = self.http.get_banner_colors()
         return [BannerColor(data=entry) for entry in data]
 
     def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[BrCosmetic]:
@@ -414,8 +414,8 @@ class AsyncFortniteAPI:
         data = await self.http.get_banners(language=(language and language.value))
         return [Banner(data=entry) for entry in data]
 
-    async def fetch_banner_colors(self, *, language: Optional[GameLanguage] = None) -> List[BannerColor]:
-        data = await self.http.get_banner_colors(language=(language and language.value))
+    async def fetch_banner_colors(self) -> List[BannerColor]:
+        data = await self.http.get_banner_colors()
         return [BannerColor(data=entry) for entry in data]
 
     async def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[BrCosmetic]:

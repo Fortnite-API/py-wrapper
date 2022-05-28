@@ -142,30 +142,30 @@ class BrShopEntry:
     )
 
     def __init__(self, data: Dict[str, Any]) -> None:
-        self.regular_price: int = data['regularPrice']
-        self.final_price: int = data['finalPrice']
+        self.regular_price: Optional[int] = data.get('regularPrice')
+        self.final_price: Optional[int] = data.get('finalPrice')
 
         self.bundle: Optional[BrShopBundle] = (bundle := data.get('bundle')) and BrShopBundle(bundle)
         self.banner: Optional[BrShopBanner] = (banner := data.get('banner')) and BrShopBanner(banner)
-        self.giftable: bool = data['giftable']
-        self.refundable: bool = data['refundable']
-        self.sort_priority: int = data['sortPriority']
-        self.categories: Any = data['categories']  # unknown atm
-        self.section_id: int = data['sectionId']
+        self.giftable: Optional[bool] = data.get('giftable')
+        self.refundable: Optional[bool] = data.get('refundable')
+        self.sort_priority: Optional[int] = data.get('sortPriority')
+        self.categories: Optional[List[str]] = data.get('categories')
+        self.section_id: Optional[int] = data.get('sectionId')
 
         self.section: Optional[BrShopSection] = (section := data.get('section')) and BrShopSection(section)
-        self.dev_name: str = data['devName']
-        self.offer_id: int = data['offerId']
-        self.display_asset_path: str = data['displayAssetPath']
-        self.tile_size: str = data['tileSize']
-        self.new_display_asset_path: str = data['newDisplayAssetPath']
-        self.new_display_asset = data['newDisplayAsset']
+        self.dev_name: Optional[str] = data.get('devName')
+        self.offer_id: Optional[int] = data.get('offerId')
+        self.display_asset_path: Optional[str] = data.get('displayAssetPath')
+        self.tile_size: Optional[str] = data.get('tileSize')
+        self.new_display_asset_path: Optional[str] = data.get('newDisplayAssetPath')
+        self.new_display_asset: Optional[str] = data.get('newDisplayAsset')
         self.items: List[BrCosmetic] = [BrCosmetic(item_data) for item_data in data.get('items', [])]
         self.raw_data: Dict[str, Any] = data
 
     @property
-    def discount(self) -> int:
-        return self.regular_price - self.final_price
+    def discount(self) -> Optional[int]:
+        return self.regular_price and self.final_price and self.regular_price - self.final_price
 
 
 class BrShopBundle:

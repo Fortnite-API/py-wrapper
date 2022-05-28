@@ -45,7 +45,7 @@ class Banner:
 
     def __init__(self, data: Dict[str, Any]) -> None:
         self.id: str = data['id']
-        self.name: str = data['str']
+        self.name: Optional[str] = data.get('str')
         self.description: str = data['category']
         self.category: str = data['category']
         self.full_usage_rights = data['fullUsageRights']

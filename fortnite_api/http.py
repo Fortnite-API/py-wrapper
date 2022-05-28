@@ -54,7 +54,7 @@ class Route:
 
         url = self.BASE_URL + endpoint
         if params is not None:
-            url = url.format(params)
+            url = url.format(**params)
 
         self.url: str = url
 
@@ -68,15 +68,14 @@ class BaseHTTPClient(abc.ABC):
     ) -> None:
         self.run_async: bool = run_async
 
-        self.headers: Dict[str, Any] = {'User-Agent': self.user_agent}
-
         self.token: Optional[str] = token
-        if self.token is not None:
-            self.headers['Authorization'] = self.token
-
-        self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {}) Python/{1[0]}.{1[1]}'.format(
+        self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {0}) Python/{1[0]}.{1[1]}'.format(
             __version__, sys.version_info
         )
+        
+        self.headers: Dict[str, Any] = {'User-Agent': self.user_agent}
+        if self.token is not None:
+            self.headers['Authorization'] = self.token
 
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any:
