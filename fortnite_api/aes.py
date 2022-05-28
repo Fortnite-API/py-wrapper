@@ -42,36 +42,36 @@ VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subvers
 
 
 class Aes:
-    """Represents a AES Code.
+    """Represents a Aes Code.
 
     .. container:: operations
 
         .. describe:: x == y
 
-            Checks if the two AES objects are equal.
+            Checks if the two Aes objects are equal.
 
         .. describe:: x != y
 
-            Checks if two AES objects are not equal.
+            Checks if two Aes objects are not equal.
 
         .. describe:: str(x)
 
-            Returns the AES main key.
+            Returns the Aes main key.
 
         .. describe:: hash(x)
 
-            Returns the AES main key and build's hash.
+            Returns the Aes main key and build's hash.
 
     Attributes
     ----------
     main_key: :class:`str`
         The main encryption key.
     build: :class:`str`
-        The current build where the AES key refers to.
+        The current build where the Aes key refers to.
     version: :class:`str`
-        The current version where the AES key refers to.
+        The current version where the Aes key refers to.
     updated: :class:`datetime.datetime`
-        The date where the AES was updates.
+        The date where the Aes was updates.
     dynamic_keys: List[:class:`DynamicKey`]
         All current dynamic keys
     raw_data: :class:`dict`
@@ -91,12 +91,12 @@ class Aes:
     def __str__(self):
         return self.main_key
 
-    def __eq__(self, o: Union[object, AES]):
-        if not isinstance(o, AES):
+    def __eq__(self, o: Union[object, Aes]):
+        if not isinstance(o, Aes):
             return False
         return self.build == o.build and self.main_key == o.main_key and self.dynamic_keys == o.dynamic_keys
 
-    def __ne__(self, o: Union[object, AES]) -> bool:
+    def __ne__(self, o: Union[object, Aes]) -> bool:
         return not self.__eq__(o)
 
     def __hash__(self) -> int:

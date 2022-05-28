@@ -124,15 +124,15 @@ Returns a `Shop` object.
 
 ___
 
-### AES 
+### Aes 
 ```
 api.aes.fetch()
 ```
-Get the latest Fortnite AES Key. This also include version and build information.
+Get the latest Fortnite Aes Key. This also include version and build information.
 ###### Parameters
-- `key_format` [KeyFormat] (Optional) - Specify the AES key format. Default is set to HEX
+- `key_format` [KeyFormat] (Optional) - Specify the Aes key format. Default is set to HEX
 ###### Returns
-Returns a `AES` object. 
+Returns a `Aes` object. 
 
 ___
 
