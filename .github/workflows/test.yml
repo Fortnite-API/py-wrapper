@@ -9,16 +9,14 @@ jobs:
   pytest:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        version: ['3.8']
-    
-    name: pytest ${{ matrix.python-version }}
     steps:
-      - name: Set up CPython ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+
+      -uses: actions/checkout@v3
+      
+      - name: Setup Python 3.8
+      uses: actions/setup-pyton@v3
+      with:
+        python-version: "3.8"
 
       - name: Install Dependencies
       run: |
