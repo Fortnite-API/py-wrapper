@@ -4,6 +4,9 @@
 # Items for pytest
 .pytest_cache/
 
+# Misc for python local development
+__pycache__/
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
