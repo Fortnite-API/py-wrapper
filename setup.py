@@ -15,6 +15,13 @@ readme = ''
 with open('README.md') as f:
     readme = f.read()
 
+extras_require = {
+    'test': [
+        'pytest',
+        'pytest-asyncio',
+    ]
+}
+
 setup(
     name='fortnite-api',
     author='Luc1412',
@@ -32,7 +39,8 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     install_requires=['requests>=2.22.0', 'aiohttp>=3.6.0,<3.9.0'],
-    python_requires='>=3.6.15',
+    extras_require=extras_require,
+    python_requires='>=3.8.0',
     download_url='https://github.com/Fortnite-API/py-wrapper/archive/refs/tags/v2.5.1.tar.gz',
     keywords=['fortnite', 'fortnite-api.com', 'shop', 'cosmetics', 'fortnite api', 'fortnite shop'],
     classifiers=[
