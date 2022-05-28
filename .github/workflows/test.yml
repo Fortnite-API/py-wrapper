@@ -1,4 +1,4 @@
-name: test
+name: Pytest
 
 on: 
   push:
@@ -7,12 +7,12 @@ on:
 
 jobs:
   pytest:
+    name: Pytest Main
     runs-on: ubuntu-latest
-
     steps:
 
       -uses: actions/checkout@v3
-      
+
       - name: Setup Python 3.8
       uses: actions/setup-pyton@v3
       with:
