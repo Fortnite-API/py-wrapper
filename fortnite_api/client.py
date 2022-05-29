@@ -379,9 +379,7 @@ class FortniteAPI:
         time_window: TimeWindow = TimeWindow.LIFETIME,
         image: StatsImageType = StatsImageType.ALL,
     ) -> BrPlayerStats:
-        data = self.http.get_br_stats(
-            name=name, account_type=type.value, time_window=time_window.value, image=image.value
-        )
+        data = self.http.get_br_stats(name=name, account_type=type.value, time_window=time_window.value, image=image.value)
         return BrPlayerStats(data=data)
 
     def fetch_br_stats_by_id(
@@ -389,7 +387,6 @@ class FortniteAPI:
     ) -> BrPlayerStats:
         data = self.http.get_br_stats_by_id(id=id, time_window=time_window.value, image=image.value)
         return BrPlayerStats(data=data)
-
 
 
 class AsyncFortniteAPI:

@@ -37,7 +37,4 @@ from .playlist import *
 from .shop import *
 from .stats import *
 from .utils import *
-from .client import (
-    FortniteAPI as FortniteAPI, 
-    AsyncFortniteAPI as AsyncFortniteAPI
-)
+from .client import FortniteAPI as FortniteAPI, AsyncFortniteAPI as AsyncFortniteAPI

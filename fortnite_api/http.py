@@ -72,7 +72,7 @@ class BaseHTTPClient(abc.ABC):
         self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {0}) Python/{1[0]}.{1[1]}'.format(
             __version__, sys.version_info
         )
-        
+
         self.headers: Dict[str, Any] = {'User-Agent': self.user_agent}
         if self.token is not None:
             self.headers['Authorization'] = self.token
