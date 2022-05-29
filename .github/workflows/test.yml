@@ -29,4 +29,4 @@ jobs:
       - name: Run tests
         shell: bash
         run: |
-          PYTHONPATH="&(pwd)" -m pytest tests/sync.py, tests/async.py -vs --import-mode=importlib
+          python -m pytest tests/sync.py, tests/async.py -vs --import-mode=importlib
