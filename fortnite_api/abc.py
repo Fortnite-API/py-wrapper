@@ -31,17 +31,18 @@ __all__: Tuple[str, ...] = ('IdComparable', 'Hashable')
 class IdComparable:
     """
     Represents an object that can be compared to another object by id.
-    
+
     .. container:: operations
 
         .. describe:: x == y
 
             Determine if two objects are equal.
-        
+
         .. describe:: x != y
 
             Determine if two objects are not equal.
     """
+
     id: str
 
     def __eq__(self, __o: object) -> bool:
@@ -56,15 +57,16 @@ class IdComparable:
 
 class Hashable(IdComparable):
     """Represents a hashable object.
-    
+
     This inherits :class:`IdComparable` and adds a hash function.
-    
+
     .. container:: operations
-    
+
         .. describe:: hash(x)
-            
+
             Return the hash of the object.
     """
+
     id: str
 
     def __hash__(self) -> int:
