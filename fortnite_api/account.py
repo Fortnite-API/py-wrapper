@@ -23,7 +23,9 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Union, Tuple
+from typing import TYPE_CHECKING, Any, Dict, Tuple
+
+from .abc import Hashable
 
 if TYPE_CHECKING:
     from .types.account import Account as AccountPayload
@@ -31,26 +33,14 @@ if TYPE_CHECKING:
 __all__: Tuple[str, ...] = ('Account',)
 
 
-class Account:
+class Account(Hashable):
     """Represents a account.
 
     .. container:: operations
-
-        .. describe:: x == y
-
-            Checks if the two accounts are equal.
-
-        .. describe:: x != y
-
-            Checks if two accounts are not equal.
-
+    
         .. describe:: str(x)
 
             Returns the account's name.
-
-        .. describe:: hash(x)
-
-            Returns the account's hash.
 
     Attributes
     ----------
@@ -75,15 +65,4 @@ class Account:
 
     def __str__(self) -> str:
         return self.name
-
-    def __hash__(self) -> int:
-        return hash((self.id, self.name))
-
-    def __eq__(self, o: Union[object, Account]) -> bool:
-        if not isinstance(o, Account):
-            return False
-
-        return self.id == o.id
-
-    def __ne__(self, o: Union[object, Account]) -> bool:
-        return not self.__eq__(o)
+    
