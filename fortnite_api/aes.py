@@ -61,7 +61,7 @@ class Aes:
         .. describe:: hash(x)
 
             Returns the Aes main key and build's hash.
-            
+
         .. describe:: repr(x)
 
             Returns a representation of the Aes object in the form of a string.
@@ -98,23 +98,26 @@ class Aes:
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, self.__class__):
             return False
-        
-        return all((
-            self.build == __o.build,
-            self.main_key == __o.main_key,
-            self.dynamic_keys == __o.dynamic_keys,
-        ))
+
+        return all(
+            (
+                self.build == __o.build,
+                self.main_key == __o.main_key,
+                self.dynamic_keys == __o.dynamic_keys,
+            )
+        )
 
     def __ne__(self, __o: object) -> bool:
         return not self.__eq__(__o)
 
     def __hash__(self) -> int:
         return hash((self.build, self.main_key))
-    
-    def __repr__(self) -> str:
-        return '<Aes main_key={0.main_key} build={0.build} version={0.version} updated={0.updated!r} dynamic_keys={0.dynamic_keys!r}>'.format(self)
 
-    
+    def __repr__(self) -> str:
+        return '<Aes main_key={0.main_key} build={0.build} version={0.version} updated={0.updated!r} dynamic_keys={0.dynamic_keys!r}>'.format(
+            self
+        )
+
 
 class DynamicKey:
     """Represents a dynamic key.
