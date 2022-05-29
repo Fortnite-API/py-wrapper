@@ -66,3 +66,6 @@ class Account(Hashable):
     def __str__(self) -> str:
         return self.name
     
+    def __repr__(self) -> str:
+        return '<Account id={0.id} name={0.name} external_auths={0.external_auths}>'.format(self)
+    
