@@ -41,6 +41,10 @@ class Account(Hashable):
         .. describe:: str(x)
 
             Returns the account's name.
+            
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
