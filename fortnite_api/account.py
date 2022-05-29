@@ -55,13 +55,13 @@ class Account:
     Attributes
     ----------
     id: :class:`str`
-        The id of the user.
+        The id of the account.
     name: :class:`str`
-        The display name of the user.
+        The display name of the account.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     external_auths: Dict[Any, Any]
-        The external auths of the user. Please note this will be empty until the User
+        The external auths of the user. Please note this will be empty until the Account
         lookup feature is enabled.
     """
 
