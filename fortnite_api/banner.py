@@ -30,6 +30,26 @@ __all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BrBannerImage')
 
 
 class Banner:
+    """A representation of a banner given to the :class:`FortniteAPI` client
+    as a response. This represents a banner within the Fortnite game.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The id of the banner.
+    name: Optional[:class:`str`]
+        The name of the banner. Can be ``None`` if the banner is not named or
+        no information is provided by the API.
+    description: :class:`str`
+        The description of the banner.
+    category: :class:`str`
+        The category of the banner.
+    full_usage_rights: :class:`bool`
+        Denotes if the banner is full usage rights from Epic Games.
+    dev_name: :class:`str`
+        The developer name of the banner, this is used internally by the
+        Epic Games team.
+    """
 
     __slots__: Tuple[str, ...] = (
         'id',
