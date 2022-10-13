@@ -88,8 +88,8 @@ class Asset(_BaseAsset):
         self._http: HTTPClient = http
         self.url: str = url
 
-    def get_image(self) -> bytes:
-        """A method used to get the image bytes from the asset.
+    def read(self) -> bytes:
+        """Retrieves the content of this asset as a :class:`bytes` object.
 
         Returns
         --------
@@ -113,7 +113,7 @@ class AsyncAsset(_BaseAsset):
         self._http: AsyncHTTPClient = http
         self.url: str = url
 
-    @prepend_doc(Asset.get_image, sep='\n')
-    async def get_image(self) -> bytes:
+    @prepend_doc(Asset.read, sep='\n')
+    async def read(self) -> bytes:
         """|coro|"""
         return await self._http.request(_AssetRoute(self.url))
