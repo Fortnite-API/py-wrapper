@@ -69,7 +69,7 @@ class BrShop:
         self.hash: str = data['hash']
         self.date: datetime.datetime = parse_time(data['date'])
 
-        self.featured: Optional[BrShopEntry] = (featured := data.get('featured')) and BrShopEntry(featured)
+        self.featured: Optional[BrShopSection] = (featured := data.get('featured')) and BrShopSection(featured)
         self.daily: Optional[BrShopSection] = (daily := data.get('daily')) and BrShopSection(daily)
         self.special_featured: Optional[BrShopSection] = (special_featured := data.get('specialFeatured')) and BrShopSection(
             special_featured
