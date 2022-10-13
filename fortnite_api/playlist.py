@@ -21,42 +21,68 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from __future__ import annotations
 
-from datetime import datetime
+from typing import TYPE_CHECKING, Dict, Any, List, Optional, Tuple
+
+from .utils import parse_time
+
+if TYPE_CHECKING:
+    import datetime
 
 
 class Playlist:
 
-    def __init__(self, data):
-        self.id = data['id']
-        self.name = data['name']
-        self.sub_name = data['subName']
-        self.description = data['description']
-        self.game_type = data['gameType']
-        self.min_players = data['minPlayers']
-        self.max_players = data['maxPlayers']
-        self.max_teams = data['maxTeams']
-        self.max_team_size = data['maxTeamSize']
-        self.max_squads = data['maxSquads']
-        self.max_squad_size = data['maxSquadSize']
+    __slots__: Tuple[str, ...] = (
+        'id',
+        'name',
+        'sub_name',
+        'description',
+        'game_type',
+        'min_players',
+        'max_players',
+        'max_teams',
+        'max_team_size',
+        'max_squads',
+        'max_squad_size',
+        'is_default',
+        'is_tournament',
+        'is_limited_time_mode',
+        'is_large_team_game',
+        'accumulate_to_profile_stats',
+        'showcase_image',
+        'mission_icon',
+        'gameplay_tags',
+        'path',
+        'added',
+        'raw_data',
+    )
 
-        self.is_default = data['isDefault']
-        self.is_tournament = data['isTournament']
-        self.is_limited_time_mode = data['isLimitedTimeMode']
-        self.is_large_team_game = data['isLargeTeamGame']
-        self.accumulate_to_profile_stats = data['accumulateToProfileStats']
-        if data.get('images') is not None:
-            images = data['images']
-            self.showcase_image = images['showcase']
-            self.mission_icon = images['missionIcon']
-        else:
-            self.showcase_image = None
-            self.mission_icon = None
-        self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
-            if data.get('gameplayTags') is not None else None
-        self.path = data['path']
-        try:
-            self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, TypeError):
-            self.added = None
-        self.raw_data = data
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.id: str = data['id']
+        self.name: str = data['name']
+        self.sub_name: str = data['subName']
+        self.description: str = data['description']
+        self.game_type: str = data['gameType']
+        self.min_players: int = data['minPlayers']
+        self.max_players: int = data['maxPlayers']
+        self.max_teams: int = data['maxTeams']
+        self.max_team_size: int = data['maxTeamSize']
+        self.max_squads: int = data['maxSquads']
+        self.max_squad_size: int = data['maxSquadSize']
+
+        self.is_default: bool = data['isDefault']
+        self.is_tournament: bool = data['isTournament']
+        self.is_limited_time_mode: bool = data['isLimitedTimeMode']
+        self.is_large_team_game: bool = data['isLargeTeamGame']
+        self.accumulate_to_profile_stats: Any = data['accumulateToProfileStats']  # Unknown for now
+
+        images = data.get('images', {})
+        self.showcase_image: Optional[str] = images.get('showcase')
+        self.mission_icon: Optional[str] = images.get('missionIcon')
+
+        self.gameplay_tags: List[str] = data.get('gameplayTags', [])
+        self.path: str = data['path']
+
+        self.added: datetime.datetime = parse_time(data['added'])
+        self.raw_data: Dict[str, Any] = data

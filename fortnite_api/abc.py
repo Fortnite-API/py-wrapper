@@ -23,36 +23,51 @@ SOFTWARE.
 """
 from __future__ import annotations
 
-# NOTE: Implement these further and add documentation
+from typing import Tuple
+
+__all__: Tuple[str, ...] = ('IdComparable', 'Hashable')
 
 
-class FortniteAPIException(Exception):
-    pass
+class IdComparable:
+    """
+    Represents an object that can be compared to another object by id.
+
+    .. container:: operations
+
+        .. describe:: x == y
+
+            Determine if two objects are equal.
+
+        .. describe:: x != y
+
+            Determine if two objects are not equal.
+    """
+
+    id: str
+
+    def __eq__(self, __o: object) -> bool:
+        if not isinstance(__o, self.__class__):
+            return False
+
+        return self.id == __o.id
+
+    def __ne__(self, __o: object) -> bool:
+        return not self.__eq__(__o)
 
 
-class NotFound(FortniteAPIException):
-    pass
+class Hashable(IdComparable):
+    """Represents a hashable object.
 
+    This inherits :class:`IdComparable` and adds a hash function.
 
-class Forbidden(FortniteAPIException):
-    pass
+    .. container:: operations
 
+        .. describe:: hash(x)
 
-class MissingSearchParameter(FortniteAPIException):
-    pass
+            Return the hash of the object.
+    """
 
+    id: str
 
-class MissingIDParameter(FortniteAPIException):
-    pass
-
-
-class ServiceUnavailable(FortniteAPIException):
-    pass
-
-
-class RateLimited(FortniteAPIException):
-    pass
-
-
-class Unauthorized(FortniteAPIException):
-    pass
+    def __hash__(self) -> int:
+        return hash(self.id)

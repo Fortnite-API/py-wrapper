@@ -33,4 +33,3 @@ class Account(_AccountOptional):
     id: str
     name: str
     external_auths: Dict[Any, Any]
-    

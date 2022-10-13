@@ -21,14 +21,65 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from __future__ import annotations 
+from __future__ import annotations
 
-from typing import Tuple
 import datetime
+from typing import Any, Tuple, Dict, Protocol, Callable
 
-__all__: Tuple[str, ...] = (
-    '_parse_time',
-)
+try:
+    import orjson
 
-def _parse_time(timestamp: str) -> datetime.datetime:
+    _has_orjson: bool = True
+except ImportError:
+    import json
+
+    _has_orjson: bool = False
+
+__all__: Tuple[str, ...] = ('parse_time', 'copy_doc')
+
+
+class Docable(Protocol):
+    __doc__: str
+
+
+if _has_orjson:
+
+    def to_json(string: str) -> Dict[Any, Any]:
+        return orjson.loads(string)
+
+else:
+
+    def to_json(string: str) -> Dict[Any, Any]:
+        return json.loads(string)
+
+
+def parse_time(timestamp: str) -> datetime.datetime:
     return datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S%z')
+
+
+def copy_doc(obj: Docable) -> Callable[[Docable], Docable]:
+    """Copy the docstring from another obect"""
+
+    def wrapped(funco: Docable) -> Docable:
+        funco.__doc__ = obj.__doc__
+
+    return wrapped
+
+
+def prepend_doc(obj: Docable, sep: str = '') -> Callable[[Docable], Docable]:
+    """A decorator used to prepend a docstring onto another object.
+
+    .. code-block:: python3
+
+        @prepend_doc(discord.Embed)
+        def foo(self, *args, **kwargs):
+            '''This is a doc string'''
+
+        print(foo.__doc__)
+        >>> 'discord.Embed doc string[sep]This is a doc string'
+    """
+
+    def wrapped(funco: Docable) -> Docable:
+        funco.__doc__ = f'{obj.__doc__}{sep}{funco.__doc__}'
+
+    return wrapped

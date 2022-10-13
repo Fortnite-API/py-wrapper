@@ -21,71 +21,54 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Union, Tuple
+from typing import TYPE_CHECKING, Any, Dict, Tuple
+
+from .abc import Hashable
 
 if TYPE_CHECKING:
     from .types.account import Account as AccountPayload
 
-__all__: Tuple[str, ...] = (
-    'Account',
-)
+__all__: Tuple[str, ...] = ('Account',)
 
-class Account:
+
+class Account(Hashable):
     """Represents a account.
-    
+
     .. container:: operations
 
-        .. describe:: x == y
-
-            Checks if the two accounts are equal.
-        
-        .. describe:: x != y
-
-            Checks if two accounts are not equal.
-        
         .. describe:: str(x)
-            
-            Returns the account's name.
-        
-        .. describe:: hash(x)
 
-            Returns the account's hash.
+            Returns the account's name.
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
     id: :class:`str`
-        The id of the user.
+        The id of the account.
     name: :class:`str`
-        The display name of the user.
+        The display name of the account.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     external_auths: Dict[Any, Any]
-        The external auths of the user. Please note this will be empty until the User
+        The external auths of the user. Please note this will be empty until the Account
         lookup feature is enabled.
     """
+
     __slots__: Tuple[str, ...] = ('id', 'name', 'raw_data', 'external_auths')
 
     def __init__(self, data: AccountPayload) -> None:
         self.id: str = data['id']
         self.name: str = data['name']
         self.raw_data: AccountPayload = data
-        self.external_auths: Dict[Any, Any] = data.get('external_auths', {}) # Adding when User lookup feature is enabled
-        
+        self.external_auths: Dict[Any, Any] = data.get('external_auths', {})  # Adding when User lookup feature is enabled
+
     def __str__(self) -> str:
         return self.name
 
-    def __hash__(self) -> int:
-        return hash((self.id, self.name))
-    
-    def __eq__(self, o: Union[object, Account]) -> bool:
-        if not isinstance(o, Account):
-            return False
-        
-        return self.id == o.id 
-    
-    def __ne__(self, o: Union[object, Account]) -> bool:
-        return not self.__eq__(o)
-    
+    def __repr__(self) -> str:
+        return '<Account id={0.id} name={0.name} external_auths={0.external_auths}>'.format(self)
