@@ -176,7 +176,7 @@ class BrCosmeticImage:
             raise ValueError('Size must be a positive power of 2')
 
         url_without_type = self.url.replace('.png', '')
-        return url_without_type + '_' + size + '.png'
+        return url_without_type + '_' + str(size) + '.png'
 
     def __str__(self):
         return self.url
