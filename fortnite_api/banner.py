@@ -39,8 +39,8 @@ class BrBannerImage:
         self.url = url
 
     def url_as(self, size):
-        if size < 0 or type(math.sqrt(size)) is float:
-            raise TypeError('Size must be a power of 2.')
+        if (size & (size - 1) != 0) or size <= 0:
+            raise ValueError('Size must be a positive power of 2')
         url_without_type = self.url.replace('.png', '')
         return url_without_type + '_' + size + '.png'
 
