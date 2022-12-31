@@ -206,7 +206,6 @@ class SyncCosmeticsEndpoints:
         return [BrCosmetic(item_data) for item_data in data['data']]
 
     def search_first(self, **search_parameters) -> BrCosmetic:
-        print(_parse_search_parameter(**search_parameters))
         data = self._client.http.get('v2/cosmetics/br/search',
                                      params=_parse_search_parameter(**search_parameters))
         return BrCosmetic(data['data'])
