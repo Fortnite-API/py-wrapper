@@ -86,6 +86,7 @@ class BrShopEntry:
         self.categories = data.get('categories')
         self.section_id = data.get('sectionId')
         self.section = BrShopSectionNew(data.get('section')) if data.get('section') else None
+        self.layout = BrShopLayout(data.get('layout')) if data.get('layout') else None
         self.dev_name = data.get('devName')
         self.offer_id = data.get('offerId')
         self.display_asset_path = data.get('displayAssetPath')
@@ -127,6 +128,16 @@ class BrShopSectionNew:
         self.show_timer = data.get('showTimer')
         self.enable_toast_notification = data.get('enableToastNotification')
         self.hidden = data.get('hidden')
+
+
+class BrShopLayout:
+
+    def __init__(self, data):
+        self.id = data.get('id')
+        self.name = data.get('name')
+        self.category = data.get('category')
+        self.index = data.get('index')
+        self.show_ineligible_offers = data.get('showIneligibleOffers')
 
 
 class BrShopNewDisplayAsset:
