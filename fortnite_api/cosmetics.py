@@ -1,4 +1,3 @@
-import math
 from datetime import datetime
 
 from fortnite_api.enums import BrCosmeticType, BrCosmeticRarity
@@ -22,8 +21,8 @@ class NewBrCosmetics:
         self.raw_data = data
 
 
-class BrCosmetic:
-    """Represents a Battle Royale Cosmetic.
+class BaseCosmetic:
+    """Represents a Cosmetic.
 
     Attributes
     -----------
@@ -41,32 +40,12 @@ class BrCosmetic:
         The name of the cosmetic in the chosen language.
     description: :class:`str`
         The description of the cosmetic in the chosen language.
-    set: Optional[:class:`str`]
-        The set of the cosmetic in the chosen language.
-    set_text: Optional[:class:`str`]
-        The text of the set of the cosmetic in the chosen language.
     series: Optional[:class:`str`]
         The series of the cosmetic in the chosen language.
     backend_series: Optional[:class:`str`]
         The internal series of the cosmetic.
-    small_icon: :class:`BrCosmeticImage`
-        The icon image in 128x128 resolution of the cosmetic.
-    icon: Optional[:class:`BrCosmeticImage`]
-        The icon image in 512x512 resolution of the cosmetic.
-    featured: Optional[:class:`BrCosmeticImage`]
-        The featured image in 1024x1024 resolution of the cosmetic.
-    background: Optional[:class:`BrCosmeticImage`]
-        The background image in 2048x1024 resolution of a loading screen.
-    coverart: Optional[:class:`BrCosmeticImage`]
-        The cover art image in 512x512 resolution of a music pack.
-    decal: Optional[:class:`BrCosmeticImage`]
-        The decal in 512x512 resolution of a spray.
-    variants: Optional[List[:class:`BrCosmeticVariant`]]
-        A :class:`list` of :class:`BrCosmeticVariant` of the cosmetic.
     gameplay_tags: Optional[List[:class:`str`]]
         A :class:`list` of gameplay tags of the cosmetics.
-    display_asset_path: Optional[:class:`str`]
-        The path of the display asset.
     path: :class:`str`
         The path of the asset.
     added: :class:`datetime.datetime`
@@ -79,9 +58,6 @@ class BrCosmetic:
         self.id = data.get('id')
         self.name = data.get('name')
         self.description = data.get('description')
-        self.exclusive_description = data.get('exclusiveDescription')
-        self.unlock_requirements = data.get('unlockRequirements')
-        self.custom_exclusive_callout = data.get('customExclusiveCallout')
 
         cosmetic_type = data.get('type', {}) if data.get('type') else {}
         try:
@@ -102,44 +78,13 @@ class BrCosmetic:
         series = data.get('series', {}) if data.get('series') else {}
         self.series = series.get('value')
         self.series_image = series.get('image')
+        self.series_colors = series.get('colors')
         self.backend_series = series.get('backendValue')
 
-        cosmetic_set = data.get('set', {}) if data.get('set') else {}
-        self.set = cosmetic_set.get('value')
-        self.set_text = cosmetic_set.get('text')
-        self.backend_set = cosmetic_set.get('backendValue')
-
-        introduction = data.get('introduction', {}) if data.get('introduction') else {}
-        self.introduction_chapter = introduction.get('chapter')
-        self.introduction_season = introduction.get('season')
-        self.introduction_text = introduction.get('text')
-        self.backend_introduction = introduction.get('backendValue')
-
-        images = data.get('images', {}) if data.get('images') else {}
-        self.small_icon = BrCosmeticImage(images.get('smallIcon')) if images.get('smallIcon') else None
-        self.icon = BrCosmeticImage(images.get('icon')) if images.get('icon') else None
-        self.featured = BrCosmeticImage(images.get('featured')) if images.get('featured') else None
-        other_images = images.get('other', {}) if images.get('other') else {}
-        self.background = BrCosmeticImage(other_images.get('background')) if other_images.get('background') else None
-        self.coverart = BrCosmeticImage(other_images.get('coverart')) if other_images.get('coverart') else None
-        self.decal = BrCosmeticImage(other_images.get('decal')) if other_images.get('decal') else None
-
-        self.variants = [BrCosmeticVariant(variant) for variant in data.get('variants')] \
-            if data.get('variants') is not None else None
-        self.built_in_emote_ids = [be for be in data.get('builtInEmoteIds')] \
-            if data.get('builtInEmoteIds') is not None else None
-        self.search_tags = [st for st in data.get('searchTags')] \
-            if data.get('searchTags') is not None else None
         self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
             if data.get('gameplayTags') is not None else None
-        self.meta_tags = [meta_tag for meta_tag in data.get('metaTags')] \
-            if data.get('metaTags') is not None else None
         self.showcase_video_url = 'https://youtube.com/watch?v=' + data.get('showcaseVideo') \
             if data.get('showcaseVideo') else None
-        self.dynamic_pak_id = data.get('dynamicPakId')
-        self.item_preview_hero_path = data.get('itemPreviewHeroPath')
-        self.display_asset_path = data.get('displayAssetPath')
-        self.definition_path = data.get('definitionPath')
         self.path = data.get('path')
         try:
             self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
@@ -156,30 +101,80 @@ class BrCosmetic:
         self.first_appearance = self.shop_history[0] if self.appearances > 0 else None
         self.last_appearance = self.shop_history[self.appearances - 1] if self.appearances > 0 else None
         self.unseen_for = (datetime.utcnow() - self.last_appearance).days if self.last_appearance else None
+
         self.raw_data = data
 
 
-class BrCosmeticImage:
-    """Represents a Battle Royale cosmetic image.
+class BrCosmetic:
+    """Represents a Battle Royale Cosmetic.
 
     Attributes
     -----------
-    url: :class:`str`
-        The hash of the image.
+    set: Optional[:class:`str`]
+        The set of the cosmetic in the chosen language.
+    set_text: Optional[:class:`str`]
+        The text of the set of the cosmetic in the chosen language.
+    small_icon: :class:`BrCosmeticImage`
+        The icon image in 128x128 resolution of the cosmetic.
+    icon: Optional[:class:`BrCosmeticImage`]
+        The icon image in 512x512 resolution of the cosmetic.
+    featured: Optional[:class:`BrCosmeticImage`]
+        The featured image in 1024x1024 resolution of the cosmetic.
+    background: Optional[:class:`BrCosmeticImage`]
+        The background image in 2048x1024 resolution of a loading screen.
+    coverart: Optional[:class:`BrCosmeticImage`]
+        The cover art image in 512x512 resolution of a music pack.
+    decal: Optional[:class:`BrCosmeticImage`]
+        The decal in 512x512 resolution of a spray.
+    variants: Optional[List[:class:`BrCosmeticVariant`]]
+        A :class:`list` of :class:`BrCosmeticVariant` of the cosmetic.
+    display_asset_path: Optional[:class:`str`]
+        The path of the display asset.
     """
 
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, data):
+        self.exclusive_description = data.get('exclusiveDescription')
+        self.unlock_requirements = data.get('unlockRequirements')
+        self.custom_exclusive_callout = data.get('customExclusiveCallout')
 
-    def url_as(self, size):
-        if (size & (size - 1) != 0) or size <= 0:
-            raise ValueError('Size must be a positive power of 2')
+        cosmetic_set = data.get('set', {}) if data.get('set') else {}
+        self.set = cosmetic_set.get('value')
+        self.set_text = cosmetic_set.get('text')
+        self.backend_set = cosmetic_set.get('backendValue')
 
-        url_without_type = self.url.replace('.png', '')
-        return url_without_type + '_' + str(size) + '.png'
+        introduction = data.get('introduction', {}) if data.get('introduction') else {}
+        self.introduction_chapter = introduction.get('chapter')
+        self.introduction_season = introduction.get('season')
+        self.introduction_text = introduction.get('text')
+        self.backend_introduction = introduction.get('backendValue')
 
-    def __str__(self):
-        return self.url
+        images = data.get('images', {}) if data.get('images') else {}
+        self.small_icon = BrCosmeticImage(images.get('smallIcon')) if images.get('smallIcon') else None
+        self.icon = BrCosmeticImage(images.get('icon')) if images.get('icon') else None
+        self.featured = BrCosmeticImage(images.get('featured')) if images.get('featured') else None
+        lego_images = images.get('lego', {}) if images.get('lego') else {}
+        self.lego_small = BrCosmeticImage(lego_images.get('small')) if lego_images.get('small') else None
+        self.lego_large = BrCosmeticImage(lego_images.get('large')) if lego_images.get('large') else None
+        self.lego_wide = BrCosmeticImage(lego_images.get('wide')) if lego_images.get('wide') else None
+        other_images = images.get('other', {}) if images.get('other') else {}
+        self.background = BrCosmeticImage(other_images.get('background')) if other_images.get('background') else None
+        self.coverart = BrCosmeticImage(other_images.get('coverart')) if other_images.get('coverart') else None
+        self.decal = BrCosmeticImage(other_images.get('decal')) if other_images.get('decal') else None
+
+        self.variants = [BrCosmeticVariant(variant) for variant in data.get('variants')] \
+            if data.get('variants') is not None else None
+        self.built_in_emote_ids = [be for be in data.get('builtInEmoteIds')] \
+            if data.get('builtInEmoteIds') is not None else None
+        self.search_tags = [st for st in data.get('searchTags')] \
+            if data.get('searchTags') is not None else None
+
+        self.meta_tags = [meta_tag for meta_tag in data.get('metaTags')] \
+            if data.get('metaTags') is not None else None
+
+        self.dynamic_pak_id = data.get('dynamicPakId')
+        self.item_preview_hero_path = data.get('itemPreviewHeroPath')
+        self.display_asset_path = data.get('displayAssetPath')
+        self.definition_path = data.get('definitionPath')
 
 
 class BrCosmeticVariant:
@@ -226,3 +221,170 @@ class BrCosmeticVariantOption:
         self.image = BrCosmeticImage(data.get('image'))
         self.unlock_requirements = data.get('unlockRequirements')
         self.raw_data = data
+
+
+class CarCosmetic(BaseCosmetic):
+    """Represents a Car Cosmetic.
+
+    Attributes
+    -----------
+    vehicle_id: :class:`str`
+        The id of the vehicle.
+    small: :class:`CosmeticImage`
+        The small image of the cosmetic.
+    large: :class:`CosmeticImage`
+        The large image of the cosmetic.
+    """
+
+    def __init__(self, data):
+        super().__init__(data)
+        self.vehicle_id = data.get('vehicleId')
+
+        images = data.get('images', {}) if data.get('images') else {}
+        self.small = CosmeticImage(images.get('small')) if images.get('small') else None
+        self.large = CosmeticImage(images.get('large')) if images.get('large') else None
+
+
+class InstrumentCosmetic(BaseCosmetic):
+    """Represents an Instrument Cosmetic.
+
+    Attributes
+    -----------
+    small: :class:`CosmeticImage`
+        The small image of the cosmetic.
+    large: :class:`CosmeticImage`
+        The large image of the cosmetic.
+    """
+
+    def __init__(self, data):
+        super().__init__(data)
+        images = data.get('images', {}) if data.get('images') else {}
+        self.small = CosmeticImage(images.get('small')) if images.get('small') else None
+        self.large = CosmeticImage(images.get('large')) if images.get('large') else None
+
+
+class LegoCosmeticVariant:
+
+    """Represents a Lego Cosmetic Variant.
+
+    Attributes
+    -----------
+    tag: :class:`str`
+        The tag of the variant.
+    name: :class:`str`
+        The name of the variant in the chosen language.
+    image: :class:`BrCosmeticImage`
+        A image of the variant.
+    raw_data: :class:`dict`
+        The raw data from request. Can be used for saving and re-creating the class.
+    """
+
+    def __init__(self, data):
+        self.cosmetic_id = data.get('cosmeticId')
+        self.sound_library_tags = data.get('soundLibraryTags')
+        images = data.get('images', {}) if data.get('images') else {}
+        self.small = CosmeticImage(images.get('small')) if images.get('small') else None
+        self.large = CosmeticImage(images.get('large')) if images.get('large') else None
+        self.wide = CosmeticImage(images.get('wide')) if images.get('wide') else None
+        self.path = data.get('path')
+
+
+class JamTrack:
+    """Represents a Jam Track.
+
+    Attributes
+    -----------
+    id: :class:`str`
+        The id of the jam track.
+    dev_name: :class:`str`
+        The dev name of the jam track.
+    title: :class:`str`
+        The title of the jam track.
+    artist: :class:`str`
+        The artist of the jam track.
+    album: :class:`str`
+        The album of the jam track.
+    release_year: :class:`int`
+        The release year of the jam track.
+    bpm: :class:`int`
+        The bpm of the jam track.
+    duration: :class:`int`
+        The duration of the jam track.
+    difficutly: :class:`int`
+        The difficulty of the jam track.
+    gameplay_tags: List[:class:`str`]
+        A :class:`list` of gameplay tags of the jam track.
+    genres: List[:class:`str`]
+        A :class:`list` of genres of the jam track.
+    album_art_url: :class:`str`
+        The album art url of the jam track.
+    added: :class:`datetime.datetime`
+        The timestamp when the item was added to the Fortnite-API.com database.
+    shop_history: List[:class:`datetime.datetime`]
+        A :class:`list` of timestamps when the jam track was in the shop.
+    appearances: :class:`int`
+        The amount of times the jam track was in the shop.
+    first_appearance: Optional[:class:`datetime.datetime`]
+        The timestamp when the jam track was first in the shop.
+    last_appearance: Optional[:class:`datetime.datetime`]
+        The timestamp when the jam track was last in the shop.
+    unseen_for: Optional[:class:`int`]
+        The amount of days the jam track is unseen.
+    raw_data: :class:`dict`
+        The raw data from request. Can be used for saving and re-creating the class.
+    """
+
+    def __init__(self, data):
+        self.id = data.get('id')
+        self.dev_name = data.get('devName')
+        self.title = data.get('title')
+        self.artist = data.get('artist')
+        self.album = data.get('album')
+        self.release_year = data.get('releaseYear')
+        self.bpm = data.get('bpm')
+        self.duration = data.get('duration')
+        self.difficutly = data.get('difficutly')
+        self.gameplay_tags = data.get('gameplayTags')
+        self.genres = data.get('genres')
+        self.album_art_url = data.get('albumArt')
+        try:
+            self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
+        except (ValueError, TypeError):
+            self.added = None
+        self.shop_history = []
+        for date in data.get('shopHistory', []) if data.get('shopHistory') else []:
+            try:
+                self.shop_history.append(datetime.strptime(date, '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo=None))
+            except (ValueError, TypeError):
+                pass
+        self.appearances = len(self.shop_history)
+        self.first_appearance = self.shop_history[0] if self.appearances > 0 else None
+        self.last_appearance = self.shop_history[self.appearances - 1] if self.appearances > 0 else None
+        self.unseen_for = (datetime.utcnow() - self.last_appearance).days if self.last_appearance else None
+        self.raw_data = data
+
+
+class CosmeticImage:
+    """Represents a Battle Royale cosmetic image.
+
+    Attributes
+    -----------
+    url: :class:`str`
+        The hash of the image.
+    """
+
+    def __init__(self, url):
+        self.url = url
+
+    def url_as(self, size):
+        if (size & (size - 1) != 0) or size <= 0:
+            raise ValueError('Size must be a positive power of 2')
+
+        url_without_type = self.url.replace('.png', '')
+        return url_without_type + '_' + str(size) + '.png'
+
+    def __str__(self):
+        return self.url
+
+
+BrCosmeticImage = CosmeticImage

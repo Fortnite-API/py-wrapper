@@ -5,7 +5,7 @@ from typing import List
 
 from .aes import AES
 from .banner import Banner, BannerColor
-from .cosmetics import BrCosmetic, NewBrCosmetics
+from .cosmetics import BrCosmetic, NewBrCosmetics, CarCosmetic, InstrumentCosmetic, LegoCosmeticVariant, JamTrack
 from .creator_code import CreatorCode
 from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType, \
     BrCosmeticRarity, BrCosmeticType
@@ -161,6 +161,26 @@ class SyncCosmeticsEndpoints:
         params = {'language': language.value}
         data = self._client.http.get('v2/cosmetics/br', params=params)
         return [BrCosmetic(item_data) for item_data in data['data']]
+
+    def fetch_cars(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/cars', params=params)
+        return [CarCosmetic(item_data) for item_data in data['data']]
+
+    def fetch_instruments(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/instruments', params=params)
+        return [InstrumentCosmetic(item_data) for item_data in data['data']]
+
+    def fetch_jam_tracks(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/tracks', params=params)
+        return [JamTrack(item_data) for item_data in data['data']]
+
+    def fetch_lego_variants(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/lego', params=params)
+        return [LegoCosmeticVariant(item_data) for item_data in data['data']]
 
     def fetch_new(self, language=GameLanguage.ENGLISH):
         params = {'language': language.value}

@@ -67,6 +67,17 @@ class BrCosmeticType(Enum):
     SHOUT = 'shout'
     SPRAY = 'spray'
     TOY = 'toy'
+
+    CAR_BODY = 'body'
+    DECAL = 'skin'
+    WHEELS = 'wheel'
+
+    GUITAR = 'guitar'
+    BASS = 'bass'
+    DRUMS = 'drum'
+    MICROPHONE = 'mic'
+    KEYTAR = 'keyboard'
+
     UNKNOWN = 'unknown'
 
 
