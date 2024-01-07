@@ -105,7 +105,7 @@ class BaseCosmetic:
         self.raw_data = data
 
 
-class BrCosmetic:
+class BrCosmetic(BaseCosmetic):
     """Represents a Battle Royale Cosmetic.
 
     Attributes
@@ -133,6 +133,7 @@ class BrCosmetic:
     """
 
     def __init__(self, data):
+        super().__init__(data)
         self.exclusive_description = data.get('exclusiveDescription')
         self.unlock_requirements = data.get('unlockRequirements')
         self.custom_exclusive_callout = data.get('customExclusiveCallout')
