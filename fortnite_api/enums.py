@@ -111,3 +111,8 @@ class ShopTileSize(Enum):
     NORMAL = 'Normal'
     DOUBLE_WIDE = 'DoubleWide'
     TRIPLE_WIDE = 'TripleWide'
+
+
+class CosmeticCompatibleMode(Enum):
+    BATTLE_ROYALE = 'ECosmeticCompatibleMode::BattleRoyale'
+    LEGO = 'ECosmeticCompatibleMode::Juno'

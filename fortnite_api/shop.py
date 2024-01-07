@@ -2,14 +2,14 @@ from datetime import datetime
 from typing import List, Optional, Union
 
 from .cosmetics import BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack
-from .enums import ShopTileSize
+from .enums import ShopTileSize, CosmeticCompatibleMode
 
 
 class Shop:
 
     def __init__(self, data: dict):
         self.hash: str = data['hash']
-        self.date: datetime = datetime.fromisoformat(data['date'])
+        self.date: datetime = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S%z')
         self.entries: List[ShopEntry] = [ShopEntry(entry) for entry in data['entries']]
         self.raw_data: dict = data
 
@@ -89,7 +89,7 @@ class ShopMaterialInstance:
 
     def __init__(self, data: dict):
         self.id: str = data['id']
-        self.primary_mode: str = data['primaryMode']
+        self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode(data['primaryMode'])
         self.images: ShopMaterialInstanceImages = ShopMaterialInstanceImages(data['images'])
         self.colors: Optional[dict] = data['colors']
         self.scalings: Optional[dict] = data['scalings']
