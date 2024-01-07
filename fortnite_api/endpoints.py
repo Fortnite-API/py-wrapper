@@ -417,10 +417,17 @@ class SyncShopEndpoints:
     def __init__(self, client):
         self._client = client
 
-    def fetch(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
+    def fetch_all(self, language: GameLanguage = GameLanguage.ENGLISH) -> Shop:
+        params = {'language': language.value}
+        data = self._client.http.get('v2/shop', params=params)
+        return Shop(data['data'])
+
+    def fetch_br(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
         params = {'language': language.value}
         data = self._client.http.get('v2/shop/br' if not combined else 'v2/shop/br/combined', params=params)
         return BrShop(data['data'])
+
+    fetch = fetch_br
 
 
 class AsyncShopEndpoints:
@@ -428,10 +435,17 @@ class AsyncShopEndpoints:
     def __init__(self, client):
         self._client = client
 
-    async def fetch(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
+    async def fetch_all(self, language: GameLanguage = GameLanguage.ENGLISH) -> Shop:
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/shop', params=params)
+        return Shop(data['data'])
+
+    async def fetch_br(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
         params = {'language': language.value}
         data = await self._client.http.get('v2/shop/br' if not combined else 'v2/shop/br/combined', params=params)
         return BrShop(data['data'])
+
+    fetch = fetch_br
 
 
 class SyncStatsEndpoints:

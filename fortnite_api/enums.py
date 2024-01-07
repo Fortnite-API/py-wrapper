@@ -104,3 +104,10 @@ class StatsImageType(Enum):
     GAMEPAD = 'gamepad'
     TOUCH = 'touch'
     NONE = 'none'
+
+
+class ShopTileSize(Enum):
+    SMALL = 'Small'
+    NORMAL = 'Normal'
+    DOUBLE_WIDE = 'DoubleWide'
+    TRIPLE_WIDE = 'TripleWide'
