@@ -13,7 +13,7 @@ from .errors import MissingSearchParameter, MissingIDParameter, NotFound
 from .map import Map
 from .news import GameModeNews, News
 from .playlist import Playlist
-from .shop import BrShop
+from .shop import BrShop, Shop
 from .stats import BrPlayerStats
 
 _SEARCH_PARAMETERS = {
