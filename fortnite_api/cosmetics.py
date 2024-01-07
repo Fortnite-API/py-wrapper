@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List, Union
 
 from fortnite_api.enums import BrCosmeticType, BrCosmeticRarity
 
@@ -19,6 +20,37 @@ class NewBrCosmetics:
             self.last_addition = None
         self.items = [BrCosmetic(i) for i in data.get('items')] if data.get('items') else None
         self.raw_data = data
+
+
+class NewCosmetics:
+
+    def __init__(self, data):
+        self.date: datetime = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S%z')
+        self.build: str = data['build']
+        self.previous_build: str = data['previousBuild']
+        hashes = data['hashes']
+        self.hash: str = hashes['all']
+        self.hash_br: str = hashes['br']
+        self.hash_cars: str = hashes['cars']
+        self.hash_instruments: str = hashes['instruments']
+        self.hash_jam_tracks: str = hashes['tracks']
+        self.hash_lego: str = hashes['lego']
+        last_additions = data['lastAdditions']
+        self.last_addition: datetime = datetime.strptime(last_additions['all'], '%Y-%m-%dT%H:%M:%S%z')
+        self.last_addition_br: datetime = datetime.strptime(last_additions['br'], '%Y-%m-%dT%H:%M:%S%z')
+        self.last_addition_cars: datetime = datetime.strptime(last_additions['cars'], '%Y-%m-%dT%H:%M:%S%z')
+        self.last_addition_instruments: datetime = datetime.strptime(
+            last_additions['instruments'], '%Y-%m-%dT%H:%M:%S%z'
+        )
+        self.last_addition_jam_tracks: datetime = datetime.strptime(last_additions['tracks'], '%Y-%m-%dT%H:%M:%S%z')
+        self.last_addition_lego: datetime = datetime.strptime(last_additions['lego'], '%Y-%m-%dT%H:%M:%S%z')
+        items = data['items']
+        self.items: List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack, LegoCosmeticVariant]] = []
+        self.items.extend([BrCosmetic(item) for item in items['br']])
+        self.items.extend([CarCosmetic(item) for item in items['cars']])
+        self.items.extend([InstrumentCosmetic(item) for item in items['instruments']])
+        self.items.extend([JamTrack(item) for item in items['tracks']])
+        self.items.extend([LegoCosmeticVariant(item) for item in items['lego']])
 
 
 class BaseCosmetic:
@@ -265,7 +297,6 @@ class InstrumentCosmetic(BaseCosmetic):
 
 
 class LegoCosmeticVariant:
-
     """Represents a Lego Cosmetic Variant.
 
     Attributes
