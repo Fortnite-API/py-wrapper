@@ -73,6 +73,7 @@ class BrCosmeticType(Enum):
     DECAL = 'skin'
     WHEELS = 'wheel'
 
+    JAM_TRACK = 'track'
     GUITAR = 'guitar'
     BASS = 'bass'
     DRUMS = 'drum'
