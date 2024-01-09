@@ -44,6 +44,7 @@ class BrCosmeticRarity(Enum):
     SHADOW = 'shadow'
     SLURP = 'slurp'
     EPIC = 'epic'
+    LAMBORGHINI = 'lamborghini'
     RARE = 'rare'
     UNCOMMON = 'uncommon'
     COMMON = 'common'
