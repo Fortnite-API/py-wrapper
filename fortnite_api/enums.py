@@ -68,6 +68,7 @@ class BrCosmeticType(Enum):
     SHOUT = 'shout'
     SPRAY = 'spray'
     TOY = 'toy'
+    AURA = 'aura'
 
     CAR_BODY = 'body'
     DECAL = 'skin'
