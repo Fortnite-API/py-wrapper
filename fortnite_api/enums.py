@@ -121,3 +121,4 @@ class CosmeticCompatibleMode(Enum):
     BATTLE_ROYALE = 'ECosmeticCompatibleMode::BattleRoyale'
     LEGO = 'ECosmeticCompatibleMode::Juno'
     ROCKET_RACING = 'ECosmeticCompatibleMode::DelMar'
+    FESTIVAL = 'ECosmeticCompatibleMode::Sparks'
