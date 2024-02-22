@@ -10,7 +10,7 @@ class Shop:
     def __init__(self, data: dict):
         self.hash: str = data['hash']
         self.date: datetime = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S%z')
-        self.entries: List[ShopEntry] = [ShopEntry(entry) for entry in data['entries']]
+        self.entries: List[ShopEntry] = [ShopEntry(entry) for entry in data['entries'] or []]
         self.raw_data: dict = data
 
 
