@@ -29,7 +29,11 @@ class ShopEntry:
         self.dev_name: str = data['devName']
         self.offer_id: str = data['offerId']
         self.display_asset_path: Optional[str] = data['displayAssetPath']
-        self.tile_size: ShopTileSize = ShopTileSize(data['tileSize'])
+        try:
+            self.tile_size: ShopTileSize = ShopTileSize(data['tileSize'])
+        except ValueError:
+            # This is a fix, because Epic believes that they should spell "normal" as "nomal"
+            self.tile_size: ShopTileSize = ShopTileSize.NORMAL
         self.new_display_asset_path: Optional[str] = data['newDisplayAssetPath']
         self.new_display_asset: Optional[ShopNewDisplayAsset] = ShopNewDisplayAsset(data['newDisplayAsset']) if data[
             'newDisplayAsset'] else None

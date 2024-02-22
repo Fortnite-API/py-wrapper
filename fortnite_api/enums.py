@@ -68,10 +68,12 @@ class BrCosmeticType(Enum):
     SHOUT = 'shout'
     SPRAY = 'spray'
     TOY = 'toy'
+    AURA = 'aura'
 
     CAR_BODY = 'body'
     DECAL = 'skin'
     WHEELS = 'wheel'
+    TRAIL = 'drifttrail'
 
     JAM_TRACK = 'track'
     GUITAR = 'guitar'
@@ -118,3 +120,5 @@ class ShopTileSize(Enum):
 class CosmeticCompatibleMode(Enum):
     BATTLE_ROYALE = 'ECosmeticCompatibleMode::BattleRoyale'
     LEGO = 'ECosmeticCompatibleMode::Juno'
+    ROCKET_RACING = 'ECosmeticCompatibleMode::DelMar'
+    FESTIVAL = 'ECosmeticCompatibleMode::Sparks'
