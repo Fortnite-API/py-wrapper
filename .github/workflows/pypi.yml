@@ -2,6 +2,7 @@ name: PyPI Auto-Release
 
 on: 
   release:
+    types: [published]
 
 jobs:
   pypi:
