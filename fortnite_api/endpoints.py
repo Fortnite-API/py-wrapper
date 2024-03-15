@@ -6,7 +6,7 @@ from typing import List, Union
 from .aes import AES
 from .banner import Banner, BannerColor
 from .cosmetics import BrCosmetic, NewBrCosmetics, CarCosmetic, InstrumentCosmetic, LegoCosmeticVariant, JamTrack, \
-    NewCosmetics
+    NewCosmetics, LegoKitCosmetic
 from .creator_code import CreatorCode
 from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType, \
     BrCosmeticRarity, BrCosmeticType
@@ -140,7 +140,7 @@ class SyncCosmeticsEndpoints:
     def fetch(
             self,
             language=GameLanguage.ENGLISH
-    ) -> List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack, LegoCosmeticVariant]]:
+    ) -> List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, LegoKitCosmetic, JamTrack, LegoCosmeticVariant]]:
         params = {'language': language.value}
         data = self._client.http.get('v2/cosmetics', params=params)
         data = data['data']
@@ -148,6 +148,7 @@ class SyncCosmeticsEndpoints:
         cosmetics.extend([BrCosmetic(item) for item in data['br']])
         cosmetics.extend([CarCosmetic(item) for item in data['cars']])
         cosmetics.extend([InstrumentCosmetic(item) for item in data['instruments']])
+        cosmetics.extend([LegoKitCosmetic(item) for item in data['legoKits']])
         cosmetics.extend([JamTrack(item) for item in data['tracks']])
         cosmetics.extend([LegoCosmeticVariant(item) for item in data['lego']])
         return cosmetics
@@ -189,6 +190,11 @@ class SyncCosmeticsEndpoints:
         params = {'language': language.value}
         data = self._client.http.get('v2/cosmetics/instruments', params=params)
         return [InstrumentCosmetic(item_data) for item_data in data['data']]
+
+    def fetch_lego_kits(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/lego/kits', params=params)
+        return [LegoKitCosmetic(item_data) for item_data in data['data']]
 
     def fetch_jam_tracks(self, language=GameLanguage.ENGLISH):
         params = {'language': language.value}
@@ -264,7 +270,7 @@ class AsyncCosmeticsEndpoints:
     async def fetch(
             self,
             language=GameLanguage.ENGLISH
-    ) -> List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack, LegoCosmeticVariant]]:
+    ) -> List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, LegoKitCosmetic, JamTrack, LegoCosmeticVariant]]:
         params = {'language': language.value}
         data = await self._client.http.get('v2/cosmetics', params=params)
         data = data['data']
@@ -272,6 +278,7 @@ class AsyncCosmeticsEndpoints:
         cosmetics.extend([BrCosmetic(item) for item in data['br']])
         cosmetics.extend([CarCosmetic(item) for item in data['cars']])
         cosmetics.extend([InstrumentCosmetic(item) for item in data['instruments']])
+        cosmetics.extend([LegoKitCosmetic(item) for item in data['legoKits']])
         cosmetics.extend([JamTrack(item) for item in data['tracks']])
         cosmetics.extend([LegoCosmeticVariant(item) for item in data['lego']])
         return cosmetics
@@ -292,6 +299,11 @@ class AsyncCosmeticsEndpoints:
         params = {'language': language.value}
         data = await self._client.http.get('v2/cosmetics/instruments', params=params)
         return [InstrumentCosmetic(item_data) for item_data in data['data']]
+
+    async def fetch_lego_kits(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics/lego/kits', params=params)
+        return [LegoKitCosmetic(item_data) for item_data in data['data']]
 
     async def fetch_jam_tracks(self, language=GameLanguage.ENGLISH):
         params = {'language': language.value}

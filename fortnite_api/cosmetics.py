@@ -45,10 +45,11 @@ class NewCosmetics:
         self.last_addition_jam_tracks: datetime = datetime.strptime(last_additions['tracks'], '%Y-%m-%dT%H:%M:%S%z')
         self.last_addition_lego: datetime = datetime.strptime(last_additions['lego'], '%Y-%m-%dT%H:%M:%S%z')
         items = data['items']
-        self.items: List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack, LegoCosmeticVariant]] = []
+        self.items: List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, LegoKitCosmetic, JamTrack, LegoCosmeticVariant]] = []
         self.items.extend([BrCosmetic(item) for item in items['br']])
         self.items.extend([CarCosmetic(item) for item in items['cars']])
         self.items.extend([InstrumentCosmetic(item) for item in items['instruments']])
+        self.items.extend([LegoKitCosmetic(item) for item in items['legoKits']])
         self.items.extend([JamTrack(item) for item in items['tracks']])
         self.items.extend([LegoCosmeticVariant(item) for item in items['lego']])
 
@@ -291,6 +292,16 @@ class InstrumentCosmetic(BaseCosmetic):
 
     def __init__(self, data):
         super().__init__(data)
+        images = data.get('images', {}) if data.get('images') else {}
+        self.small = CosmeticImage(images.get('small')) if images.get('small') else None
+        self.large = CosmeticImage(images.get('large')) if images.get('large') else None
+
+
+class LegoKitCosmetic(BaseCosmetic):
+
+    def __init__(self, data):
+        super().__init__(data)
+        self.type = BrCosmeticType.LEGO_KIT
         images = data.get('images', {}) if data.get('images') else {}
         self.small = CosmeticImage(images.get('small')) if images.get('small') else None
         self.large = CosmeticImage(images.get('large')) if images.get('large') else None

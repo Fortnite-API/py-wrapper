@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional, Union
 
-from .cosmetics import BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack
+from .cosmetics import BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack, LegoKitCosmetic
 from .enums import ShopTileSize, CosmeticCompatibleMode
 
 
@@ -37,13 +37,15 @@ class ShopEntry:
         self.new_display_asset_path: Optional[str] = data['newDisplayAssetPath']
         self.new_display_asset: Optional[ShopNewDisplayAsset] = ShopNewDisplayAsset(data['newDisplayAsset']) if data[
             'newDisplayAsset'] else None
-        self.items: List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack]] = []
+        self.items: List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, LegoKitCosmetic, JamTrack]] = []
         if data['brItems']:
             self.items.extend([BrCosmetic(item) for item in data['brItems']])
         if data['cars']:
             self.items.extend([CarCosmetic(item) for item in data['cars']])
         if data['instruments']:
             self.items.extend([InstrumentCosmetic(item) for item in data['instruments']])
+        if data['legoKits']:
+            self.items.extend([LegoKitCosmetic(item) for item in data['legoKits']])
         if data['tracks']:
             self.items.extend([JamTrack(item) for item in data['tracks']])
         self.raw_data: dict = data

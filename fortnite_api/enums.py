@@ -82,6 +82,8 @@ class BrCosmeticType(Enum):
     MICROPHONE = 'mic'
     KEYTAR = 'keyboard'
 
+    LEGO_KIT = 'kit'
+
     UNKNOWN = 'unknown'
 
 
