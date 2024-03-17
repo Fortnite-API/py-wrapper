@@ -52,29 +52,25 @@ class BrCosmeticRarity(Enum):
 
 
 class BrCosmeticType(Enum):
-    BANNER = 'banner'
-    BACKPACK = 'backpack'
-    CONTRAIL = 'contrail'
     OUTFIT = 'outfit'
-    EMOTE = 'emote'
-    EMOJI = 'emoji'
-    GLIDER = 'glider'
-    WRAP = 'wrap'
-    LOADING_SCREEN = 'loadingscreen'
-    MUSIC = 'music'
+    BACKPACK = 'backpack'
     PET = 'pet'
     PET_CARRIER = 'petcarrier'
     PICKAXE = 'pickaxe'
-    SHOUT = 'shout'
-    SPRAY = 'spray'
-    TOY = 'toy'
+    GLIDER = 'glider'
+    CONTRAIL = 'contrail'
     AURA = 'aura'
 
-    CAR_BODY = 'body'
-    DECAL = 'skin'
-    WHEELS = 'wheel'
-    TRAIL = 'drifttrail'
-    BOOST = 'boost'
+    EMOTE = 'emote'
+    EMOJI = 'emoji'
+    SPRAY = 'spray'
+    TOY = 'toy'
+
+    WRAP = 'wrap'
+
+    BANNER = 'banner'
+    MUSIC = 'music'
+    LOADING_SCREEN = 'loadingscreen'
 
     JAM_TRACK = 'track'
     GUITAR = 'guitar'
@@ -83,9 +79,16 @@ class BrCosmeticType(Enum):
     MICROPHONE = 'mic'
     KEYTAR = 'keyboard'
 
-    LEGO_BUILD = 'legoprop'
+    CAR_BODY = 'body'
+    DECAL = 'skin'
+    WHEELS = 'wheel'
+    TRAIL = 'drifttrail'
+    BOOST = 'boost'
+
+    LEGO_BUILD = 'legoset'
     LEGO_DECOR_BUNDLE = 'legoset'
 
+    SHOUT = 'shout'
     UNKNOWN = 'unknown'
 
 
