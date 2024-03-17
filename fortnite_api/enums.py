@@ -74,6 +74,7 @@ class BrCosmeticType(Enum):
     DECAL = 'skin'
     WHEELS = 'wheel'
     TRAIL = 'drifttrail'
+    BOOST = 'boost'
 
     JAM_TRACK = 'track'
     GUITAR = 'guitar'
@@ -82,7 +83,8 @@ class BrCosmeticType(Enum):
     MICROPHONE = 'mic'
     KEYTAR = 'keyboard'
 
-    LEGO_KIT = 'kit'
+    LEGO_BUILD = 'legoprop'
+    LEGO_DECOR_BUNDLE = 'legoset'
 
     UNKNOWN = 'unknown'
 

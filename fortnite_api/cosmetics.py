@@ -301,7 +301,6 @@ class LegoKitCosmetic(BaseCosmetic):
 
     def __init__(self, data):
         super().__init__(data)
-        self.type = BrCosmeticType.LEGO_KIT
         images = data.get('images', {}) if data.get('images') else {}
         self.small = CosmeticImage(images.get('small')) if images.get('small') else None
         self.large = CosmeticImage(images.get('large')) if images.get('large') else None
