@@ -72,7 +72,6 @@ class BrCosmeticType(Enum):
     MUSIC = 'music'
     LOADING_SCREEN = 'loadingscreen'
 
-    JAM_TRACK = 'track'
     GUITAR = 'guitar'
     BASS = 'bass'
     DRUMS = 'drum'
@@ -85,8 +84,10 @@ class BrCosmeticType(Enum):
     TRAIL = 'drifttrail'
     BOOST = 'boost'
 
+    JAM_TRACK = 'track'
+
     LEGO_BUILD = 'legoset'
-    LEGO_DECOR_BUNDLE = 'legoset'
+    LEGO_DECOR_BUNDLE = 'legoprop'
 
     SHOUT = 'shout'
     UNKNOWN = 'unknown'
