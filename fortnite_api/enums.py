@@ -83,7 +83,7 @@ class BrCosmeticType(Enum):
     DECAL = 'skin'
     WHEELS = 'wheel'
     TRAIL = 'drifttrail'
-    BOOST = 'boost'
+    BOOST = 'booster'
 
     LEGO_BUILD = 'legoset'
     LEGO_DECOR_BUNDLE = 'legoset'
