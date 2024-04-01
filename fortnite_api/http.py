@@ -47,7 +47,7 @@ AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
 # Similar to how dpy manages routes, we'll follow this pattern as well
 class Route:
 
-    BASE_URL = 'https://fortnite-api.com/'
+    BASE_URL = 'https://fortnite-api.com'
 
     def __init__(self, method: str, endpoint: str, **params: Any) -> None:
         self.method: str = method
