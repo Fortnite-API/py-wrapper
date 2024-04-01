@@ -52,6 +52,9 @@ out/
 
 # VS Code
 .vscode/
+dependabot.yml
+.devcontainer/
+.coverage
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
