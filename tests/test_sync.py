@@ -6,7 +6,7 @@ import fortnite_api
 
 def test_sync_client():
     session = requests.Session()
-    client = fortnite_api.FortniteAPI(session=session)
+    client = fortnite_api.SyncFortniteAPI(session=session)
 
     cosmetics = client.fetch_cosmetics()
     print(cosmetics[0].id)

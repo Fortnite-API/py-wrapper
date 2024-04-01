@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
 from __future__ import annotations
 
 import abc
@@ -42,6 +43,7 @@ if TYPE_CHECKING:
 T = TypeVar('T', bound='Any')
 AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
 
+
 # Similar to how dpy manages routes, we'll follow this pattern as well
 class Route:
 
@@ -59,7 +61,7 @@ class Route:
         self.url: str = url
 
 
-class BaseHTTPClient(abc.ABC):
+class HTTPMixin(abc.ABC):
     def __init__(
         self,
         *,
@@ -78,8 +80,7 @@ class BaseHTTPClient(abc.ABC):
             self.headers['Authorization'] = self.token
 
     @abc.abstractmethod
-    def request(self, route: Route, **kwargs: Any) -> Any:
-        ...
+    def request(self, route: Route, **kwargs: Any) -> Any: ...
 
     def get_aes(self, key_format: str):
         r: Route = Route('GET', '/v2/aes')
@@ -260,7 +261,7 @@ class BaseHTTPClient(abc.ABC):
         return self.request(r, params=params)
 
 
-class AsyncHTTPClient(BaseHTTPClient):
+class HTTPClient(HTTPMixin):
     def __init__(self, *args: Any, session: Optional[aiohttp.ClientSession] = None, **kwargs: Any) -> None:
         self.session: Optional[aiohttp.ClientSession] = session
         self._http_lock: asyncio.Lock = asyncio.Lock()
@@ -325,7 +326,7 @@ class AsyncHTTPClient(BaseHTTPClient):
 
     # NOTE: Excuse my french but this is *ass*. All this is doing is overriding
     # each function to correct the return annotation. In order to do this neatly, an
-    # overload would need to be on EVERY function in BaseHTTPClient. I'm leaving this
+    # overload would need to be on EVERY function in HTTPMixin. I'm leaving this
     # for now but expect to hopefully remove it in the future with a better solution.
 
     # NOTE: Any annotation that is marked as "Any" will replaced
@@ -392,7 +393,7 @@ class AsyncHTTPClient(BaseHTTPClient):
         return super().get_br_stats_by_id(*args, **kwargs)
 
 
-class HTTPClient(BaseHTTPClient):
+class SyncHTTPClient(HTTPMixin):
     def __init__(self, *args: Any, session: Optional[requests.Session] = None, **kwargs: Any) -> None:
         self.session: requests.Session = session or requests.Session()
         super().__init__(*args, **kwargs)

@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Tuple
@@ -29,9 +30,9 @@ from .http import Route
 from .utils import prepend_doc
 
 if TYPE_CHECKING:
-    from .http import HTTPClient, AsyncHTTPClient
+    from .http import HTTPClient, SyncHTTPClient
 
-__all__: Tuple[str, ...] = ('Asset', 'AsyncAsset')
+__all__: Tuple[str, ...] = ('SyncAsset', 'Asset')
 
 
 class _AssetRoute(Route):
@@ -74,6 +75,31 @@ class _BaseAsset:
         return hash(self.url)
 
 
+class SyncAsset(_BaseAsset):
+    """Represents an asset given to the client. This can be from
+    an image on a banner to a cosmetic image.
+
+    Attributes
+    ----------
+    url: :class:`str`
+        The url of the asset.
+    """
+
+    def __init__(self, http: SyncHTTPClient, url: str) -> None:
+        self._http: SyncHTTPClient = http
+        self.url: str = url
+
+    def read(self) -> bytes:
+        """Retrieves the content of this asset as a :class:`bytes` object.
+
+        Returns
+        --------
+        :class:`bytes`
+            The image bytes.
+        """
+        return self._http.request(_AssetRoute(self.url))
+
+
 class Asset(_BaseAsset):
     """Represents an asset given to the client. This can be from
     an image on a banner to a cosmetic image.
@@ -88,32 +114,7 @@ class Asset(_BaseAsset):
         self._http: HTTPClient = http
         self.url: str = url
 
-    def read(self) -> bytes:
-        """Retrieves the content of this asset as a :class:`bytes` object.
-
-        Returns
-        --------
-        :class:`bytes`
-            The image bytes.
-        """
-        return self._http.request(_AssetRoute(self.url))
-
-
-class AsyncAsset(_BaseAsset):
-    """Represents an asset given to the client. This can be from
-    an image on a banner to a cosmetic image.
-
-    Attributes
-    ----------
-    url: :class:`str`
-        The url of the asset.
-    """
-
-    def __init__(self, http: AsyncHTTPClient, url: str) -> None:
-        self._http: AsyncHTTPClient = http
-        self.url: str = url
-
-    @prepend_doc(Asset.read, sep='\n')
+    @prepend_doc(SyncAsset.read, sep='\n')
     async def read(self) -> bytes:
         """|coro|"""
         return await self._http.request(_AssetRoute(self.url))
