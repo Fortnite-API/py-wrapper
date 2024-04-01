@@ -32,4 +32,3 @@ class _AccountOptional(TypedDict, total=False):
 class Account(_AccountOptional):
     id: str
     name: str
-    external_auths: Dict[Any, Any]
