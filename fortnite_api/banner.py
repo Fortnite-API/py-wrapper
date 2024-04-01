@@ -27,10 +27,12 @@ from __future__ import annotations
 import math
 from typing import Any, Dict, Optional, Tuple
 
+from .abc import Hashable
+
 __all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BrBannerImage')
 
 
-class Banner:
+class Banner(Hashable):
     """A representation of a banner given to the :class:`FortniteAPI` client
     as a response. This represents a banner within the Fortnite game.
 
@@ -70,7 +72,7 @@ class Banner:
         self.dev_name: str = data['devName']
         self.description: str = data['category']
         self.category: str = data['category']
-        self.full_usage_rights = data['fullUsageRights']
+        self.full_usage_rights: bool = data['fullUsageRights']
 
         images: Dict[str, Any] = data['images']
         self.small_icon: Optional[BrBannerImage] = BrBannerImage(smi) if (smi := images.get('smallIcon')) else None
@@ -78,15 +80,15 @@ class Banner:
         self.raw_data: Dict[str, Any] = data
 
 
-class BannerColor:
+class BannerColor(Hashable):
 
     __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]) -> None:
-        self.id = data.get('id')
-        self.color = data.get('color')
-        self.category = data.get('category')
-        self.sub_category_group = data.get('subCategoryGroup')
+        self.id: str = data['id']
+        self.color: str = data['color']
+        self.category: str = data['category']
+        self.sub_category_group: int = data['subCategoryGroup']  # TODO: Convert this to enum
         self.raw_data = data
 
 
