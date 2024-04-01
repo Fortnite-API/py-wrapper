@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
 from __future__ import annotations
 
 import math
@@ -65,11 +66,11 @@ class Banner:
 
     def __init__(self, data: Dict[str, Any]) -> None:
         self.id: str = data['id']
-        self.name: Optional[str] = data.get('str')
+        self.name: str = data['name']
+        self.dev_name: str = data['devName']
         self.description: str = data['category']
         self.category: str = data['category']
         self.full_usage_rights = data['fullUsageRights']
-        self.dev_name: str = data['devName']
 
         images: Dict[str, Any] = data['images']
         self.small_icon: Optional[BrBannerImage] = BrBannerImage(smi) if (smi := images.get('smallIcon')) else None
