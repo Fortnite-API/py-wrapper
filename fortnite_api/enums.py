@@ -119,3 +119,8 @@ class StatsImageType(enum.Enum):
     GAMEPAD = 'gamepad'
     TOUCH = 'touch'
     NONE = 'none'
+
+
+class CreatorCodeStatus(enum.Enum):
+    ACTIVE = 'active'
+    DISABLED = 'disabled'
