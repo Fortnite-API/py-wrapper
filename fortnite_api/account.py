@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Dict, Tuple
@@ -55,8 +56,12 @@ class Account(Hashable):
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     external_auths: Dict[Any, Any]
-        The external auths of the user. Please note this will be empty until the Account
-        lookup feature is enabled.
+        The external auths of the user.
+
+
+        .. note::
+
+            This will always be empty until the Account lookup feature is enabled.
     """
 
     __slots__: Tuple[str, ...] = ('id', 'name', 'raw_data', 'external_auths')
