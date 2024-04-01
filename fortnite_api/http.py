@@ -401,7 +401,7 @@ class HTTPClient(BaseHTTPClient):
         response: Optional[requests.Response] = None
         for tries in range(5):
             with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
-                # We arent able to parse the same as we are in async mode, so we'll need
+                # We aren't able to parse the same as we are in async mode, so we'll need
                 # to use some other logic here
                 if response.headers['Content-Type'].startswith('application/json'):
                     data = to_json(response.text)

@@ -122,7 +122,7 @@ class Aes:
 class DynamicKey:
     """Represents a dynamic key.
 
-    .. containter:: operations
+    .. container:: operations
 
         .. describe:: x == y
 

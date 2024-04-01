@@ -105,7 +105,7 @@ class FortniteAPI:
         match_method: Optional[MatchMethod] = None,
         id: Optional[str] = None,
         name: Optional[str] = None,
-        descripion: Optional[str] = None,
+        description: Optional[str] = None,
         type: Optional[BrCosmeticType] = None,
         display_type: Optional[str] = None,
         backend_type: Optional[str] = None,
@@ -148,7 +148,7 @@ class FortniteAPI:
         match_method: Optional[MatchMethod] = None,
         id: Optional[str] = None,
         name: Optional[str] = None,
-        descripion: Optional[str] = None,
+        description: Optional[str] = None,
         type: Optional[BrCosmeticType] = None,
         display_type: Optional[str] = None,
         backend_type: Optional[str] = None,
@@ -190,7 +190,7 @@ class FortniteAPI:
         match_method: Optional[MatchMethod] = None,
         id: Optional[str] = None,
         name: Optional[str] = None,
-        descripion: Optional[str] = None,
+        description: Optional[str] = None,
         type: Optional[BrCosmeticType] = None,
         display_type: Optional[str] = None,
         backend_type: Optional[str] = None,
@@ -238,8 +238,8 @@ class FortniteAPI:
         if name is not None:
             params['name'] = name
 
-        if descripion is not None:
-            params['description'] = descripion
+        if description is not None:
+            params['description'] = description
 
         if type is not None:
             params['type'] = type.value
@@ -433,7 +433,7 @@ class AsyncFortniteAPI:
         match_method: Optional[MatchMethod] = None,
         id: Optional[str] = None,
         name: Optional[str] = None,
-        descripion: Optional[str] = None,
+        description: Optional[str] = None,
         type: Optional[BrCosmeticType] = None,
         display_type: Optional[str] = None,
         backend_type: Optional[str] = None,
@@ -476,7 +476,7 @@ class AsyncFortniteAPI:
         match_method: Optional[MatchMethod] = None,
         id: Optional[str] = None,
         name: Optional[str] = None,
-        descripion: Optional[str] = None,
+        description: Optional[str] = None,
         type: Optional[BrCosmeticType] = None,
         display_type: Optional[str] = None,
         backend_type: Optional[str] = None,
@@ -518,7 +518,7 @@ class AsyncFortniteAPI:
         match_method: Optional[MatchMethod] = None,
         id: Optional[str] = None,
         name: Optional[str] = None,
-        descripion: Optional[str] = None,
+        description: Optional[str] = None,
         type: Optional[BrCosmeticType] = None,
         display_type: Optional[str] = None,
         backend_type: Optional[str] = None,
@@ -566,8 +566,8 @@ class AsyncFortniteAPI:
         if name is not None:
             params['name'] = name
 
-        if descripion is not None:
-            params['description'] = descripion
+        if description is not None:
+            params['description'] = description
 
         if type is not None:
             params['type'] = type.value

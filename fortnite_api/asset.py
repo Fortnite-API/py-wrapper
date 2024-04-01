@@ -43,7 +43,7 @@ class _AssetRoute(Route):
 
 class _BaseAsset:
     """
-    .. conatiner:: operations
+    .. container:: operations
 
         .. describe:: x == y
 
@@ -76,7 +76,7 @@ class _BaseAsset:
 
 class Asset(_BaseAsset):
     """Represents an asset given to the client. This can be from
-    an image on a benner to a cosmetic image.
+    an image on a banner to a cosmetic image.
 
     Attributes
     ----------
@@ -101,7 +101,7 @@ class Asset(_BaseAsset):
 
 class AsyncAsset(_BaseAsset):
     """Represents an asset given to the client. This can be from
-    an image on a benner to a cosmetic image.
+    an image on a banner to a cosmetic image.
 
     Attributes
     ----------

@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
 from __future__ import annotations
 
 import math
@@ -305,7 +306,7 @@ class BrCosmetic:
 
     @property
     def unseen_for(self) -> Optional[int]:
-        return (datetime.datetime.utcnow() - self.last_appearance).days if self.last_appearance else None
+        return (datetime.datetime.now(datetime.timezone.utc) - self.last_appearance).days if self.last_appearance else None
 
 
 class BrCosmeticImage:

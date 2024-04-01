@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
 from __future__ import annotations
 
 import datetime
@@ -58,7 +59,7 @@ def parse_time(timestamp: str) -> datetime.datetime:
 
 
 def copy_doc(obj: Docable) -> Callable[[Docable], Docable]:
-    """Copy the docstring from another obect"""
+    """Copy the docstring from another object"""
 
     def wrapped(funco: Docable) -> Docable:
         funco.__doc__ = obj.__doc__
