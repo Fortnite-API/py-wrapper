@@ -27,12 +27,12 @@ from __future__ import annotations
 import math
 from typing import Any, Dict, Optional, Tuple
 
-from .abc import Hashable
+from .abc import IdComparable
 
 __all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BrBannerImage')
 
 
-class Banner(Hashable):
+class Banner(IdComparable):
     """A representation of a banner given to the :class:`FortniteAPI` client
     as a response. This represents a banner within the Fortnite game.
 
@@ -80,7 +80,7 @@ class Banner(Hashable):
         self.raw_data: Dict[str, Any] = data
 
 
-class BannerColor(Hashable):
+class BannerColor(IdComparable):
 
     __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
 
