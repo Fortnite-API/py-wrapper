@@ -26,6 +26,8 @@ from __future__ import annotations
 
 from typing import Dict, Any, Tuple, List
 
+from .abc import IdComparable
+
 __all__: Tuple[str, ...] = ('Map', 'POI', 'POILocation')
 
 
@@ -40,7 +42,7 @@ class Map:
         self.raw_data = data
 
 
-class POI:
+class POI(IdComparable):
 
     __slots__: Tuple[str, ...] = ('id', 'name', 'location', 'raw_data')
 
