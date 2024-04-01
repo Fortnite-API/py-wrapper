@@ -30,6 +30,7 @@ from typing import Optional, List, Dict, Any, Tuple
 
 from .enums import BrCosmeticType, BrCosmeticRarity
 from .utils import parse_time
+from .abc import IdComparable
 
 
 class NewBrCosmetics:
@@ -66,7 +67,7 @@ class NewBrCosmetics:
         self.raw_data: Dict[str, Any] = data
 
 
-class BrCosmetic:
+class BrCosmetic(IdComparable):
     """Represents a Battle Royal cosmetic.
 
     Attributes
