@@ -61,8 +61,7 @@ class FortniteAPI:
         return self
 
     async def __aexit__(self, *args: Any) -> None:
-        if self.http.session is not None:
-            await self.http.session.close()
+        await self.http.close()
 
     async def fetch_aes(self, *, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
         data = await self.http.get_aes(key_format.value)
@@ -403,6 +402,16 @@ class SyncFortniteAPI:
 
     def __init__(self, api_key: Optional[str] = None, *, session: Optional[requests.Session] = None) -> None:
         self.http: SyncHTTPClient = SyncHTTPClient(session=session, token=api_key)
+
+    # For with statement
+    def __enter__(self) -> Self:
+        if self.http.session is None:
+            self.http.session = requests.Session()
+
+        return self
+
+    def __exit__(self, *args: Any) -> None:
+        self.http.close()
 
     def fetch_aes(self, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
         data = self.http.get_aes(key_format.value)
