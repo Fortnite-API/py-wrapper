@@ -25,6 +25,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import time
+import aiohttp
+import requests
 from typing import TYPE_CHECKING, List, Literal, Optional, TypeVar, Any, Dict, overload, Union
 from typing_extensions import ParamSpec, Self
 
@@ -41,8 +43,6 @@ from .shop import BrShop
 from .stats import BrPlayerStats
 
 if TYPE_CHECKING:
-    import aiohttp
-    import requests
     import datetime
 
 T = TypeVar('T')
