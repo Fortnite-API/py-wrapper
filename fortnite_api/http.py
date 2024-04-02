@@ -55,7 +55,7 @@ class Route:
         self.params: Optional[Dict[str, Any]] = params
 
         url = self.BASE_URL + endpoint
-        if params is not None:
+        if params:
             url = url.format(**params)
 
         self.url: str = url
