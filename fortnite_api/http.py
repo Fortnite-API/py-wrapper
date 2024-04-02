@@ -262,10 +262,15 @@ class HTTPMixin(abc.ABC):
 
 
 class HTTPClient(HTTPMixin):
+
     def __init__(self, *args: Any, session: Optional[aiohttp.ClientSession] = None, **kwargs: Any) -> None:
         self.session: Optional[aiohttp.ClientSession] = session
         self._http_lock: asyncio.Lock = asyncio.Lock()
         super().__init__(*args, **kwargs)
+
+    async def close(self) -> None:
+        if self.session is not None:
+            await self.session.close()
 
     async def _parse_async_response(self, response: aiohttp.ClientResponse) -> Union[Dict[str, Any], str, bytes]:
         try:
@@ -280,7 +285,9 @@ class HTTPClient(HTTPMixin):
 
     async def request(self, route: Route, **kwargs: Any) -> Any:
         if self.session is None:
-            self.session = aiohttp.ClientSession()
+            raise RuntimeError(
+                'aiohttp.ClientSession is not set. Must either pass session to FortniteAPI constructor or use the async context manager.'
+            )
 
         response: Optional[aiohttp.ClientResponse] = None
         async with self._http_lock:
@@ -394,11 +401,21 @@ class HTTPClient(HTTPMixin):
 
 
 class SyncHTTPClient(HTTPMixin):
+
     def __init__(self, *args: Any, session: Optional[requests.Session] = None, **kwargs: Any) -> None:
-        self.session: requests.Session = session or requests.Session()
+        self.session: Optional[requests.Session] = session
         super().__init__(*args, **kwargs)
 
+    def close(self) -> None:
+        if self.session is not None:
+            self.session.close()
+
     def request(self, route: Route, **kwargs: Any) -> Any:
+        if self.session is None:
+            raise RuntimeError(
+                'requests.Session is not set. Must either pass session to FortniteAPI constructor or use the async context manager.'
+            )
+
         response: Optional[requests.Response] = None
         for tries in range(5):
             with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
