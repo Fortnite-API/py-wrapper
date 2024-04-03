@@ -104,3 +104,20 @@ async def test_async_creator_code():
     assert creator_code.status is fn_api.CreatorCodeStatus.ACTIVE
     assert creator_code.disabled is False
     assert creator_code.verified is False
+
+
+@pytest.mark.asyncio
+async def test_async_fetch_playlist():
+    async with fn_api.FortniteAPI() as client:
+        playlists = await client.fetch_playlists()
+        playlists_en = await client.fetch_playlists()
+
+    assert len(playlists), "Playlists should not be empty"
+
+    first = playlists[0]
+    assert first == first
+
+    if len(playlists) >= 2:
+        assert first != playlists[1]
+
+    assert playlists == playlists_en

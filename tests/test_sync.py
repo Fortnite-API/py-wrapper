@@ -93,3 +93,19 @@ def test_sync_creator_code():
     assert creator_code.status is fn_api.CreatorCodeStatus.ACTIVE
     assert creator_code.disabled is False
     assert creator_code.verified is False
+
+
+def test_sync_fetch_playlist():
+    with fn_api.SyncFortniteAPI() as client:
+        playlists = client.fetch_playlists()
+        playlists_en = client.fetch_playlists()
+
+    assert len(playlists), "Playlists should not be empty"
+
+    first = playlists[0]
+    assert first == first
+
+    if len(playlists) >= 2:
+        assert first != playlists[1]
+
+    assert playlists == playlists_en
