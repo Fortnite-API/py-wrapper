@@ -30,8 +30,8 @@ import sys
 import aiohttp
 import asyncio
 import requests
-from typing import Any, Coroutine, Dict, List, Literal, Optional, Union, TypeVar, TYPE_CHECKING
-from typing_extensions import TypeAlias
+from typing import Any, Coroutine, Dict, List, Literal, Optional, Union, TYPE_CHECKING
+from typing_extensions import TypeAlias, TypeVar
 
 from . import __version__
 from .utils import to_json
@@ -42,6 +42,8 @@ if TYPE_CHECKING:
 
 T = TypeVar('T', bound='Any')
 AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
+
+HTTPClientT = TypeVar('HTTPClientT', bound='Union[HTTPClient, SyncHTTPClient]', default='HTTPClient')
 
 
 # Similar to how dpy manages routes, we'll follow this pattern as well
