@@ -24,14 +24,13 @@ SOFTWARE.
 
 from __future__ import annotations
 
-import math
 from typing import Any, Dict, Generic, Tuple
 
 from .http import HTTPClientT
 from .abc import IdComparable
 from .images import Images
 
-__all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BrBannerImage')
+__all__: Tuple[str, ...] = ('Banner', 'BannerColor')
 
 
 class Banner(IdComparable, Generic[HTTPClientT]):
@@ -92,28 +91,3 @@ class BannerColor(IdComparable):
         self.category: str = data['category']
         self.sub_category_group: int = data['subCategoryGroup']  # TODO: Convert this to enum
         self.raw_data = data
-
-
-class BrBannerImage:
-    """Represents a Battle Royale cosmetic image.
-
-    Attributes
-    -----------
-    url: :class:`str`
-        The hash of the image.
-    """
-
-    __slots__: Tuple[str, ...] = ('url',)
-
-    def __init__(self, url: str) -> None:
-        self.url = url
-
-    def url_as(self, size: int) -> str:
-        if size < 0 or type(math.sqrt(size)) is float:
-            raise TypeError('Size must be a power of 2.')
-
-        url_without_type = self.url.replace('.png', '')
-        return f'{url_without_type}_{size}.png'
-
-    def __str__(self):
-        return self.url
