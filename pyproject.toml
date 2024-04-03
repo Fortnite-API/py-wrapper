@@ -31,3 +31,4 @@ profile = "black"
 combine_as_imports = true
 combine_star = true
 line_length = 125
+src_paths = ["fortnite_api/", "tests/"]
