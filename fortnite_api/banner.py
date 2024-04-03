@@ -25,14 +25,16 @@ SOFTWARE.
 from __future__ import annotations
 
 import math
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Generic, Tuple
 
+from .http import HTTPClientT
 from .abc import IdComparable
+from .images import Images
 
 __all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BrBannerImage')
 
 
-class Banner(IdComparable):
+class Banner(IdComparable, Generic[HTTPClientT]):
     """A representation of a banner given to the :class:`FortniteAPI` client
     as a response. This represents a banner within the Fortnite game.
 
@@ -52,6 +54,9 @@ class Banner(IdComparable):
     dev_name: :class:`str`
         The developer name of the banner, this is used internally by the
         Epic Games team.
+        'icon',
+    images: :class:`Images`
+        The images of the banner.
     """
 
     __slots__: Tuple[str, ...] = (
@@ -61,12 +66,11 @@ class Banner(IdComparable):
         'category',
         'full_usage_rights',
         'dev_name',
-        'small_icon',
-        'icon',
+        'images',
         'raw_data',
     )
 
-    def __init__(self, data: Dict[str, Any]) -> None:
+    def __init__(self, data: Dict[str, Any], *, http: HTTPClientT) -> None:
         self.id: str = data['id']
         self.name: str = data['name']
         self.dev_name: str = data['devName']
@@ -74,9 +78,7 @@ class Banner(IdComparable):
         self.category: str = data['category']
         self.full_usage_rights: bool = data['fullUsageRights']
 
-        images: Dict[str, Any] = data['images']
-        self.small_icon: Optional[BrBannerImage] = BrBannerImage(smi) if (smi := images.get('smallIcon')) else None
-        self.icon: Optional[BrBannerImage] = BrBannerImage(i) if (i := images.get('icon')) else None
+        self.images: Images[HTTPClientT] = Images(data, http=http)
         self.raw_data: Dict[str, Any] = data
 
 
