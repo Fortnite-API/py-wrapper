@@ -32,7 +32,6 @@ def test_sync_aes():
     assert aes.updated
     assert isinstance(aes.updated, datetime.datetime)
 
-    assert aes == aes
     assert aes != None
 
     # Ensure that the AES can be fetched with BASE64
