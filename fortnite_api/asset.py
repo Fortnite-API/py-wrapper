@@ -24,15 +24,15 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Any, Coroutine, Generic, Tuple, Union, overload
 
-from .http import Route
-from .utils import prepend_doc
+from .http import Route, HTTPClientT
 
 if TYPE_CHECKING:
     from .http import HTTPClient, SyncHTTPClient
 
-__all__: Tuple[str, ...] = ('SyncAsset', 'Asset')
+
+__all__: Tuple[str, ...] = ('Asset',)
 
 
 class _AssetRoute(Route):
@@ -42,25 +42,19 @@ class _AssetRoute(Route):
         self.method: str = 'GET'
 
 
-class _BaseAsset:
-    """
-    .. container:: operations
+class Asset(Generic[HTTPClientT]):
+    """Represents an asset given to the client. This can be from
+    an image on a banner to a cosmetic image.
 
-        .. describe:: x == y
-
-            Determine if two assets are equal.
-
-        .. describe:: x != y
-
-            Determine if two assets are not equal.
-
-        .. describe:: hash(x)
-
-            Returns the hash of the asset.
-
+    Attributes
+    ----------
+    url: :class:`str`
+        The url of the asset.
     """
 
-    url: str
+    def __init__(self, http: HTTPClientT, url: str) -> None:
+        self._http: HTTPClientT = http
+        self.url: str = url
 
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, self.__class__):
@@ -74,23 +68,17 @@ class _BaseAsset:
     def __hash__(self) -> int:
         return hash(self.url)
 
+    @overload
+    def read(self: Asset[HTTPClient], /) -> Coroutine[Any, Any, bytes]: ...
 
-class SyncAsset(_BaseAsset):
-    """Represents an asset given to the client. This can be from
-    an image on a banner to a cosmetic image.
+    @overload
+    def read(self: Asset[SyncHTTPClient], /) -> bytes: ...
 
-    Attributes
-    ----------
-    url: :class:`str`
-        The url of the asset.
-    """
+    def read(self) -> Union[Coroutine[Any, Any, bytes], bytes]:
+        """|maybecoro|
 
-    def __init__(self, http: SyncHTTPClient, url: str) -> None:
-        self._http: SyncHTTPClient = http
-        self.url: str = url
-
-    def read(self) -> bytes:
-        """Retrieves the content of this asset as a :class:`bytes` object.
+        Retrieves the content of this asset as a :class:`bytes` object. This is only a coroutine if the client is
+        an async client.
 
         Returns
         --------
@@ -98,23 +86,3 @@ class SyncAsset(_BaseAsset):
             The image bytes.
         """
         return self._http.request(_AssetRoute(self.url))
-
-
-class Asset(_BaseAsset):
-    """Represents an asset given to the client. This can be from
-    an image on a banner to a cosmetic image.
-
-    Attributes
-    ----------
-    url: :class:`str`
-        The url of the asset.
-    """
-
-    def __init__(self, http: HTTPClient, url: str) -> None:
-        self._http: HTTPClient = http
-        self.url: str = url
-
-    @prepend_doc(SyncAsset.read, sep='\n')
-    async def read(self) -> bytes:
-        """|coro|"""
-        return await self._http.request(_AssetRoute(self.url))
