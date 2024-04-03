@@ -345,6 +345,10 @@ class FortniteAPI:
         data = await self.http.get_creative_news(language=(language and language.value))
         return GameModeNews(data=data)
 
+    async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
+        data = await self.http.get_playlists(language=(language and language.value))
+        return [Playlist(data=entry) for entry in data]
+
     async def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
         data = await self.http.get_playlist(id, language=(language and language.value))
         return Playlist(data=data)
@@ -694,6 +698,10 @@ class SyncFortniteAPI:
     def fetch_creative_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
         data = self.http.get_creative_news(language=(language and language.value))
         return GameModeNews(data=data)
+
+    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
+        data = self.http.get_playlists(language=(language and language.value))
+        return [Playlist(data=entry) for entry in data]
 
     def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
         data = self.http.get_playlist(id, language=(language and language.value))
