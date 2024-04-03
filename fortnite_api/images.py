@@ -24,16 +24,15 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Any, Optional, Tuple
-from .asset import SyncAsset, Asset
+from typing import Dict, Any, Generic, Optional, Tuple
 
-if TYPE_CHECKING:
-    from .http import HTTPClient, SyncHTTPClient
+from .http import HTTPClientT
+from .asset import Asset
 
-__all__: Tuple[str, ...] = ('Image', 'SyncImage')
+__all__: Tuple[str, ...] = ('Images',)
 
 
-class Image:
+class Images(Generic[HTTPClientT]):
     """Represents image data passed from the API.
 
     Attributes
@@ -46,24 +45,10 @@ class Image:
 
     __slots__: Tuple[str, ...] = ('small_icon', 'icon')
 
-    def __init__(self, http: HTTPClient, data: Dict[str, Any]) -> None:
-        self.small_icon: Optional[Asset] = (small_icon := data.get('smallIcon')) and Asset(http, small_icon)
-        self.icon: Optional[Asset] = (icon := data.get('icon')) and Asset(http, icon)
+    def __init__(self, data: Dict[str, Any], *, http: HTTPClientT) -> None:
 
+        small_icon = data.get('smallIcon')
+        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http, small_icon)
 
-class SyncImage:
-    """Represents image data passed from the API.
-
-    Attributes
-    ----------
-    small_icon: Optional[:class:`SyncAsset`]
-        The small icon of the image.
-    icon: Optional[:class:`SyncAsset`]
-        The icon of the image.
-    """
-
-    __slots__: Tuple[str, ...] = ('small_icon', 'icon')
-
-    def __init__(self, http: SyncHTTPClient, data: Dict[str, Any]) -> None:
-        self.small_icon: Optional[SyncAsset] = (small_icon := data.get('smallIcon')) and SyncAsset(http, small_icon)
-        self.icon: Optional[SyncAsset] = (icon := data.get('icon')) and SyncAsset(http, icon)
+        icon = data.get('icon')
+        self.icon: Optional[Asset[HTTPClientT]] = icon and Asset(http, icon)
