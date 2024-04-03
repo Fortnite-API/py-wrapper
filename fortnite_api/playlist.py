@@ -24,10 +24,10 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Any, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
-from .utils import parse_time
 from .abc import IdComparable
+from .utils import parse_time
 
 if TYPE_CHECKING:
     import datetime

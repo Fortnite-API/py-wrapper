@@ -1,6 +1,7 @@
-import pytest
-import aiohttp
 import datetime
+
+import aiohttp
+import pytest
 
 import fortnite_api as fn_api
 from fortnite_api.types.account import Account as AccountPayload

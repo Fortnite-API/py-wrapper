@@ -26,8 +26,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Generic, Tuple
 
-from .http import HTTPClientT
 from .abc import IdComparable
+from .http import HTTPClientT
 from .images import Images
 
 __all__: Tuple[str, ...] = ('Banner', 'BannerColor')

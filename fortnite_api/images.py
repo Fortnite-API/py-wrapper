@@ -24,10 +24,10 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Dict, Any, Generic, Optional, Tuple
+from typing import Any, Dict, Generic, Optional, Tuple
 
-from .http import HTTPClientT
 from .asset import Asset
+from .http import HTTPClientT
 
 __all__: Tuple[str, ...] = ('Images',)
 

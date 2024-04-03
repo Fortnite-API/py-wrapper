@@ -26,9 +26,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-
-from .common import CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType, Cosmetic
 from ..http import HTTPClientT
+from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
 
 
 class CosmeticSet:

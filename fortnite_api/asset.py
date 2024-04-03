@@ -25,9 +25,10 @@ SOFTWARE.
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Coroutine, Generic, Optional, Tuple, Union, overload
+
 from typing_extensions import Self
 
-from .http import Route, HTTPClientT
+from .http import HTTPClientT, Route
 from .utils import MISSING
 
 if TYPE_CHECKING:

@@ -1,5 +1,6 @@
-import requests
 import datetime
+
+import requests
 
 import fortnite_api as fn_api
 from fortnite_api.types.account import Account as AccountPayload

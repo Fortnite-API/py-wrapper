@@ -1,8 +1,8 @@
-from typing import Dict, Union, List
+from datetime import datetime, timezone
+from typing import Dict, List, Union
+
 import pytest
 
-
-from datetime import datetime, timezone
 from fortnite_api.playlist import Playlist
 
 

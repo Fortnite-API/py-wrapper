@@ -25,13 +25,13 @@ SOFTWARE.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, Generic, Optional, List
+from typing import Any, Dict, Generic, List, Optional
 
+from ..abc import IdComparable
 from ..asset import Asset
 from ..http import HTTPClientT
-from ..abc import IdComparable
-from ..utils import parse_time
 from ..images import Images
+from ..utils import parse_time
 
 
 class Cosmetic(IdComparable, Generic[HTTPClientT]):

@@ -24,19 +24,16 @@ SOFTWARE.
 
 from __future__ import annotations
 
-import re
 import dataclasses
-from typing import TYPE_CHECKING, Optional, Tuple, List, Union
+import re
+from typing import TYPE_CHECKING, List, Optional, Tuple, Union
 
 from .utils import parse_time
 
 if TYPE_CHECKING:
-    from .types.aes import (
-        Aes as AesPayload,
-        DynamicKey as DynamicKeyPayload,
-    )
-
     import datetime
+
+    from .types.aes import Aes as AesPayload, DynamicKey as DynamicKeyPayload
 
 __all__: Tuple[str, ...] = ('Aes', 'DynamicKey')
 

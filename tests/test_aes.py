@@ -1,10 +1,9 @@
 from datetime import datetime, timezone
+
 import pytest
 
 from fortnite_api.aes import Aes, Version
-from fortnite_api.types.aes import (
-    Aes as AesPayload,
-)
+from fortnite_api.types.aes import Aes as AesPayload
 
 
 @pytest.fixture

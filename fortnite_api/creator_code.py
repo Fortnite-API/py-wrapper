@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Tuple, Dict, Any
+from typing import Any, Dict, Tuple
 
 from .account import Account
 from .enums import CreatorCodeStatus

@@ -25,19 +25,20 @@ SOFTWARE.
 from __future__ import annotations
 
 import time
+from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, TypeVar, Union, overload
+
 import aiohttp
 import requests
-from typing import TYPE_CHECKING, List, Literal, Optional, TypeVar, Any, Dict, overload, Union
 from typing_extensions import ParamSpec, Self
 
-from .enums import *
 from .aes import Aes
 from .banner import Banner, BannerColor
 from .cosmetics import CosmeticBr
-from .http import HTTPClient, SyncHTTPClient
 from .creator_code import CreatorCode
+from .enums import *
+from .http import HTTPClient, SyncHTTPClient
 from .map import Map
-from .news import News, GameModeNews
+from .news import GameModeNews, News
 from .playlist import Playlist
 
 # from .shop import BrShop
@@ -711,7 +712,7 @@ class SyncFortniteAPI:
     # def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
     #     data = self.http.get_br_shop(language=(language and language.value))
     #     return BrShop(data=data)
-# 
+    #
     # def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
     #     raise NotImplementedError('')
 

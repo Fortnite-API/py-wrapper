@@ -28,6 +28,7 @@ from . import types as types
 from .account import *
 from .aes import *
 from .banner import *
+from .client import FortniteAPI as FortniteAPI, SyncFortniteAPI as SyncFortniteAPI
 from .cosmetics import *
 from .creator_code import *
 from .enums import *
@@ -37,4 +38,3 @@ from .news import *
 from .playlist import *
 from .stats import *
 from .utils import *
-from .client import FortniteAPI as FortniteAPI, SyncFortniteAPI as SyncFortniteAPI

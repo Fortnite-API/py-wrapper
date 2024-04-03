@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import Dict, TypedDict, Any
+from typing import Any, Dict, TypedDict
 
 
 class _AccountOptional(TypedDict, total=False):

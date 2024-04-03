@@ -25,17 +25,18 @@ SOFTWARE.
 from __future__ import annotations
 
 import abc
-import time
-import sys
-import aiohttp
 import asyncio
+import sys
+import time
+from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Literal, Optional, Union
+
+import aiohttp
 import requests
-from typing import Any, Coroutine, Dict, List, Literal, Optional, Union, TYPE_CHECKING
 from typing_extensions import TypeAlias, TypeVar
 
 from . import __version__
-from .utils import to_json
 from .errors import *
+from .utils import to_json
 
 if TYPE_CHECKING:
     from .types import aes
