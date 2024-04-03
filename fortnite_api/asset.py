@@ -28,6 +28,7 @@ from typing import TYPE_CHECKING, Any, Coroutine, Generic, Optional, Tuple, Unio
 from typing_extensions import Self
 
 from .http import Route, HTTPClientT
+from .utils import MISSING
 
 if TYPE_CHECKING:
     from .http import HTTPClient, SyncHTTPClient
@@ -53,11 +54,12 @@ class Asset(Generic[HTTPClientT]):
         The url of the asset.
     """
 
-    def __init__(self, http: HTTPClientT, url: str, max_size: Optional[int] = None) -> None:
+    def __init__(self, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING) -> None:
         self._http: HTTPClientT = http
         self.url: str = url
 
         # The maximum size of the asset, if any. If provided, the url's default size is the maximum size.
+        # MISSING for not supported, None for no max size, int for max size.
         self._max_size: Optional[int] = max_size
 
     def __eq__(self, __o: object) -> bool:
@@ -73,14 +75,28 @@ class Asset(Generic[HTTPClientT]):
         return hash(self.url)
 
     @property
+    def can_resize(self) -> bool:
+        """Whether this asset can be resized.
+
+        Returns
+        --------
+        :class:`bool`
+            Whether this asset can be resized.
+        """
+        return self._max_size is not MISSING
+
+    @property
     def max_size(self) -> Optional[int]:
         """The max size of this asset.
 
         Returns
         --------
         Optional[:class:`int`]
-            The max size of the asset. If ``None``, there is no max size.
+            The max size of the asset. If ``None``, there is no max size. If `-1`, resizing is not allowed.
         """
+        if self._max_size is MISSING:
+            return -1
+
         return self._max_size
 
     def resize(self, size: int) -> Self:
@@ -95,7 +111,15 @@ class Asset(Generic[HTTPClientT]):
         --------
         :class:`Asset`
             The resized asset. Will return ``self`` if the size is the same as the current size.
+
+        Raises
+        ------
+        ValueError
+            This asset does not support resizing.
         """
+        if self._max_size is MISSING:
+            raise ValueError('This asset does not support resizing.')
+
         if (size & (size - 1) != 0) or size <= 0:
             raise TypeError('Size must be a power of 2.')
 

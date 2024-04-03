@@ -36,7 +36,26 @@ except ImportError:
 
     _has_orjson: bool = False
 
-__all__: Tuple[str, ...] = ('parse_time', 'copy_doc')
+__all__: Tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json')
+
+
+class _MissingSentinel:
+    __slots__ = ()
+
+    def __eq__(self, other: Any) -> bool:
+        return False
+
+    def __bool__(self) -> bool:
+        return False
+
+    def __hash__(self) -> int:
+        return 0
+
+    def __repr__(self):
+        return '...'
+
+
+MISSING: Any = _MissingSentinel()
 
 
 class Docable(Protocol):
