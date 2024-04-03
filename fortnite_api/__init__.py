@@ -35,7 +35,6 @@ from .errors import *
 from .map import *
 from .news import *
 from .playlist import *
-from .shop import *
 from .stats import *
 from .utils import *
 from .client import FortniteAPI as FortniteAPI, SyncFortniteAPI as SyncFortniteAPI

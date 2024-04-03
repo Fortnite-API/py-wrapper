@@ -39,7 +39,8 @@ from .creator_code import CreatorCode
 from .map import Map
 from .news import News, GameModeNews
 from .playlist import Playlist
-from .shop import BrShop
+
+# from .shop import BrShop
 from .stats import BrPlayerStats
 
 if TYPE_CHECKING:
@@ -353,12 +354,12 @@ class FortniteAPI:
         data = await self.http.get_playlist(id, language=(language and language.value))
         return Playlist(data=data)
 
-    async def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
-        data = await self.http.get_br_shop(language=(language and language.value))
-        return BrShop(data=data)
-
-    async def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
-        raise NotImplementedError('the fawk?')
+    # async def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
+    #     data = await self.http.get_br_shop(language=(language and language.value))
+    #     return BrShop(data=data)
+    #
+    # async def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
+    #     raise NotImplementedError()
 
     async def fetch_br_stats(
         self,
@@ -707,12 +708,12 @@ class SyncFortniteAPI:
         data = self.http.get_playlist(id, language=(language and language.value))
         return Playlist(data=data)
 
-    def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
-        data = self.http.get_br_shop(language=(language and language.value))
-        return BrShop(data=data)
-
-    def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
-        raise NotImplementedError('the fawk?')
+    # def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
+    #     data = self.http.get_br_shop(language=(language and language.value))
+    #     return BrShop(data=data)
+# 
+    # def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
+    #     raise NotImplementedError('')
 
     def fetch_br_stats(
         self,
