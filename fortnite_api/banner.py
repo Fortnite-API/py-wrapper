@@ -69,7 +69,7 @@ class Banner(IdComparable, Generic[HTTPClientT]):
         'raw_data',
     )
 
-    def __init__(self, data: Dict[str, Any], *, http: HTTPClientT) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.id: str = data['id']
         self.name: str = data['name']
         self.dev_name: str = data['devName']
@@ -77,7 +77,7 @@ class Banner(IdComparable, Generic[HTTPClientT]):
         self.category: str = data['category']
         self.full_usage_rights: bool = data['fullUsageRights']
 
-        self.images: Images[HTTPClientT] = Images(data, http=http)
+        self.images: Images[HTTPClientT] = Images(data=data, http=http)
         self.raw_data: Dict[str, Any] = data
 
 
