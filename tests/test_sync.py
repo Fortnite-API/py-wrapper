@@ -55,7 +55,7 @@ def test_sync_banners():
         assert banner.description
         assert banner.category
         assert banner.full_usage_rights is not None
-        # TODO: Banner images tests (not added because of pending Image class implementation)
+        # TODO: Banner images tests (not added because of pending Images class implementation)
 
 
 def test_sync_banner_colors():

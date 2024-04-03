@@ -67,9 +67,9 @@ class FortniteAPI:
         data = await self.http.get_aes(key_format.value)
         return Aes(data=data)
 
-    async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner]:
+    async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[HTTPClient]]:
         data = await self.http.get_banners(language=(language and language.value))
-        return [Banner(data=entry) for entry in data]
+        return [Banner(data=entry, http=self.http) for entry in data]
 
     async def fetch_banner_colors(self) -> List[BannerColor]:
         data = await self.http.get_banner_colors()
@@ -421,9 +421,9 @@ class SyncFortniteAPI:
         data = self.http.get_aes(key_format.value)
         return Aes(data=data)
 
-    def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner]:
+    def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[SyncHTTPClient]]:
         data = self.http.get_banners(language=(language and language.value))
-        return [Banner(data=entry) for entry in data]
+        return [Banner(data=entry, http=self.http) for entry in data]
 
     def fetch_banner_colors(self) -> List[BannerColor]:
         data = self.http.get_banner_colors()
