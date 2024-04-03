@@ -25,7 +25,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Tuple, List, Union
+import dataclasses
+from typing import TYPE_CHECKING, Optional, Tuple, List, Union
 
 from .utils import parse_time
 
@@ -40,6 +41,22 @@ if TYPE_CHECKING:
 __all__: Tuple[str, ...] = ('Aes', 'DynamicKey')
 
 VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})')
+
+
+@dataclasses.dataclass(init=True, repr=True, eq=True, order=False, unsafe_hash=True, frozen=True)
+class Version:
+    """Represents a version of a build of Fortnite.
+
+    Attributes
+    ----------
+    major: :class:`int`
+        The major version.
+    minor: :class:`int`
+        The minor version.
+    """
+
+    major: int
+    minor: int
 
 
 class Aes:
@@ -73,8 +90,8 @@ class Aes:
         The main encryption key.
     build: :class:`str`
         The current build where the Aes key refers to.
-    version: :class:`str`
-        The current version where the Aes key refers to.
+    version: Optional[:class:`Version`]
+        The current version where the Aes key refers to. This will only be ``None`` in the case that the API returned an invalid :attr`build` value.
     updated: :class:`datetime.datetime`
         The date where the Aes was updates.
     dynamic_keys: List[:class:`DynamicKey`]
@@ -88,7 +105,14 @@ class Aes:
     def __init__(self, data: AesPayload):
         self.main_key: str = data['mainKey']
         self.build: str = data['build']
-        self.version: str = VERSION_REGEX.findall(self.build)[0]
+
+        # In the case that the API gives us an invalid version, we will set it to None
+        self.version: Optional[Version] = None
+        version_info = VERSION_REGEX.findall(self.build)
+        if version_info and len(version_info[0]) == 2:
+            major, minor = version_info[0]
+            self.version = Version(major=int(major), minor=int(minor))
+
         self.dynamic_keys: List[DynamicKey] = [DynamicKey(entry) for entry in data.get('dynamicKeys', [])]
         self.updated: datetime.datetime = parse_time(data['updated'])
         self.raw_data: AesPayload = data
