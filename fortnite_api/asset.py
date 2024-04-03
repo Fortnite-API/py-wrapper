@@ -54,7 +54,7 @@ class Asset(Generic[HTTPClientT]):
         The url of the asset.
     """
 
-    def __init__(self, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING) -> None:
+    def __init__(self, *, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING) -> None:
         self._http: HTTPClientT = http
         self.url: str = url
 
@@ -131,7 +131,7 @@ class Asset(Generic[HTTPClientT]):
                 return self
 
         url_without_type = self.url[:-4]
-        return self.__class__(self._http, f'{url_without_type}_{size}.png')
+        return self.__class__(http=self._http, url=f'{url_without_type}_{size}.png')
 
     @overload
     def read(self: Asset[HTTPClient], /) -> Coroutine[Any, Any, bytes]: ...

@@ -33,7 +33,7 @@ from typing_extensions import ParamSpec, Self
 from .enums import *
 from .aes import Aes
 from .banner import Banner, BannerColor
-from .cosmetics import BrCosmetic
+from .cosmetics import CosmeticBr
 from .http import HTTPClient, SyncHTTPClient
 from .creator_code import CreatorCode
 from .map import Map
@@ -75,13 +75,13 @@ class FortniteAPI:
         data = await self.http.get_banner_colors()
         return [BannerColor(data=entry) for entry in data]
 
-    async def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[BrCosmetic]:
+    async def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[HTTPClient]]:
         data = await self.http.get_cosmetics(language=(language and language.value))
-        return [BrCosmetic(data=entry) for entry in data]
+        return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> BrCosmetic:
+    async def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> CosmeticBr[HTTPClient]:
         data = await self.http.get_cosmetic(id, language=(language and language.value))
-        return BrCosmetic(data=data)
+        return CosmeticBr(data=data, http=self.http)
 
     @overload
     async def search_cosmetic(
@@ -123,7 +123,7 @@ class FortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> List[BrCosmetic]: ...
+    ) -> List[CosmeticBr[HTTPClient]]: ...
 
     @overload
     async def search_cosmetic(
@@ -165,7 +165,7 @@ class FortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> BrCosmetic: ...
+    ) -> CosmeticBr[HTTPClient]: ...
 
     async def search_cosmetic(
         self,
@@ -206,7 +206,7 @@ class FortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> Union[BrCosmetic, List[BrCosmetic]]:
+    ) -> Union[CosmeticBr[HTTPClient], List[CosmeticBr[HTTPClient]]]:
         params: Dict[str, Any] = {}
 
         if language is not None:
@@ -316,10 +316,10 @@ class FortniteAPI:
 
         if multiple is True:
             data = await self.http.search_cosmetic_all(**params)
-            return [BrCosmetic(entry) for entry in data]
+            return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
         data = await self.http.search_cosmetic(**params)
-        return BrCosmetic(data)
+        return CosmeticBr(data=data, http=self.http)
 
     async def fetch_creator_code(self, name: str, /) -> CreatorCode:
         data = await self.http.get_creator_code(name)
@@ -429,13 +429,13 @@ class SyncFortniteAPI:
         data = self.http.get_banner_colors()
         return [BannerColor(data=entry) for entry in data]
 
-    def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[BrCosmetic]:
+    def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
         data = self.http.get_cosmetics(language=(language and language.value))
-        return [BrCosmetic(data=entry) for entry in data]
+        return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
-    def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> BrCosmetic:
+    def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> CosmeticBr[SyncHTTPClient]:
         data = self.http.get_cosmetic(id, language=(language and language.value))
-        return BrCosmetic(data=data)
+        return CosmeticBr(data=data, http=self.http)
 
     @overload
     def search_cosmetic(
@@ -477,7 +477,7 @@ class SyncFortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> List[BrCosmetic]: ...
+    ) -> List[CosmeticBr[SyncHTTPClient]]: ...
 
     @overload
     def search_cosmetic(
@@ -519,7 +519,7 @@ class SyncFortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> BrCosmetic: ...
+    ) -> CosmeticBr[SyncHTTPClient]: ...
 
     def search_cosmetic(
         self,
@@ -560,7 +560,7 @@ class SyncFortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> Union[BrCosmetic, List[BrCosmetic]]:
+    ) -> Union[CosmeticBr[SyncHTTPClient], List[CosmeticBr[SyncHTTPClient]]]:
         params: Dict[str, Any] = {}
 
         if language is not None:
@@ -670,10 +670,10 @@ class SyncFortniteAPI:
 
         if multiple is True:
             data = self.http.search_cosmetic_all(**params)
-            return [BrCosmetic(entry) for entry in data]
+            return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
         data = self.http.search_cosmetic(**params)
-        return BrCosmetic(data)
+        return CosmeticBr(data=data, http=self.http)
 
     def fetch_creator_code(self, name: str, /) -> CreatorCode:
         data = self.http.get_creator_code(name)

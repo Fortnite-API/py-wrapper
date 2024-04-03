@@ -24,31 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Dict, Any, Generic, Optional, Tuple
-
-from .http import HTTPClientT
-from .asset import Asset
-
-__all__: Tuple[str, ...] = ('Images',)
-
-
-class Images(Generic[HTTPClientT]):
-    """Represents image data passed from the API.
-
-    Attributes
-    ----------
-    small_icon: Optional[:class:`Asset`]
-        The small icon of the image.
-    icon: Optional[:class:`Asset`]
-        The icon of the image.
-    """
-
-    __slots__: Tuple[str, ...] = ('small_icon', 'icon')
-
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-
-        small_icon = data.get('smallIcon')
-        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
-
-        icon = data.get('icon')
-        self.icon: Optional[Asset[HTTPClientT]] = icon and Asset(http=http, url=icon)
+from .br import *
+from .car import *
+from .common import *
+from .instrument import *
+from .lego import *
+from .track import *
