@@ -120,3 +120,12 @@ async def test_async_fetch_playlist():
         assert first != playlists[1]
 
     assert playlists == playlists_en
+
+
+@pytest.mark.asyncio
+async def test_async_fetch_cosmetics_br():
+    async with fn_api.FortniteAPI() as client:
+        cosmetics_br = await client.fetch_cosmetics_br()
+
+    for cosmetic in cosmetics_br:
+        assert isinstance(cosmetic, fn_api.CosmeticBr)
