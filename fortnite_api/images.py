@@ -46,7 +46,6 @@ class Images(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('small_icon', 'icon')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-
         small_icon = data.get('smallIcon')
         self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
 

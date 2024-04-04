@@ -82,7 +82,6 @@ class Banner(IdComparable, Generic[HTTPClientT]):
 
 
 class BannerColor(IdComparable):
-
     __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]) -> None:

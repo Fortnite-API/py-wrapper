@@ -34,11 +34,9 @@ if TYPE_CHECKING:
 
 
 class BrPlayerStats:
-
     __slots__: Tuple[str, ...] = ('user', 'battle_pass', 'image_url', 'stats', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]) -> None:
-
         self.user: Optional[Account] = (account := data.get('account')) and Account(data=account)
         self.battle_pass: Optional[BrBattlePass] = (battle_pass := data.get('battlePass')) and BrBattlePass(data=battle_pass)
         self.image_url: str = data['image']
@@ -47,7 +45,6 @@ class BrPlayerStats:
 
 
 class BrBattlePass:
-
     __slots__: Tuple[str, ...] = ('level', 'progress', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]) -> None:
@@ -57,7 +54,6 @@ class BrBattlePass:
 
 
 class BrInputs:
-
     __slots__: Tuple[str, ...] = ('all', 'keyboard_mouse', 'gamepad', 'touch', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]) -> None:
@@ -71,7 +67,6 @@ class BrInputs:
 
 
 class BrInputStats:
-
     __slots__: Tuple[str, ...] = ('overall', 'solo', 'duo', 'trio', 'squad', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]) -> None:
@@ -84,7 +79,6 @@ class BrInputStats:
 
 
 class BrGameModeStats:
-
     __slots__: Tuple[str, ...] = (
         'score',
         'score_per_min',

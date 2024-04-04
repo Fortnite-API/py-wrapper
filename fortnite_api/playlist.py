@@ -34,7 +34,6 @@ if TYPE_CHECKING:
 
 
 class Playlist(IdComparable):
-
     __slots__: Tuple[str, ...] = (
         'id',
         'name',

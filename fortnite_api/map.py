@@ -32,7 +32,6 @@ __all__: Tuple[str, ...] = ('Map', 'POI', 'POILocation')
 
 
 class Map:
-
     __slots__: Tuple[str, ...] = ('blank_image', 'poi_image', 'pois', 'raw_data')
 
     def __init__(self, data: Dict[Any, Any]) -> None:
@@ -43,7 +42,6 @@ class Map:
 
 
 class POI(IdComparable):
-
     __slots__: Tuple[str, ...] = ('id', 'name', 'location', 'raw_data')
 
     def __init__(self, data: Dict[Any, Any]) -> None:
@@ -54,7 +52,6 @@ class POI(IdComparable):
 
 
 class POILocation:
-
     __slots__: Tuple[str, ...] = ('x', 'y', 'z', 'raw_data')
 
     def __init__(self, data: Dict[Any, Any]) -> None:

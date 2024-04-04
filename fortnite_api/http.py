@@ -49,7 +49,6 @@ HTTPClientT = TypeVar('HTTPClientT', bound='Union[HTTPClient, SyncHTTPClient]', 
 
 # Similar to how dpy manages routes, we'll follow this pattern as well
 class Route:
-
     BASE_URL = 'https://fortnite-api.com'
 
     def __init__(self, method: str, endpoint: str, **params: Any) -> None:
@@ -83,7 +82,8 @@ class HTTPMixin(abc.ABC):
             self.headers['Authorization'] = self.token
 
     @abc.abstractmethod
-    def request(self, route: Route, **kwargs: Any) -> Any: ...
+    def request(self, route: Route, **kwargs: Any) -> Any:
+        ...
 
     # TODO
     def get_cosmetics_cars(self, language: Optional[str] = None):
@@ -339,7 +339,6 @@ class HTTPMixin(abc.ABC):
 
 
 class HTTPClient(HTTPMixin):
-
     def __init__(self, *args: Any, session: Optional[aiohttp.ClientSession] = None, **kwargs: Any) -> None:
         self.session: Optional[aiohttp.ClientSession] = session
         self._http_lock: asyncio.Lock = asyncio.Lock()
@@ -369,7 +368,6 @@ class HTTPClient(HTTPMixin):
         response: Optional[aiohttp.ClientResponse] = None
         async with self._http_lock:
             for tries in range(5):  # Just in case we get rate limited
-
                 async with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
                     data = await self._parse_async_response(response)
 
@@ -478,7 +476,6 @@ class HTTPClient(HTTPMixin):
 
 
 class SyncHTTPClient(HTTPMixin):
-
     def __init__(self, *args: Any, session: Optional[requests.Session] = None, **kwargs: Any) -> None:
         self.session: Optional[requests.Session] = session
         super().__init__(*args, **kwargs)

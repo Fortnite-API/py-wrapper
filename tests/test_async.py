@@ -91,7 +91,6 @@ async def test_async_banner_colors():
 
 @pytest.mark.asyncio
 async def test_async_creator_code():
-
     async with fn_api.FortniteAPI() as client:
         creator_code = await client.fetch_creator_code(TEST_CREATOR_CODE)
 

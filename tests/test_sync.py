@@ -80,7 +80,6 @@ def test_sync_banner_colors():
 
 
 def test_sync_creator_code():
-
     with fn_api.SyncFortniteAPI() as client:
         creator_code = client.fetch_creator_code(TEST_CREATOR_CODE)
 

@@ -125,7 +125,8 @@ class FortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> List[CosmeticBr[HTTPClient]]: ...
+    ) -> List[CosmeticBr[HTTPClient]]:
+        ...
 
     @overload
     async def search_cosmetic(
@@ -167,7 +168,8 @@ class FortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> CosmeticBr[HTTPClient]: ...
+    ) -> CosmeticBr[HTTPClient]:
+        ...
 
     async def search_cosmetic(
         self,
@@ -475,7 +477,8 @@ class SyncFortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> List[CosmeticBr[SyncHTTPClient]]: ...
+    ) -> List[CosmeticBr[SyncHTTPClient]]:
+        ...
 
     @overload
     def search_cosmetic(
@@ -517,7 +520,8 @@ class SyncFortniteAPI:
         added_since: Optional[datetime.datetime] = None,
         unseen_for: Optional[int] = None,
         last_appearance: Optional[int] = None,
-    ) -> CosmeticBr[SyncHTTPClient]: ...
+    ) -> CosmeticBr[SyncHTTPClient]:
+        ...
 
     def search_cosmetic(
         self,
