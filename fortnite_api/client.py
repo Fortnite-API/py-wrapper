@@ -24,12 +24,14 @@ SOFTWARE.
 
 from __future__ import annotations
 
-import time
-from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, TypeVar, Union, overload
+from typing import Any, List, Optional, TypeVar
 
 import aiohttp
 import requests
 from typing_extensions import ParamSpec, Self
+
+from .cosmetics import CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
+from .new import NewBrCosmetics, NewCosmetics
 
 from .aes import Aes
 from .banner import Banner, BannerColor
@@ -44,8 +46,6 @@ from .playlist import Playlist
 # from .shop import BrShop
 from .stats import BrPlayerStats
 
-if TYPE_CHECKING:
-    import datetime
 
 T = TypeVar('T')
 TC = TypeVar('TC')
@@ -65,10 +65,52 @@ class FortniteAPI:
     async def __aexit__(self, *args: Any) -> None:
         await self.http.close()
 
+    # COSMETICS
+    async def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar[HTTPClient]]:
+        data = await self.http.get_cosmetics_cars(language=(language and language.value))
+        return [CosmeticCar(data=entry, http=self.http) for entry in data]
+
+    async def fetch_cosmetics_instruments(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> List[CosmeticInstrument[HTTPClient]]:
+        data = await self.http.get_cosmetics_instruments(language=(language and language.value))
+        return [CosmeticInstrument(data=entry, http=self.http) for entry in data]
+
+    async def fetch_cosmetics_lego_kits(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> List[CosmeticLegoKit[HTTPClient]]:
+        data = await self.http.get_cosmetics_lego_kits(language=(language and language.value))
+        return [CosmeticLegoKit(data=entry, http=self.http) for entry in data]
+
+    async def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack[HTTPClient]]:
+        data = await self.http.get_cosmetics_tracks(language=(language and language.value))
+        return [CosmeticTrack(data=entry, http=self.http) for entry in data]
+
+    async def fetch_cosmetics_br_new(self) -> NewBrCosmetics:
+        data = await self.http.get_cosmetics_br_new()
+        return NewBrCosmetics(data=data, http=self.http)
+
+    async def fetch_cosmetics_new(self) -> NewCosmetics:
+        data = await self.http.get_cosmetics_new()
+        return NewCosmetics(data=data, http=self.http)
+
+    async def fetch_cosmetic_br(
+        self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None
+    ) -> CosmeticBr[HTTPClient]:
+        data = await self.http.get_cosmetic_br(cosmetic_id, language=(language and language.value))
+        return CosmeticBr(data=data, http=self.http)
+
+    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[HTTPClient]]:
+        data = await self.http.get_cosmetics_br(language=(language and language.value))
+        return [CosmeticBr(data=entry, http=self.http) for entry in data]
+
+    # AES
+
     async def fetch_aes(self, *, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
         data = await self.http.get_aes(key_format.value)
         return Aes(data=data)
 
+    # BANNERS
     async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[HTTPClient]]:
         data = await self.http.get_banners(language=(language and language.value))
         return [Banner(data=entry, http=self.http) for entry in data]
@@ -77,13 +119,19 @@ class FortniteAPI:
         data = await self.http.get_banner_colors()
         return [BannerColor(data=entry) for entry in data]
 
+    # CREATOR CODES
+
     async def fetch_creator_code(self, name: str, /) -> CreatorCode:
         data = await self.http.get_creator_code(name)
         return CreatorCode(data=data)
 
+    # MAPS
+
     async def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map:
         data = await self.http.get_map(language=(language and language.value))
         return Map(data=data)
+
+    # NEWS
 
     async def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News:
         data = await self.http.get_news(language=(language and language.value))
@@ -97,6 +145,8 @@ class FortniteAPI:
         data = await self.http.get_news_stw(language=(language and language.value))
         return GameModeNews(data=data)
 
+    # PLAYLISTS
+
     async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
         data = await self.http.get_playlists(language=(language and language.value))
         return [Playlist(data=entry) for entry in data]
@@ -105,12 +155,7 @@ class FortniteAPI:
         data = await self.http.get_playlist(id, language=(language and language.value))
         return Playlist(data=data)
 
-    # async def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
-    #     data = await self.http.get_br_shop(language=(language and language.value))
-    #     return BrShop(data=data)
-    #
-    # async def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
-    #     raise NotImplementedError()
+    # PLAYER STATS
 
     async def fetch_br_stats(
         self,
@@ -129,7 +174,7 @@ class FortniteAPI:
     async def fetch_br_stats_by_id(
         self, id: str, /, *, time_window: TimeWindow = TimeWindow.LIFETIME, image: StatsImageType = StatsImageType.ALL
     ) -> BrPlayerStats:
-        data = await self.http.get_br_stats_by_id(id=id, time_window=time_window.value, image=image.value)
+        data = await self.http.get_br_stats_by_id(account_id=id, time_window=time_window.value, image=image.value)
         return BrPlayerStats(data=data)
 
 
@@ -169,10 +214,15 @@ class SyncFortniteAPI:
     def __exit__(self, *args: Any) -> None:
         self.http.close()
 
-    def fetch_aes(self, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
+    # COSMETICS
+
+    # AES
+
+    def fetch_aes(self, *, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
         data = self.http.get_aes(key_format.value)
         return Aes(data=data)
 
+    # BANNERS
     def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[SyncHTTPClient]]:
         data = self.http.get_banners(language=(language and language.value))
         return [Banner(data=entry, http=self.http) for entry in data]
@@ -181,259 +231,19 @@ class SyncFortniteAPI:
         data = self.http.get_banner_colors()
         return [BannerColor(data=entry) for entry in data]
 
-    def fetch_br_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_br(language=(language and language.value))
-        return [CosmeticBr(data=entry, http=self.http) for entry in data]
-
-    def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> CosmeticBr[SyncHTTPClient]:
-        data = self.http.get_cosmetic_br(id, language=(language and language.value))
-        return CosmeticBr(data=data, http=self.http)
-
-    @overload
-    def search_cosmetic(
-        self,
-        *,
-        multiple: Literal[True] = True,
-        language: Optional[GameLanguage] = None,
-        search_language: Optional[GameLanguage] = None,
-        match_method: Optional[MatchMethod] = None,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        type: Optional[CosmeticBrType] = None,
-        display_type: Optional[str] = None,
-        backend_type: Optional[str] = None,
-        rarity: Optional[CosmeticBrRarity] = None,
-        display_rarity: Optional[str] = None,
-        backend_rarity: Optional[str] = None,
-        has_series: Optional[bool] = None,
-        series: Optional[str] = None,
-        backend_series: Optional[str] = None,
-        has_set: Optional[bool] = None,
-        set: Optional[str] = None,
-        set_text: Optional[str] = None,
-        backend_set: Optional[str] = None,
-        has_introduction: Optional[bool] = None,
-        backend_introduction: Optional[int] = None,
-        introduction_chapter: Optional[str] = None,
-        introduction_season: Optional[str] = None,
-        has_featured_image: Optional[bool] = None,
-        has_variants: Optional[bool] = None,
-        has_gameplay_tags: Optional[bool] = None,
-        gameplay_tag: Optional[str] = None,
-        has_meta_tags: Optional[bool] = None,
-        meta_tag: Optional[str] = None,
-        has_dynamic_pak_id: Optional[bool] = None,
-        dynamic_pak_id: Optional[str] = None,
-        added: Optional[datetime.datetime] = None,
-        added_since: Optional[datetime.datetime] = None,
-        unseen_for: Optional[int] = None,
-        last_appearance: Optional[int] = None,
-    ) -> List[CosmeticBr[SyncHTTPClient]]: ...
-
-    @overload
-    def search_cosmetic(
-        self,
-        *,
-        multiple: Literal[False] = False,
-        language: Optional[GameLanguage] = None,
-        search_language: Optional[GameLanguage] = None,
-        match_method: Optional[MatchMethod] = None,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        type: Optional[CosmeticBrType] = None,
-        display_type: Optional[str] = None,
-        backend_type: Optional[str] = None,
-        rarity: Optional[CosmeticBrRarity] = None,
-        display_rarity: Optional[str] = None,
-        backend_rarity: Optional[str] = None,
-        has_series: Optional[bool] = None,
-        series: Optional[str] = None,
-        backend_series: Optional[str] = None,
-        has_set: Optional[bool] = None,
-        set: Optional[str] = None,
-        set_text: Optional[str] = None,
-        backend_set: Optional[str] = None,
-        has_introduction: Optional[bool] = None,
-        backend_introduction: Optional[int] = None,
-        introduction_chapter: Optional[str] = None,
-        introduction_season: Optional[str] = None,
-        has_featured_image: Optional[bool] = None,
-        has_variants: Optional[bool] = None,
-        has_gameplay_tags: Optional[bool] = None,
-        gameplay_tag: Optional[str] = None,
-        has_meta_tags: Optional[bool] = None,
-        meta_tag: Optional[str] = None,
-        has_dynamic_pak_id: Optional[bool] = None,
-        dynamic_pak_id: Optional[str] = None,
-        added: Optional[datetime.datetime] = None,
-        added_since: Optional[datetime.datetime] = None,
-        unseen_for: Optional[int] = None,
-        last_appearance: Optional[int] = None,
-    ) -> CosmeticBr[SyncHTTPClient]: ...
-
-    def search_cosmetic(
-        self,
-        *,
-        multiple: Optional[bool] = False,
-        language: Optional[GameLanguage] = None,
-        search_language: Optional[GameLanguage] = None,
-        match_method: Optional[MatchMethod] = None,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        type: Optional[CosmeticBrType] = None,
-        display_type: Optional[str] = None,
-        backend_type: Optional[str] = None,
-        rarity: Optional[CosmeticBrRarity] = None,
-        display_rarity: Optional[str] = None,
-        backend_rarity: Optional[str] = None,
-        has_series: Optional[bool] = None,
-        series: Optional[str] = None,
-        backend_series: Optional[str] = None,
-        has_set: Optional[bool] = None,
-        set: Optional[str] = None,
-        set_text: Optional[str] = None,
-        backend_set: Optional[str] = None,
-        has_introduction: Optional[bool] = None,
-        backend_introduction: Optional[int] = None,
-        introduction_chapter: Optional[str] = None,
-        introduction_season: Optional[str] = None,
-        has_featured_image: Optional[bool] = None,
-        has_variants: Optional[bool] = None,
-        has_gameplay_tags: Optional[bool] = None,
-        gameplay_tag: Optional[str] = None,
-        has_meta_tags: Optional[bool] = None,
-        meta_tag: Optional[str] = None,
-        has_dynamic_pak_id: Optional[bool] = None,
-        dynamic_pak_id: Optional[str] = None,
-        added: Optional[datetime.datetime] = None,
-        added_since: Optional[datetime.datetime] = None,
-        unseen_for: Optional[int] = None,
-        last_appearance: Optional[int] = None,
-    ) -> Union[CosmeticBr[SyncHTTPClient], List[CosmeticBr[SyncHTTPClient]]]:
-        params: Dict[str, Any] = {}
-
-        if language is not None:
-            params['language'] = language.value
-
-        if search_language is not None:
-            params['searchLanguage'] = search_language.value
-
-        if match_method is not None:
-            params['matchMethod'] = match_method.value
-
-        if id is not None:
-            params['id'] = id
-
-        if name is not None:
-            params['name'] = name
-
-        if description is not None:
-            params['description'] = description
-
-        if type is not None:
-            params['type'] = type.value
-
-        if display_type is not None:
-            params['displayType'] = display_type
-
-        if backend_type is not None:
-            params['backendType'] = backend_type
-
-        if rarity is not None:
-            params['rarity'] = rarity.value
-
-        if display_rarity is not None:
-            params['displayRarity'] = display_rarity
-
-        if backend_rarity is not None:
-            params['backendRarity'] = backend_rarity
-
-        if has_series is not None:
-            params['hasSeries'] = has_series
-
-        if series is not None:
-            params['series'] = series
-
-        if backend_series is not None:
-            params['backendSeries'] = backend_series
-
-        if has_set is not None:
-            params['hasSet'] = has_set
-
-        if set is not None:
-            params['set'] = set
-
-        if set_text is not None:
-            params['setText'] = set_text
-
-        if backend_set is not None:
-            params['backendSet'] = backend_set
-
-        if has_introduction is not None:
-            params['hasIntroduction'] = has_introduction
-
-        if backend_introduction is not None:
-            params['backendIntroduction'] = backend_introduction
-
-        if introduction_chapter is not None:
-            params['introductionChapter'] = introduction_chapter
-
-        if introduction_season is not None:
-            params['introductionSeason'] = introduction_season
-
-        if has_featured_image is not None:
-            params['hasFeaturedImage'] = has_featured_image
-
-        if has_variants is not None:
-            params['hasVariants'] = has_variants
-
-        if has_gameplay_tags is not None:
-            params['hasGameplayTags'] = has_gameplay_tags
-
-        if gameplay_tag is not None:
-            params['gameplayTag'] = gameplay_tag
-
-        if has_meta_tags is not None:
-            params['hasMetaTags'] = has_meta_tags
-
-        if meta_tag is not None:
-            params['metaTag'] = meta_tag
-
-        if has_dynamic_pak_id is not None:
-            params['hasDynamicPakId'] = has_dynamic_pak_id
-
-        if dynamic_pak_id is not None:
-            params['dynamicPakId'] = dynamic_pak_id
-
-        if added is not None:
-            params['added'] = time.mktime(added.timetuple())
-
-        if added_since is not None:
-            params['addedSince'] = time.mktime(added_since.timetuple())
-
-        if unseen_for is not None:
-            params['unseenFor'] = unseen_for
-
-        if last_appearance is not None:
-            params['lastAppearance'] = last_appearance
-
-        if multiple is True:
-            data = self.http.search_cosmetic_all(**params)
-            return [CosmeticBr(data=entry, http=self.http) for entry in data]
-
-        data = self.http.search_cosmetic(**params)
-        return CosmeticBr(data=data, http=self.http)
+    # CREATOR CODES
 
     def fetch_creator_code(self, name: str, /) -> CreatorCode:
         data = self.http.get_creator_code(name)
         return CreatorCode(data=data)
 
+    # MAPS
+
     def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map:
         data = self.http.get_map(language=(language and language.value))
         return Map(data=data)
+
+    # NEWS
 
     def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News:
         data = self.http.get_news(language=(language and language.value))
@@ -447,6 +257,8 @@ class SyncFortniteAPI:
         data = self.http.get_news_stw(language=(language and language.value))
         return GameModeNews(data=data)
 
+    # PLAYLISTS
+
     def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
         data = self.http.get_playlists(language=(language and language.value))
         return [Playlist(data=entry) for entry in data]
@@ -455,12 +267,7 @@ class SyncFortniteAPI:
         data = self.http.get_playlist(id, language=(language and language.value))
         return Playlist(data=data)
 
-    # def fetch_br_shop(self, *, language: Optional[GameLanguage] = None) -> BrShop:
-    #     data = self.http.get_br_shop(language=(language and language.value))
-    #     return BrShop(data=data)
-    #
-    # def fetch_br_shop_combined(self, *, language: Optional[GameLanguage] = None) -> BrShop:
-    #     raise NotImplementedError('')
+    # PLAYER STATS
 
     def fetch_br_stats(
         self,
