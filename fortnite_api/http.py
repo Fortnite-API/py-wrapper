@@ -85,6 +85,76 @@ class HTTPMixin(abc.ABC):
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any: ...
 
+    # TODO
+    def get_cars(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/cars')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO
+    def get_instruments(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/instruments')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO
+    def get_lego_kits(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/lego/kits')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO
+    def get_jam_tracks(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/tracks')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO
+    def get_lego_variants(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/lego/variants')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO
+    def get_new_br(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/br/new')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO (gets all of the new items not just specific)
+    def get_new_cosmetics(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/new')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
     def get_aes(self, key_format: str):
         r: Route = Route('GET', '/v2/aes')
         params: Dict[str, str] = {'keyFormat': key_format}
@@ -104,16 +174,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r)
 
     def get_cosmetics(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/cosmetics/br')
-        params: Dict[str, str] = {}
-
-        if language:
-            params['language'] = language
-
-        return self.request(r, params=params)
-
-    def get_new_cosmetics(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/cosmetics/br/new')
+        r: Route = Route('GET', '/v2/cosmetics')
         params: Dict[str, str] = {}
 
         if language:
@@ -180,15 +241,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_creative_news(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/news/creative')
-        params: Dict[str, str] = {}
-
-        if language:
-            params['language'] = language
-
-        return self.request(r, params=params)
-
     def get_playlists(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v1/playlists')
         params: Dict[str, str] = {}
@@ -200,6 +252,16 @@ class HTTPMixin(abc.ABC):
 
     def get_playlist(self, id: str, language: Optional[str] = None):
         r: Route = Route('GET', '/v1/playlists/{id}', id=id)
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO
+    def get_shop(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/shop')
         params: Dict[str, str] = {}
 
         if language:
@@ -381,9 +443,6 @@ class HTTPClient(HTTPMixin):
     def get_stw_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
         return super().get_stw_news(*args, **kwargs)
 
-    def get_creative_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_creative_news(*args, **kwargs)
-
     def get_playlists(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
         return super().get_playlists(*args, **kwargs)
 
@@ -508,9 +567,6 @@ class SyncHTTPClient(HTTPMixin):
 
     def get_stw_news(self, *args: Any, **kwargs: Any) -> Any:
         return super().get_stw_news(*args, **kwargs)
-
-    def get_creative_news(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_creative_news(*args, **kwargs)
 
     def get_playlists(self, *args: Any, **kwargs: Any) -> List[Any]:
         return super().get_playlists(*args, **kwargs)
