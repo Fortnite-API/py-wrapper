@@ -28,7 +28,7 @@ import abc
 import asyncio
 import sys
 import time
-from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Literal, Optional, Union
+from typing import Any, Coroutine, Dict, Literal, Optional, Union
 
 import aiohttp
 import requests
@@ -37,9 +37,6 @@ from typing_extensions import TypeAlias, TypeVar
 from . import __version__
 from .errors import *
 from .utils import to_json
-
-if TYPE_CHECKING:
-    from .types import aes
 
 T = TypeVar('T', bound='Any')
 AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
@@ -82,8 +79,7 @@ class HTTPMixin(abc.ABC):
             self.headers['Authorization'] = self.token
 
     @abc.abstractmethod
-    def request(self, route: Route, **kwargs: Any) -> Any:
-        ...
+    def request(self, route: Route, **kwargs: Any) -> Any: ...
 
     # TODO
     def get_cosmetics_cars(self, language: Optional[str] = None):
@@ -341,7 +337,6 @@ class HTTPMixin(abc.ABC):
 class HTTPClient(HTTPMixin):
     def __init__(self, *args: Any, session: Optional[aiohttp.ClientSession] = None, **kwargs: Any) -> None:
         self.session: Optional[aiohttp.ClientSession] = session
-        self._http_lock: asyncio.Lock = asyncio.Lock()
         super().__init__(*args, **kwargs)
 
     async def close(self) -> None:
@@ -366,113 +361,44 @@ class HTTPClient(HTTPMixin):
             )
 
         response: Optional[aiohttp.ClientResponse] = None
-        async with self._http_lock:
-            for tries in range(5):  # Just in case we get rate limited
-                async with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
-                    data = await self._parse_async_response(response)
+        for tries in range(5):  # Just in case we get rate limited
+            async with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
+                data = await self._parse_async_response(response)
 
-                    if 300 > response.status >= 200:  # Everything is ok
-                        if isinstance(data, dict):
-                            return data.get('data', data)
-
-                        return data
-
-                    # Let's try and find an error message
-                    error: str = 'Error message not provided!'
+                if 300 > response.status >= 200:  # Everything is ok
                     if isinstance(data, dict):
-                        error = data.get('data', data).get('error', error)
+                        return data.get('data', data)
 
-                    if response.status == 401:
-                        raise Unauthorized(error)
+                    return data
 
-                    if response.status == 403:
-                        raise Forbidden(error)
+                # Let's try and find an error message
+                error: str = 'Error message not provided!'
+                if isinstance(data, dict):
+                    error = data.get('data', data).get('error', error)
 
-                    if response.status == 404:
-                        raise NotFound(error)
+                if response.status == 401:
+                    raise Unauthorized(error)
 
-                    if response.status == 429:  # NOTE: Handle this better down the road
-                        raise RateLimited(error)
+                if response.status == 403:
+                    raise Forbidden(error)
 
-                    if response.status in {500, 502, 504}:
-                        await asyncio.sleep(1 + tries * 2)
-                        continue
+                if response.status == 404:
+                    raise NotFound(error)
 
-                    if response.status > 500:
-                        raise ServiceUnavailable(error)
+                if response.status == 429:  # NOTE: Handle this better down the road
+                    raise RateLimited(error)
+
+                if response.status in {500, 502, 504}:
+                    await asyncio.sleep(1 + tries * 2)
+                    continue
+
+                if response.status > 500:
+                    raise ServiceUnavailable(error)
 
         if response is not None:
             raise ServiceUnavailable('Service unavailable')
 
         raise RuntimeError('Unreachable code reached!')
-
-    # NOTE: Excuse my french but this is *ass*. All this is doing is overriding
-    # each function to correct the return annotation. In order to do this neatly, an
-    # overload would need to be on EVERY function in HTTPMixin. I'm leaving this
-    # for now but expect to hopefully remove it in the future with a better solution.
-
-    # NOTE: Any annotation that is marked as "Any" will replaced
-    # with a TypedDict when they're fully implemented.
-
-    def get_aes(self, *args: Any, **kwargs: Any) -> AsyncResponse[aes.Aes]:
-        return super().get_aes(*args, **kwargs)
-
-    def get_banners(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
-        return super().get_banners(*args, **kwargs)
-
-    def get_banner_colors(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
-        return super().get_banner_colors(*args, **kwargs)
-
-    def get_cosmetics_br(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
-        return super().get_cosmetics_br(*args, **kwargs)
-
-    def get_cosmetics(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
-        return super().get_cosmetics(*args, **kwargs)
-
-    def get_cosmetics_new(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
-        return super().get_cosmetics_new(*args, **kwargs)
-
-    def get_cosmetic_br(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_cosmetic_br(*args, **kwargs)
-
-    def search_cosmetic(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().search_cosmetic(*args, **kwargs)
-
-    def search_cosmetic_all(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
-        return super().search_cosmetic_all(*args, **kwargs)
-
-    def get_creator_code(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_creator_code(*args, **kwargs)
-
-    def get_map(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_map(*args, **kwargs)
-
-    def get_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_news(*args, **kwargs)
-
-    def get_news_br(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_news_br(*args, **kwargs)
-
-    def get_news_stw(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_news_stw(*args, **kwargs)
-
-    def get_playlists(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
-        return super().get_playlists(*args, **kwargs)
-
-    def get_playlist(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_playlist(*args, **kwargs)
-
-    def get_br_shop(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_br_shop(*args, **kwargs)
-
-    def get_br_shop_combined(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_br_shop_combined(*args, **kwargs)
-
-    def get_br_stats(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_br_stats(*args, **kwargs)
-
-    def get_br_stats_by_id(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_br_stats_by_id(*args, **kwargs)
 
 
 class SyncHTTPClient(HTTPMixin):
