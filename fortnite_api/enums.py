@@ -57,7 +57,7 @@ class MatchMethod(enum.Enum):
     ENDS = 'ends'
 
 
-class BrCosmeticRarity(enum.Enum):
+class CosmeticBrRarity(enum.Enum):
     FROZEN = 'frozen'
     LAVA = 'lava'
     LEGENDARY = 'legendary'
@@ -73,10 +73,11 @@ class BrCosmeticRarity(enum.Enum):
     RARE = 'rare'
     UNCOMMON = 'uncommon'
     COMMON = 'common'
+    MYTHIC = 'mythic'
     UNKNOWN = 'unknown'
 
 
-class BrCosmeticType(enum.Enum):
+class CosmeticBrType(enum.Enum):
     BANNER = 'banner'
     BACKPACK = 'backpack'
     CONTRAIL = 'contrail'
@@ -85,6 +86,7 @@ class BrCosmeticType(enum.Enum):
     EMOJI = 'emoji'
     GLIDER = 'glider'
     WRAP = 'wrap'
+    AURA = 'aura'
     LOADING_SCREEN = 'loadingscreen'
     MUSIC = 'music'
     PET = 'pet'
@@ -94,6 +96,19 @@ class BrCosmeticType(enum.Enum):
     SPRAY = 'spray'
     TOY = 'toy'
     UNKNOWN = 'unknown'
+
+
+class CosmeticBrSearchTag(enum.Enum):
+    YELLOW = 'Yellow'
+    WINTER = 'Winter'
+    WESTERN = 'Western'
+    UMBRELLA = 'Umbrella'
+    BEAR = 'Bear'
+    FOOD = 'Food'
+    HAZE = 'Haze'
+    PINK = 'Pink'
+    SUPERMAN = 'Superman'
+    SUMMER = 'Summer'
 
 
 class NewsType(enum.Enum):
