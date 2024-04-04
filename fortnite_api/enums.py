@@ -57,7 +57,7 @@ class MatchMethod(enum.Enum):
     ENDS = 'ends'
 
 
-class CosmeticTag(enum.Enum):
+class CosmeticType(enum.Enum):
     BR = "br"
     TRACKS = "tracks"
     INSTRUMENTS = "instruments"
