@@ -28,7 +28,7 @@ import datetime
 from typing import Any, Dict, Generic, List, Optional
 
 from ..asset import Asset
-from ..enums import CosmeticBrSearchTag, CosmeticTag
+from ..enums import CosmeticBrSearchTag
 from ..http import HTTPClientT
 from ..utils import parse_time
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
@@ -60,8 +60,8 @@ class CosmeticIntroduction:
     ----------
     chapter: :class:`int`
         The chapter the cosmetic was introduced in.
-    season: :class:`int`
-        The season the cosmetic was introduced in.
+    season: :class:`str`
+        The season the cosmetic was introduced in. Can be "OG" if the cosmetic was introduced before seasons.
     text: :class:`str`
         The display text of this introduction. In the form, ``"Introduced in Chapter {{chapter}}, Season {{season}}."``
     backend_value: :class:`int`
@@ -70,7 +70,7 @@ class CosmeticIntroduction:
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.chapter: int = int(data['chapter'])
-        self.season: int = int(data['season'])
+        self.season: str = data['season']
         self.text: str = data['text']
         self.backend_value: int = data['backendValue']
 
@@ -89,7 +89,7 @@ class CosmeticVariantOption(Generic[HTTPClientT]):
     """
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self.tag: str = data['tag ']
+        self.tag: str = data['tag']
         self.name: str = data['name']
         self.image: Asset[HTTPClientT] = Asset[HTTPClientT](http=http, url=data['image'])
 
@@ -141,9 +141,9 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The variants of the cosmetic, if any.
     search_tags: List[:class:`CosmeticBrSearchTag`]
         The search tags of the cosmetic.
-    gameplay_tags: List[:class:`CosmeticTag`]
+    gameplay_tags: List[:class:`str`]
         The gameplay tags of the cosmetic.
-    meta_tags: List[:class:`CosmeticTag`]
+    meta_tags: List[:class:`str`]
         The meta tags of the cosmetic.
     showcase_video: Optional[:class:`str`]
         The showcase video of the cosmetic, if available.
@@ -196,11 +196,8 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         search_tags: List[str] = data.get('searchTags', []) or []
         self.search_tags: List[CosmeticBrSearchTag] = [CosmeticBrSearchTag(tag) for tag in search_tags]
 
-        gameplay_tags: List[str] = data.get('gameplayTags', []) or []
-        self.gameplay_tags: List[CosmeticTag] = [CosmeticTag(tag) for tag in gameplay_tags]
-
-        meta_tags: List[str] = data.get('metaTags', []) or []
-        self.meta_tags: List[CosmeticTag] = [CosmeticTag(tag) for tag in meta_tags]
+        self.gameplay_tags: List[str] = data.get('gameplayTags', []) or []
+        self.meta_tags: List[str] = data.get('metaTags', []) or []
 
         self.showcase_video: Optional[str] = data.get('showcaseVideo', None)
         self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId', None)

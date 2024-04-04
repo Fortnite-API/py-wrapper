@@ -25,13 +25,16 @@ SOFTWARE.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, Generic, List, Optional
+from typing import Any, Dict, Generic, List, Optional, TypeVar
 
 from ..abc import IdComparable
 from ..asset import Asset
 from ..http import HTTPClientT
 from ..images import Images
 from ..utils import parse_time
+
+
+CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]', covariant=True)
 
 
 class Cosmetic(IdComparable, Generic[HTTPClientT]):
@@ -158,7 +161,7 @@ class CosmeticImages(Images[HTTPClientT]):
         self.lego: Optional[Asset[HTTPClientT]] = lego and Asset[HTTPClientT](http=http, url=lego)
 
         # Mapping of str to Asset. In testing all I have found is "background" in this mapping.
-        other = data.get('other', {})
+        other: Dict[str, str] = data.get('other', {}) or {}
         self.other: Dict[str, Asset[HTTPClientT]] = {
             key: Asset[HTTPClientT](http=http, url=value) for key, value in other.items()
         }
