@@ -77,12 +77,12 @@ class FortniteAPI:
         data = await self.http.get_banner_colors()
         return [BannerColor(data=entry) for entry in data]
 
-    async def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[HTTPClient]]:
-        data = await self.http.get_cosmetics(language=(language and language.value))
+    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[HTTPClient]]:
+        data = await self.http.get_cosmetics_br(language=(language and language.value))
         return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> CosmeticBr[HTTPClient]:
-        data = await self.http.get_cosmetic(id, language=(language and language.value))
+    async def fetch_cosmetic_br(self, id: str, /, *, language: Optional[GameLanguage] = None) -> CosmeticBr[HTTPClient]:
+        data = await self.http.get_cosmetic_br(id, language=(language and language.value))
         return CosmeticBr(data=data, http=self.http)
 
     @overload
@@ -335,16 +335,12 @@ class FortniteAPI:
         data = await self.http.get_news(language=(language and language.value))
         return News(data=data)
 
-    async def fetch_br_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
-        data = await self.http.get_br_news(language=(language and language.value))
+    async def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        data = await self.http.get_news_br(language=(language and language.value))
         return GameModeNews(data=data)
 
-    async def fetch_stw_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
-        data = await self.http.get_stw_news(language=(language and language.value))
-        return GameModeNews(data=data)
-
-    async def fetch_creative_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
-        data = await self.http.get_creative_news(language=(language and language.value))
+    async def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        data = await self.http.get_news_stw(language=(language and language.value))
         return GameModeNews(data=data)
 
     async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
@@ -431,12 +427,12 @@ class SyncFortniteAPI:
         data = self.http.get_banner_colors()
         return [BannerColor(data=entry) for entry in data]
 
-    def fetch_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
-        data = self.http.get_cosmetics(language=(language and language.value))
+    def fetch_br_cosmetics(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_br(language=(language and language.value))
         return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
     def fetch_cosmetic(self, id: str, /, *, language: Optional[GameLanguage] = None) -> CosmeticBr[SyncHTTPClient]:
-        data = self.http.get_cosmetic(id, language=(language and language.value))
+        data = self.http.get_cosmetic_br(id, language=(language and language.value))
         return CosmeticBr(data=data, http=self.http)
 
     @overload
@@ -689,16 +685,12 @@ class SyncFortniteAPI:
         data = self.http.get_news(language=(language and language.value))
         return News(data=data)
 
-    def fetch_br_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
-        data = self.http.get_br_news(language=(language and language.value))
+    def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        data = self.http.get_news_br(language=(language and language.value))
         return GameModeNews(data=data)
 
-    def fetch_stw_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
-        data = self.http.get_stw_news(language=(language and language.value))
-        return GameModeNews(data=data)
-
-    def fetch_creative_news(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
-        data = self.http.get_creative_news(language=(language and language.value))
+    def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        data = self.http.get_news_stw(language=(language and language.value))
         return GameModeNews(data=data)
 
     def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
@@ -731,5 +723,5 @@ class SyncFortniteAPI:
     def fetch_br_stats_by_id(
         self, id: str, /, *, time_window: TimeWindow = TimeWindow.LIFETIME, image: StatsImageType = StatsImageType.ALL
     ) -> BrPlayerStats:
-        data = self.http.get_br_stats_by_id(id=id, time_window=time_window.value, image=image.value)
+        data = self.http.get_br_stats_by_id(account_id=id, time_window=time_window.value, image=image.value)
         return BrPlayerStats(data=data)
