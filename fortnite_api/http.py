@@ -86,7 +86,7 @@ class HTTPMixin(abc.ABC):
     def request(self, route: Route, **kwargs: Any) -> Any: ...
 
     # TODO
-    def get_cars(self, language: Optional[str] = None):
+    def get_cosmetics_cars(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/cars')
         params: Dict[str, str] = {}
 
@@ -96,7 +96,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     # TODO
-    def get_instruments(self, language: Optional[str] = None):
+    def get_cosmetics_instruments(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/instruments')
         params: Dict[str, str] = {}
 
@@ -106,7 +106,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     # TODO
-    def get_lego_kits(self, language: Optional[str] = None):
+    def get_cosmetics_lego_kits(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/lego/kits')
         params: Dict[str, str] = {}
 
@@ -116,7 +116,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     # TODO
-    def get_jam_tracks(self, language: Optional[str] = None):
+    def get_cosmetics_tracks(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/tracks')
         params: Dict[str, str] = {}
 
@@ -126,7 +126,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     # TODO
-    def get_lego_variants(self, language: Optional[str] = None):
+    def get_cosmetics_lego_variants(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/lego/variants')
         params: Dict[str, str] = {}
 
@@ -136,7 +136,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     # TODO
-    def get_new_br(self, language: Optional[str] = None):
+    def get_cosmetics_br_new(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/br/new')
         params: Dict[str, str] = {}
 
@@ -146,8 +146,38 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     # TODO (gets all of the new items not just specific)
-    def get_new_cosmetics(self, language: Optional[str] = None):
+    def get_cosmetics_new(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/new')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO: must be updated
+    def get_cosmetic_br(self, id: str, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/br/{id}', id=id)
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO
+    def get_cosmetics(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
+    # TODO
+    def get_cosmetics_br(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/br')
         params: Dict[str, str] = {}
 
         if language:
@@ -161,7 +191,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     def get_banners(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v1/banners')
+        r: Route = Route('GET', '/v2/banners')
         params: Dict[str, str] = {}
 
         if language:
@@ -170,26 +200,8 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     def get_banner_colors(self):
-        r: Route = Route('GET', '/v1/banners/colors')
+        r: Route = Route('GET', '/v2/banners/colors')
         return self.request(r)
-
-    def get_cosmetics(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/cosmetics')
-        params: Dict[str, str] = {}
-
-        if language:
-            params['language'] = language
-
-        return self.request(r, params=params)
-
-    def get_cosmetic(self, id: str, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/cosmetics/br/{id}', id=id)
-        params: Dict[str, str] = {}
-
-        if language:
-            params['language'] = language
-
-        return self.request(r, params=params)
 
     # kwargs will be expanded upon in client so its understood what you can and cant pass
     def search_cosmetic(self, **kwargs: Any):
@@ -223,7 +235,7 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_br_news(self, language: Optional[str] = None):
+    def get_news_br(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/news/br')
         params: Dict[str, str] = {}
 
@@ -232,7 +244,7 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_stw_news(self, language: Optional[str] = None):
+    def get_news_stw(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/news/stw')
         params: Dict[str, str] = {}
 
@@ -413,14 +425,17 @@ class HTTPClient(HTTPMixin):
     def get_banner_colors(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
         return super().get_banner_colors(*args, **kwargs)
 
+    def get_cosmetics_br(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
+        return super().get_cosmetics_br(*args, **kwargs)
+
     def get_cosmetics(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
         return super().get_cosmetics(*args, **kwargs)
 
-    def get_new_cosmetics(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
-        return super().get_new_cosmetics(*args, **kwargs)
+    def get_cosmetics_new(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
+        return super().get_cosmetics_new(*args, **kwargs)
 
-    def get_cosmetic(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_cosmetic(*args, **kwargs)
+    def get_cosmetic_br(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_cosmetic_br(*args, **kwargs)
 
     def search_cosmetic(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
         return super().search_cosmetic(*args, **kwargs)
@@ -437,11 +452,11 @@ class HTTPClient(HTTPMixin):
     def get_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
         return super().get_news(*args, **kwargs)
 
-    def get_br_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_br_news(*args, **kwargs)
+    def get_news_br(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_news_br(*args, **kwargs)
 
-    def get_stw_news(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
-        return super().get_stw_news(*args, **kwargs)
+    def get_news_stw(self, *args: Any, **kwargs: Any) -> AsyncResponse[Any]:
+        return super().get_news_stw(*args, **kwargs)
 
     def get_playlists(self, *args: Any, **kwargs: Any) -> AsyncResponse[List[Any]]:
         return super().get_playlists(*args, **kwargs)
@@ -525,63 +540,3 @@ class SyncHTTPClient(HTTPMixin):
             raise ServiceUnavailable('Service unavailable')
 
         raise RuntimeError('Unreachable code reached!')
-
-    # NOTE: The same that goes for AsyncHTTPClient goes for this as well,
-    # we need to ensure the return annotation is correct.
-
-    def get_aes(self, *args: Any, **kwargs: Any) -> aes.Aes:
-        return super().get_aes(*args, **kwargs)
-
-    def get_banners(self, *args: Any, **kwargs: Any) -> List[Any]:
-        return super().get_banners(*args, **kwargs)
-
-    def get_banner_colors(self, *args: Any, **kwargs: Any) -> List[Any]:
-        return super().get_banner_colors(*args, **kwargs)
-
-    def get_cosmetics(self, *args: Any, **kwargs: Any) -> List[Any]:
-        return super().get_cosmetics(*args, **kwargs)
-
-    def get_new_cosmetics(self, *args: Any, **kwargs: Any) -> List[Any]:
-        return super().get_new_cosmetics(*args, **kwargs)
-
-    def get_cosmetic(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_cosmetic(*args, **kwargs)
-
-    def search_cosmetic(self, *args: Any, **kwargs: Any) -> Any:
-        return super().search_cosmetic(*args, **kwargs)
-
-    def search_cosmetic_all(self, *args: Any, **kwargs: Any) -> List[Any]:
-        return super().search_cosmetic_all(*args, **kwargs)
-
-    def get_creator_code(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_creator_code(*args, **kwargs)
-
-    def get_map(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_map(*args, **kwargs)
-
-    def get_news(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_news(*args, **kwargs)
-
-    def get_br_news(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_br_news(*args, **kwargs)
-
-    def get_stw_news(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_stw_news(*args, **kwargs)
-
-    def get_playlists(self, *args: Any, **kwargs: Any) -> List[Any]:
-        return super().get_playlists(*args, **kwargs)
-
-    def get_playlist(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_playlist(*args, **kwargs)
-
-    def get_br_shop(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_br_shop(*args, **kwargs)
-
-    def get_br_shop_combined(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_br_shop_combined(*args, **kwargs)
-
-    def get_br_stats(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_br_stats(*args, **kwargs)
-
-    def get_br_stats_by_id(self, *args: Any, **kwargs: Any) -> Any:
-        return super().get_br_stats_by_id(*args, **kwargs)
