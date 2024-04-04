@@ -24,10 +24,15 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+import datetime
+from typing import Any, Dict, Generic, Optional, List
+
+from fortnite_api.utils import parse_time
 
 from ..http import HTTPClientT
+from ..asset import Asset
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
+from ..enums import CosmeticBrSearchTag
 
 
 class CosmeticSet:
@@ -71,6 +76,47 @@ class CosmeticIntroduction:
         self.backend_value: int = data['backendValue']
 
 
+class CosmeticVariantOption(Generic[HTTPClientT]):
+    """Represents a variant option for a cosmetic.
+
+    Attributes
+    ----------
+    tag: :class:`str`
+        The tag of the variant option.
+    name: :class:`str`
+        The option's name.
+    image: :class:`Asset`
+        The image of the variant option.
+    """
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        self.tag: str = data['tag ']
+        self.name: str = data['name']
+        self.image: Asset[HTTPClientT] = Asset[HTTPClientT](http=http, url=data['image'])
+
+
+class CosmeticVariant(Generic[HTTPClientT]):
+    """Represents a variant for a cosmetic.
+
+    Attributes
+    ----------
+    channel: :class:`str`
+        The channel of the variant.
+    type: :class:`str`
+        The type of the variant.
+    options: List[:class:`CosmeticVariantOption`]
+        The options for the variant, if any.
+    """
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        self.channel: str = data['channel']
+        self.type: str = data['type']  # TODO: Move to enum eventually.
+
+        self.options: List[CosmeticVariantOption[HTTPClientT]] = [
+            CosmeticVariantOption[HTTPClientT](data=option, http=http) for option in data['options']
+        ]
+
+
 class CosmeticBr(Cosmetic[HTTPClientT]):
     """Represents a Battle Royale cosmetic.
 
@@ -92,6 +138,10 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         Metadata about when the cosmetic was introduced, if available.
     images: Optional[:class:`CosmeticImages`]
         The images of the cosmetic.
+    variants: List[:class:`CosmeticVariant`]
+        The variants of the cosmetic, if any.
+    search_tags: List[:class:`CosmeticBrSearchTag`]
+        The search tags of the cosmetic.
     """
 
     def __init__(
@@ -122,3 +172,22 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
 
         images = data.get('images')
         self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages[HTTPClientT](http=http, data=images)
+
+        variants: List[Dict[str, Any]] = data.get('variants', None) or []
+        self.variants: List[CosmeticVariant[HTTPClientT]] = [
+            CosmeticVariant[HTTPClientT](data=variant, http=http) for variant in variants
+        ]
+
+        search_tags: List[str] = data.get('searchTags', []) or []
+        self.search_tags: List[CosmeticBrSearchTag] = [CosmeticBrSearchTag(tag) for tag in search_tags]
+
+        self.gameplay_tags: List[str] = data.get('gameplayTags', []) or []
+        self.meta_tags: List[str] = data.get('metaTags', []) or []
+        self.showcase_video: Optional[str] = data.get('showcaseVideo', None)
+        self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId', None)
+        self.display_asset_path: Optional[str] = data.get('displayAssetPath', None)
+        self.definition_path: Optional[str] = data.get('definitionPath', None)
+        self.path: Optional[str] = data.get('path', None)
+
+        history: List[str] = data.get('shopHistory') or []
+        self.shop_history: List[datetime.datetime] = [parse_time(time) for time in history]
