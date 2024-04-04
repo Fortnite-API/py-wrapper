@@ -191,7 +191,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     def get_banners(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/banners')
+        r: Route = Route('GET', '/v1/banners')
         params: Dict[str, str] = {}
 
         if language:
@@ -200,7 +200,7 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     def get_banner_colors(self):
-        r: Route = Route('GET', '/v2/banners/colors')
+        r: Route = Route('GET', '/v1/banners/colors')
         return self.request(r)
 
     # kwargs will be expanded upon in client so its understood what you can and cant pass
