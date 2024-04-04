@@ -140,7 +140,6 @@ class StatsImageType(enum.Enum):
     KEYBOARD_MOUSE = 'keyboardMouse'
     GAMEPAD = 'gamepad'
     TOUCH = 'touch'
-    NONE = 'none'
 
 
 class CreatorCodeStatus(enum.Enum):
