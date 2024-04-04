@@ -32,7 +32,7 @@ from fortnite_api.utils import parse_time
 from ..http import HTTPClientT
 from ..asset import Asset
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
-from ..enums import CosmeticBrSearchTag
+from ..enums import CosmeticBrSearchTag, CosmeticTag
 
 
 class CosmeticSet:
@@ -142,6 +142,22 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The variants of the cosmetic, if any.
     search_tags: List[:class:`CosmeticBrSearchTag`]
         The search tags of the cosmetic.
+    gameplay_tags: List[:class:`CosmeticTag`]
+        The gameplay tags of the cosmetic.
+    meta_tags: List[:class:`CosmeticTag`]
+        The meta tags of the cosmetic.
+    showcase_video: Optional[:class:`str`]
+        The showcase video of the cosmetic, if available.
+    dynamic_pak_id: Optional[:class:`str`]
+        The dynamic pak ID of the cosmetic, if available.
+    display_asset_path: Optional[:class:`str`]
+        The display asset path of the cosmetic, if available.
+    definition_path: Optional[:class:`str`]
+        The definition path of the cosmetic, if available.
+    path: Optional[:class:`str`]
+        The path of the cosmetic, if available.
+    shop_history: List[:class:`datetime.datetime`]
+        The shop history of the cosmetic.
     """
 
     def __init__(
@@ -181,8 +197,12 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         search_tags: List[str] = data.get('searchTags', []) or []
         self.search_tags: List[CosmeticBrSearchTag] = [CosmeticBrSearchTag(tag) for tag in search_tags]
 
-        self.gameplay_tags: List[str] = data.get('gameplayTags', []) or []
-        self.meta_tags: List[str] = data.get('metaTags', []) or []
+        gameplay_tags: List[str] = data.get('gameplayTags', []) or []
+        self.gameplay_tags: List[CosmeticTag] = [CosmeticTag(tag) for tag in gameplay_tags]
+
+        meta_tags: List[str] = data.get('metaTags', []) or []
+        self.meta_tags: List[CosmeticTag] = [CosmeticTag(tag) for tag in meta_tags]
+
         self.showcase_video: Optional[str] = data.get('showcaseVideo', None)
         self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId', None)
         self.display_asset_path: Optional[str] = data.get('displayAssetPath', None)

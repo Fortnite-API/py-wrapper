@@ -57,6 +57,15 @@ class MatchMethod(enum.Enum):
     ENDS = 'ends'
 
 
+class CosmeticTag(enum.Enum):
+    BR = "br"
+    TRACKS = "tracks"
+    INSTRUMENTS = "instruments"
+    CARS = "cars"
+    LEGO = "lego"
+    LEGO_KITS = "legokits"
+
+
 class CosmeticBrRarity(enum.Enum):
     FROZEN = 'frozen'
     LAVA = 'lava'
@@ -74,7 +83,6 @@ class CosmeticBrRarity(enum.Enum):
     UNCOMMON = 'uncommon'
     COMMON = 'common'
     MYTHIC = 'mythic'
-    UNKNOWN = 'unknown'
 
 
 class CosmeticBrType(enum.Enum):
@@ -95,7 +103,6 @@ class CosmeticBrType(enum.Enum):
     SHOUT = 'shout'
     SPRAY = 'spray'
     TOY = 'toy'
-    UNKNOWN = 'unknown'
 
 
 class CosmeticBrSearchTag(enum.Enum):
