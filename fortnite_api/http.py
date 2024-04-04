@@ -81,7 +81,6 @@ class HTTPMixin(abc.ABC):
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any: ...
 
-    # TODO
     def get_cosmetics_cars(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/cars')
         params: Dict[str, str] = {}
@@ -91,7 +90,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO
     def get_cosmetics_instruments(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/instruments')
         params: Dict[str, str] = {}
@@ -101,7 +99,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO
     def get_cosmetics_lego_kits(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/lego/kits')
         params: Dict[str, str] = {}
@@ -111,7 +108,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO
     def get_cosmetics_tracks(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/tracks')
         params: Dict[str, str] = {}
@@ -131,7 +127,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO
     def get_cosmetics_br_new(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/br/new')
         params: Dict[str, str] = {}
@@ -141,7 +136,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO (gets all of the new items not just specific)
     def get_cosmetics_new(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/new')
         params: Dict[str, str] = {}
@@ -151,7 +145,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO: must be updated
     def get_cosmetic_br(self, id: str, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/br/{id}', id=id)
         params: Dict[str, str] = {}
@@ -161,7 +154,7 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO
+    # TODO (returns all cosmetics, not just BR)
     def get_cosmetics(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics')
         params: Dict[str, str] = {}
@@ -171,7 +164,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO
     def get_cosmetics_br(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/br')
         params: Dict[str, str] = {}
