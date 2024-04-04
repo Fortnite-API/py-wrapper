@@ -27,8 +27,7 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, Generic, Optional, List
 
-from fortnite_api.utils import parse_time
-
+from ..utils import parse_time
 from ..http import HTTPClientT
 from ..asset import Asset
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
