@@ -135,12 +135,10 @@ class Asset(Generic[HTTPClientT]):
         return self.__class__(http=self._http, url=f'{url_without_type}_{size}.png')
 
     @overload
-    def read(self: Asset[HTTPClient], /) -> Coroutine[Any, Any, bytes]:
-        ...
+    def read(self: Asset[HTTPClient], /) -> Coroutine[Any, Any, bytes]: ...
 
     @overload
-    def read(self: Asset[SyncHTTPClient], /) -> bytes:
-        ...
+    def read(self: Asset[SyncHTTPClient], /) -> bytes: ...
 
     def read(self) -> Union[Coroutine[Any, Any, bytes], bytes]:
         """|maybecoro|

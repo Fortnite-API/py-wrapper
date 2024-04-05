@@ -30,22 +30,19 @@ import aiohttp
 import requests
 from typing_extensions import ParamSpec, Self
 
-from .cosmetics import CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
-from .new import NewBrCosmetics, NewCosmetics
-
 from .aes import Aes
 from .banner import Banner, BannerColor
-from .cosmetics import CosmeticBr
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
 from .creator_code import CreatorCode
 from .enums import *
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
+from .new import NewBrCosmetics, NewCosmetics
 from .news import GameModeNews, News
 from .playlist import Playlist
 
 # from .shop import BrShop
 from .stats import BrPlayerStats
-
 
 T = TypeVar('T')
 TC = TypeVar('TC')
@@ -86,13 +83,9 @@ class FortniteAPI:
         data = await self.http.get_cosmetics_tracks(language=(language and language.value))
         return [CosmeticTrack(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetics_br_new(self) -> NewBrCosmetics:
-        data = await self.http.get_cosmetics_br_new()
-        return NewBrCosmetics(data=data, http=self.http)
-
-    async def fetch_cosmetics_new(self) -> NewCosmetics:
-        data = await self.http.get_cosmetics_new()
-        return NewCosmetics(data=data, http=self.http)
+    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[HTTPClient]]:
+        data = await self.http.get_cosmetics_br(language=(language and language.value))
+        return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
     async def fetch_cosmetic_br(
         self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None
@@ -100,9 +93,15 @@ class FortniteAPI:
         data = await self.http.get_cosmetic_br(cosmetic_id, language=(language and language.value))
         return CosmeticBr(data=data, http=self.http)
 
-    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[HTTPClient]]:
-        data = await self.http.get_cosmetics_br(language=(language and language.value))
-        return [CosmeticBr(data=entry, http=self.http) for entry in data]
+    # NEW COSMETICS
+
+    async def fetch_cosmetics_br_new(self) -> NewBrCosmetics:
+        data = await self.http.get_cosmetics_br_new()
+        return NewBrCosmetics(data=data, http=self.http)
+
+    async def fetch_cosmetics_new(self) -> NewCosmetics:
+        data = await self.http.get_cosmetics_new()
+        return NewCosmetics(data=data, http=self.http)
 
     # AES
 
