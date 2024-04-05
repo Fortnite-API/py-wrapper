@@ -8,6 +8,7 @@ from fortnite_api.types.account import Account as AccountPayload
 TEST_ACCOUNT_ID = "4735ce9132924caf8a5b17789b40f79c"
 TEST_ACCOUNT_NAME = "Ninja"
 TEST_CREATOR_CODE = "ninja"
+TEST_COSMETIC_ID = "Backpack_BrakePedal"
 
 
 def test_sync_client_initialization():
@@ -108,3 +109,82 @@ def test_sync_fetch_playlist():
         assert first != playlists[1]
 
     assert playlists == playlists_en
+
+
+def test_async_fetch_cosmetics_cars():
+    with fn_api.SyncFortniteAPI() as client:
+        cosmetics_cars = client.fetch_cosmetics_cars()
+
+    for cosmetic in cosmetics_cars:
+        assert isinstance(cosmetic, fn_api.CosmeticCar)
+
+
+def test_async_fetch_cosmetics_instruments():
+    with fn_api.SyncFortniteAPI() as client:
+        cosmetics_instruments = client.fetch_cosmetics_instruments()
+
+    for cosmetic in cosmetics_instruments:
+        assert isinstance(cosmetic, fn_api.CosmeticInstrument)
+
+
+def test_async_fetch_cosmetics_lego_kits():
+    with fn_api.SyncFortniteAPI() as client:
+        lego_kits = client.fetch_cosmetics_lego_kits()
+
+    for kit in lego_kits:
+        assert isinstance(kit, fn_api.CosmeticLegoKit)
+
+
+def test_async_fetch_cosmetics_tracks():
+    with fn_api.SyncFortniteAPI() as client:
+        cosmetics_tracks = client.fetch_cosmetics_tracks()
+
+    for cosmetic in cosmetics_tracks:
+        assert isinstance(cosmetic, fn_api.CosmeticTrack)
+
+
+def test_async_fetch_cosmetics_br():
+    with fn_api.SyncFortniteAPI() as client:
+        cosmetics_br = client.fetch_cosmetics_br()
+
+    for cosmetic in cosmetics_br:
+        assert isinstance(cosmetic, fn_api.CosmeticBr)
+
+
+def test_async_fetch_cosmetic_br():
+    with fn_api.SyncFortniteAPI() as client:
+        cosmetic_br = client.fetch_cosmetic_br(TEST_COSMETIC_ID)
+
+    assert isinstance(cosmetic_br, fn_api.CosmeticBr)
+    assert cosmetic_br.id == TEST_COSMETIC_ID
+
+
+def test_async_fetch_cosmetics_br_new():
+    with fn_api.SyncFortniteAPI() as client:
+        new_cosmetics_br = client.fetch_cosmetics_br_new()
+
+    assert isinstance(new_cosmetics_br, fn_api.NewBrCosmetics)
+
+    assert isinstance(new_cosmetics_br.date, datetime.datetime)
+    assert new_cosmetics_br.build
+    assert new_cosmetics_br.previous_build
+
+
+def test_async_fetch_cosmetics_new():
+    with fn_api.SyncFortniteAPI() as client:
+        new_cosmetics = client.fetch_cosmetics_new()
+
+    assert isinstance(new_cosmetics, fn_api.NewCosmetics)
+
+    assert new_cosmetics.global_hash
+    assert new_cosmetics.date
+    assert new_cosmetics.global_last_addition
+    assert new_cosmetics.build
+    assert new_cosmetics.previous_build
+
+    assert isinstance(new_cosmetics.br, fn_api.NewCosmetic)
+    assert isinstance(new_cosmetics.tracks, fn_api.NewCosmetic)
+    assert isinstance(new_cosmetics.instruments, fn_api.NewCosmetic)
+    assert isinstance(new_cosmetics.cars, fn_api.NewCosmetic)
+    assert isinstance(new_cosmetics.lego, fn_api.NewCosmetic)
+    assert isinstance(new_cosmetics.lego_kits, fn_api.NewCosmetic)

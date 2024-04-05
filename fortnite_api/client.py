@@ -63,33 +63,27 @@ class FortniteAPI:
         await self.http.close()
 
     # COSMETICS
-    async def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar[HTTPClient]]:
+    async def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar]:
         data = await self.http.get_cosmetics_cars(language=(language and language.value))
         return [CosmeticCar(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetics_instruments(
-        self, *, language: Optional[GameLanguage] = None
-    ) -> List[CosmeticInstrument[HTTPClient]]:
+    async def fetch_cosmetics_instruments(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticInstrument]:
         data = await self.http.get_cosmetics_instruments(language=(language and language.value))
         return [CosmeticInstrument(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetics_lego_kits(
-        self, *, language: Optional[GameLanguage] = None
-    ) -> List[CosmeticLegoKit[HTTPClient]]:
+    async def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit]:
         data = await self.http.get_cosmetics_lego_kits(language=(language and language.value))
         return [CosmeticLegoKit(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack[HTTPClient]]:
+    async def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack]:
         data = await self.http.get_cosmetics_tracks(language=(language and language.value))
         return [CosmeticTrack(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[HTTPClient]]:
+    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr]:
         data = await self.http.get_cosmetics_br(language=(language and language.value))
         return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetic_br(
-        self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None
-    ) -> CosmeticBr[HTTPClient]:
+    async def fetch_cosmetic_br(self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None) -> CosmeticBr:
         data = await self.http.get_cosmetic_br(cosmetic_id, language=(language and language.value))
         return CosmeticBr(data=data, http=self.http)
 
@@ -110,7 +104,7 @@ class FortniteAPI:
         return Aes(data=data)
 
     # BANNERS
-    async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[HTTPClient]]:
+    async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner]:
         data = await self.http.get_banners(language=(language and language.value))
         return [Banner(data=entry, http=self.http) for entry in data]
 
@@ -192,6 +186,43 @@ class SyncFortniteAPI:
         self.http.close()
 
     # COSMETICS
+    def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_cars(language=(language and language.value))
+        return [CosmeticCar(data=entry, http=self.http) for entry in data]
+
+    def fetch_cosmetics_instruments(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> List[CosmeticInstrument[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_instruments(language=(language and language.value))
+        return [CosmeticInstrument(data=entry, http=self.http) for entry in data]
+
+    def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_lego_kits(language=(language and language.value))
+        return [CosmeticLegoKit(data=entry, http=self.http) for entry in data]
+
+    def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_tracks(language=(language and language.value))
+        return [CosmeticTrack(data=entry, http=self.http) for entry in data]
+
+    def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_br(language=(language and language.value))
+        return [CosmeticBr(data=entry, http=self.http) for entry in data]
+
+    def fetch_cosmetic_br(
+        self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None
+    ) -> CosmeticBr[SyncHTTPClient]:
+        data = self.http.get_cosmetic_br(cosmetic_id, language=(language and language.value))
+        return CosmeticBr(data=data, http=self.http)
+
+    # NEW COSMETICS
+
+    def fetch_cosmetics_br_new(self) -> NewBrCosmetics[SyncHTTPClient]:
+        data = self.http.get_cosmetics_br_new()
+        return NewBrCosmetics(data=data, http=self.http)
+
+    def fetch_cosmetics_new(self) -> NewCosmetics[SyncHTTPClient]:
+        data = self.http.get_cosmetics_new()
+        return NewCosmetics(data=data, http=self.http)
 
     # AES
 
