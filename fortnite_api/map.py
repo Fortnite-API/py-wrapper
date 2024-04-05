@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple
 
-from .abc import IdComparable
+from .abc import Hashable
 
 __all__: Tuple[str, ...] = ('Map', 'POI', 'POILocation')
 
@@ -41,7 +41,7 @@ class Map:
         self.raw_data = data
 
 
-class POI(IdComparable):
+class POI(Hashable):
     __slots__: Tuple[str, ...] = ('id', 'name', 'location', 'raw_data')
 
     def __init__(self, data: Dict[Any, Any]) -> None:

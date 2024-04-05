@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
-from .abc import IdComparable
+from .abc import Hashable
 from .utils import parse_time
 
 if TYPE_CHECKING:
@@ -82,7 +82,7 @@ class GameModeNews:
         self.raw_data: Dict[str, Any] = data
 
 
-class NewsMotd(IdComparable):
+class NewsMotd(Hashable):
     """Represents News of a specific game mode.
 
     Attributes

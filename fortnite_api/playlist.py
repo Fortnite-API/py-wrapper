@@ -26,14 +26,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
-from .abc import IdComparable
+from .abc import Hashable
 from .utils import parse_time
 
 if TYPE_CHECKING:
     import datetime
 
 
-class Playlist(IdComparable):
+class Playlist(Hashable):
     __slots__: Tuple[str, ...] = (
         'id',
         'name',

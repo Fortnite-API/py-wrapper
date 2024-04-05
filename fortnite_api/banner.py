@@ -26,14 +26,14 @@ from __future__ import annotations
 
 from typing import Any, Dict, Generic, Tuple
 
-from .abc import IdComparable
+from .abc import Hashable
 from .http import HTTPClientT
 from .images import Images
 
 __all__: Tuple[str, ...] = ('Banner', 'BannerColor')
 
 
-class Banner(IdComparable, Generic[HTTPClientT]):
+class Banner(Hashable, Generic[HTTPClientT]):
     """A representation of a banner given to the :class:`FortniteAPI` client
     as a response. This represents a banner within the Fortnite game.
 
@@ -81,7 +81,7 @@ class Banner(IdComparable, Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
 
-class BannerColor(IdComparable):
+class BannerColor(Hashable):
     __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]) -> None:

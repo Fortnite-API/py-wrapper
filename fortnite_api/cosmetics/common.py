@@ -27,7 +27,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Generic, List, Optional, TypeVar
 
-from ..abc import IdComparable
+from ..abc import Hashable
 from ..asset import Asset
 from ..http import HTTPClientT
 from ..images import Images
@@ -36,7 +36,7 @@ from ..utils import parse_time
 CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
 
 
-class Cosmetic(IdComparable, Generic[HTTPClientT]):
+class Cosmetic(Hashable, Generic[HTTPClientT]):
     """Represents a cosmetic. Every cosmetic type inherits from this class.
 
     Attributes

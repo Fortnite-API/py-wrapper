@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Dict, Tuple
 
-from .abc import IdComparable
+from .abc import Hashable
 
 if TYPE_CHECKING:
     from .types.account import Account as AccountPayload
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 __all__: Tuple[str, ...] = ('Account',)
 
 
-class Account(IdComparable):
+class Account(Hashable):
     """Represents a account.
 
     .. container:: operations
