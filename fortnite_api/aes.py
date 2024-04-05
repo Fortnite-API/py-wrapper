@@ -83,8 +83,8 @@ class Aes:
 
     Attributes
     ----------
-    main_key: :class:`str`
-        The main encryption key.
+    main_key: Optional[:class:`str`]
+        The main encryption key. Can be ``None`` if Fortnite was recently updated.
     build: :class:`str`
         The current build where the Aes key refers to.
     version: Optional[:class:`Version`]
@@ -100,7 +100,7 @@ class Aes:
     __slots__: Tuple[str, ...] = ('main_key', 'build', 'version', 'updated', 'dynamic_keys', 'raw_data')
 
     def __init__(self, data: AesPayload):
-        self.main_key: str = data['mainKey']
+        self.main_key: Optional[str] = data['mainKey']
         self.build: str = data['build']
 
         # In the case that the API gives us an invalid version, we will set it to None
@@ -113,9 +113,6 @@ class Aes:
         self.dynamic_keys: List[DynamicKey] = [DynamicKey(entry) for entry in data.get('dynamicKeys', [])]
         self.updated: datetime.datetime = parse_time(data['updated'])
         self.raw_data: AesPayload = data
-
-    def __str__(self):
-        return self.main_key
 
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, self.__class__):
