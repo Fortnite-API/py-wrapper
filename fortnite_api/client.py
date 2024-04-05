@@ -178,28 +178,6 @@ class FortniteAPI:
 
 
 class SyncFortniteAPI:
-    r"""A number of options can be passed to the :class:`FortniteAPI`.
-
-    Parameters
-    -----------
-    api_key: :class:`str`
-        The API key from Fortnite-API.com\profile to authenticate.
-    run_async: Optional[:class:`bool`]
-        A boolean whether the API should run in async mode or not.
-        Defaults set to ``True``, in which case the api runs sync.
-
-    Attributes
-    -----------
-    cosmetics: Union[:class:`SyncCosmeticEndpoints`, :class:`AsyncCosmeticEndpoints`]
-        The Cosmetic endpoints. The class depends whether the api runs sync or async.
-    creator_code: Union[:class:`SyncCreatorCodeEndpoints`, :class:`AsyncCreatorCodeEndpoints`]
-         The Creator Code endpoints. The class depends whether the api runs sync or async.
-    news: Union[:class:`SyncNewsEndpoints`, :class:`AsyncNewsEndpoints`]
-        The News endpoints. The class depends whether the api runs sync or async.
-    shop: Union[:class:`SyncShopEndpoints`, :class:`AsyncShopEndpoints`]
-        The Shop endpoints. The class depends whether the api runs sync or async.
-    """
-
     def __init__(self, api_key: Optional[str] = None, *, session: Optional[requests.Session] = None) -> None:
         self.http: SyncHTTPClient = SyncHTTPClient(session=session, token=api_key)
 
