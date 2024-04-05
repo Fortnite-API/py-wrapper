@@ -76,7 +76,7 @@ class HTTPMixin(abc.ABC):
 
         self.headers: Dict[str, Any] = {'User-Agent': self.user_agent}
         if self.token is not None:
-            self.headers['Authorization'] = self.token
+            self.headers['x-api-key'] = self.token
 
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any: ...
