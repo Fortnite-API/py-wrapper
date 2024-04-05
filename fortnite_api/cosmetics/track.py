@@ -24,8 +24,8 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from .common import Cosmetic
 from ..http import HTTPClientT
+from .common import Cosmetic
 
 
 class CosmeticTrack(Cosmetic[HTTPClientT]): ...

@@ -33,8 +33,7 @@ from ..http import HTTPClientT
 from ..images import Images
 from ..utils import parse_time
 
-
-CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]', covariant=True)
+CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
 
 
 class Cosmetic(IdComparable, Generic[HTTPClientT]):
