@@ -25,12 +25,12 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Generic, Dict, List, Optional
+from typing import Any, Dict, Generic, List, Optional, Type
 
-from .cosmetics import CosmeticT, CosmeticBr, CosmeticTrack, CosmeticInstrument, CosmeticCar, CosmeticLego, CosmeticLegoKit
-from .utils import parse_time
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
 from .enums import CosmeticType
 from .http import HTTPClientT
+from .utils import parse_time
 
 
 class NewCosmetic(Generic[CosmeticT]):
@@ -62,7 +62,7 @@ class NewCosmetic(Generic[CosmeticT]):
         *,
         type: CosmeticType,
         hash: Optional[str] = None,
-        last_addition: datetime.datetime,
+        last_addition: Optional[datetime.datetime] = None,
         items: List[CosmeticT],
         http: HTTPClientT,
     ) -> None:
@@ -70,7 +70,7 @@ class NewCosmetic(Generic[CosmeticT]):
 
         self.type: CosmeticType = type
         self.hash: Optional[str] = hash
-        self.last_addition: datetime.datetime = last_addition
+        self.last_addition: Optional[datetime.datetime] = last_addition
         self.items: List[CosmeticT] = items
 
 
@@ -146,61 +146,64 @@ class NewCosmetics(Generic[HTTPClientT]):
         self.date: datetime.datetime = parse_time(data['date'])
         self.global_hash: str = data['hashes']['all']
         self.global_last_addition: datetime.datetime = parse_time(data['lastAdditions']['all'])
+        self.raw_data: Dict[str, Any] = data
 
-        hashes = data['hashes']
-        last_additions = data['lastAdditions']
-        items = data['items']
-
-        br_items: List[Dict[str, Any]] = items['br'] or []
-        self.br: NewCosmetic[CosmeticBr[HTTPClientT]] = NewCosmetic(
-            type=CosmeticType.BR,
-            hash=hashes['br'],
-            last_addition=parse_time(last_additions['br']),
-            items=[CosmeticBr(data=item, http=http) for item in br_items],
-            http=self._http,
+        self.br: NewCosmetic[CosmeticBr[HTTPClientT]] = self._create_new_cosmetic(
+            cosmetic_type=CosmeticType.BR,
+            internal_key='br',
+            cosmetic_class=CosmeticBr,
         )
 
-        track_items: List[Dict[str, Any]] = items['tracks'] or []
-        self.tracks: NewCosmetic[CosmeticTrack[HTTPClientT]] = NewCosmetic(
-            type=CosmeticType.TRACKS,
-            hash=hashes['tracks'],
-            last_addition=parse_time(last_additions['tracks']),
-            items=[CosmeticTrack(data=item, http=self._http) for item in track_items],
-            http=self._http,
+        self.tracks: NewCosmetic[CosmeticTrack[HTTPClientT]] = self._create_new_cosmetic(
+            cosmetic_type=CosmeticType.TRACKS,
+            internal_key='tracks',
+            cosmetic_class=CosmeticTrack,
         )
 
-        instrument_items: List[Dict[str, Any]] = items['instruments'] or []
-        self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = NewCosmetic(
-            type=CosmeticType.INSTRUMENTS,
-            hash=hashes['instruments'],
-            last_addition=parse_time(last_additions['instruments']),
-            items=[CosmeticInstrument(data=item, http=self._http) for item in instrument_items],
-            http=self._http,
+        self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = self._create_new_cosmetic(
+            cosmetic_type=CosmeticType.INSTRUMENTS,
+            internal_key='instruments',
+            cosmetic_class=CosmeticInstrument,
         )
 
-        car_items: List[Dict[str, Any]] = items['cars'] or []
-        self.cars: NewCosmetic[CosmeticCar[HTTPClientT]] = NewCosmetic(
-            type=CosmeticType.CARS,
-            hash=hashes['cars'],
-            last_addition=parse_time(last_additions['cars']),
-            items=[CosmeticCar(data=item, http=self._http) for item in car_items],
-            http=self._http,
+        self.cars: NewCosmetic[CosmeticCar[HTTPClientT]] = self._create_new_cosmetic(
+            cosmetic_type=CosmeticType.CARS,
+            internal_key='cars',
+            cosmetic_class=CosmeticCar,
         )
 
-        lego_items: List[Dict[str, Any]] = items['lego'] or []
-        self.lego: NewCosmetic[CosmeticLego[HTTPClientT]] = NewCosmetic(
-            type=CosmeticType.LEGO,
-            hash=hashes['lego'],
-            last_addition=parse_time(last_additions['lego']),
-            items=[CosmeticLego(data=item, http=self._http) for item in lego_items],
-            http=self._http,
+        self.lego: NewCosmetic[CosmeticLego[HTTPClientT]] = self._create_new_cosmetic(
+            cosmetic_type=CosmeticType.LEGO,
+            internal_key='lego',
+            cosmetic_class=CosmeticLego,
         )
 
-        lego_kit_items: List[Dict[str, Any]] = items['legoKits'] or []
-        self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = NewCosmetic(
-            type=CosmeticType.LEGO_KITS,
-            hash=hashes['legoKits'],
-            last_addition=parse_time(last_additions['legoKits']),
-            items=[CosmeticLegoKit(data=item, http=self._http) for item in lego_kit_items],
+        self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = self._create_new_cosmetic(
+            cosmetic_type=CosmeticType.LEGO_KITS,
+            internal_key='legoKits',
+            cosmetic_class=CosmeticLegoKit,
+        )
+
+    def _create_new_cosmetic(
+        self,
+        *,
+        cosmetic_type: CosmeticType,
+        internal_key: str,
+        cosmetic_class: Type[CosmeticT],
+    ) -> NewCosmetic[CosmeticT]:
+        hashes = self.raw_data['hashes']
+        last_additions = self.raw_data['lastAdditions']
+        items = self.raw_data['items']
+
+        cosmetic_items: List[Dict[str, Any]] = items[internal_key] or []
+
+        last_addition_str = last_additions[internal_key]
+        last_addition: Optional[datetime.datetime] = parse_time(last_addition_str) if last_addition_str else None
+
+        return NewCosmetic(
+            type=cosmetic_type,
+            hash=hashes[internal_key],
+            last_addition=last_addition,
+            items=[cosmetic_class(data=item, http=self._http) for item in cosmetic_items],
             http=self._http,
         )
