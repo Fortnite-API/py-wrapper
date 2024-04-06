@@ -34,7 +34,7 @@ from ..utils import parse_time
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
 
 
-class CosmeticSet:
+class CosmeticBrSet:
     """Represents a set that a given cosmetic belongs to.
 
     Attributes
@@ -53,7 +53,7 @@ class CosmeticSet:
         self.backend_value: str = data['backendValue']
 
 
-class CosmeticIntroduction:
+class CosmeticBrIntroduction:
     """Holds some metadata about when a cosmetic was introduced.
 
     Attributes
@@ -75,7 +75,7 @@ class CosmeticIntroduction:
         self.backend_value: int = data['backendValue']
 
 
-class CosmeticVariantOption(Generic[HTTPClientT]):
+class CosmeticBrVariantOption(Generic[HTTPClientT]):
     """Represents a variant option for a cosmetic.
 
     Attributes
@@ -94,7 +94,7 @@ class CosmeticVariantOption(Generic[HTTPClientT]):
         self.image: Asset[HTTPClientT] = Asset[HTTPClientT](http=http, url=data['image'])
 
 
-class CosmeticVariant(Generic[HTTPClientT]):
+class CosmeticBrVariant(Generic[HTTPClientT]):
     """Represents a variant for a cosmetic.
 
     Attributes
@@ -103,7 +103,7 @@ class CosmeticVariant(Generic[HTTPClientT]):
         The channel of the variant.
     type: :class:`str`
         The type of the variant.
-    options: List[:class:`CosmeticVariantOption`]
+    options: List[:class:`CosmeticBrVariantOption`]
         The options for the variant, if any.
     """
 
@@ -111,8 +111,8 @@ class CosmeticVariant(Generic[HTTPClientT]):
         self.channel: str = data['channel']
         self.type: str = data['type']  # TODO: Move to enum eventually.
 
-        self.options: List[CosmeticVariantOption[HTTPClientT]] = [
-            CosmeticVariantOption[HTTPClientT](data=option, http=http) for option in data['options']
+        self.options: List[CosmeticBrVariantOption[HTTPClientT]] = [
+            CosmeticBrVariantOption[HTTPClientT](data=option, http=http) for option in data['options']
         ]
 
 
@@ -131,13 +131,13 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The cosmetic's rarity.
     series: Optional[:class:`CosmeticSeries`]
         The series of the cosmetic, if any.
-    set: Optional[:class:`CosmeticSet`]
+    set: Optional[:class:`CosmeticBrSet`]
         The set that the cosmetic belongs to, if any.
-    introduction: Optional[:class:`CosmeticIntroduction`]
+    introduction: Optional[:class:`CosmeticBrIntroduction`]
         Metadata about when the cosmetic was introduced, if available.
     images: Optional[:class:`CosmeticImages`]
         The images of the cosmetic.
-    variants: List[:class:`CosmeticVariant`]
+    variants: List[:class:`CosmeticBrVariant`]
         The variants of the cosmetic, if any.
     search_tags: List[:class:`CosmeticBrSearchTag`]
         The search tags of the cosmetic.
@@ -180,17 +180,17 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         self.series: Optional[CosmeticSeries[HTTPClientT]] = series and CosmeticSeries(http=http, data=series)
 
         _set = data.get('set')
-        self.set: Optional[CosmeticSet] = _set and CosmeticSet(data=_set)
+        self.set: Optional[CosmeticBrSet] = _set and CosmeticBrSet(data=_set)
 
         introduction = data.get('introduction')
-        self.introduction: Optional[CosmeticIntroduction] = introduction and CosmeticIntroduction(data=introduction)
+        self.introduction: Optional[CosmeticBrIntroduction] = introduction and CosmeticBrIntroduction(data=introduction)
 
         images = data.get('images')
         self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages(http=http, data=images)
 
         variants: List[Dict[str, Any]] = data.get('variants', None) or []
-        self.variants: List[CosmeticVariant[HTTPClientT]] = [
-            CosmeticVariant(data=variant, http=http) for variant in variants
+        self.variants: List[CosmeticBrVariant[HTTPClientT]] = [
+            CosmeticBrVariant(data=variant, http=http) for variant in variants
         ]
 
         search_tags: List[str] = data.get('searchTags', []) or []
