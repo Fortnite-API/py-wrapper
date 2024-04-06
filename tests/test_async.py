@@ -4,7 +4,6 @@ import aiohttp
 import pytest
 
 import fortnite_api as fn_api
-from fortnite_api.types.account import Account as AccountPayload
 
 TEST_ACCOUNT_ID = "4735ce9132924caf8a5b17789b40f79c"
 TEST_ACCOUNT_NAME = "Ninja"
@@ -98,7 +97,7 @@ async def test_async_creator_code():
     assert isinstance(creator_code, fn_api.CreatorCode)
     assert creator_code.code == TEST_CREATOR_CODE
 
-    mock_account_payload = AccountPayload(id=TEST_ACCOUNT_ID, name=TEST_ACCOUNT_NAME)
+    mock_account_payload = dict(id=TEST_ACCOUNT_ID, name=TEST_ACCOUNT_NAME)
     assert creator_code.account == fn_api.Account(mock_account_payload)
 
     assert creator_code.status is fn_api.CreatorCodeStatus.ACTIVE

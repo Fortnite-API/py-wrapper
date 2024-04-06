@@ -24,7 +24,6 @@ SOFTWARE.
 
 __version__ = '2.5.1'
 
-from . import types as types
 from .account import *
 from .aes import *
 from .banner import *
