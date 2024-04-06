@@ -16,7 +16,12 @@ with open('README.md') as f:
 
 extras_require = {
     'test': ['pytest', 'pytest-asyncio', 'pytest-cov'],
-    'docs': ['sphinx', 'sphinxcontrib_trio', 'sphinxcontrib-websupport', 'typing-extensions'],
+    'docs': [
+        'sphinx',
+        'sphinxcontrib_trio',
+        'sphinxcontrib-websupport',
+        'typing-extensions',
+    ],
 }
 
 with open('requirements.txt') as f:
