@@ -26,13 +26,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Tuple, Union, overload
 
-from ..enums import GameLanguage
-
-from .br import CosmeticBr
-
 from ..asset import Asset
+from ..enums import GameLanguage
 from ..http import HTTPClientT
 from ..utils import get_with_fallback
+from .br import CosmeticBr
 from .common import Cosmetic, CosmeticImages
 
 if TYPE_CHECKING:

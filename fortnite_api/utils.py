@@ -90,7 +90,10 @@ def copy_doc(obj: Docable) -> Callable[[Docable], Docable]:
     """Copy the docstring from another object"""
 
     def wrapped(funco: Docable) -> Docable:
-        funco.__doc__ = obj.__doc__
+        if obj.__doc__:
+            funco.__doc__ = obj.__doc__
+
+        return funco
 
     return wrapped
 
@@ -105,11 +108,38 @@ def prepend_doc(obj: Docable, sep: str = '') -> Callable[[Docable], Docable]:
             '''This is a doc string'''
 
         print(foo.__doc__)
-        >>> 'discord.Embed doc string[sep]This is a doc string'
+        >>> '<<discord.Embed doc string>>[sep]This is a doc string'
     """
 
     def wrapped(funco: Docable) -> Docable:
-        funco.__doc__ = f'{obj.__doc__}{sep}{funco.__doc__}'
+        if funco.__doc__ and obj.__doc__:
+            funco.__doc__ = f'{obj.__doc__}{sep}{funco.__doc__}'
+        elif funco.__doc__:
+            funco.__doc__ = f'{sep}{funco.__doc__}'
+
+        return funco
+
+    return wrapped
+
+
+def remove_prefix(text: str) -> Callable[[Docable], Docable]:
+    """A decorator used to remove a prefix from a docstring.
+
+    .. code-block:: python3
+
+        @remove_prefix('This is a doc string')
+        def foo(self, *args, **kwargs):
+            '''This is a doc string'''
+
+        print(foo.__doc__)
+        >>> 'This is a doc string'
+    """
+
+    def wrapped(funco: Docable) -> Docable:
+        if funco.__doc__:
+            funco.__doc__ = funco.__doc__.replace(text, '').strip()
+
+        return funco
 
     return wrapped
 
