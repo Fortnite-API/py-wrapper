@@ -53,6 +53,9 @@ cmake-build-*/
 # IntelliJ
 out/
 
+# Sphinx documentation
+docs/_build/
+
 # VS Code
 .vscode/
 dependabot.yml

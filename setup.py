@@ -5,7 +5,7 @@ from setuptools import setup
 
 version = ''
 with open('fortnite_api/__init__.py') as f:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)  # type: ignore
 
 if not version:
     raise RuntimeError('version is not set')
@@ -14,7 +14,10 @@ readme = ''
 with open('README.md') as f:
     readme = f.read()
 
-extras_require = {'test': ['pytest', 'pytest-asyncio', 'pytest-cov']}
+extras_require = {
+    'test': ['pytest', 'pytest-asyncio', 'pytest-cov'],
+    'docs': ['sphinx', 'sphinxcontrib_trio', 'sphinxcontrib-websupport', 'typing-extensions'],
+}
 
 with open('requirements.txt') as f:
     install_requires = f.read().splitlines()
@@ -45,10 +48,11 @@ setup(
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Topic :: Internet',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
