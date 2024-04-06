@@ -23,9 +23,31 @@ SOFTWARE.
 """
 
 from __future__ import annotations
+from typing import Any, Dict, List, Optional
+
+from ..asset import Asset
+
+from ..utils import get_with_fallback
 
 from ..http import HTTPClientT
-from .common import Cosmetic
+from .common import Cosmetic, CosmeticImages
 
 
-class CosmeticLego(Cosmetic[HTTPClientT]): ...
+class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        _wide = data.get('wide')
+        self.wide: Optional[Asset[HTTPClientT]] = _wide and Asset(http=http, url=_wide)
+
+
+class CosmeticLego(Cosmetic[HTTPClientT]):
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.cosmetic_id: str = data['cosmeticId']
+        self.sound_library_tags: List[str] = get_with_fallback(data, 'soundLibraryTags', list)
+
+        _images = data.get('images')
+        self.images: Optional[CosmeticLegoImages[HTTPClientT]] = _images and CosmeticLegoImages(data=_images, http=http)
+        self.path: Optional[str] = data.get('path')
