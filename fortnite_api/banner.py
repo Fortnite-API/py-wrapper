@@ -30,7 +30,7 @@ from .abc import Hashable
 from .http import HTTPClientT
 from .images import Images
 
-__all__: Tuple[str, ...] = ('Banner', 'BannerColor')
+__all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BannerColour')
 
 
 class Banner(Hashable, Generic[HTTPClientT]):
