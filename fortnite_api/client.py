@@ -513,7 +513,7 @@ class SyncFortniteAPI:
 
     @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_creator_code)
-    def fetch_creator_code(self, name: str, /) -> CreatorCode:
+    def fetch_creator_code(self, /, *, name: str) -> CreatorCode:
         data = self.http.get_creator_code(name)
         return CreatorCode(data=data)
 
