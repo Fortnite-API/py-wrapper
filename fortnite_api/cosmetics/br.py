@@ -186,11 +186,11 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         self.introduction: Optional[CosmeticIntroduction] = introduction and CosmeticIntroduction(data=introduction)
 
         images = data.get('images')
-        self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages[HTTPClientT](http=http, data=images)
+        self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages(http=http, data=images)
 
         variants: List[Dict[str, Any]] = data.get('variants', None) or []
         self.variants: List[CosmeticVariant[HTTPClientT]] = [
-            CosmeticVariant[HTTPClientT](data=variant, http=http) for variant in variants
+            CosmeticVariant(data=variant, http=http) for variant in variants
         ]
 
         search_tags: List[str] = data.get('searchTags', []) or []
@@ -205,5 +205,5 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         self.definition_path: Optional[str] = data.get('definitionPath', None)
         self.path: Optional[str] = data.get('path', None)
 
-        history: List[str] = data.get('shopHistory') or []
-        self.shop_history: List[datetime.datetime] = [parse_time(time) for time in history]
+        _shop_history: List[str] = data.get('shopHistory') or []
+        self.shop_history: List[datetime.datetime] = [parse_time(time) for time in _shop_history]
