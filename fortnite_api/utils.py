@@ -30,11 +30,12 @@ from typing import Any, Callable, Dict, Protocol, Tuple
 try:
     import orjson
 
-    _HAS_ORJSON: bool = True
+    _has_orjson: bool = True
 except ImportError:
     import json
 
-    _HAS_ORJSON: bool = False
+    _has_orjson: bool = False
+
 
 __all__: Tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json')
 
@@ -64,15 +65,15 @@ class Docable(Protocol):
     __doc__: str
 
 
-if _HAS_ORJSON:
+if _has_orjson:
 
     def to_json(string: str) -> Dict[Any, Any]:
-        return orjson.loads(string)
+        return orjson.loads(string)  # type: ignore
 
 else:
 
     def to_json(string: str) -> Dict[Any, Any]:
-        return json.loads(string)
+        return json.loads(string)  # type: ignore
 
 
 def parse_time(timestamp: str) -> datetime.datetime:
