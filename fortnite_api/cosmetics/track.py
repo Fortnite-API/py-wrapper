@@ -25,14 +25,38 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
+
+from ..asset import Asset
 
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time
 from .common import Cosmetic
 
+__all__: Tuple[str, ...] = ('CosmeticTrackDifficulty', 'CosmeticTrack')
+
 
 class CosmeticTrackDifficulty:
+    """Represents the difficulty of a track cosmetic in Fortnite.
+
+    Attributes
+    ----------
+    vocals: :class:`int`
+        The vocals difficulty of the track.
+    guitar: :class:`int`
+        The guitar difficulty of the track.
+    bass: :class:`int`
+        The bass difficulty of the track.
+    plastic_bass: :class:`int`
+        The plastic bass difficulty of the track.
+    drums: :class:`int`
+        The drums difficulty of the track.
+    plastic_drums: :class:`int`
+        The plastic drums difficulty of the track.
+    """
+
+    __slots__: Tuple[str, ...] = ('vocals', 'guitar', 'bass', 'plastic_bass', 'drums', 'plastic_drums')
+
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.vocals: int = data['vocals']
         self.guitar: int = data['guitar']
@@ -43,6 +67,53 @@ class CosmeticTrackDifficulty:
 
 
 class CosmeticTrack(Cosmetic[HTTPClientT]):
+    """Represents a track cosmetic in Fortnite.
+
+    This class inherits from :class:`Cosmetic`.
+
+    Attributes
+    ----------
+    dev_name: :class:`str`
+        The developer name of the track.
+    title: :class:`str`
+        The title of the track.
+    artist: :class:`str`
+        The artist of the track.
+    album: Optional[:class:`str`]
+        The album of the track.
+    release_year: :class:`int`
+        The release year of the track.
+    bpm: :class:`int`
+        The BPM of the track.
+    duration: :class:`int`
+        The duration of the track, in seconds.
+    difficulty: :class:`CosmeticTrackDifficulty`
+        The difficulty of the track.
+    gameplay_tags: List[:class:`str`]
+        The gameplay tags of the track.
+    genres: List[:class:`str`]
+        The genres of the track.
+    album_art: :class:`Asset`
+        The album art of the track.
+    shop_history: List[:class:`datetime.datetime`]
+        The shop history of the track.
+    """
+
+    __slots__: Tuple[str, ...] = (
+        'dev_name',
+        'title',
+        'artist',
+        'album',
+        'release_year',
+        'bpm',
+        'duration',
+        'difficulty',
+        'gameplay_tags',
+        'genres',
+        'album_art',
+        'shop_history',
+    )
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
@@ -57,7 +128,7 @@ class CosmeticTrack(Cosmetic[HTTPClientT]):
         self.difficulty: CosmeticTrackDifficulty = CosmeticTrackDifficulty(data=data['difficulty'])
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
         self.genres: List[str] = get_with_fallback(data, 'genres', list)
-        self.album_art: str = data['albumArt']
+        self.album_art: Asset[HTTPClientT] = Asset(http=http, url=data['albumArt'])
 
         self.shop_history: List[datetime.datetime] = [
             parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
