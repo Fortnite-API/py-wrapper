@@ -82,11 +82,35 @@ class Banner(Hashable, Generic[HTTPClientT]):
 
 
 class BannerColor(Hashable):
+    """Represents a color of a :class:`Banner`.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The id of the color.
+    color: :class:`str`
+        The color of the banner.
+    colour: :class:`str`
+        An alias to :attr:`color`.
+    category: :class:`str`
+        The category of the banner.
+    sub_category_group: :class:`int`
+        The sub category group of the banner.
+    raw_data: :class:`Dict[str, Any]`
+        The raw data of the banner color.
+    """
+
     __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]) -> None:
         self.id: str = data['id']
+
         self.color: str = data['color']
+        self.colour = self.color
+
         self.category: str = data['category']
-        self.sub_category_group: int = data['subCategoryGroup']  # TODO: Convert this to enum
+        self.sub_category_group: int = data['subCategoryGroup']  # TODO: Convert this to enum?
         self.raw_data = data
+
+
+BannerColour = BannerColor
