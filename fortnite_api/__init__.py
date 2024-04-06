@@ -25,6 +25,7 @@ SOFTWARE.
 __version__ = '2.5.1'
 
 from .account import *
+from .all import *
 from .aes import *
 from .banner import *
 from .client import FortniteAPI as FortniteAPI, SyncFortniteAPI as SyncFortniteAPI
