@@ -29,7 +29,6 @@ from typing import Any, Dict, Tuple
 from .abc import Hashable
 from .utils import get_with_fallback
 
-
 __all__: Tuple[str, ...] = ('Account',)
 
 

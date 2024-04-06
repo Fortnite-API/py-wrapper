@@ -1,4 +1,5 @@
 from typing import Any, Dict
+
 import pytest
 
 from fortnite_api import Account

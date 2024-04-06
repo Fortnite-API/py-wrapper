@@ -30,11 +30,10 @@ import aiohttp
 import requests
 from typing_extensions import ParamSpec, Self
 
-from .all import CosmeticsAll
-
 from .aes import Aes
+from .all import CosmeticsAll
 from .banner import Banner, BannerColor
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, CosmeticLego
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticTrack
 from .creator_code import CreatorCode
 from .enums import *
 from .http import HTTPClient, SyncHTTPClient

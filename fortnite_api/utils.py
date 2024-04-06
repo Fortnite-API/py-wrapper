@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, Dict, Protocol, Tuple, TypeVar, Hashable
+from typing import Any, Callable, Dict, Hashable, Protocol, Tuple, TypeVar
 
 try:
     import orjson

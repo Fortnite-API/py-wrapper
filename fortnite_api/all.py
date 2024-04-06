@@ -22,17 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import Any, Generic, Dict, List
-
-from .cosmetics.lego_kit import CosmeticLegoKit
-
-from .cosmetics.lego import CosmeticLego
-
-from .cosmetics.car import CosmeticCar
+from typing import Any, Dict, Generic, List
 
 from .cosmetics import CosmeticBr, CosmeticInstrument, CosmeticTrack
-from .utils import get_with_fallback
+from .cosmetics.car import CosmeticCar
+from .cosmetics.lego import CosmeticLego
+from .cosmetics.lego_kit import CosmeticLegoKit
 from .http import HTTPClientT
+from .utils import get_with_fallback
 
 
 class CosmeticsAll(Generic[HTTPClientT]):
