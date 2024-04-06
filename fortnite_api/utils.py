@@ -25,18 +25,20 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, Dict, Optional, Protocol, Tuple, overload
+from typing import Any, Callable, Dict, Protocol, Tuple
 
 try:
     import orjson
 
-    _has_orjson: bool = True
+    _HAS_ORJSON: bool = True
 except ImportError:
     import json
 
-    _has_orjson: bool = False
+    _HAS_ORJSON: bool = False
 
 __all__: Tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json')
+
+BACKUP_TIMESTAMP: str = '0001-01-01T00:00:00'
 
 
 class _MissingSentinel:
@@ -62,7 +64,7 @@ class Docable(Protocol):
     __doc__: str
 
 
-if _has_orjson:
+if _HAS_ORJSON:
 
     def to_json(string: str) -> Dict[Any, Any]:
         return orjson.loads(string)
@@ -74,6 +76,10 @@ else:
 
 
 def parse_time(timestamp: str) -> datetime.datetime:
+    # This can happen when the API is supposed to return a timestamp but there is no timestamp to give, so it yields an improper timestamp without a UTC offset.
+    if timestamp == BACKUP_TIMESTAMP:
+        return datetime.datetime.fromisoformat(timestamp)
+
     return datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S%z')
 
 
