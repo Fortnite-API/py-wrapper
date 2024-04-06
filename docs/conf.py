@@ -31,7 +31,6 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinxcontrib_trio',
-    'python_docs_theme',
 ]
 
 autodoc_member_order = 'bysource'
@@ -153,7 +152,7 @@ html_experimental_html5_writer = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'python_docs_theme'
+html_theme = 'alabaster'
 
 html_context = {}
 
