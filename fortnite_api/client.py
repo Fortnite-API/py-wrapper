@@ -223,6 +223,14 @@ class SyncFortniteAPI:
         data = self.http.get_cosmetic_br(cosmetic_id, language=(language and language.value))
         return CosmeticBr(data=data, http=self.http)
 
+    def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLego[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_lego(language=(language and language.value))
+        return [CosmeticLego(data=entry, http=self.http) for entry in data]
+
+    def fetch_cosmetics_all(self, *, language: Optional[GameLanguage] = None) -> CosmeticsAll[SyncHTTPClient]:
+        data = self.http.get_cosmetics_all(language=(language and language.value))
+        return CosmeticsAll(data=data, http=self.http)
+
     # NEW COSMETICS
 
     def fetch_cosmetics_br_new(self) -> NewBrCosmetics[SyncHTTPClient]:
