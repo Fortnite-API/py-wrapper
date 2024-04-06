@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, Dict, Protocol, Tuple
+from typing import Any, Callable, Dict, Protocol, Tuple, TypeVar, Hashable
 
 try:
     import orjson
@@ -36,6 +36,8 @@ except ImportError:
 
     _has_orjson: bool = False
 
+K_co = TypeVar('K_co', bound='Hashable', covariant=True)
+V_co = TypeVar('V_co', covariant=True)
 
 __all__: Tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json')
 
@@ -110,3 +112,16 @@ def prepend_doc(obj: Docable, sep: str = '') -> Callable[[Docable], Docable]:
         funco.__doc__ = f'{obj.__doc__}{sep}{funco.__doc__}'
 
     return wrapped
+
+
+def get_with_fallback(dict: Dict[K_co, V_co], key: K_co, default_factory: Callable[[], V_co]) -> V_co:
+    result = dict.get(key, MISSING)
+    if result is MISSING:
+        # Use the default factory
+        return default_factory()
+
+    if not result:
+        # Use the default factory
+        return default_factory()
+
+    return result
