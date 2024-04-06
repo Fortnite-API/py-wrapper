@@ -123,6 +123,15 @@ async def test_async_fetch_playlist():
 
 
 @pytest.mark.asyncio
+async def test_async_fetch_cosmetics_br():
+    async with fn_api.FortniteAPI() as client:
+        cosmetics_br = await client.fetch_cosmetics_br()
+
+    for cosmetic in cosmetics_br:
+        assert isinstance(cosmetic, fn_api.CosmeticBr)
+
+
+@pytest.mark.asyncio
 async def test_async_fetch_cosmetics_cars():
     async with fn_api.FortniteAPI() as client:
         cosmetics_cars = await client.fetch_cosmetics_cars()
@@ -150,21 +159,21 @@ async def test_async_fetch_cosmetics_lego_kits():
 
 
 @pytest.mark.asyncio
+async def test_async_fetch_cosmetics_lego():
+    async with fn_api.FortniteAPI() as client:
+        lego = await client.fetch_cosmetics_lego()
+
+    for lego in lego:
+        assert isinstance(lego, fn_api.CosmeticLego)
+
+
+@pytest.mark.asyncio
 async def test_async_fetch_cosmetics_tracks():
     async with fn_api.FortniteAPI() as client:
         cosmetics_tracks = await client.fetch_cosmetics_tracks()
 
     for cosmetic in cosmetics_tracks:
         assert isinstance(cosmetic, fn_api.CosmeticTrack)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetics_br():
-    async with fn_api.FortniteAPI() as client:
-        cosmetics_br = await client.fetch_cosmetics_br()
-
-    for cosmetic in cosmetics_br:
-        assert isinstance(cosmetic, fn_api.CosmeticBr)
 
 
 @pytest.mark.asyncio
@@ -207,3 +216,19 @@ async def test_async_fetch_cosmetics_new():
     assert isinstance(new_cosmetics.cars, fn_api.NewCosmetic)
     assert isinstance(new_cosmetics.lego, fn_api.NewCosmetic)
     assert isinstance(new_cosmetics.lego_kits, fn_api.NewCosmetic)
+
+
+@pytest.mark.asyncio
+async def test_async_fetch_cosmetics_all():
+    async with fn_api.FortniteAPI() as client:
+        cosmetics_all = await client.fetch_cosmetics_all()
+
+    assert isinstance(cosmetics_all, fn_api.CosmeticsAll)
+
+    assert cosmetics_all.br
+    assert cosmetics_all.tracks
+    assert cosmetics_all.instruments
+    assert cosmetics_all.cars
+    assert cosmetics_all.lego
+    assert cosmetics_all.lego_kits
+    assert cosmetics_all.raw_data
