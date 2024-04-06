@@ -23,12 +23,12 @@ SOFTWARE.
 """
 
 from __future__ import annotations
+
 import datetime
 from typing import Any, Dict, List, Optional
 
-from ..utils import get_with_fallback, parse_time
-
 from ..http import HTTPClientT
+from ..utils import get_with_fallback, parse_time
 from .common import Cosmetic
 
 

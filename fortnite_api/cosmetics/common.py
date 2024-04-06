@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
 
 from ..abc import Hashable
 from ..asset import Asset
@@ -34,6 +34,14 @@ from ..images import Images
 from ..utils import get_with_fallback, parse_time
 
 CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
+
+__all__: Tuple[str, ...] = (
+    'Cosmetic',
+    'CosmeticType',
+    'CosmeticRarity',
+    'CosmeticSeries',
+    'CosmeticImages',
+)
 
 
 class Cosmetic(Hashable, Generic[HTTPClientT]):
@@ -48,6 +56,8 @@ class Cosmetic(Hashable, Generic[HTTPClientT]):
     raw_data: :class:`dict`
         The raw data of the cosmetic.
     """
+
+    __slots__: Tuple[str, ...] = ('id', 'added', 'raw_data')
 
     def __init__(
         self,
@@ -75,6 +85,8 @@ class CosmeticType:
         The internal marker of the cosmetic type.
     """
 
+    __slots__: Tuple[str, ...] = ('value', 'display_value', 'backend_value')
+
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.value: str = data['value']
         self.display_value: str = data['displayValue']
@@ -93,6 +105,8 @@ class CosmeticRarity:
     backend_value: :class:`str`
         The internal marker of the cosmetic rarity.
     """
+
+    __slots__: Tuple[str, ...] = ('value', 'display_value', 'backend_value')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.value: str = data['value']
@@ -114,6 +128,8 @@ class CosmeticSeries(Generic[HTTPClientT]):
     colors: List[:class:`str`]
         A list of colors that are associated with the cosmetic series.
     """
+
+    __slots__: Tuple[str, ...] = ('value', 'backend_value', 'image', 'colors')
 
     def __init__(
         self,
@@ -144,6 +160,8 @@ class CosmeticImages(Images[HTTPClientT]):
     other: Dict[:class:`str`, :class:`Asset`]
         A mapping other images to their respective asset.
     """
+
+    __slots__: Tuple[str, ...] = ('featured', 'lego', 'other')
 
     def __init__(
         self,

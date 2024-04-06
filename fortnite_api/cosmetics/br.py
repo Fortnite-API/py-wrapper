@@ -25,13 +25,15 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, Generic, List, Optional
+from typing import Any, Dict, Generic, List, Optional, Tuple
 
 from ..asset import Asset
 from ..enums import CosmeticBrSearchTag
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
+
+__all__: Tuple[str, ...] = ('CosmeticBrSet', 'CosmeticBrIntroduction', 'CosmeticBrVariantOption', 'CosmeticBr')
 
 
 class CosmeticBrSet:
@@ -46,6 +48,8 @@ class CosmeticBrSet:
     backend_value: :class:`str`
         The backend value of this set.
     """
+
+    __slots__: Tuple[str, ...] = ('value', 'text', 'backend_value')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.value: str = data['value']
@@ -68,6 +72,8 @@ class CosmeticBrIntroduction:
         The backend value of this introduction.
     """
 
+    __slots__: Tuple[str, ...] = ('chapter', 'season', 'text', 'backend_value')
+
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.chapter: int = int(data['chapter'])
         self.season: str = data['season']
@@ -88,6 +94,8 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
         The image of the variant option.
     """
 
+    __slots__: Tuple[str, ...] = ('tag', 'name', 'image')
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.tag: str = data['tag']
         self.name: str = data['name']
@@ -106,6 +114,8 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
     options: List[:class:`CosmeticBrVariantOption`]
         The options for the variant, if any.
     """
+
+    __slots__: Tuple[str, ...] = ('channel', 'type', 'options')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.channel: str = data['channel']
@@ -158,6 +168,27 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the cosmetic.
     """
+
+    __slots__: Tuple[str, ...] = (
+        'name',
+        'description',
+        'type',
+        'rarity',
+        'series',
+        'set',
+        'introduction',
+        'images',
+        'variants',
+        'search_tags',
+        'gameplay_tags',
+        'meta_tags',
+        'showcase_video',
+        'dynamic_pak_id',
+        'display_asset_path',
+        'definition_path',
+        'path',
+        'shop_history',
+    )
 
     def __init__(
         self,

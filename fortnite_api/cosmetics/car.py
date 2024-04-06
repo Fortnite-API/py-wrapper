@@ -23,16 +23,62 @@ SOFTWARE.
 """
 
 from __future__ import annotations
-import datetime
-from typing import Any, Dict, List, Optional
 
-from ..utils import get_with_fallback, parse_time
+import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 from ..http import HTTPClientT
+from ..utils import get_with_fallback, parse_time
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
+
+__all__: Tuple[str, ...] = ('CosmeticCar',)
 
 
 class CosmeticCar(Cosmetic[HTTPClientT]):
+    """Represents a car cosmetic in Fortnite.
+
+    This class inherits from :class:`Cosmetic`.
+
+    Attributes
+    ----------
+    vehicle_id: :class:`str`
+        The ID of the vehicle.
+    name: :class:`str`
+        The name of the car.
+    description: :class:`str`
+        The description of the car.
+    type: Optional[:class:`CosmeticType`]
+        The type of the car.
+    rarity: Optional[:class:`CosmeticRarity`]
+        The rarity of the car.
+    images: Optional[:class:`CosmeticImages`]
+        Any car images.
+    series: Optional[:class:`CosmeticSeries`]
+        The series of the car.
+    gameplay_tags: List[:class:`str`]
+        The gameplay tags of the car.
+    path: Optional[:class:`str`]
+        The path of the car.
+    showcase_video: Optional[:class:`str`]
+        The showcase video of the car.
+    shop_history: List[:class:`datetime.datetime`]
+        A list of datetimes representing the shop history of the car.
+    """
+
+    __slots__: Tuple[str, ...] = (
+        'vehicle_id',
+        'name',
+        'description',
+        'type',
+        'rarity',
+        'images',
+        'series',
+        'gameplay_tags',
+        'path',
+        'showcase_video',
+        'shop_history',
+    )
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 

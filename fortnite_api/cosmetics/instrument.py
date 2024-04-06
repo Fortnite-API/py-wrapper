@@ -25,15 +25,57 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, Optional, List
-
-from ..utils import get_with_fallback, parse_time
+from typing import Any, Dict, List, Optional, Tuple
 
 from ..http import HTTPClientT
+from ..utils import get_with_fallback, parse_time
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
+
+__all__: Tuple[str, ...] = ('CosmeticInstrument',)
 
 
 class CosmeticInstrument(Cosmetic[HTTPClientT]):
+    """Represents an instrument cosmetic in Fortnite.
+
+    This class inherits from :class:`Cosmetic`.
+
+    Attributes
+    ----------
+    name: :class:`str`
+        The name of the instrument.
+    description: :class:`str`
+        The description of the instrument.
+    type: Optional[:class:`CosmeticType`]
+        The type of the instrument.
+    rarity: Optional[:class:`CosmeticRarity`]
+        The rarity of the instrument.
+    images: Optional[:class:`CosmeticImages`]
+        Any instrument images.
+    series: Optional[:class:`CosmeticSeries`]
+        The series of the instrument.
+    gameplay_tags: List[:class:`str`]
+        The gameplay tags of the instrument.
+    path: Optional[:class:`str`]
+        The path of the instrument.
+    showcase_video: Optional[:class:`str`]
+        The showcase video of the instrument.
+    shop_history: List[:class:`datetime.datetime`]
+        The shop history of the instrument.
+    """
+
+    __slots__: Tuple[str, ...] = (
+        'name',
+        'description',
+        'type',
+        'rarity',
+        'images',
+        'series',
+        'gameplay_tags',
+        'path',
+        'showcase_video',
+        'shop_history',
+    )
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 

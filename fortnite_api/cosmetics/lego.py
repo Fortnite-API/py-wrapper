@@ -23,13 +23,12 @@ SOFTWARE.
 """
 
 from __future__ import annotations
+
 from typing import Any, Dict, List, Optional
 
 from ..asset import Asset
-
-from ..utils import get_with_fallback
-
 from ..http import HTTPClientT
+from ..utils import get_with_fallback
 from .common import Cosmetic, CosmeticImages
 
 
