@@ -24,12 +24,11 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Tuple
+from typing import Any, Dict, Tuple
 
 from .abc import Hashable
+from .utils import get_with_fallback
 
-if TYPE_CHECKING:
-    from .types.account import Account as AccountPayload
 
 __all__: Tuple[str, ...] = ('Account',)
 
@@ -66,11 +65,13 @@ class Account(Hashable):
 
     __slots__: Tuple[str, ...] = ('id', 'name', 'raw_data', 'external_auths')
 
-    def __init__(self, data: AccountPayload) -> None:
+    def __init__(self, data: Dict[str, Any]) -> None:
         self.id: str = data['id']
         self.name: str = data['name']
-        self.raw_data: AccountPayload = data
-        self.external_auths: Dict[Any, Any] = data.get('external_auths', {})  # Adding when User lookup feature is enabled
+        self.raw_data: Dict[str, Any] = data
+        self.external_auths: Dict[Any, Any] = get_with_fallback(
+            data, 'externalAuths', dict
+        )  # Adding when User lookup feature is enabled
 
     def __str__(self) -> str:
         return self.name

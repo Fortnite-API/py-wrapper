@@ -1,13 +1,13 @@
 from datetime import datetime, timezone
+from typing import Any, Dict
 
 import pytest
 
 from fortnite_api.aes import Aes, Version
-from fortnite_api.types.aes import Aes as AesPayload
 
 
 @pytest.fixture
-def sample_aes_data() -> AesPayload:
+def sample_aes_data() -> Dict[str, Any]:
     return {
         'mainKey': 'test_main_key',
         'build': '++Fortnite+Release-29.10-CL-32567225-Windows',
@@ -22,7 +22,7 @@ def sample_aes_data() -> AesPayload:
     }
 
 
-def test_aes_initialization(sample_aes_data: AesPayload):
+def test_aes_initialization(sample_aes_data: Dict[str, Any]):
     aes = Aes(sample_aes_data)
 
     assert aes.main_key == 'test_main_key'
@@ -36,14 +36,14 @@ def test_aes_initialization(sample_aes_data: AesPayload):
     assert aes.raw_data == sample_aes_data
 
 
-def test_aes_equality(sample_aes_data: AesPayload):
+def test_aes_equality(sample_aes_data: Dict[str, Any]):
     aes1 = Aes(sample_aes_data)
     aes2 = Aes(sample_aes_data)
 
     assert aes1 == aes2
 
 
-def test_aes_inequality(sample_aes_data: AesPayload):
+def test_aes_inequality(sample_aes_data: Dict[str, Any]):
     aes1 = Aes(sample_aes_data)
     aes2 = Aes(sample_aes_data)
     aes2.main_key = 'different_main_key'

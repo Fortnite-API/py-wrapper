@@ -26,14 +26,12 @@ from __future__ import annotations
 
 import dataclasses
 import re
-from typing import TYPE_CHECKING, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
 from .utils import parse_time
 
 if TYPE_CHECKING:
     import datetime
-
-    from .types.aes import Aes as AesPayload, DynamicKey as DynamicKeyPayload
 
 __all__: Tuple[str, ...] = ('Aes', 'DynamicKey')
 
@@ -99,7 +97,7 @@ class Aes:
 
     __slots__: Tuple[str, ...] = ('main_key', 'build', 'version', 'updated', 'dynamic_keys', 'raw_data')
 
-    def __init__(self, data: AesPayload):
+    def __init__(self, data: Dict[str, Any]):
         self.main_key: Optional[str] = data['mainKey']
         self.build: str = data['build']
 
@@ -112,7 +110,7 @@ class Aes:
 
         self.dynamic_keys: List[DynamicKey] = [DynamicKey(entry) for entry in data.get('dynamicKeys', [])]
         self.updated: datetime.datetime = parse_time(data['updated'])
-        self.raw_data: AesPayload = data
+        self.raw_data: Dict[str, Any] = data
 
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, self.__class__):
@@ -173,11 +171,11 @@ class DynamicKey:
 
     __slots__: Tuple[str, ...] = ('pak_filename', 'pak_guid', 'key', 'raw_data')
 
-    def __init__(self, data: DynamicKeyPayload):
+    def __init__(self, data: Dict[str, Any]):
         self.pak_filename: str = data['pakFilename']
         self.pak_guid: str = data['pakGuid']
         self.key: str = data['key']
-        self.raw_data: DynamicKeyPayload = data
+        self.raw_data: Dict[str, Any] = data
 
     def __hash__(self) -> int:
         return hash((self.pak_filename, self.pak_guid, self.key))
