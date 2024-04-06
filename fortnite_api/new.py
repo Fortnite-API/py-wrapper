@@ -30,7 +30,7 @@ from typing import Any, Dict, Generic, List, Optional, Type
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
 from .enums import CosmeticType
 from .http import HTTPClientT
-from .utils import parse_time
+from .utils import get_with_fallback, parse_time
 
 
 class NewCosmetic(Generic[CosmeticT]):
@@ -195,7 +195,7 @@ class NewCosmetics(Generic[HTTPClientT]):
         last_additions = self.raw_data['lastAdditions']
         items = self.raw_data['items']
 
-        cosmetic_items: List[Dict[str, Any]] = items[internal_key] or []
+        cosmetic_items: List[Dict[str, Any]] = get_with_fallback(items, internal_key, list)
 
         last_addition_str = last_additions[internal_key]
         last_addition: Optional[datetime.datetime] = parse_time(last_addition_str) if last_addition_str else None
