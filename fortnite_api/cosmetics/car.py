@@ -26,7 +26,7 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, List, Optional
 
-from ..utils import parse_time
+from ..utils import get_with_fallback, parse_time
 
 from ..http import HTTPClientT
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
@@ -52,9 +52,10 @@ class CosmeticCar(Cosmetic[HTTPClientT]):
         _series = data.get('series')
         self.series: Optional[CosmeticSeries[HTTPClientT]] = _series and CosmeticSeries(data=_series, http=self._http)
 
-        self.gameplay_tags: List[str] = data.get('gameplayTags', []) or []
+        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
         self.path: Optional[str] = data.get('path')
         self.showcase_video: Optional[str] = data.get('showcaseVideo')
 
-        _shop_history: List[str] = data.get('shopHistory') or []
-        self.shop_history: List[datetime.datetime] = [parse_time(time) for time in _shop_history]
+        self.shop_history: List[datetime.datetime] = [
+            parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
+        ]

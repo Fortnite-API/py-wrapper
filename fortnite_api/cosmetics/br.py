@@ -30,7 +30,7 @@ from typing import Any, Dict, Generic, List, Optional
 from ..asset import Asset
 from ..enums import CosmeticBrSearchTag
 from ..http import HTTPClientT
-from ..utils import parse_time
+from ..utils import get_with_fallback, parse_time
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
 
 
@@ -91,7 +91,7 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.tag: str = data['tag']
         self.name: str = data['name']
-        self.image: Asset[HTTPClientT] = Asset[HTTPClientT](http=http, url=data['image'])
+        self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
 
 
 class CosmeticBrVariant(Generic[HTTPClientT]):
@@ -112,7 +112,7 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
         self.type: str = data['type']  # TODO: Move to enum eventually.
 
         self.options: List[CosmeticBrVariantOption[HTTPClientT]] = [
-            CosmeticBrVariantOption[HTTPClientT](data=option, http=http) for option in data['options']
+            CosmeticBrVariantOption(data=option, http=http) for option in data['options']
         ]
 
 
@@ -188,22 +188,23 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         images = data.get('images')
         self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages(http=http, data=images)
 
-        variants: List[Dict[str, Any]] = data.get('variants', None) or []
+        variants: List[Dict[str, Any]] = get_with_fallback(data, 'variants', list)
         self.variants: List[CosmeticBrVariant[HTTPClientT]] = [
             CosmeticBrVariant(data=variant, http=http) for variant in variants
         ]
 
-        search_tags: List[str] = data.get('searchTags', []) or []
+        search_tags: List[str] = get_with_fallback(data, 'searchTags', list)
         self.search_tags: List[CosmeticBrSearchTag] = [CosmeticBrSearchTag(tag) for tag in search_tags]
 
-        self.gameplay_tags: List[str] = data.get('gameplayTags', []) or []
-        self.meta_tags: List[str] = data.get('metaTags', []) or []
+        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.meta_tags: List[str] = get_with_fallback(data, 'metaTags', list)
 
-        self.showcase_video: Optional[str] = data.get('showcaseVideo', None)
-        self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId', None)
-        self.display_asset_path: Optional[str] = data.get('displayAssetPath', None)
-        self.definition_path: Optional[str] = data.get('definitionPath', None)
-        self.path: Optional[str] = data.get('path', None)
+        self.showcase_video: Optional[str] = data.get('showcaseVideo')
+        self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId')
+        self.display_asset_path: Optional[str] = data.get('displayAssetPath')
+        self.definition_path: Optional[str] = data.get('definitionPath')
+        self.path: Optional[str] = data.get('path')
 
-        _shop_history: List[str] = data.get('shopHistory') or []
-        self.shop_history: List[datetime.datetime] = [parse_time(time) for time in _shop_history]
+        self.shop_history: List[datetime.datetime] = [
+            parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
+        ]

@@ -31,7 +31,7 @@ from ..abc import Hashable
 from ..asset import Asset
 from ..http import HTTPClientT
 from ..images import Images
-from ..utils import parse_time
+from ..utils import get_with_fallback, parse_time
 
 CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
 
@@ -125,9 +125,9 @@ class CosmeticSeries(Generic[HTTPClientT]):
         self.backend_value: str = data['backendValue']
 
         image = data.get('image')
-        self.image: Optional[Asset[HTTPClientT]] = image and Asset[HTTPClientT](http=http, url=image)
+        self.image: Optional[Asset[HTTPClientT]] = image and Asset(http=http, url=image)
 
-        self.colors: List[str] = data['colors'] or []
+        self.colors: List[str] = get_with_fallback(data, 'colors', list)
 
 
 class CosmeticImages(Images[HTTPClientT]):
@@ -154,13 +154,11 @@ class CosmeticImages(Images[HTTPClientT]):
         super().__init__(data=data, http=http)
 
         featured = data.get('featured')
-        self.featured: Optional[Asset[HTTPClientT]] = featured and Asset[HTTPClientT](http=http, url=featured)
+        self.featured: Optional[Asset[HTTPClientT]] = featured and Asset(http=http, url=featured)
 
         lego = data.get('lego')
-        self.lego: Optional[Asset[HTTPClientT]] = lego and Asset[HTTPClientT](http=http, url=lego)
+        self.lego: Optional[Asset[HTTPClientT]] = lego and Asset(http=http, url=lego)
 
         # Mapping of str to Asset. In testing all I have found is "background" in this mapping.
-        other: Dict[str, str] = data.get('other', {}) or {}
-        self.other: Dict[str, Asset[HTTPClientT]] = {
-            key: Asset[HTTPClientT](http=http, url=value) for key, value in other.items()
-        }
+        other: Dict[str, str] = get_with_fallback(data, 'other', dict)
+        self.other: Dict[str, Asset[HTTPClientT]] = {key: Asset(http=http, url=value) for key, value in other.items()}

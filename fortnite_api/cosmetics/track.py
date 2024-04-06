@@ -26,7 +26,7 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, List, Optional
 
-from ..utils import parse_time
+from ..utils import get_with_fallback, parse_time
 
 from ..http import HTTPClientT
 from .common import Cosmetic
@@ -55,9 +55,10 @@ class CosmeticTrack(Cosmetic[HTTPClientT]):
         self.duration: int = data['duration']
 
         self.difficulty: CosmeticTrackDifficulty = CosmeticTrackDifficulty(data=data['difficulty'])
-        self.gameplay_tags: List[str] = data.get('gameplayTags') or []
-        self.genres: List[str] = data.get('genres') or []
+        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.genres: List[str] = get_with_fallback(data, 'genres', list)
         self.album_art: str = data['albumArt']
 
-        _shop_history: List[str] = data.get('shopHistory') or []
-        self.shop_history: List[datetime.datetime] = [parse_time(time) for time in _shop_history]
+        self.shop_history: List[datetime.datetime] = [
+            parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
+        ]
