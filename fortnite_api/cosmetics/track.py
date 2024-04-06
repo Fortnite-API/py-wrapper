@@ -23,9 +23,41 @@ SOFTWARE.
 """
 
 from __future__ import annotations
+import datetime
+from typing import Any, Dict, List, Optional
+
+from ..utils import parse_time
 
 from ..http import HTTPClientT
 from .common import Cosmetic
 
 
-class CosmeticTrack(Cosmetic[HTTPClientT]): ...
+class CosmeticTrackDifficulty:
+    def __init__(self, *, data: Dict[str, Any]) -> None:
+        self.vocals: int = data['vocals']
+        self.guitar: int = data['guitar']
+        self.bass: int = data['bass']
+        self.plastic_bass: int = data['plasticBass']
+        self.drums: int = data['drums']
+        self.plastic_drums: int = data['plasticDrums']
+
+
+class CosmeticTrack(Cosmetic[HTTPClientT]):
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.dev_name: str = data['devName']
+        self.title: str = data['title']
+        self.artist: str = data['artist']
+        self.album: Optional[str] = data.get('album')
+        self.release_year: int = data['releaseYear']
+        self.bpm: int = data['bpm']
+        self.duration: int = data['duration']
+
+        self.difficulty: CosmeticTrackDifficulty = CosmeticTrackDifficulty(data=data['difficulty'])
+        self.gameplay_tags: List[str] = data.get('gameplayTags') or []
+        self.genres: List[str] = data.get('genres') or []
+        self.album_art: str = data['albumArt']
+
+        _shop_history: List[str] = data.get('shopHistory') or []
+        self.shop_history: List[datetime.datetime] = [parse_time(time) for time in _shop_history]
