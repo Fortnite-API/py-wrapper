@@ -69,8 +69,9 @@ class Account(Hashable):
         self.id: str = data['id']
         self.name: str = data['name']
         self.raw_data: Dict[str, Any] = data
+
         self.external_auths: Dict[Any, Any] = get_with_fallback(
-            data, 'externalAuths', dict
+            data, 'external_auths', dict
         )  # Adding when User lookup feature is enabled
 
     def __str__(self) -> str:
