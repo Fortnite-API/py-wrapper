@@ -33,6 +33,26 @@ from .utils import get_with_fallback
 
 
 class CosmeticsAll(Generic[HTTPClientT]):
+    """A class that represents a request to get all cosmetics.
+
+    Attributes
+    ----------
+    br: List[:class:`CosmeticBr`]
+        The battle royale cosmetics.
+    tracks: List[:class:`CosmeticTrack`]
+        The tracks cosmetics.
+    instruments: List[:class:`CosmeticInstrument`]
+        The instruments cosmetics.
+    cars: List[:class:`CosmeticCar`]
+        The cars cosmetics.
+    lego: List[:class:`CosmeticLego`]
+        The lego cosmetics.
+    lego_kits: List[:class:`CosmeticLegoKit`]
+        The lego kits cosmetics.
+    raw_data: Dict[:class:`str`, Any]
+        The raw data of the cosmetics.
+    """
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self._http: HTTPClientT = http
 
