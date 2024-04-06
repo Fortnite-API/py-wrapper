@@ -162,7 +162,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO (returns all cosmetics, not just BR)
     def get_cosmetics_all(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics')
         params: Dict[str, str] = {}
