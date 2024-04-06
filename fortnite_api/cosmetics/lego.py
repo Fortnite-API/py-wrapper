@@ -24,15 +24,34 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Tuple, Union, overload
+
+from ..enums import GameLanguage
+
+from .br import CosmeticBr
 
 from ..asset import Asset
 from ..http import HTTPClientT
 from ..utils import get_with_fallback
 from .common import Cosmetic, CosmeticImages
 
+if TYPE_CHECKING:
+    from ..http import HTTPClient, SyncHTTPClient
+
+__all__: Tuple[str, ...] = ('CosmeticLego', 'CosmeticLegoImages')
+
 
 class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
+    """A class representing the images of a lego cosmetic.
+
+    This class inherits from :class:`CosmeticImages`.
+
+    Attributes
+    ----------
+    wide: Optional[:class:`Asset`]
+        The wide image of the lego cosmetic.
+    """
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
@@ -41,6 +60,24 @@ class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
 
 
 class CosmeticLego(Cosmetic[HTTPClientT]):
+    """Represents a Lego cosmetic.
+
+    This class inherits from :class:`Cosmetic`.
+
+    Attributes
+    ----------
+    cosmetic_id: :class:`str`
+        The ID of the cosmetic that this lego cosmetic is based on.
+    sound_library_tags: List[:class:`str`]
+        The sound library tags of the lego cosmetic.
+    images: Optional[:class:`CosmeticLegoImages`]
+        The images of the lego cosmetic.
+    path: Optional[:class:`str`]
+        The path of the lego cosmetic.
+    """
+
+    __slots__: Tuple[str, ...] = ('cosmetic_id', 'sound_library_tags', 'images', 'path')
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
@@ -50,3 +87,30 @@ class CosmeticLego(Cosmetic[HTTPClientT]):
         _images = data.get('images')
         self.images: Optional[CosmeticLegoImages[HTTPClientT]] = _images and CosmeticLegoImages(data=_images, http=http)
         self.path: Optional[str] = data.get('path')
+
+    @overload
+    def fetch_cosmetic_br(
+        self: CosmeticLego[HTTPClient], *, language: Optional[GameLanguage] = None
+    ) -> Coroutine[Any, Any, CosmeticBr]: ...
+
+    @overload
+    def fetch_cosmetic_br(self: CosmeticLego[SyncHTTPClient], *, language: Optional[GameLanguage] = None) -> CosmeticBr: ...
+
+    def fetch_cosmetic_br(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> Union[Coroutine[Any, Any, CosmeticBr], CosmeticBr]:
+        """|coro|
+
+        Fetches the Battle Royale cosmetic that this lego cosmetic is based on.
+
+        Parameters
+        ----------
+        language: Optional[:class:`GameLanguage`]
+            The language to fetch the cosmetic in.
+
+        Returns
+        -------
+        :class:`CosmeticBr`
+            The Battle Royale cosmetic that this lego cosmetic is based on.
+        """
+        return self._http.get_cosmetic_br(self.cosmetic_id, language=language and language.value)
