@@ -35,13 +35,7 @@ from ..utils import get_with_fallback, parse_time
 
 CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
 
-__all__: Tuple[str, ...] = (
-    'Cosmetic',
-    'CosmeticType',
-    'CosmeticRarity',
-    'CosmeticSeries',
-    'CosmeticImages',
-)
+__all__: Tuple[str, ...] = ('Cosmetic', 'CosmeticType', 'CosmeticRarity', 'CosmeticSeries', 'CosmeticImages', 'CosmeticT')
 
 
 class Cosmetic(Hashable, Generic[HTTPClientT]):
