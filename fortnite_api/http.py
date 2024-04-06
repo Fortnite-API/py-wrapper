@@ -81,6 +81,15 @@ class HTTPMixin(abc.ABC):
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any: ...
 
+    def get_cosmetics_br(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/br')
+        params: Dict[str, str] = {}
+
+        if language:
+            params['language'] = language
+
+        return self.request(r, params=params)
+
     def get_cosmetics_cars(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/cars')
         params: Dict[str, str] = {}
@@ -117,9 +126,8 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO
-    def get_cosmetics_lego_variants(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/cosmetics/lego/variants')
+    def get_cosmetics_lego(self, language: Optional[str] = None):
+        r: Route = Route('GET', '/v2/cosmetics/lego')
         params: Dict[str, str] = {}
 
         if language:
@@ -155,17 +163,8 @@ class HTTPMixin(abc.ABC):
         return self.request(r, params=params)
 
     # TODO (returns all cosmetics, not just BR)
-    def get_cosmetics(self, language: Optional[str] = None):
+    def get_cosmetics_all(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics')
-        params: Dict[str, str] = {}
-
-        if language:
-            params['language'] = language
-
-        return self.request(r, params=params)
-
-    def get_cosmetics_br(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/cosmetics/br')
         params: Dict[str, str] = {}
 
         if language:
