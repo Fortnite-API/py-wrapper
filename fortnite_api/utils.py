@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, Dict, Hashable, Protocol, Tuple, TypeVar
+from typing import Any, Callable, Dict, Hashable, Tuple, TypeVar
 
 try:
     import orjson
@@ -38,6 +38,7 @@ except ImportError:
 
 K_co = TypeVar('K_co', bound='Hashable', covariant=True)
 V_co = TypeVar('V_co', covariant=True)
+T = TypeVar('T')
 
 __all__: Tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json')
 
@@ -63,10 +64,6 @@ class _MissingSentinel:
 MISSING: Any = _MissingSentinel()
 
 
-class Docable(Protocol):
-    __doc__: str
-
-
 if _has_orjson:
 
     def to_json(string: str) -> Dict[Any, Any]:
@@ -86,10 +83,10 @@ def parse_time(timestamp: str) -> datetime.datetime:
     return datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S%z')
 
 
-def copy_doc(obj: Docable) -> Callable[[Docable], Docable]:
+def copy_doc(obj: Any) -> Callable[[T], T]:
     """Copy the docstring from another object"""
 
-    def wrapped(funco: Docable) -> Docable:
+    def wrapped(funco: T) -> T:
         if obj.__doc__:
             funco.__doc__ = obj.__doc__
 
@@ -98,7 +95,7 @@ def copy_doc(obj: Docable) -> Callable[[Docable], Docable]:
     return wrapped
 
 
-def prepend_doc(obj: Docable, sep: str = '') -> Callable[[Docable], Docable]:
+def prepend_doc(obj: Any, sep: str = '') -> Callable[[T], T]:
     """A decorator used to prepend a docstring onto another object.
 
     .. code-block:: python3
@@ -111,7 +108,7 @@ def prepend_doc(obj: Docable, sep: str = '') -> Callable[[Docable], Docable]:
         >>> '<<discord.Embed doc string>>[sep]This is a doc string'
     """
 
-    def wrapped(funco: Docable) -> Docable:
+    def wrapped(funco: T) -> T:
         if funco.__doc__ and obj.__doc__:
             funco.__doc__ = f'{obj.__doc__}{sep}{funco.__doc__}'
         elif funco.__doc__:
@@ -122,7 +119,7 @@ def prepend_doc(obj: Docable, sep: str = '') -> Callable[[Docable], Docable]:
     return wrapped
 
 
-def remove_prefix(text: str) -> Callable[[Docable], Docable]:
+def remove_prefix(text: str) -> Callable[[T], T]:
     """A decorator used to remove a prefix from a docstring.
 
     .. code-block:: python3
@@ -135,7 +132,7 @@ def remove_prefix(text: str) -> Callable[[Docable], Docable]:
         >>> 'This is a doc string'
     """
 
-    def wrapped(funco: Docable) -> Docable:
+    def wrapped(funco: T) -> T:
         if funco.__doc__:
             funco.__doc__ = funco.__doc__.replace(text, '').strip()
 
