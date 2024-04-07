@@ -403,7 +403,7 @@ class SyncHTTPClient(HTTPMixin):
     def request(self, route: Route, **kwargs: Any) -> Any:
         if self.session is None:
             raise RuntimeError(
-                'requests.Session is not set. Must either pass session to FortniteAPI constructor or use the async context manager.'
+                'requests.Session is not set. Must either pass session to FortniteAPI constructor or use the context manager.'
             )
 
         response: Optional[requests.Response] = None
