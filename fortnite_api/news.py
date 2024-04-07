@@ -36,6 +36,8 @@ from .utils import get_with_fallback, parse_time
 if TYPE_CHECKING:
     import datetime
 
+__all__: Tuple[str, ...] = ('News', 'GameModeNews', 'NewsMotd', 'NewsMessage')
+
 
 class News(Generic[HTTPClientT]):
     """Represents Game News.
