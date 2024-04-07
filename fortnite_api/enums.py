@@ -86,23 +86,44 @@ class CosmeticBrRarity(enum.Enum):
 
 
 class CosmeticBrType(enum.Enum):
-    BANNER = 'banner'
-    BACKPACK = 'backpack'
-    CONTRAIL = 'contrail'
     OUTFIT = 'outfit'
-    EMOTE = 'emote'
-    EMOJI = 'emoji'
-    GLIDER = 'glider'
-    WRAP = 'wrap'
-    AURA = 'aura'
-    LOADING_SCREEN = 'loadingscreen'
-    MUSIC = 'music'
+    BACKPACK = 'backpack'
     PET = 'pet'
     PET_CARRIER = 'petcarrier'
     PICKAXE = 'pickaxe'
-    SHOUT = 'shout'
+    GLIDER = 'glider'
+    CONTRAIL = 'contrail'
+    AURA = 'aura'
+
+    EMOTE = 'emote'
+    EMOJI = 'emoji'
     SPRAY = 'spray'
     TOY = 'toy'
+
+    WRAP = 'wrap'
+
+    BANNER = 'banner'
+    MUSIC = 'music'
+    LOADING_SCREEN = 'loadingscreen'
+
+    GUITAR = 'guitar'
+    BASS = 'bass'
+    DRUMS = 'drum'
+    MICROPHONE = 'mic'
+    KEYTAR = 'keyboard'
+
+    CAR_BODY = 'body'
+    DECAL = 'skin'
+    WHEELS = 'wheel'
+    TRAIL = 'drifttrail'
+    BOOST = 'booster'
+
+    JAM_TRACK = 'track'
+
+    LEGO_BUILD = 'legoset'
+    LEGO_DECOR_BUNDLE = 'legoprop'
+
+    SHOUT = 'shout'
 
 
 class CosmeticBrSearchTag(enum.Enum):
@@ -140,8 +161,23 @@ class StatsImageType(enum.Enum):
     KEYBOARD_MOUSE = 'keyboardMouse'
     GAMEPAD = 'gamepad'
     TOUCH = 'touch'
+    NONE = 'none'
 
 
 class CreatorCodeStatus(enum.Enum):
     ACTIVE = 'active'
     DISABLED = 'disabled'
+
+
+class ShopTileSize(enum.Enum):
+    SMALL = 'Small'
+    NORMAL = 'Normal'
+    DOUBLE_WIDE = 'DoubleWide'
+    TRIPLE_WIDE = 'TripleWide'
+
+
+class CosmeticCompatibleMode(enum.Enum):
+    BATTLE_ROYALE = 'ECosmeticCompatibleMode::BattleRoyale'
+    LEGO = 'ECosmeticCompatibleMode::Juno'
+    ROCKET_RACING = 'ECosmeticCompatibleMode::DelMar'
+    FESTIVAL = 'ECosmeticCompatibleMode::Sparks'
