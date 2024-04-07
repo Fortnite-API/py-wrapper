@@ -347,7 +347,7 @@ class FortniteAPI:
 
     async def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map:
         data = await self.http.get_map(language=self._resolve_language_value(language))
-        return Map(data=data)
+        return Map(data=data, http=self.http)
 
     # NEWS
 
@@ -519,9 +519,9 @@ class SyncFortniteAPI:
 
     # MAPS
 
-    def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map:
+    def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map[SyncHTTPClient]:
         data = self.http.get_map(language=self._resolve_language_value(language))
-        return Map(data=data)
+        return Map(data=data, http=self.http)
 
     # NEWS
 
