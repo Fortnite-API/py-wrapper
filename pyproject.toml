@@ -1,7 +1,7 @@
 [tool.black]
 line-length = 125
 skip-string-normalization = true
-force-exclude = "LICENSE|requirements.txt|pyproject.toml|README.md"
+force-exclude = "LICENSE|requirements.txt|pyproject.toml|README.md|setup.cfg"
 
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
