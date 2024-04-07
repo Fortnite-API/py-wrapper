@@ -22,6 +22,10 @@ extras_require = {
         'sphinxcontrib-websupport',
         'typing-extensions',
     ],
+    'dev': [
+        'black',
+        'isort',
+    ],
 }
 
 with open('requirements.txt') as f:
