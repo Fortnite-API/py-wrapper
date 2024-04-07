@@ -1,15 +1,17 @@
 import datetime
-from typing import Any
+from typing import Any, Final
 
 import aiohttp
 import pytest
 
 import fortnite_api as fn_api
 
-TEST_ACCOUNT_ID = "4735ce9132924caf8a5b17789b40f79c"
-TEST_ACCOUNT_NAME = "Ninja"
-TEST_CREATOR_CODE = "ninja"
-TEST_COSMETIC_ID = "Backpack_BrakePedal"
+TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"
+TEST_ACCOUNT_NAME: Final[str] = "Ninja"
+TEST_CREATOR_CODE: Final[str] = "ninja"
+TEST_COSMETIC_ID: Final[str] = "Backpack_BrakePedal"
+
+TEST_DEFAULT_PLAYLIST: Final[str] = "Playlist_NoBuildBR_Duo"
 
 
 @pytest.mark.asyncio
@@ -309,3 +311,42 @@ async def test_fetch_news_methods():
 
     assert isinstance(news_stw, fn_api.GameModeNews)
     _test_game_mode_news(news_stw)
+
+
+def _test_playlist(playlist: fn_api.Playlist[Any]):
+    assert isinstance(playlist, fn_api.Playlist)
+    assert playlist.name
+    assert playlist.min_players
+    assert playlist.max_players
+    assert playlist.max_teams
+    assert playlist.max_team_size
+    assert playlist.max_squads
+    assert playlist.max_squad_size
+    assert isinstance(playlist.is_default, bool)
+    assert isinstance(playlist.is_tournament, bool)
+    assert isinstance(playlist.is_limited_time_mode, bool)
+    assert isinstance(playlist.is_large_team_game, bool)
+    assert isinstance(playlist.accumulate_to_profile_stats, bool)
+
+    assert playlist.path
+    assert playlist.added
+
+    assert playlist == playlist
+
+
+@pytest.mark.asyncio
+async def test_async_fetch_playlists():
+    async with fn_api.FortniteAPI() as client:
+        playlists = await client.fetch_playlists()
+
+    for playlist in playlists:
+        _test_playlist(playlist)
+
+
+@pytest.mark.asyncio
+async def test_async_fetch_playlist_by_id():
+    async with fn_api.FortniteAPI() as client:
+        playlist = await client.fetch_playlist(TEST_DEFAULT_PLAYLIST)
+
+    assert playlist.id == TEST_DEFAULT_PLAYLIST
+    _test_playlist(playlist)

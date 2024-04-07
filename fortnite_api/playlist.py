@@ -24,16 +24,94 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple
+
+from .asset import Asset
+
+from .http import HTTPClientT
 
 from .abc import Hashable
-from .utils import parse_time
+from .utils import get_with_fallback, parse_time
 
 if TYPE_CHECKING:
     import datetime
 
 
-class Playlist(Hashable):
+__all__: Tuple[str, ...] = ('PlaylistImages', 'Playlist')
+
+
+class PlaylistImages(Generic[HTTPClientT]):
+    """Represents images that are associated with a Fortnite Playlist.
+
+    Attributes
+    ------------
+    showcase: Optional[:class:`Asset`]
+        A showcase image for the playlist, if any.
+    mission_icon: Optional[:class:`Asset`]
+        A mission icon for the playlist, if any.
+    """
+
+    __slots__: Tuple[str, ...] = ('showcase', 'mission_icon')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        _showcase = data.get('showcase')
+        self.showcase: Optional[Asset[HTTPClientT]] = _showcase and Asset(url=_showcase, http=http)
+
+        _mission_icon = data.get('missionIcon')
+        self.mission_icon: Optional[Asset[HTTPClientT]] = _mission_icon and Asset(url=_mission_icon, http=http)
+
+
+class Playlist(Hashable, Generic[HTTPClientT]):
+    """Represents a Fortnite Playlist.
+
+    Attributes
+    -----------
+    id: :class:`str`
+        The ID of the playlist.
+    name: :class:`str`
+        The playlist's name.
+    sub_name: Optional[:class:`str`]
+        The playlist's sub name, if any.
+    description: Optional[:class:`str`]
+        A description of the playlist.
+    game_type: Optional[:class:`str`]
+        The type of game the playlist is, if any.
+    rating_type: Optional[:class:`str`]
+        The rating type of the playlist, if any.
+    min_players: :class:`int`
+        The minimum amount of players required. Will be ``-1`` if there is no limit.
+    max_players: :class:`int`
+        The maximum amount of players allowed. Will be ``-1`` if there is no limit.
+    max_teams: :class:`int`
+        The maximum amount of teams allowed. Will be ``-1`` if there is no limit.
+    max_team_size: :class:`int`
+        The maximum amount of players per team. Will be ``-1`` if there is no limit.
+    max_squads: :class:`int`
+        The maximum amount of squads allowed. Will be ``-1`` if there is no limit.
+    max_squad_size: :class:`int`
+        The maximum amount of players per squad. Will be ``-1`` if there is no limit.
+    is_default: :class:`bool`
+        Whether the playlist is the default one.
+    is_tournament: :class:`bool`
+        Whether this playlist is a tournament.
+    is_limited_time_mode: :class:`bool`
+        Whether this playlist is a limited time mode.
+    is_large_team_game: :class:`bool`
+        Whether this playlist is a large team game.
+    accumulate_to_profile_stats: :class:`bool`
+        Whether this playlist accumulates to profile stats.
+    images: Optional[:class:`PlaylistImages`]
+        The images associated with the playlist.
+    gameplay_tags: List[:class:`str`]
+        The gameplay tags for the playlist.
+    path: :class:`str`
+        The path of the playlist.
+    added: :class:`datetime.datetime`
+        The time the playlist was added.
+    raw_data: Dict[:class:`str`, Any]
+        The raw data received from the API.
+    """
+
     __slots__: Tuple[str, ...] = (
         'id',
         'name',
@@ -51,20 +129,22 @@ class Playlist(Hashable):
         'is_limited_time_mode',
         'is_large_team_game',
         'accumulate_to_profile_stats',
-        'showcase_image',
-        'mission_icon',
+        'images',
         'gameplay_tags',
         'path',
         'added',
         'raw_data',
     )
 
-    def __init__(self, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.id: str = data['id']
         self.name: str = data['name']
-        self.sub_name: str = data['subName']
-        self.description: str = data['description']
-        self.game_type: str = data['gameType']
+        self.sub_name: Optional[str] = data.get('subName')
+        self.description: Optional[str] = data.get('description')
+
+        self.game_type: Optional[str] = data.get('gameType')  # TODO: Make this into an enum
+        self.rating_type: Optional[str] = data.get('ratingType')
+
         self.min_players: int = data['minPlayers']
         self.max_players: int = data['maxPlayers']
         self.max_teams: int = data['maxTeams']
@@ -76,13 +156,12 @@ class Playlist(Hashable):
         self.is_tournament: bool = data['isTournament']
         self.is_limited_time_mode: bool = data['isLimitedTimeMode']
         self.is_large_team_game: bool = data['isLargeTeamGame']
-        self.accumulate_to_profile_stats: Any = data['accumulateToProfileStats']  # Unknown for now
+        self.accumulate_to_profile_stats: bool = data['accumulateToProfileStats']
 
-        images = data.get('images', {})
-        self.showcase_image: Optional[str] = images.get('showcase')
-        self.mission_icon: Optional[str] = images.get('missionIcon')
+        _images = get_with_fallback(data, 'images', dict)
+        self.images: Optional[PlaylistImages[HTTPClientT]] = _images and PlaylistImages(data=_images, http=http)
 
-        self.gameplay_tags: List[str] = data.get('gameplayTags', [])
+        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
         self.path: str = data['path']
 
         self.added: datetime.datetime = parse_time(data['added'])

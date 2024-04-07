@@ -24,6 +24,7 @@ SOFTWARE.
 
 __version__ = '2.5.1'
 
+from .asset import *
 from .account import *
 from .aes import *
 from .all import *

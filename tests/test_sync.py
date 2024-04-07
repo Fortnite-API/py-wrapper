@@ -4,12 +4,15 @@ import requests
 
 import fortnite_api as fn_api
 
-from .test_async import _test_game_mode_news
-
-TEST_ACCOUNT_ID = "4735ce9132924caf8a5b17789b40f79c"
-TEST_ACCOUNT_NAME = "Ninja"
-TEST_CREATOR_CODE = "ninja"
-TEST_COSMETIC_ID = "Backpack_BrakePedal"
+from .test_async import (
+    _test_game_mode_news,
+    _test_playlist,
+    TEST_ACCOUNT_ID,
+    TEST_ACCOUNT_NAME,
+    TEST_CREATOR_CODE,
+    TEST_COSMETIC_ID,
+    TEST_DEFAULT_PLAYLIST,
+)
 
 
 def test_sync_client_initialization():
@@ -232,3 +235,19 @@ def test_fetch_news_methods():
 
     assert isinstance(news_stw, fn_api.GameModeNews)
     _test_game_mode_news(news_stw)
+
+
+def test_sync_fetch_playlists():
+    with fn_api.SyncFortniteAPI() as client:
+        playlists = client.fetch_playlists()
+
+    for playlist in playlists:
+        _test_playlist(playlist)
+
+
+def test_sync_fetch_playlist_by_id():
+    with fn_api.SyncFortniteAPI() as client:
+        playlist = client.fetch_playlist(TEST_DEFAULT_PLAYLIST)
+
+    assert playlist.id == TEST_DEFAULT_PLAYLIST
+    _test_playlist(playlist)

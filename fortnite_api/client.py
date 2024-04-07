@@ -367,11 +367,11 @@ class FortniteAPI:
 
     async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
         data = await self.http.get_playlists(language=self._resolve_language_value(language))
-        return [Playlist(data=entry) for entry in data]
+        return [Playlist(data=entry, http=self.http) for entry in data]
 
     async def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
         data = await self.http.get_playlist(id, language=self._resolve_language_value(language))
-        return Playlist(data=data)
+        return Playlist(data=data, http=self.http)
 
     # PLAYER STATS
 
@@ -539,13 +539,13 @@ class SyncFortniteAPI:
 
     # PLAYLISTS
 
-    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
+    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist[SyncHTTPClient]]:
         data = self.http.get_playlists(language=self._resolve_language_value(language))
-        return [Playlist(data=entry) for entry in data]
+        return [Playlist(data=entry, http=self.http) for entry in data]
 
-    def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
+    def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist[SyncHTTPClient]:
         data = self.http.get_playlist(id, language=self._resolve_language_value(language))
-        return Playlist(data=data)
+        return Playlist(data=data, http=self.http)
 
     # PLAYER STATS
 
