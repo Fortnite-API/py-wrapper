@@ -4,6 +4,8 @@ import requests
 
 import fortnite_api as fn_api
 
+from .test_async import _test_game_mode_news
+
 TEST_ACCOUNT_ID = "4735ce9132924caf8a5b17789b40f79c"
 TEST_ACCOUNT_NAME = "Ninja"
 TEST_CREATOR_CODE = "ninja"
@@ -210,3 +212,23 @@ def test_sync_map():
         assert poi.id
         assert poi.name
         assert isinstance(poi.location, fn_api.POILocation)
+
+
+def test_fetch_news():
+    with fn_api.SyncFortniteAPI() as client:
+        news = client.fetch_news()
+
+    assert isinstance(news, fn_api.News)
+    assert news.raw_data
+
+
+def test_fetch_news_methods():
+    with fn_api.SyncFortniteAPI() as client:
+        news_br = client.fetch_news_br()
+        news_stw = client.fetch_news_stw()
+
+    assert isinstance(news_stw, fn_api.GameModeNews)
+    _test_game_mode_news(news_br)
+
+    assert isinstance(news_stw, fn_api.GameModeNews)
+    _test_game_mode_news(news_stw)

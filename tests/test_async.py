@@ -1,4 +1,5 @@
 import datetime
+from typing import Any
 
 import aiohttp
 import pytest
@@ -256,3 +257,55 @@ async def test_async_map():
         assert poi.id
         assert poi.name
         assert isinstance(poi.location, fn_api.POILocation)
+
+
+@pytest.mark.asyncio
+async def test_fetch_news():
+    async with fn_api.FortniteAPI() as client:
+        news = await client.fetch_news()
+
+    assert isinstance(news, fn_api.News)
+    assert news.raw_data
+
+
+def _test_game_mode_news(news: fn_api.GameModeNews[Any]):
+    assert news.hash
+    assert news.date
+
+    if news.image:
+        assert isinstance(news.image, fn_api.Asset)
+
+    for motd in news.motds:
+        assert isinstance(motd, fn_api.NewsMotd)
+        assert motd.id
+        assert motd.title
+        assert motd.tab_title
+        assert motd.body
+
+        assert motd.image
+        assert isinstance(motd.image, fn_api.Asset)
+
+        assert motd.title_image
+        assert isinstance(motd.title_image, fn_api.Asset)
+
+        assert motd.sorting_priority
+
+    for message in news.messages:
+        assert isinstance(message, fn_api.NewsMessage)
+        assert message.title
+        assert message.body
+
+        assert isinstance(message.image, fn_api.Asset)
+
+
+@pytest.mark.asyncio
+async def test_fetch_news_methods():
+    async with fn_api.FortniteAPI() as client:
+        news_br = await client.fetch_news_br()
+        news_stw = await client.fetch_news_stw()
+
+    assert isinstance(news_br, fn_api.GameModeNews)
+    _test_game_mode_news(news_br)
+
+    assert isinstance(news_stw, fn_api.GameModeNews)
+    _test_game_mode_news(news_stw)

@@ -353,15 +353,15 @@ class FortniteAPI:
 
     async def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News:
         data = await self.http.get_news(language=self._resolve_language_value(language))
-        return News(data=data)
+        return News(data=data, http=self.http)
 
     async def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
         data = await self.http.get_news_br(language=self._resolve_language_value(language))
-        return GameModeNews(data=data)
+        return GameModeNews(data=data, http=self.http)
 
     async def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
         data = await self.http.get_news_stw(language=self._resolve_language_value(language))
-        return GameModeNews(data=data)
+        return GameModeNews(data=data, http=self.http)
 
     # PLAYLISTS
 
@@ -525,17 +525,17 @@ class SyncFortniteAPI:
 
     # NEWS
 
-    def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News:
+    def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News[SyncHTTPClient]:
         data = self.http.get_news(language=self._resolve_language_value(language))
-        return News(data=data)
+        return News(data=data, http=self.http)
 
-    def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+    def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews[SyncHTTPClient]:
         data = self.http.get_news_br(language=self._resolve_language_value(language))
-        return GameModeNews(data=data)
+        return GameModeNews(data=data, http=self.http)
 
-    def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+    def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews[SyncHTTPClient]:
         data = self.http.get_news_stw(language=self._resolve_language_value(language))
-        return GameModeNews(data=data)
+        return GameModeNews(data=data, http=self.http)
 
     # PLAYLISTS
 
