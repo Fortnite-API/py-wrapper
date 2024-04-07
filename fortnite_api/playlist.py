@@ -33,6 +33,7 @@ class Playlist:
         self.sub_name = data['subName']
         self.description = data['description']
         self.game_type = data['gameType']
+        self.rating_type = data['ratingType']
         self.min_players = data['minPlayers']
         self.max_players = data['maxPlayers']
         self.max_teams = data['maxTeams']

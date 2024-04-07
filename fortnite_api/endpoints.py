@@ -25,11 +25,12 @@ SOFTWARE.
 import datetime
 import typing
 from enum import Enum
-from typing import List
+from typing import List, Union
 
 from .aes import AES
 from .banner import Banner, BannerColor
-from .cosmetics import BrCosmetic, NewBrCosmetics
+from .cosmetics import BrCosmetic, NewBrCosmetics, CarCosmetic, InstrumentCosmetic, LegoCosmeticVariant, JamTrack, \
+    NewCosmetics, LegoKitCosmetic
 from .creator_code import CreatorCode
 from .enums import GameLanguage, MatchMethod, NewsType, KeyFormat, AccountType, TimeWindow, StatsImageType, \
     BrCosmeticRarity, BrCosmeticType
@@ -37,7 +38,7 @@ from .errors import MissingSearchParameter, MissingIDParameter, NotFound
 from .map import Map
 from .news import GameModeNews, News
 from .playlist import Playlist
-from .shop import BrShop
+from .shop import BrShop, Shop
 from .stats import BrPlayerStats
 
 _SEARCH_PARAMETERS = {
@@ -160,7 +161,23 @@ class SyncCosmeticsEndpoints:
     def __init__(self, client):
         self._client = client
 
-    def fetch_all(self, language=GameLanguage.ENGLISH):
+    def fetch(
+            self,
+            language=GameLanguage.ENGLISH
+    ) -> List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, LegoKitCosmetic, JamTrack, LegoCosmeticVariant]]:
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics', params=params)
+        data = data['data']
+        cosmetics = []
+        cosmetics.extend([BrCosmetic(item) for item in data['br']])
+        cosmetics.extend([CarCosmetic(item) for item in data['cars']])
+        cosmetics.extend([InstrumentCosmetic(item) for item in data['instruments']])
+        cosmetics.extend([LegoKitCosmetic(item) for item in data['legoKits']])
+        cosmetics.extend([JamTrack(item) for item in data['tracks']])
+        cosmetics.extend([LegoCosmeticVariant(item) for item in data['lego']])
+        return cosmetics
+
+    def fetch_br(self, language=GameLanguage.ENGLISH):
         """Returns an list of all battle royale cosmetics.
 
         Parameters
@@ -186,10 +203,44 @@ class SyncCosmeticsEndpoints:
         data = self._client.http.get('v2/cosmetics/br', params=params)
         return [BrCosmetic(item_data) for item_data in data['data']]
 
-    def fetch_new(self, language=GameLanguage.ENGLISH):
+    fetch_all = fetch_br  # Backwards compatibility
+
+    def fetch_cars(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/cars', params=params)
+        return [CarCosmetic(item_data) for item_data in data['data']]
+
+    def fetch_instruments(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/instruments', params=params)
+        return [InstrumentCosmetic(item_data) for item_data in data['data']]
+
+    def fetch_lego_kits(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/lego/kits', params=params)
+        return [LegoKitCosmetic(item_data) for item_data in data['data']]
+
+    def fetch_jam_tracks(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/tracks', params=params)
+        return [JamTrack(item_data) for item_data in data['data']]
+
+    def fetch_lego_variants(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/lego', params=params)
+        return [LegoCosmeticVariant(item_data) for item_data in data['data']]
+
+    def fetch_new_all(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = self._client.http.get('v2/cosmetics/new', params=params)
+        return NewCosmetics(data['data'])
+
+    def fetch_new_br(self, language=GameLanguage.ENGLISH):
         params = {'language': language.value}
         data = self._client.http.get('v2/cosmetics/br/new', params=params)
         return NewBrCosmetics(data['data'])
+
+    fetch_new = fetch_new_br  # Backwards compatibility
 
     def search_by_id(self, *cosmetic_ids, language=GameLanguage.ENGLISH):
         """Returns an list of the requested battle royale cosmetic ids.
@@ -230,7 +281,6 @@ class SyncCosmeticsEndpoints:
         return [BrCosmetic(item_data) for item_data in data['data']]
 
     def search_first(self, **search_parameters) -> BrCosmetic:
-        print(_parse_search_parameter(**search_parameters))
         data = self._client.http.get('v2/cosmetics/br/search',
                                      params=_parse_search_parameter(**search_parameters))
         return BrCosmetic(data['data'])
@@ -241,15 +291,65 @@ class AsyncCosmeticsEndpoints:
     def __init__(self, client):
         self._client = client
 
-    async def fetch_all(self, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[BrCosmetic]:
+    async def fetch(
+            self,
+            language=GameLanguage.ENGLISH
+    ) -> List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, LegoKitCosmetic, JamTrack, LegoCosmeticVariant]]:
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics', params=params)
+        data = data['data']
+        cosmetics = []
+        cosmetics.extend([BrCosmetic(item) for item in data['br']])
+        cosmetics.extend([CarCosmetic(item) for item in data['cars']])
+        cosmetics.extend([InstrumentCosmetic(item) for item in data['instruments']])
+        cosmetics.extend([LegoKitCosmetic(item) for item in data['legoKits']])
+        cosmetics.extend([JamTrack(item) for item in data['tracks']])
+        cosmetics.extend([LegoCosmeticVariant(item) for item in data['lego']])
+        return cosmetics
+
+    async def fetch_br(self, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[BrCosmetic]:
         params = {'language': language.value}
         data = await self._client.http.get('v2/cosmetics/br', params=params)
         return [BrCosmetic(item_data) for item_data in data['data']]
 
-    async def fetch_new(self, language=GameLanguage.ENGLISH):
+    fetch_all = fetch_br  # Backwards compatibility
+
+    async def fetch_cars(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics/cars', params=params)
+        return [CarCosmetic(item_data) for item_data in data['data']]
+
+    async def fetch_instruments(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics/instruments', params=params)
+        return [InstrumentCosmetic(item_data) for item_data in data['data']]
+
+    async def fetch_lego_kits(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics/lego/kits', params=params)
+        return [LegoKitCosmetic(item_data) for item_data in data['data']]
+
+    async def fetch_jam_tracks(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics/tracks', params=params)
+        return [JamTrack(item_data) for item_data in data['data']]
+
+    async def fetch_lego_variants(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics/lego', params=params)
+        return [LegoCosmeticVariant(item_data) for item_data in data['data']]
+
+    async def fetch_new_all(self, language=GameLanguage.ENGLISH):
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/cosmetics/new', params=params)
+        return NewCosmetics(data['data'])
+
+    async def fetch_new_br(self, language=GameLanguage.ENGLISH):
         params = {'language': language.value}
         data = await self._client.http.get('v2/cosmetics/br/new', params=params)
         return NewBrCosmetics(data['data'])
+
+    fetch_new = fetch_new_br  # Backwards compatibility
 
     async def search_by_id(self, *cosmetic_id: str, language: GameLanguage = GameLanguage.ENGLISH) -> typing.List[
         BrCosmetic]:
@@ -422,10 +522,17 @@ class SyncShopEndpoints:
     def __init__(self, client):
         self._client = client
 
-    def fetch(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
+    def fetch_all(self, language: GameLanguage = GameLanguage.ENGLISH) -> Shop:
+        params = {'language': language.value}
+        data = self._client.http.get('v2/shop', params=params)
+        return Shop(data['data'])
+
+    def fetch_br(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
         params = {'language': language.value}
         data = self._client.http.get('v2/shop/br' if not combined else 'v2/shop/br/combined', params=params)
         return BrShop(data['data'])
+
+    fetch = fetch_br
 
 
 class AsyncShopEndpoints:
@@ -433,10 +540,17 @@ class AsyncShopEndpoints:
     def __init__(self, client):
         self._client = client
 
-    async def fetch(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
+    async def fetch_all(self, language: GameLanguage = GameLanguage.ENGLISH) -> Shop:
+        params = {'language': language.value}
+        data = await self._client.http.get('v2/shop', params=params)
+        return Shop(data['data'])
+
+    async def fetch_br(self, language: GameLanguage = GameLanguage.ENGLISH, combined: bool = False) -> BrShop:
         params = {'language': language.value}
         data = await self._client.http.get('v2/shop/br' if not combined else 'v2/shop/br/combined', params=params)
         return BrShop(data['data'])
+
+    fetch = fetch_br
 
 
 class SyncStatsEndpoints:

@@ -68,6 +68,7 @@ class BrCosmeticRarity(Enum):
     SHADOW = 'shadow'
     SLURP = 'slurp'
     EPIC = 'epic'
+    LAMBORGHINI = 'lamborghini'
     RARE = 'rare'
     UNCOMMON = 'uncommon'
     COMMON = 'common'
@@ -75,22 +76,44 @@ class BrCosmeticRarity(Enum):
 
 
 class BrCosmeticType(Enum):
-    BANNER = 'banner'
-    BACKPACK = 'backpack'
-    CONTRAIL = 'contrail'
     OUTFIT = 'outfit'
-    EMOTE = 'emote'
-    EMOJI = 'emoji'
-    GLIDER = 'glider'
-    WRAP = 'wrap'
-    LOADING_SCREEN = 'loadingscreen'
-    MUSIC = 'music'
+    BACKPACK = 'backpack'
     PET = 'pet'
     PET_CARRIER = 'petcarrier'
     PICKAXE = 'pickaxe'
-    SHOUT = 'shout'
+    GLIDER = 'glider'
+    CONTRAIL = 'contrail'
+    AURA = 'aura'
+
+    EMOTE = 'emote'
+    EMOJI = 'emoji'
     SPRAY = 'spray'
     TOY = 'toy'
+
+    WRAP = 'wrap'
+
+    BANNER = 'banner'
+    MUSIC = 'music'
+    LOADING_SCREEN = 'loadingscreen'
+
+    GUITAR = 'guitar'
+    BASS = 'bass'
+    DRUMS = 'drum'
+    MICROPHONE = 'mic'
+    KEYTAR = 'keyboard'
+
+    CAR_BODY = 'body'
+    DECAL = 'skin'
+    WHEELS = 'wheel'
+    TRAIL = 'drifttrail'
+    BOOST = 'booster'
+
+    JAM_TRACK = 'track'
+
+    LEGO_BUILD = 'legoset'
+    LEGO_DECOR_BUNDLE = 'legoprop'
+
+    SHOUT = 'shout'
     UNKNOWN = 'unknown'
 
 
@@ -117,3 +140,17 @@ class StatsImageType(Enum):
     GAMEPAD = 'gamepad'
     TOUCH = 'touch'
     NONE = 'none'
+
+
+class ShopTileSize(Enum):
+    SMALL = 'Small'
+    NORMAL = 'Normal'
+    DOUBLE_WIDE = 'DoubleWide'
+    TRIPLE_WIDE = 'TripleWide'
+
+
+class CosmeticCompatibleMode(Enum):
+    BATTLE_ROYALE = 'ECosmeticCompatibleMode::BattleRoyale'
+    LEGO = 'ECosmeticCompatibleMode::Juno'
+    ROCKET_RACING = 'ECosmeticCompatibleMode::DelMar'
+    FESTIVAL = 'ECosmeticCompatibleMode::Sparks'

@@ -48,7 +48,7 @@ class BrBattlePass:
 class BrInputs:
 
     def __init__(self, data):
-        self.all = BrInputStats(data.get('overall')) if data.get('overall') else None
+        self.all = BrInputStats(data.get('all')) if data.get('all') else None
         self.keyboard_mouse = BrInputStats(data.get('keyboardMouse')) if data.get('keyboardMouse') else None
         self.gamepad = BrInputStats(data.get('gamepad')) if data.get('gamepad') else None
         self.touch = BrInputStats(data.get('touch')) if data.get('touch') else None

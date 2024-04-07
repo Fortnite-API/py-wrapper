@@ -23,8 +23,118 @@ SOFTWARE.
 """
 
 from datetime import datetime
+from typing import List, Optional, Union
 
-from fortnite_api.cosmetics import BrCosmetic
+from .cosmetics import BrCosmetic, CarCosmetic, InstrumentCosmetic, JamTrack, LegoKitCosmetic
+from .enums import ShopTileSize, CosmeticCompatibleMode
+
+
+class Shop:
+
+    def __init__(self, data: dict):
+        self.hash: str = data['hash']
+        self.date: datetime = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S%z')
+        self.entries: List[ShopEntry] = [ShopEntry(entry) for entry in data['entries'] or []]
+        self.raw_data: dict = data
+
+
+class ShopEntry:
+
+    def __init__(self, data: dict):
+        self.regular_price: int = data['regularPrice']
+        self.final_price: int = data['finalPrice']
+        self.bundle: Optional[ShopBundle] = ShopBundle(data['bundle']) if data['bundle'] else None
+        self.banner: Optional[ShopBanner] = ShopBanner(data['banner']) if data['banner'] else None
+        self.giftable: bool = data['giftable']
+        self.refundable: bool = data['refundable']
+        self.sort_priority: int = data['sortPriority']
+        self.layout_id: str = data['layoutId']
+        self.layout: Optional[ShopLayout] = ShopLayout(data['layout']) if data['layout'] else None
+        self.dev_name: str = data['devName']
+        self.offer_id: str = data['offerId']
+        self.display_asset_path: Optional[str] = data['displayAssetPath']
+        try:
+            self.tile_size: ShopTileSize = ShopTileSize(data['tileSize'])
+        except ValueError:
+            # This is a fix, because Epic believes that they should spell "normal" as "nomal"
+            self.tile_size: ShopTileSize = ShopTileSize.NORMAL
+        self.new_display_asset_path: Optional[str] = data['newDisplayAssetPath']
+        self.new_display_asset: Optional[ShopNewDisplayAsset] = ShopNewDisplayAsset(data['newDisplayAsset']) if data[
+            'newDisplayAsset'] else None
+        self.items: List[Union[BrCosmetic, CarCosmetic, InstrumentCosmetic, LegoKitCosmetic, JamTrack]] = []
+        if data['brItems']:
+            self.items.extend([BrCosmetic(item) for item in data['brItems']])
+        if data['cars']:
+            self.items.extend([CarCosmetic(item) for item in data['cars']])
+        if data['instruments']:
+            self.items.extend([InstrumentCosmetic(item) for item in data['instruments']])
+        if data['legoKits']:
+            self.items.extend([LegoKitCosmetic(item) for item in data['legoKits']])
+        if data['tracks']:
+            self.items.extend([JamTrack(item) for item in data['tracks']])
+        self.raw_data: dict = data
+
+
+class ShopBundle:
+
+    def __init__(self, data: dict):
+        self.name: str = data['name']
+        self.info: str = data['info']
+        self.image_url: str = data['image']
+        self.raw_data: dict = data
+
+
+class ShopBanner:
+
+    def __init__(self, data: dict):
+        self.value: str = data['value']
+        self.intensity: str = data['intensity']
+        self.backend_value: str = data['backendValue']
+        self.raw_data: dict = data
+
+
+class ShopLayout:
+
+    def __init__(self, data: dict):
+        self.id: str = data['id']
+        self.name: str = data['name']
+        self.category: str = data['category']
+        self.index: int = data['index']
+        self.show_ineligible_offers: bool = data['showIneligibleOffers']
+        self.background_url: str = data['background']
+        self.raw_data: dict = data
+
+
+class ShopNewDisplayAsset:
+
+    def __init__(self, data: dict):
+        self.id: str = data['id']
+        self.cosmetic_id: Optional[str] = data['cosmeticId']
+        self.material_instances: List[ShopMaterialInstance] = [ShopMaterialInstance(mi) for mi in
+                                                               data['materialInstances']]
+        self.raw_data: dict = data
+
+
+class ShopMaterialInstance:
+
+    def __init__(self, data: dict):
+        self.id: str = data['id']
+        self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode(data['primaryMode'])
+        self.images: ShopMaterialInstanceImages = ShopMaterialInstanceImages(data['images'])
+        self.colors: Optional[dict] = data['colors']
+        self.scalings: Optional[dict] = data['scalings']
+        self.flags: Optional[dict] = data['flags']
+        self.raw_data: dict = data
+
+
+class ShopMaterialInstanceImages:
+
+    def __init__(self, data: dict):
+        self.offer_image_url: str = data['OfferImage']
+        self.fnm_texture_url: Optional[str] = data.get('FNMTexture')
+        self.image_background_url: Optional[str] = data.get('ImageBackground')
+        self.background_url: Optional[str] = data.get('Background')
+        self.raw_data: dict = data
 
 
 class BrShop:
@@ -110,6 +220,7 @@ class BrShopEntry:
         self.categories = data.get('categories')
         self.section_id = data.get('sectionId')
         self.section = BrShopSectionNew(data.get('section')) if data.get('section') else None
+        self.layout = BrShopLayout(data.get('layout')) if data.get('layout') else None
         self.dev_name = data.get('devName')
         self.offer_id = data.get('offerId')
         self.display_asset_path = data.get('displayAssetPath')
@@ -151,6 +262,16 @@ class BrShopSectionNew:
         self.show_timer = data.get('showTimer')
         self.enable_toast_notification = data.get('enableToastNotification')
         self.hidden = data.get('hidden')
+
+
+class BrShopLayout:
+
+    def __init__(self, data):
+        self.id = data.get('id')
+        self.name = data.get('name')
+        self.category = data.get('category')
+        self.index = data.get('index')
+        self.show_ineligible_offers = data.get('showIneligibleOffers')
 
 
 class BrShopNewDisplayAsset:
