@@ -232,3 +232,27 @@ async def test_async_fetch_cosmetics_all():
     assert cosmetics_all.lego
     assert cosmetics_all.lego_kits
     assert cosmetics_all.raw_data
+
+
+@pytest.mark.asyncio
+async def test_async_map():
+    async with fn_api.FortniteAPI() as client:
+        map = await client.fetch_map()
+
+    assert isinstance(map, fn_api.Map)
+    assert isinstance(map.images, fn_api.MapImages)
+
+    assert map.images.blank
+    assert map.images.pois
+
+    assert map.pois
+
+    first_poi = map.pois[0]
+    assert isinstance(first_poi, fn_api.POI)
+    assert map.get_poi(first_poi.id) == first_poi
+
+    for poi in map.pois:
+        assert isinstance(poi, fn_api.POI)
+        assert poi.id
+        assert poi.name
+        assert isinstance(poi.location, fn_api.POILocation)
