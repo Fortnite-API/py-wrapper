@@ -30,7 +30,7 @@ from .abc import Hashable
 from .asset import Asset
 from .http import HTTPClientT
 
-__all__: Tuple[str, ...] = ('Map', 'POI', 'POILocation')
+__all__: Tuple[str, ...] = ('Map', 'MapImages', 'POI', 'POILocation')
 
 
 class MapImages(Generic[HTTPClientT]):
