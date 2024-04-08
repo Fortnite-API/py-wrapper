@@ -22,10 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from datetime import datetime
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple
+
+from .abc import Hashable
+from .asset import Asset
+from .http import HTTPClientT
+from .utils import get_with_fallback, parse_time
+
+if TYPE_CHECKING:
+    import datetime
+
+__all__: Tuple[str, ...] = ('News', 'GameModeNews', 'NewsMotd', 'NewsMessage')
 
 
-class News:
+class News(Generic[HTTPClientT]):
     """Represents Game News.
 
     Attributes
@@ -40,39 +52,59 @@ class News:
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
-        self.br = GameModeNews(data.get('br')) if data.get('br') else None
-        self.stw = GameModeNews(data.get('stw')) if data.get('stw') else None
-        self.creative = GameModeNews(data.get('creative')) if data.get('creative') else None
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('br', 'stw', 'creative', 'raw_data')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        _br = data.get('br')
+        self.br: Optional[GameModeNews[HTTPClientT]] = _br and GameModeNews(data=_br, http=http)
+
+        _stw = data.get('stw')
+        self.stw: Optional[GameModeNews[HTTPClientT]] = _stw and GameModeNews(data=_stw, http=http)
+
+        _creative = data.get('creative')
+        self.creative: Optional[GameModeNews[HTTPClientT]] = _creative and GameModeNews(data=_creative, http=http)
+
+        self.raw_data: Dict[str, Any] = data
 
 
-class GameModeNews:
+class GameModeNews(Generic[HTTPClientT]):
     """Represents News of a specific game mode.
 
     Attributes
-    -----------
-    last_modified: :class:`datetime.datetime`
-        The timestamp when the news where modified.
-    entries: List[:class:`NewsEntry`]
-        A list of news entries.
+    ----------
+    hash: :class:`str`
+        The hash of the news.
+    date: :class:`datetime.datetime`
+        The date when the news was published.
+    image: Optional[:class:`Asset`]
+        The display image of the news, if available.
+    motds: List[:class:`NewsMotd`]
+        A list of Message of the Day (MOTD) for the game mode.
+    messages: List[:class:`NewsMessage`]
+        A list of messages for the game mode.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
-        self.hash = data.get('hash')
-        try:
-            self.date = datetime.strptime(data.get('date'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, TypeError):
-            self.date = None
-        self.image = data.get('image')
-        self.motds = [NewsMotd(item_data) for item_data in data.get('motds')] if data.get('motds') else None
-        self.messages = [NewsMessage(item_data) for item_data in data.get('messages')] if data.get('messages') else None
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('hash', 'date', 'image', 'motds', 'messages', 'raw_data')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        self.hash: str = data['hash']
+        self.date: datetime.datetime = parse_time(data['date'])
+
+        _image = data.get('image')
+        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
+
+        _motds = get_with_fallback(data, 'motds', list)
+        self.motds: List[NewsMotd[HTTPClientT]] = [NewsMotd(data=motd, http=http) for motd in _motds]
+
+        _messages = get_with_fallback(data, 'messages', list)
+        self.messages: List[NewsMessage[HTTPClientT]] = [NewsMessage(data=message, http=http) for message in _messages]
+
+        self.raw_data: Dict[str, Any] = data
 
 
-class NewsMotd:
+class NewsMotd(Hashable, Generic[HTTPClientT]):
     """Represents News of a specific game mode.
 
     Attributes
@@ -81,60 +113,66 @@ class NewsMotd:
         The id of the motd.
     title: :class:`str`
         The title of the motd.
+    tab_title: :class:`str`
+        The tab title of the motd.
     body: Optional[:class:`str`]
         The body of the motd.
-    image_url: :class:`str`
-        The url of the image in 1920x1080.
-    tile_image_url: :class:`str`
-        The url of the tile image in 1024x512.
+    image: :class:`Asset`
+        The asset of the image that represents this news.
+    title_image: :class:`str`
+        The asset of the title image that represents this news.
     hidden: :class:`bool`
-        Whether the motd is hidden.
-    spotlight: :class:`bool`
-        Whether the motd is in spotlight.
-    type: :class:`str`
-        The type of the entry.
+        Whether the motd is hidden or not.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    def __init__(self, data):
-        self.id = data.get('id')
-        self.title = data.get('title')
-        self.body = data.get('body')
-        self.image_url = data.get('image')
-        self.tile_image_url = data.get('tileImage')
-        self.sorting_priority = data.get('sortingPriority')
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = (
+        'id',
+        'title',
+        'tab_title',
+        'body',
+        'image',
+        'tile_image',
+        'sorting_priority',
+        'hidden',
+        'raw_data',
+    )
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        self.id: str = data['id']
+        self.title: str = data['title']
+        self.tab_title: str = data['tabTitle']
+        self.body: str = data['body']
+
+        self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
+        self.title_image: Asset[HTTPClientT] = Asset(http=http, url=data['tileImage'])
+
+        self.sorting_priority: int = data['sortingPriority']
+        self.hidden: bool = data['hidden']
+
+        self.raw_data: Dict[str, Any] = data
 
 
-class NewsMessage:
+class NewsMessage(Generic[HTTPClientT]):
     """Represents News of a specific game mode.
 
     Attributes
-    -----------
-    image_url: :class:`str`
-        The url of the image.
-    hidden: :class:`bool`
-        Whether the entry is hidden.
-    message_type: Optional[:class:`str`]
-        The type of the message.
-    type: :class:`str`
-        The type of the entry.
-    banner: :class:`str`
-        The banner of the entry.
+    ----------
     title: :class:`str`
-        The title of the entry.
+        The title of the message.
     body: :class:`str`
-        The body of the entry.
-    spotlight: :class:`bool`
-        Whether the entry is in spotlight.
-    raw_data: :class:`dict`
-        The raw data from request. Can be used for saving and re-creating the class.
+        The body contents of the message.
+    image: :class:`Asset`
+        An image that is associated with the message.
+    adspace: Optional[:class:`str`]
+        The adspace of the message.
     """
 
-    def __init__(self, data):
-        self.title = data.get('title')
-        self.body = data.get('body')
-        self.image_url = data.get('image')
-        self.adspace = data.get('adspace')
-        self.raw_data = data
+    __slots__: Tuple[str, ...] = ('title', 'body', 'image', 'adspace', 'raw_data')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        self.title: str = data['title']
+        self.body: str = data['body']
+        self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
+        self.adspace: Optional[str] = data['adspace']

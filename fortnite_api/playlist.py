@@ -22,42 +22,145 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from datetime import datetime
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple
+
+from .abc import Hashable
+from .asset import Asset
+from .http import HTTPClientT
+from .utils import get_with_fallback, parse_time
+
+if TYPE_CHECKING:
+    import datetime
 
 
-class Playlist:
+__all__: Tuple[str, ...] = ('PlaylistImages', 'Playlist')
 
-    def __init__(self, data):
-        self.id = data['id']
-        self.name = data['name']
-        self.sub_name = data['subName']
-        self.description = data['description']
-        self.game_type = data['gameType']
-        self.rating_type = data['ratingType']
-        self.min_players = data['minPlayers']
-        self.max_players = data['maxPlayers']
-        self.max_teams = data['maxTeams']
-        self.max_team_size = data['maxTeamSize']
-        self.max_squads = data['maxSquads']
-        self.max_squad_size = data['maxSquadSize']
 
-        self.is_default = data['isDefault']
-        self.is_tournament = data['isTournament']
-        self.is_limited_time_mode = data['isLimitedTimeMode']
-        self.is_large_team_game = data['isLargeTeamGame']
-        self.accumulate_to_profile_stats = data['accumulateToProfileStats']
-        if data.get('images') is not None:
-            images = data['images']
-            self.showcase_image = images['showcase']
-            self.mission_icon = images['missionIcon']
-        else:
-            self.showcase_image = None
-            self.mission_icon = None
-        self.gameplay_tags = [gameplay_tag for gameplay_tag in data.get('gameplayTags')] \
-            if data.get('gameplayTags') is not None else None
-        self.path = data['path']
-        try:
-            self.added = datetime.strptime(data.get('added'), '%Y-%m-%dT%H:%M:%S%z')
-        except (ValueError, TypeError):
-            self.added = None
-        self.raw_data = data
+class PlaylistImages(Generic[HTTPClientT]):
+    """Represents images that are associated with a Fortnite Playlist.
+
+    Attributes
+    ------------
+    showcase: Optional[:class:`Asset`]
+        A showcase image for the playlist, if any.
+    mission_icon: Optional[:class:`Asset`]
+        A mission icon for the playlist, if any.
+    """
+
+    __slots__: Tuple[str, ...] = ('showcase', 'mission_icon')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        _showcase = data.get('showcase')
+        self.showcase: Optional[Asset[HTTPClientT]] = _showcase and Asset(url=_showcase, http=http)
+
+        _mission_icon = data.get('missionIcon')
+        self.mission_icon: Optional[Asset[HTTPClientT]] = _mission_icon and Asset(url=_mission_icon, http=http)
+
+
+class Playlist(Hashable, Generic[HTTPClientT]):
+    """Represents a Fortnite Playlist.
+
+    Attributes
+    -----------
+    id: :class:`str`
+        The ID of the playlist.
+    name: :class:`str`
+        The playlist's name.
+    sub_name: Optional[:class:`str`]
+        The playlist's sub name, if any.
+    description: Optional[:class:`str`]
+        A description of the playlist.
+    game_type: Optional[:class:`str`]
+        The type of game the playlist is, if any.
+    rating_type: Optional[:class:`str`]
+        The rating type of the playlist, if any.
+    min_players: :class:`int`
+        The minimum amount of players required. Will be ``-1`` if there is no limit.
+    max_players: :class:`int`
+        The maximum amount of players allowed. Will be ``-1`` if there is no limit.
+    max_teams: :class:`int`
+        The maximum amount of teams allowed. Will be ``-1`` if there is no limit.
+    max_team_size: :class:`int`
+        The maximum amount of players per team. Will be ``-1`` if there is no limit.
+    max_squads: :class:`int`
+        The maximum amount of squads allowed. Will be ``-1`` if there is no limit.
+    max_squad_size: :class:`int`
+        The maximum amount of players per squad. Will be ``-1`` if there is no limit.
+    is_default: :class:`bool`
+        Whether the playlist is the default one.
+    is_tournament: :class:`bool`
+        Whether this playlist is a tournament.
+    is_limited_time_mode: :class:`bool`
+        Whether this playlist is a limited time mode.
+    is_large_team_game: :class:`bool`
+        Whether this playlist is a large team game.
+    accumulate_to_profile_stats: :class:`bool`
+        Whether this playlist accumulates to profile stats.
+    images: Optional[:class:`PlaylistImages`]
+        The images associated with the playlist.
+    gameplay_tags: List[:class:`str`]
+        The gameplay tags for the playlist.
+    path: :class:`str`
+        The path of the playlist.
+    added: :class:`datetime.datetime`
+        The time the playlist was added.
+    raw_data: Dict[:class:`str`, Any]
+        The raw data received from the API.
+    """
+
+    __slots__: Tuple[str, ...] = (
+        'id',
+        'name',
+        'sub_name',
+        'description',
+        'game_type',
+        'min_players',
+        'max_players',
+        'max_teams',
+        'max_team_size',
+        'max_squads',
+        'max_squad_size',
+        'is_default',
+        'is_tournament',
+        'is_limited_time_mode',
+        'is_large_team_game',
+        'accumulate_to_profile_stats',
+        'images',
+        'gameplay_tags',
+        'path',
+        'added',
+        'raw_data',
+    )
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        self.id: str = data['id']
+        self.name: str = data['name']
+        self.sub_name: Optional[str] = data.get('subName')
+        self.description: Optional[str] = data.get('description')
+
+        self.game_type: Optional[str] = data.get('gameType')  # TODO: Make this into an enum
+        self.rating_type: Optional[str] = data.get('ratingType')
+
+        self.min_players: int = data['minPlayers']
+        self.max_players: int = data['maxPlayers']
+        self.max_teams: int = data['maxTeams']
+        self.max_team_size: int = data['maxTeamSize']
+        self.max_squads: int = data['maxSquads']
+        self.max_squad_size: int = data['maxSquadSize']
+
+        self.is_default: bool = data['isDefault']
+        self.is_tournament: bool = data['isTournament']
+        self.is_limited_time_mode: bool = data['isLimitedTimeMode']
+        self.is_large_team_game: bool = data['isLargeTeamGame']
+        self.accumulate_to_profile_stats: bool = data['accumulateToProfileStats']
+
+        _images = get_with_fallback(data, 'images', dict)
+        self.images: Optional[PlaylistImages[HTTPClientT]] = _images and PlaylistImages(data=_images, http=http)
+
+        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.path: str = data['path']
+
+        self.added: datetime.datetime = parse_time(data['added'])
+        self.raw_data: Dict[str, Any] = data

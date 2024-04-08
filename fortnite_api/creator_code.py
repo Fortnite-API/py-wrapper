@@ -22,7 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from __future__ import annotations
+
+from typing import Any, Dict, Tuple
+
 from .account import Account
+from .enums import CreatorCodeStatus
+
+__all__: Tuple[str, ...] = ('CreatorCode',)
 
 
 class CreatorCode:
@@ -30,21 +37,28 @@ class CreatorCode:
 
     Attributes
     -----------
-    user: :class:`User`
-        The user of the creator code.
-    disabled: :class:`bool`
-        Whether the Creator Code is disabled or not.
     code: :class:`str`
-        The slug of the Creator Code
+        The creator code.
+    account: :class:`Account`
+        The account associated with the creator code.
+    status: :class:`CreatorCodeStatus`
+        The status of the creator code.
     verified: :class:`bool`
-        Whether the Creator Code is verified or not.
+        Whether the creator code is verified.
     raw_data: :class:`dict`
-        The raw data from request. Can be used for saving and re-creating the class.
+        The raw data of the creator code.
     """
 
-    def __init__(self, data):
-        self.code = data.get('code')
-        self.user = Account(data.get('account')) if data.get('account') else None
-        self.disabled = data.get('status', '').lower() == 'disabled'
-        self.verified = data.get('verified', False)
+    __slots__: Tuple[str, ...] = ('code', 'account', 'verified', 'status', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.code: str = data['code']
+        self.account: Account = Account(data['account'])
+        self.verified: bool = data['verified']
+        self.status: CreatorCodeStatus = CreatorCodeStatus(data['status'].lower())
         self.raw_data = data
+
+    @property
+    def disabled(self) -> bool:
+        """:class:`bool`: Whether the creator code is disabled."""
+        return self.status is CreatorCodeStatus.DISABLED

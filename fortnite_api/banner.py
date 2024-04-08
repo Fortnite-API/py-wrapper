@@ -22,51 +22,95 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import math
+from __future__ import annotations
+
+from typing import Any, Dict, Generic, Tuple
+
+from .abc import Hashable
+from .http import HTTPClientT
+from .images import Images
+
+__all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BannerColour')
 
 
-class Banner:
-
-    def __init__(self, data):
-        self.id = data.get('id')
-        self.name = data.get('name')
-        self.description = data.get('description')
-        self.category = data.get('category')
-        self.full_usage_rights = data.get('fullUsageRights')
-
-        images = data.get('images', {}) if data.get('images') else {}
-        self.small_icon = BrBannerImage(images.get('smallIcon')) if images.get('smallIcon') else None
-        self.icon = BrBannerImage(images.get('icon')) if images.get('icon') else None
-        self.raw_data = data
-
-
-class BannerColor:
-
-    def __init__(self, data):
-        self.id = data.get('id')
-        self.color = data.get('color')
-        self.category = data.get('category')
-        self.sub_category_group = data.get('subCategoryGroup')
-        self.raw_data = data
-
-
-class BrBannerImage:
-    """Represents a Battle Royale cosmetic image.
+class Banner(Hashable, Generic[HTTPClientT]):
+    """A representation of a banner given to the :class:`FortniteAPI` client
+    as a response. This represents a banner within the Fortnite game.
 
     Attributes
-    -----------
-    url: :class:`str`
-        The hash of the image.
+    ----------
+    id: :class:`str`
+        The id of the banner.
+    name: Optional[:class:`str`]
+        The name of the banner. Can be ``None`` if the banner is not named or
+        no information is provided by the API.
+    description: :class:`str`
+        The description of the banner.
+    category: :class:`str`
+        The category of the banner.
+    full_usage_rights: :class:`bool`
+        Denotes if the banner is full usage rights from Epic Games.
+    dev_name: :class:`str`
+        The developer name of the banner, this is used internally by the
+        Epic Games team.
+        'icon',
+    images: :class:`Images`
+        The images of the banner.
     """
 
-    def __init__(self, url):
-        self.url = url
+    __slots__: Tuple[str, ...] = (
+        'id',
+        'name',
+        'description',
+        'category',
+        'full_usage_rights',
+        'dev_name',
+        'images',
+        'raw_data',
+    )
 
-    def url_as(self, size):
-        if (size & (size - 1) != 0) or size <= 0:
-            raise ValueError('Size must be a positive power of 2')
-        url_without_type = self.url.replace('.png', '')
-        return url_without_type + '_' + str(size) + '.png'
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        self.id: str = data['id']
+        self.name: str = data['name']
+        self.dev_name: str = data['devName']
+        self.description: str = data['category']
+        self.category: str = data['category']
+        self.full_usage_rights: bool = data['fullUsageRights']
 
-    def __str__(self):
-        return self.url
+        self.images: Images[HTTPClientT] = Images(data=data, http=http)
+        self.raw_data: Dict[str, Any] = data
+
+
+class BannerColor(Hashable):
+    """Represents a color of a :class:`Banner`.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The id of the color.
+    color: :class:`str`
+        The color of the banner.
+    colour: :class:`str`
+        An alias to :attr:`color`.
+    category: :class:`str`
+        The category of the banner.
+    sub_category_group: :class:`int`
+        The sub category group of the banner.
+    raw_data: :class:`Dict[str, Any]`
+        The raw data of the banner color.
+    """
+
+    __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        self.id: str = data['id']
+
+        self.color: str = data['color']
+        self.colour = self.color
+
+        self.category: str = data['category']
+        self.sub_category_group: int = data['subCategoryGroup']  # TODO: Convert this to enum?
+        self.raw_data = data
+
+
+BannerColour = BannerColor

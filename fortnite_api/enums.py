@@ -22,15 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from enum import Enum
+from __future__ import annotations
+
+import enum
 
 
-class KeyFormat(Enum):
+class KeyFormat(enum.Enum):
     HEX = 'hex'
     BASE64 = 'base64'
 
 
-class GameLanguage(Enum):
+class GameLanguage(enum.Enum):
     ARABIC = 'ar'
     GERMAN = 'de'
     ENGLISH = 'en'
@@ -48,14 +50,23 @@ class GameLanguage(Enum):
     CHINESE_TRADITIONAL = 'zh-Hant'
 
 
-class MatchMethod(Enum):
+class MatchMethod(enum.Enum):
     FULL = 'full'
     CONTAINS = 'contains'
     STARTS = 'starts'
     ENDS = 'ends'
 
 
-class BrCosmeticRarity(Enum):
+class CosmeticType(enum.Enum):
+    BR = "br"
+    TRACKS = "tracks"
+    INSTRUMENTS = "instruments"
+    CARS = "cars"
+    LEGO = "lego"
+    LEGO_KITS = "legokits"
+
+
+class CosmeticBrRarity(enum.Enum):
     FROZEN = 'frozen'
     LAVA = 'lava'
     LEGENDARY = 'legendary'
@@ -72,10 +83,10 @@ class BrCosmeticRarity(Enum):
     RARE = 'rare'
     UNCOMMON = 'uncommon'
     COMMON = 'common'
-    UNKNOWN = 'unknown'
+    MYTHIC = 'mythic'
 
 
-class BrCosmeticType(Enum):
+class CosmeticBrType(enum.Enum):
     OUTFIT = 'outfit'
     BACKPACK = 'backpack'
     PET = 'pet'
@@ -114,27 +125,39 @@ class BrCosmeticType(Enum):
     LEGO_DECOR_BUNDLE = 'legoprop'
 
     SHOUT = 'shout'
-    UNKNOWN = 'unknown'
 
 
-class NewsType(Enum):
+class CosmeticBrSearchTag(enum.Enum):
+    YELLOW = 'Yellow'
+    WINTER = 'Winter'
+    WESTERN = 'Western'
+    UMBRELLA = 'Umbrella'
+    BEAR = 'Bear'
+    FOOD = 'Food'
+    HAZE = 'Haze'
+    PINK = 'Pink'
+    SUPERMAN = 'Superman'
+    SUMMER = 'Summer'
+
+
+class NewsType(enum.Enum):
     BATTLE_ROYALE = 'br'
     SAVE_THE_WORLD = 'stw'
     CREATIVE = 'creative'
 
 
-class AccountType(Enum):
+class AccountType(enum.Enum):
     EPIC = 'epic'
     PSN = 'psn'
     XBL = 'xbl'
 
 
-class TimeWindow(Enum):
+class TimeWindow(enum.Enum):
     SEASON = 'season'
     LIFETIME = 'lifetime'
 
 
-class StatsImageType(Enum):
+class StatsImageType(enum.Enum):
     ALL = 'all'
     KEYBOARD_MOUSE = 'keyboardMouse'
     GAMEPAD = 'gamepad'
@@ -142,14 +165,19 @@ class StatsImageType(Enum):
     NONE = 'none'
 
 
-class ShopTileSize(Enum):
+class CreatorCodeStatus(enum.Enum):
+    ACTIVE = 'active'
+    DISABLED = 'disabled'
+
+
+class ShopTileSize(enum.Enum):
     SMALL = 'Small'
     NORMAL = 'Normal'
     DOUBLE_WIDE = 'DoubleWide'
     TRIPLE_WIDE = 'TripleWide'
 
 
-class CosmeticCompatibleMode(Enum):
+class CosmeticCompatibleMode(enum.Enum):
     BATTLE_ROYALE = 'ECosmeticCompatibleMode::BattleRoyale'
     LEGO = 'ECosmeticCompatibleMode::Juno'
     ROCKET_RACING = 'ECosmeticCompatibleMode::DelMar'

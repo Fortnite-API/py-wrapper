@@ -22,21 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = '2.6.5'
+from __future__ import annotations
 
-from .account import *
-from .aes import *
-from .all import *
-from .asset import *
-from .banner import *
-from .client import FortniteAPI as FortniteAPI, SyncFortniteAPI as SyncFortniteAPI
-from .cosmetics import *
-from .creator_code import *
-from .enums import *
-from .errors import *
-from .map import *
-from .new import *
-from .news import *
-from .playlist import *
-from .stats import *
-from .utils import *
+from typing import Any, Dict, Generic, Optional, Tuple
+
+from .asset import Asset
+from .http import HTTPClientT
+
+__all__: Tuple[str, ...] = ('Images',)
+
+
+class Images(Generic[HTTPClientT]):
+    """Represents image data passed from the API.
+
+    Attributes
+    ----------
+    small_icon: Optional[:class:`Asset`]
+        The small icon of the image.
+    icon: Optional[:class:`Asset`]
+        The icon of the image.
+    """
+
+    __slots__: Tuple[str, ...] = ('small_icon', 'icon')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        small_icon = data.get('smallIcon')
+        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
+
+        icon = data.get('icon')
+        self.icon: Optional[Asset[HTTPClientT]] = icon and Asset(http=http, url=icon)

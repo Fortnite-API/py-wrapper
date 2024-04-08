@@ -22,15 +22,53 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import Dict, TypedDict, Any
+from __future__ import annotations
+
+from typing import Tuple
+
+__all__: Tuple[str, ...] = ('IdComparable', 'Hashable')
 
 
-class _AccountOptional(TypedDict, total=False):
-    external_auths: Dict[Any, Any]
+class IdComparable:
+    """
+    Represents an object that can be compared to another object by id.
 
+    .. container:: operations
 
-class Account(_AccountOptional):
+        .. describe:: x == y
+
+            Determine if two objects are equal.
+
+        .. describe:: x != y
+
+            Determine if two objects are not equal.
+    """
+
     id: str
-    name: str
-    external_auths: Dict[Any, Any]
-    
+
+    def __eq__(self, __o: object) -> bool:
+        if not isinstance(__o, self.__class__):
+            return False
+
+        return self.id == __o.id
+
+    def __ne__(self, __o: object) -> bool:
+        return not self.__eq__(__o)
+
+
+class Hashable(IdComparable):
+    """Represents a hashable object.
+
+    This inherits :class:`IdComparable` and adds a hash function.
+
+    .. container:: operations
+
+        .. describe:: hash(x)
+
+            Return the hash of the object.
+    """
+
+    id: str
+
+    def __hash__(self) -> int:
+        return hash(self.id)

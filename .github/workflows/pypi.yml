@@ -3,6 +3,7 @@ name: PyPI Auto-Release
 on: 
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   pypi:
