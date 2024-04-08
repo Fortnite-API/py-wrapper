@@ -24,10 +24,10 @@ SOFTWARE.
 
 __version__ = '2.6.5'
 
-from .asset import *
 from .account import *
 from .aes import *
 from .all import *
+from .asset import *
 from .banner import *
 from .client import FortniteAPI as FortniteAPI, SyncFortniteAPI as SyncFortniteAPI
 from .cosmetics import *

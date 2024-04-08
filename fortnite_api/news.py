@@ -26,11 +26,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple
 
-from .asset import Asset
-
-from .http import HTTPClientT
-
 from .abc import Hashable
+from .asset import Asset
+from .http import HTTPClientT
 from .utils import get_with_fallback, parse_time
 
 if TYPE_CHECKING:

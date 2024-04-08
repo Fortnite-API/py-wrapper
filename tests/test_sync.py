@@ -5,13 +5,13 @@ import requests
 import fortnite_api as fn_api
 
 from .test_async import (
-    _test_game_mode_news,
-    _test_playlist,
     TEST_ACCOUNT_ID,
     TEST_ACCOUNT_NAME,
-    TEST_CREATOR_CODE,
     TEST_COSMETIC_ID,
+    TEST_CREATOR_CODE,
     TEST_DEFAULT_PLAYLIST,
+    _test_game_mode_news,
+    _test_playlist,
 )
 
 
