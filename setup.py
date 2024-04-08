@@ -50,7 +50,7 @@ setup(
     install_requires=install_requires,
     extras_require=extras_require,
     python_requires='>=3.8.0',
-    download_url='https://github.com/Fortnite-API/py-wrapper/archive/refs/tags/v2.5.1.tar.gz',
+    download_url=f'https://github.com/Fortnite-API/py-wrapper/archive/refs/tags/v{version}.tar.gz',
     keywords=['fortnite', 'fortnite-api.com', 'shop', 'cosmetics', 'fortnite api', 'fortnite shop'],
     classifiers=[
         'License :: OSI Approved :: MIT License',

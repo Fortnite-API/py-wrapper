@@ -1,3 +1,2 @@
 requests>=2.22.0
-aiohttp>=3.7.4,<4
-typing-extensions
+aiohttp>=3.9.0,<4.0.0

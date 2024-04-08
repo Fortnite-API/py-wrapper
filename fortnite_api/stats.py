@@ -56,13 +56,19 @@ class BrBattlePass:
 class BrInputs:
     __slots__: Tuple[str, ...] = ('all', 'keyboard_mouse', 'gamepad', 'touch', 'raw_data')
 
-    def __init__(self, data: Dict[str, Any]) -> None:
-        self.all: Optional[BrInputStats] = (all := data.get('all')) and BrInputStats(data=all)
-        self.keyboard_mouse: Optional[BrInputStats] = (keyboard_mouse := data.get('keyboardMouse')) and BrInputStats(
-            data=keyboard_mouse
-        )
-        self.gamepad: Optional[BrInputStats] = (gamepad := data.get('gamepad')) and BrInputStats(data=gamepad)
-        self.touch: Optional[BrInputStats] = (touch := data.get('touch')) and BrInputStats(data=touch)
+    def __init__(self, data: Dict[str, Any]):
+
+        _all = data.get('all')
+        self.all = _all and BrInputStats(_all)
+
+        _keyboard_mouse = data.get('keyboardMouse')
+        self.keyboard_mouse = _keyboard_mouse and BrInputStats(_keyboard_mouse)
+
+        _gamepad = data.get('gamepad')
+        self.gamepad = _gamepad and BrInputStats(_gamepad)
+
+        _touch = data.get('touch')
+        self.touch = _touch and BrInputStats(_touch)
         self.raw_data = data
 
 
