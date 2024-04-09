@@ -90,15 +90,18 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
         The tag of the variant option.
     name: :class:`str`
         The option's name.
+    unlock_requirements: Optional[:class:`str`]
+        The unlock requirements of the variant option, if available.
     image: :class:`Asset`
         The image of the variant option.
     """
 
-    __slots__: Tuple[str, ...] = ('tag', 'name', 'image')
+    __slots__: Tuple[str, ...] = ('tag', 'name', 'unlock_requirements', 'image')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.tag: str = data['tag']
         self.name: str = data['name']
+        self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
 
 
