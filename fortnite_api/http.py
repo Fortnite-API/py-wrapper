@@ -65,10 +65,7 @@ class HTTPMixin(abc.ABC):
         self,
         *,
         token: Optional[str] = None,
-        run_async: bool = False,
     ) -> None:
-        self.run_async: bool = run_async
-
         self.token: Optional[str] = token
         self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {0}) Python/{1[0]}.{1[1]}'.format(
             __version__, sys.version_info
