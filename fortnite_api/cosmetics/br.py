@@ -166,7 +166,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The gameplay tags of the cosmetic.
     meta_tags: List[:class:`str`]
         The meta tags of the cosmetic.
-    showcase_video: Optional[:class:`str`]
+    showcase_video_id: Optional[:class:`str`]
         The showcase video of the cosmetic, if available.
     dynamic_pak_id: Optional[:class:`str`]
         The dynamic pak ID of the cosmetic, if available.
@@ -199,7 +199,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         'search_tags',
         'gameplay_tags',
         'meta_tags',
-        'showcase_video',
+        'showcase_video_id',
         'dynamic_pak_id',
         'item_preview_hero_path',
         'display_asset_path',
@@ -254,7 +254,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
         self.meta_tags: List[str] = get_with_fallback(data, 'metaTags', list)
 
-        self.showcase_video: Optional[str] = data.get('showcaseVideo')
+        self.showcase_video_id: Optional[str] = data.get('showcaseVideo')
         self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId')
         self.item_preview_hero_path: Optional[str] = data.get('itemPreviewHeroPath')
         self.display_asset_path: Optional[str] = data.get('displayAssetPath')
@@ -264,3 +264,12 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         self.shop_history: List[datetime.datetime] = [
             parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
         ]
+
+    @property
+    def showcase_video(self) -> Optional[str]:
+        """Optional[:class:`str`]: The URL of the showcase video of the cosmetic, if any."""
+        id = self.showcase_video_id
+        if not id:
+            return None
+
+        return f"https://www.youtube.com/watch?v={id}"
