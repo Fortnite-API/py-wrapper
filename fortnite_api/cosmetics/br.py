@@ -135,6 +135,12 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The name of the cosmetic.
     description: :class:`str`
         The description of the cosmetic.
+    exclusive_description: Optional[:class:`str`]
+        The exclusive description of the cosmetic, if available.
+    unlock_requirements: Optional[:class:`str`]
+        The unlock requirements of the cosmetic, if available.
+    custom_exclusive_callout: Optional[:class:`str`]
+        The custom exclusive callout of the cosmetic, if available.
     type: Optional[:class:`CosmeticType`]
         The type of the cosmetic.
     rarity: Optional[:class:`CosmeticRarity`]
@@ -149,6 +155,8 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The images of the cosmetic.
     variants: List[:class:`CosmeticBrVariant`]
         The variants of the cosmetic, if any.
+    built_in_emote_ids: List[:class:`str`]
+        The built-in emote IDs of the cosmetic.
     search_tags: List[:class:`CosmeticBrSearchTag`]
         The search tags of the cosmetic.
     gameplay_tags: List[:class:`str`]
@@ -159,6 +167,8 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The showcase video of the cosmetic, if available.
     dynamic_pak_id: Optional[:class:`str`]
         The dynamic pak ID of the cosmetic, if available.
+    item_preview_hero_path: Optional[:class:`str`]
+        The item preview hero path of the cosmetic, if available.
     display_asset_path: Optional[:class:`str`]
         The display asset path of the cosmetic, if available.
     definition_path: Optional[:class:`str`]
@@ -172,6 +182,9 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
     __slots__: Tuple[str, ...] = (
         'name',
         'description',
+        'exclusive_description',
+        'unlock_requirements',
+        'custom_exclusive_callout',
         'type',
         'rarity',
         'series',
@@ -179,11 +192,13 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         'introduction',
         'images',
         'variants',
+        'built_in_emote_ids',
         'search_tags',
         'gameplay_tags',
         'meta_tags',
         'showcase_video',
         'dynamic_pak_id',
+        'item_preview_hero_path',
         'display_asset_path',
         'definition_path',
         'path',
@@ -200,6 +215,9 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
 
         self.name: str = data['name']
         self.description: str = data['description']
+        self.exclusive_description: Optional[str] = data.get('exclusiveDescription')
+        self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
+        self.custom_exclusive_callout: Optional[str] = data.get('customExclusiveCallout')
 
         _type = data.get('type')
         self.type: Optional[CosmeticType] = _type and CosmeticType(data=_type)
@@ -224,6 +242,9 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
             CosmeticBrVariant(data=variant, http=http) for variant in variants
         ]
 
+        built_in_emote_ids: List[str] = get_with_fallback(data, 'builtInEmoteId', list)
+        self.built_in_emote_ids: List[str] = built_in_emote_ids
+
         search_tags: List[str] = get_with_fallback(data, 'searchTags', list)
         self.search_tags: List[CosmeticBrSearchTag] = [CosmeticBrSearchTag(tag) for tag in search_tags]
 
@@ -232,6 +253,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
 
         self.showcase_video: Optional[str] = data.get('showcaseVideo')
         self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId')
+        self.item_preview_hero_path: Optional[str] = data.get('itemPreviewHeroPath')
         self.display_asset_path: Optional[str] = data.get('displayAssetPath')
         self.definition_path: Optional[str] = data.get('definitionPath')
         self.path: Optional[str] = data.get('path')
