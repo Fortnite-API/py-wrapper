@@ -57,8 +57,8 @@ class CosmeticInstrument(Cosmetic[HTTPClientT]):
         The gameplay tags of the instrument.
     path: Optional[:class:`str`]
         The path of the instrument.
-    showcase_video: Optional[:class:`str`]
-        The showcase video of the instrument.
+    showcase_video_id: Optional[:class:`str`]
+        The showcase Youtube video ID of the cosmetic, if available.
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the instrument.
     """
@@ -72,7 +72,7 @@ class CosmeticInstrument(Cosmetic[HTTPClientT]):
         'series',
         'gameplay_tags',
         'path',
-        'showcase_video',
+        'showcase_video_id',
         'shop_history',
     )
 
@@ -96,8 +96,17 @@ class CosmeticInstrument(Cosmetic[HTTPClientT]):
 
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
         self.path: Optional[str] = data.get('path')
-        self.showcase_video: Optional[str] = data.get('showcaseVideo')
+        self.showcase_video_id: Optional[str] = data.get('showcaseVideo')
 
         self.shop_history: List[datetime.datetime] = [
             parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
         ]
+
+    @property
+    def showcase_video(self) -> Optional[str]:
+        """Optional[:class:`str`]: The URL of the Youtube showcase video of the cosmetic, if any."""
+        id = self.showcase_video_id
+        if not id:
+            return None
+
+        return f"https://www.youtube.com/watch?v={id}"
