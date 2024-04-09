@@ -22,10 +22,7 @@ extras_require = {
         'sphinxcontrib-websupport',
         'typing-extensions',
     ],
-    'dev': [
-        'black',
-        'isort',
-    ],
+    'dev': ['black', 'isort', 'python-dotenv'],
 }
 
 with open('requirements.txt') as f:
