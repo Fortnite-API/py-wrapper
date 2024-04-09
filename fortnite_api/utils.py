@@ -28,7 +28,7 @@ import datetime
 from typing import Any, Callable, Dict, Hashable, Tuple, TypeVar
 
 try:
-    import orjson
+    import orjson  # type: ignore
 
     _has_orjson: bool = True
 except ImportError:
