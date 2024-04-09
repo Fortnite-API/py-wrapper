@@ -254,27 +254,8 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    # TODO
     def get_shop(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/shop')
-        params: Dict[str, str] = {}
-
-        if language:
-            params['language'] = language
-
-        return self.request(r, params=params)
-
-    def get_br_shop(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/shop/br')
-        params: Dict[str, str] = {}
-
-        if language:
-            params['language'] = language
-
-        return self.request(r, params=params)
-
-    def get_br_shop_combined(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/shop/br/combined')
         params: Dict[str, str] = {}
 
         if language:
