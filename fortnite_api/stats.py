@@ -73,7 +73,8 @@ class BrPlayerStats(Generic[HTTPClientT]):
         _image = data.get('image')
         self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
 
-        self.stats: Optional[BrInputs] = (inputs := data.get('inputs')) and BrInputs(data=inputs)
+        _inputs = data.get('_inputs')
+        self.stats: Optional[BrInputs] = _inputs and BrInputs(data=_inputs)
 
         self.raw_data: Dict[str, Any] = data
 
@@ -92,8 +93,8 @@ class BrBattlePass:
     __slots__: Tuple[str, ...] = ('level', 'progress')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.level = data.get('level')
-        self.progress = data.get('progress')
+        self.level: int = data['level']
+        self.progress: Optional[int] = data['progress']
 
 
 class BrInputs:
@@ -175,27 +176,27 @@ class BrGameModeStats:
     top3: Optional[:class:`int`]
         The number of times the player has placed in the top 3 (10 players left remaining)
         in this specific game mode. This is only available when the game mode for these
-        stats is a :attr:`BrInputStats.squad` game mode.
+        stats is a :attr:`BrInputStats.squad` game mode or :attr:`BrInputStats.overall`.
     top5: Optional[:class:`int`]
         The number of times the player has placed in the top 5 (10 players left remaining)
         in this specific game mode. This is only available when the game mode
-        for these stats is a :attr:`BrInputStats.duo` game mode.
+        for these stats is a :attr:`BrInputStats.duo` game mode or :attr:`BrInputStats.overall`.
     top6: Optional[:class:`int`]
         The number of times the player has placed in the top 6 (25 players left remaining)
         in this specific game mode. This is only available when the game mode
-        for these stats is a :attr:`BrInputStats.squad` game mode.
+        for these stats is a :attr:`BrInputStats.squad` game mode or :attr:`BrInputStats.overall`.
     top10: Optional[:class:`int`]
         The number of times the player has placed in the top 10 (10 players left remaining) in
         this specific game mode. This is only available when the game mode for these
-        stats is a :attr:`BrInputStats.solo` game mode.
+        stats is a :attr:`BrInputStats.solo` game mode or :attr:`BrInputStats.overall`.
     top12: Optional[:class:`int`]
         The number of times the player has placed in the top 12 (25 players left remaining)
         in this specific game mode. This is only available when the game mode
-        for these stats is a :attr:`BrInputStats.duo` game mode.
+        for these stats is a :attr:`BrInputStats.duo` game mode or :attr:`BrInputStats.overall`.
     top25: Optional[:class:`int`]
         The number of times the player has placed in the top 25 (25 players left remaining)
         in this specific game mode. This is only available when the game mode for
-        these stats is a :attr:`BrInputStats.solo` game mode.
+        these stats is a :attr:`BrInputStats.solo` game mode or :attr:`BrInputStats.overall`.
     kills: :class:`int`
         The total number of kills in this specific game mode.
     kills_per_min: :class:`float`
