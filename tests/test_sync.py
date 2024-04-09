@@ -288,3 +288,58 @@ def test_sync_beta_fetch_material_instances():
 
         assert instance.images.offer_image
         assert instance == instance
+
+
+def test_sync_fetch_shop():
+    with fn_api.SyncFortniteAPI() as client:
+        shop = client.fetch_shop()
+
+    assert isinstance(shop, fn_api.Shop)
+
+    if not shop.entries:
+        return
+
+    for entry in shop.entries:
+        assert isinstance(entry, fn_api.ShopEntry)
+        assert isinstance(entry.regular_price, int)
+        assert isinstance(entry.final_price, int)
+
+        bundle = entry.bundle
+        if bundle:
+            assert isinstance(entry.bundle, fn_api.ShopEntryBundle)
+            assert bundle.name
+            assert bundle.info
+            assert bundle.image
+
+        banner = entry.banner
+        if banner:
+            assert banner.value
+            assert banner.intensity
+            assert banner.backend_value
+
+        assert isinstance(entry.giftable, bool)
+        assert isinstance(entry.refundable, bool)
+        assert isinstance(entry.sort_priority, int)
+        assert isinstance(entry.layout_id, str)
+
+        layout = entry.layout
+        assert isinstance(layout, fn_api.ShopEntryLayout)
+        assert layout.id
+        assert layout.name
+        assert layout.index
+        assert layout.show_ineligible_offers
+
+        assert entry.dev_name
+        assert entry.offer_id
+        assert entry.tile_size
+        assert entry.new_display_asset_path
+
+        new_display_asset = entry.new_display_asset
+        assert isinstance(new_display_asset, fn_api.ShopEntryNewDisplayAsset)
+        assert new_display_asset.id
+
+        for material_instance in new_display_asset.material_instances:
+            assert isinstance(material_instance, fn_api.MaterialInstance)
+
+        for cosmetic in entry.br_items + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:
+            assert isinstance(cosmetic, fn_api.Cosmetic)
