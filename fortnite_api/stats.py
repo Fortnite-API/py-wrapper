@@ -172,18 +172,30 @@ class BrGameModeStats:
         The score per match for the stats for a specific game mode. This is the score divided by the matches played.
     wins: :class:`int`
         The total number of wins in this specific game mode.
-    top3: :class:`int`
-        The number of times the player has placed in the top 3 in this specific game mode.
-    top5: :class:`int`
-        The number of times the player has placed in the top 5 in this specific game mode.
-    top6: :class:`int`
-        The number of times the player has placed in the top 6 in this specific game mode.
-    top10: :class:`int`
-        The number of times the player has placed in the top 10 in this specific game mode.
-    top12: :class:`int`
-        The number of times the player has placed in the top 12 in this specific game mode.
-    top25: :class:`int`
-        The number of times the player has placed in the top 25 in this specific game mode.
+    top3: Optional[:class:`int`]
+        The number of times the player has placed in the top 3 (10 players left remaining)
+        in this specific game mode. This is only available when the game mode for these
+        stats is a :attr:`BrInputStats.squad` game mode.
+    top5: Optional[:class:`int`]
+        The number of times the player has placed in the top 5 (10 players left remaining)
+        in this specific game mode. This is only available when the game mode
+        for these stats is a :attr:`BrInputStats.duo` game mode.
+    top6: Optional[:class:`int`]
+        The number of times the player has placed in the top 6 (25 players left remaining)
+        in this specific game mode. This is only available when the game mode
+        for these stats is a :attr:`BrInputStats.squad` game mode.
+    top10: Optional[:class:`int`]
+        The number of times the player has placed in the top 10 (10 players left remaining) in
+        this specific game mode. This is only available when the game mode for these
+        stats is a :attr:`BrInputStats.solo` game mode.
+    top12: Optional[:class:`int`]
+        The number of times the player has placed in the top 12 (25 players left remaining)
+        in this specific game mode. This is only available when the game mode
+        for these stats is a :attr:`BrInputStats.duo` game mode.
+    top25: Optional[:class:`int`]
+        The number of times the player has placed in the top 25 (25 players left remaining)
+        in this specific game mode. This is only available when the game mode for
+        these stats is a :attr:`BrInputStats.solo` game mode.
     kills: :class:`int`
         The total number of kills in this specific game mode.
     kills_per_min: :class:`float`
@@ -236,12 +248,12 @@ class BrGameModeStats:
         self.score_per_match: float = data['scorePerMatch']
         self.wins: int = data['wins']
 
-        self.top3: int = data['top3']
-        self.top5: int = data['top5']
-        self.top6: int = data['top6']
-        self.top10: int = data['top10']
-        self.top12: int = data['top12']
-        self.top25: int = data['top25']
+        self.top3: Optional[int] = data.get('top3')
+        self.top5: Optional[int] = data.get('top5')
+        self.top6: Optional[int] = data.get('top6')
+        self.top10: Optional[int] = data.get('top10')
+        self.top12: Optional[int] = data.get('top12')
+        self.top25: Optional[int] = data.get('top25')
 
         self.kills: int = data['kills']
         self.kills_per_min: float = data['killsPerMin']
