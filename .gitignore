@@ -84,3 +84,7 @@ fabric.properties
 *.log
 *.log.*
 '.idea'
+
+# Development Test Files
+_.py
+.env
