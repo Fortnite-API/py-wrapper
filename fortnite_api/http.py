@@ -288,38 +288,30 @@ class HTTPMixin(abc.ABC):
     def get_br_stats(
         self,
         name: str,
-        account_type: Optional[Literal['epic', 'psn', 'xbl']] = None,
-        time_window: Optional[Literal['season', 'lifetime']] = None,
-        image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch', 'none']] = None,
+        account_type: Literal['epic', 'psn', 'xbl'] = 'epic',
+        time_window: Literal['season', 'lifetime'] = 'lifetime',
+        image: Literal['all', 'keyboardMouse', 'gamepad', 'touch', 'none'] = 'none',
     ):
         r: Route = Route('GET', '/v2/stats/br/v2', name=name)
         params: Dict[str, str] = {'name': name}
 
-        if account_type:
-            params['account_type'] = account_type
-
-        if time_window:
-            params['time_window'] = time_window
-
-        if image:
-            params['image'] = image
+        params['account_type'] = account_type
+        params['time_window'] = time_window
+        params['image'] = image
 
         return self.request(r, params=params)
 
     def get_br_stats_by_id(
         self,
         account_id: str,
-        time_window: Optional[Literal['season', 'lifetime']] = None,
-        image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch', 'none']] = None,
+        time_window: Literal['season', 'lifetime'] = 'lifetime',
+        image: Literal['all', 'keyboardMouse', 'gamepad', 'touch', 'none'] = 'none',
     ):
         r: Route = Route('GET', '/v2/stats/br/v2/{account_id}', account_id=account_id)
         params: Dict[str, str] = {}
 
-        if time_window:
-            params['time_window'] = time_window
-
-        if image:
-            params['image'] = image
+        params['time_window'] = time_window
+        params['image'] = image
 
         return self.request(r, params=params)
 
