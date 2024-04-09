@@ -35,6 +35,7 @@ from .creator_code import *
 from .enums import *
 from .errors import *
 from .map import *
+from .material import *
 from .new import *
 from .news import *
 from .playlist import *

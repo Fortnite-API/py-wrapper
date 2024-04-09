@@ -312,6 +312,10 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
+    def beta_get_material_instances(self):
+        r: Route = Route('GET', '/beta/materialinstances')
+        return self.request(r)
+
 
 class HTTPClient(HTTPMixin):
     def __init__(self, *args: Any, session: Optional[aiohttp.ClientSession] = None, **kwargs: Any) -> None:

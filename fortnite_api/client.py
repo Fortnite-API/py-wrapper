@@ -36,8 +36,10 @@ from .banner import Banner, BannerColor
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticTrack
 from .creator_code import CreatorCode
 from .enums import *
+from .errors import BetaAccessNotEnabledError
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
+from .material import MaterialInstance
 from .new import NewBrCosmetics, NewCosmetics
 from .news import GameModeNews, News
 from .playlist import Playlist
@@ -51,7 +53,7 @@ TC = TypeVar('TC')
 P = ParamSpec('P')
 
 
-def _remove_coro(obj: T) -> T:
+def _remove_coro_doc(obj: T) -> T:
     # Runs through all the functions of the object and anything
     # that has a docstring that starts with '|coro|' is removed
     for value in obj.__dict__.values():
@@ -84,6 +86,10 @@ class FortniteAPI:
         The default language to display the data in. Defaults to :attr:`GameLanguage.ENGLISH`.
     session: Optional[:class:`aiohttp.ClientSession`]
         The session to use for the HTTP requests. Defaults to ``None``. If not provided, a new session will be created for you.
+    beta: :class:`bool`
+        Whether or not the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``. This is to prevent accidental usage of beta endpoints.
+
+        All beta endpoints are prefixed with ``beta_``.
     """
 
     def __init__(
@@ -92,9 +98,11 @@ class FortniteAPI:
         *,
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[aiohttp.ClientSession] = None,
+        beta: bool = False,
     ) -> None:
         self.http: HTTPClient = HTTPClient(session=session, token=api_key)
         self.default_language: Optional[GameLanguage] = default_language
+        self.beta: bool = beta
 
     async def __aenter__(self) -> Self:
         if self.http.session is None:
@@ -574,8 +582,39 @@ class FortniteAPI:
         )
         return BrPlayerStats(data=data, http=self.http)
 
+    async def beta_fetch_material_instances(self) -> List[MaterialInstance]:
+        """|coro|
 
-@_remove_coro
+        Fetches all the material instances available in Fortnite.
+
+        .. note::
+
+            This is a beta method. This cannot be called unless :attr:`beta`
+            is set to ``True`` in the client.
+
+        .. warning::
+
+            This is a beta method. At any time, the endpoint this method calls could be removed or
+            changed, and this method could break. Always be prepared for this.
+
+        Returns
+        --------
+        List[:class:`MaterialInstance`]
+            The fetched material instances.
+
+        Raises
+        ------
+        BetaAccessNotEnabledError
+            The client does not have beta access enabled through :attr:`beta`.
+        """
+        if not self.beta:
+            raise BetaAccessNotEnabledError("Beta access is not enabled for this client.")
+
+        data = await self.http.beta_get_material_instances()
+        return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]
+
+
+@_remove_coro_doc
 class SyncFortniteAPI:
     """Represents a Sync Fortnite API client. This is the main class used to interact with the Fortnite API.
 
@@ -594,6 +633,10 @@ class SyncFortniteAPI:
         The default language to display the data in. Defaults to :attr:`GameLanguage.ENGLISH`.
     session: Optional[:class:`requests.Session`]
         The session to use for the HTTP requests. Defaults to ``None``. If not provided, a new session will be created for you.
+    beta: :class:`bool`
+        Whether or not the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``.
+
+        All beta endpoints are prefixed with ``beta_``.
     """
 
     def __init__(
@@ -602,9 +645,11 @@ class SyncFortniteAPI:
         *,
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[requests.Session] = None,
+        beta: bool = False,
     ) -> None:
         self.http: SyncHTTPClient = SyncHTTPClient(session=session, token=api_key)
         self.default_language: Optional[GameLanguage] = default_language
+        self.beta: bool = beta
 
     # For with statement
     def __enter__(self) -> Self:
@@ -769,3 +814,11 @@ class SyncFortniteAPI:
     ) -> BrPlayerStats[SyncHTTPClient]:
         data = self.http.get_br_stats_by_id(account_id=id, time_window=time_window.value, image=image.value)
         return BrPlayerStats(data=data, http=self.http)
+
+    @copy_doc(FortniteAPI.beta_fetch_material_instances)
+    def beta_fetch_material_instances(self) -> List[MaterialInstance[SyncHTTPClient]]:
+        if not self.beta:
+            raise BetaAccessNotEnabledError("Beta access is not enabled for this client.")
+
+        data = self.http.beta_get_material_instances()
+        return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]

@@ -241,3 +241,24 @@ def test_sync_fetch_playlist_by_id():
 
     assert playlist.id == TEST_DEFAULT_PLAYLIST
     _test_playlist(playlist)
+
+
+def test_sync_beta_fetch_material_instances():
+    # Ensure you cannot call this without beta=True
+    try:
+        fn_api.SyncFortniteAPI().beta_fetch_material_instances()
+        assert False, "Should not be able to call this without beta=True"
+    except fn_api.BetaAccessNotEnabledError:
+        pass
+
+    with fn_api.SyncFortniteAPI(beta=True) as client:
+        material_instances = client.beta_fetch_material_instances()
+
+    for instance in material_instances:
+        assert isinstance(instance, fn_api.MaterialInstance)
+
+        assert instance.id
+        assert instance.primary_mode
+
+        assert instance.images.offer_image
+        assert instance == instance

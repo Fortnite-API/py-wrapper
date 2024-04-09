@@ -57,3 +57,7 @@ class RateLimited(FortniteAPIException):
 
 class Unauthorized(FortniteAPIException):
     pass
+
+
+class BetaAccessNotEnabledError(FortniteAPIException):
+    pass

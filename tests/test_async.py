@@ -335,3 +335,26 @@ async def test_async_fetch_playlist_by_id():
 
     assert playlist.id == TEST_DEFAULT_PLAYLIST
     _test_playlist(playlist)
+
+
+@pytest.mark.asyncio
+async def test_async_beta_fetch_material_instances():
+
+    # Ensure you cannot call this without beta=True
+    try:
+        await fn_api.FortniteAPI().beta_fetch_material_instances()
+        assert False, "Should not be able to call this without beta=True"
+    except fn_api.BetaAccessNotEnabledError:
+        pass
+
+    async with fn_api.FortniteAPI(beta=True) as client:
+        material_instances = await client.beta_fetch_material_instances()
+
+    for instance in material_instances:
+        assert isinstance(instance, fn_api.MaterialInstance)
+
+        assert instance.id
+        assert instance.primary_mode
+
+        assert instance.images.offer_image
+        assert instance == instance
