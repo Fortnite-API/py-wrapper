@@ -41,3 +41,4 @@ from .news import *
 from .playlist import *
 from .stats import *
 from .utils import *
+from .shop import *
