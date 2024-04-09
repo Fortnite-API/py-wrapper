@@ -91,7 +91,8 @@ class ScalingsInfo:
     size: :class:`float`
         The size of the scaling attribute.
     intensity: Optional[:class:`float`]
-        The intensity of the scaling attribute. This will be ``None`` if the info is about a gradient, otherwise it will be a float.
+        The intensity of the scaling attribute. This will be ``None`` if the info is about a gradient,
+        otherwise it will be a float.
     """
 
     hardness: float
@@ -169,7 +170,8 @@ class MaterialInstanceScalings:
 class MaterialInstance(Hashable, Generic[HTTPClientT]):
     """Material instancing is a way to create a parent Material that you can
     use as a base to make a wide variety of different looking children (Material instances).
-    Fortnite takes advantage of this concept for its cosmetics, allowing them to create a single
+
+    Fortnite takes advantage of this concept for its cosmetics. This allows developers to create a single
     cosmetic and then create many different versions of it using Material instances. This is used
     across not just skins but also extended onto lego cosmetics as well.
 
