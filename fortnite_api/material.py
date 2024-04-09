@@ -103,12 +103,12 @@ class MaterialInstance(Hashable, Generic[HTTPClientT]):
         Some information about the scalings of the Material instance. This is a low level Unreal Engine 5
         information dump that is not commonly used, but is available for those who need it. It can
         contain information about the material background, density, zoom, streak multipliers, and spotlights.
-    flags: None
-        The flags of the material instance.
+    flags: :class:`dict`
+        Any flags on the material instance.
 
         .. warning::
 
-            This is always None, as the flags are unknown at this time.
+            This is always an empty dict, as there are no flags used at this time.
     """
 
     __slots__: Tuple[str, ...] = ('id', 'primary_mode', 'images', 'colors', 'scalings', 'flags')
@@ -123,4 +123,4 @@ class MaterialInstance(Hashable, Generic[HTTPClientT]):
         self.colors: Optional[MaterialInstanceColors] = _colors and MaterialInstanceColors(data=_colors)
         self.scalings: Dict[str, Any] = get_with_fallback(data, 'scalings', dict)
 
-        self.flags: None = data['flags']  # This is always None at this time.
+        self.flags: Dict[str, Any] = get_with_fallback(data, 'flags', dict)  # This is always None at this time.
