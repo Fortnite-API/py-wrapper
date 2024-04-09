@@ -332,7 +332,8 @@ class HTTPClient(HTTPMixin):
         except UnicodeDecodeError:
             return await response.read()
 
-        if response.headers['Content-Type'].startswith('application/json'):
+        content_type = response.headers.get('Content-Type')
+        if content_type and content_type.startswith('application/json'):
             return to_json(text)
 
         return text
@@ -404,8 +405,11 @@ class SyncHTTPClient(HTTPMixin):
             with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
                 # We aren't able to parse the same as we are in async mode, so we'll need
                 # to use some other logic here
-                if response.headers['Content-Type'].startswith('application/json'):
+                content_type = response.headers.get('Content-Type')
+                if content_type and content_type.startswith('application/json'):
                     data = to_json(response.text)
+                elif content_type and content_type.startswith('image/'):
+                    return response.content
                 else:
                     try:
                         data = response.text
