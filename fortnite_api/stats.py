@@ -139,13 +139,11 @@ class BrInputStats:
         The player's stats for solo game modes. This is ``None`` if the player has no stats for solo game modes.
     duo: Optional[:class:`BrGameModeStats`]
         The player's stats for duo game modes. This is ``None`` if the player has no stats for duo game modes.
-    trio: Optional[:class:`BrGameModeStats`]
-        The player's stats for trio game modes. This is ``None`` if the player has no stats for trio game modes.
     squad: Optional[:class:`BrGameMode`]
         The player's stats for squad game modes. This is ``None`` if the player has no stats for squad game modes.
     """
 
-    __slots__: Tuple[str, ...] = ('overall', 'solo', 'duo', 'trio', 'squad', 'raw_data')
+    __slots__: Tuple[str, ...] = ('overall', 'solo', 'duo', 'squad', 'raw_data')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
         _overall = data.get('overall')
@@ -156,9 +154,6 @@ class BrInputStats:
 
         _duo = data.get('duo')
         self.duo: Optional[BrGameModeStats] = _duo and BrGameModeStats(data=_duo)
-
-        _trio = data.get('trio')
-        self.trio: Optional[BrGameModeStats] = _trio and BrGameModeStats(data=_trio)
 
         _squad = data.get('squad')
         self.squad: Optional[BrGameModeStats] = _squad and BrGameModeStats(data=_squad)
