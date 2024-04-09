@@ -103,49 +103,49 @@ class ScalingsInfo:
 
 
 class MaterialInstanceScalings:
-    """Represents some information about the scaling of a Material instance.
-
-    Attributes
-    ----------
-    offset_image_x: :class:`float`
-        The offset of the material instance on the x-axis.
-    offset_image_y: :class:`float`
-        The offset of the material instance on the y-axis.
-    zoom_image_percent: :class:`float`
-        The zoom percentage of the material instance.
-    refraction_depth_bias: :class:`float`
-        The refraction depth bias of the material instance.
-    gradient: :class:`ScalingsInfo`
-        Some information about the gradient of the material instance.
-    spotlight: :class:`ScalingsSpotlightInfo`
-        Some information about the spotlight of the material instance. ``spotlight.intensity`` will not be ``None``.
-    falloff_color_fill_percent: :class:`float`
-        The fill percentage of the falloff color.
-    falloff_color_position: :class:`float`
-        The position of the falloff color.
-    offset_image_y_compensation: :class:`float`
-        The compensation of the offset image on the y-axis.
-    """
-
-    __slots__: Tuple[str, ...] = (
-        'offset_image_x',
-        'offset_image_y',
-        'zoom_image_percent',
-        'refraction_depth_bias',
-        'gradient',
-        'spotlight',
-        'falloff_color_fill_percent',
-        'falloff_color_position',
-        'offset_image_y_compensation',
-    )
+    """Represents some information about the scaling of a Material instance."""
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.offset_image_x: float = data['OffsetImage_X']
-        self.offset_image_y: float = data['OffsetImage_Y']
+        self.background_balance: Optional[float] = data.get('Background-Balance')
+        self.vignette_density: Optional[float] = data.get('Vignette Density')
+        self.vignette_radius: Optional[float] = data.get('Vignette Radius')
+        self.vignette_strength: Optional[float] = data.get('Vignette-Strength')
 
-        self.zoom_image_percent: float = data['ZoomImage_Percent']
-        self.refraction_depth_bias: float = data['RefractionDepthBias']
+        self.density_enhanced: Optional[float] = data.get('DensityEnhanced')
+        self.radius_enhanced: Optional[float] = data.get('RadiusEnhanced')
 
+        self.offset_image_x: Optional[float] = data.get('OffsetImage_X')
+        self.offset_image_y: Optional[float] = data.get('OffsetImage_Y')
+
+        self.zoom_image_percent: Optional[float] = data.get('ZoomImage_Percent')
+        self.refraction_depth_bias: Optional[float] = data.get('RefractionDepthBias')
+
+        self.effect_bump_multiply: Optional[float] = data.get('Effect-Bump-Multiply')
+        self.effect_time_factor: Optional[float] = data.get('Effect-Time-Factor')
+
+        self.sine_offset: Optional[float] = data.get('Sine Offset')
+        self.streak_angle: Optional[float] = data.get('Streak Angle')
+        self.streak_power_angle: Optional[float] = data.get('Streak Power Angle')
+
+        # TODO: Move these into objects? streak_X objects?
+        self.streak_g_multiply_max: Optional[float] = data.get('Streak-G-Multiply-Max')
+        self.streak_g_multiply_min: Optional[float] = data.get('Streak-G-Multiply-Min')
+        self.streak_g_power_max: Optional[float] = data.get('Streak-G-Power-Max')
+        self.streak_g_power_min: Optional[float] = data.get('Streak-G-Power-Min')
+        self.streak_g_u_offset: Optional[float] = data.get('Streak-G-U-Offset')
+        self.streak_g_u_tile: Optional[float] = data.get('Streak-G-U-Tile')
+        self.streak_g_v_offset: Optional[float] = data.get('Streak-G-V-Offset')
+        self.streak_g_v_tile: Optional[float] = data.get('Streak-G-V-Tile')
+        self.streak_r_multiply_max: Optional[float] = data.get('Streak-R-Multiply-Max')
+        self.streak_r_multiply_min: Optional[float] = data.get('Streak-R-Multiply-Min')
+        self.streak_r_power_max: Optional[float] = data.get('Streak-R-Power-Max')
+        self.streak_r_power_min: Optional[float] = data.get('Streak-R-Power-Min')
+        self.streak_r_u_offset: Optional[float] = data.get('Streak-R-U-Offset')
+        self.streak_r_u_tile: Optional[float] = data.get('Streak-R-U-Tile')
+        self.streak_r_v_offset: Optional[float] = data.get('Streak-R-V-Offset')
+        self.streak_r_v_tile: Optional[float] = data.get('Streak-R-V-Tile')
+
+        # TODO: These must be made optional (add check for if they are all none then don't show)
         self.gradient: ScalingsInfo = ScalingsInfo(
             hardness=data['Gradient_Hardness'],
             position_x=data['Gradient_Position_X'],
@@ -153,6 +153,7 @@ class MaterialInstanceScalings:
             size=data['Gradient_Size'],
         )
 
+        # TODO These must be made optional (add check for if they are all none then don't show)
         self.spotlight: ScalingsInfo = ScalingsInfo(
             hardness=data['Spotlight_Hardness'],
             intensity=data['Spotlight_Intensity'],
@@ -161,9 +162,9 @@ class MaterialInstanceScalings:
             size=data['Spotlight_Size'],
         )
 
-        self.falloff_color_fill_percent: float = data['FallOffColor_Fill_Percent']
-        self.falloff_color_position: float = data['FallOffColor_Postion']
-        self.offset_image_y_compensation: float = data['OffsetImage_Y_Compensation']
+        self.falloff_color_fill_percent: Optional[float] = data.get('FallOffColor_Fill_Percent')
+        self.falloff_color_position: Optional[float] = data.get('FallOffColor_Postion')
+        self.offset_image_y_compensation: Optional[float] = data.get('OffsetImage_Y_Compensation')
 
 
 class MaterialInstance(Hashable, Generic[HTTPClientT]):
