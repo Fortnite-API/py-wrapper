@@ -48,20 +48,18 @@ class _AssetRoute(Route):
 class Asset(Generic[HTTPClientT]):
     """Represents an asset given to the client. This can be from
     an image on a banner to a cosmetic image.
-
-    Attributes
-    ----------
-    url: :class:`str`
-        The url of the asset.
     """
 
-    def __init__(self, *, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING) -> None:
+    def __init__(self, *, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING, size: int = MISSING) -> None:
         self._http: HTTPClientT = http
-        self.url: str = url
+        self._url: str = url
 
         # The maximum size of the asset, if any. If provided, the url's default size is the maximum size.
         # MISSING for not supported, None for no max size, int for max size.
         self._max_size: Optional[int] = max_size
+
+        # The current size of this asset. Will only be set if the asset was resized.
+        self._size: int = size
 
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, self.__class__):
@@ -74,6 +72,15 @@ class Asset(Generic[HTTPClientT]):
 
     def __hash__(self) -> int:
         return hash(self.url)
+
+    @property
+    def url(self) -> str:
+        """:class:`str`: The url of the asset."""
+        if self._size is MISSING:
+            return self._url
+
+        # Resize the URL from the size
+        return f'{self._url[:-4]}_{self._size}.png'
 
     @property
     def can_resize(self) -> bool:
@@ -111,7 +118,7 @@ class Asset(Generic[HTTPClientT]):
         Returns
         --------
         :class:`Asset`
-            The resized asset. Will return ``self`` if the size is the same as the current size.
+            The resized asset.
 
         Raises
         ------
@@ -128,11 +135,8 @@ class Asset(Generic[HTTPClientT]):
             if size > self._max_size:
                 raise ValueError(f'Size must be less than or equal to {self._max_size}.')
 
-            if size == self._max_size:
-                return self
-
-        url_without_type = self.url[:-4]
-        return self.__class__(http=self._http, url=f'{url_without_type}_{size}.png')
+        self._size = size
+        return self
 
     @overload
     def read(self: Asset[HTTPClient], /) -> Coroutine[Any, Any, bytes]: ...
