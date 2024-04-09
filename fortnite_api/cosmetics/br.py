@@ -41,8 +41,8 @@ class CosmeticBrSet:
 
     Attributes
     ----------
-    value: :class:`str`
-        The value of the set, also known as the name.
+    value: Optional[:class:`str`]
+        The value of the set, also known as the name, if available.
     text: :class:`str`
         The display text of this set. In the form, ``"Part of the {{value}} set."``
     backend_value: :class:`str`
@@ -52,7 +52,7 @@ class CosmeticBrSet:
     __slots__: Tuple[str, ...] = ('value', 'text', 'backend_value')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.value: str = data['value']
+        self.value: Optional[str] = data['value']
         self.text: str = data['text']
         self.backend_value: str = data['backendValue']
 
@@ -88,7 +88,7 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
     ----------
     tag: :class:`str`
         The tag of the variant option.
-    name: :class:`str`
+    name: Optional[:class:`str`]
         The option's name.
     unlock_requirements: Optional[:class:`str`]
         The unlock requirements of the variant option, if available.
@@ -100,7 +100,7 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.tag: str = data['tag']
-        self.name: str = data['name']
+        self.name: Optional[str] = data['name']
         self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
 
@@ -112,7 +112,7 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
     ----------
     channel: :class:`str`
         The channel of the variant.
-    type: :class:`str`
+    type: Optional[:class:`str`]
         The type of the variant.
     options: List[:class:`CosmeticBrVariantOption`]
         The options for the variant, if any.
@@ -122,7 +122,7 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.channel: str = data['channel']
-        self.type: str = data['type']  # TODO: Move to enum eventually.
+        self.type: Optional[str] = data['type']  # TODO: Move to enum eventually.
 
         self.options: List[CosmeticBrVariantOption[HTTPClientT]] = [
             CosmeticBrVariantOption(data=option, http=http) for option in data['options']
