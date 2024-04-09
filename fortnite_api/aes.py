@@ -98,7 +98,7 @@ class Aes:
     __slots__: Tuple[str, ...] = ('main_key', 'build', 'version', 'updated', 'dynamic_keys', 'raw_data')
 
     def __init__(self, data: Dict[str, Any]):
-        self.main_key: Optional[str] = data['mainKey']
+        self.main_key: Optional[str] = data.get('mainKey')
         self.build: str = data['build']
 
         # In the case that the API gives us an invalid version, we will set it to None

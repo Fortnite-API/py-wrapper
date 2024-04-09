@@ -170,4 +170,4 @@ class NewsMessage(Generic[HTTPClientT]):
         self.title: str = data['title']
         self.body: str = data['body']
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
-        self.adspace: Optional[str] = data['adspace']
+        self.adspace: Optional[str] = data.get('adspace')

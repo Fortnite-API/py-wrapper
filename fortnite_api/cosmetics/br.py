@@ -52,7 +52,7 @@ class CosmeticBrSet:
     __slots__: Tuple[str, ...] = ('value', 'text', 'backend_value')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.value: Optional[str] = data['value']
+        self.value: Optional[str] = data.get('value')
         self.text: str = data['text']
         self.backend_value: str = data['backendValue']
 
@@ -100,7 +100,7 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.tag: str = data['tag']
-        self.name: Optional[str] = data['name']
+        self.name: Optional[str] = data.get('name')
         self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
 
@@ -122,7 +122,7 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.channel: str = data['channel']
-        self.type: Optional[str] = data['type']  # TODO: Move to enum eventually.
+        self.type: Optional[str] = data.get('type')  # TODO: Move to enum eventually.
 
         self.options: List[CosmeticBrVariantOption[HTTPClientT]] = [
             CosmeticBrVariantOption(data=option, http=http) for option in data['options']
