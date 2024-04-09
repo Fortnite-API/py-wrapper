@@ -43,8 +43,7 @@ from .material import MaterialInstance
 from .new import NewBrCosmetics, NewCosmetics
 from .news import GameModeNews, News
 from .playlist import Playlist
-
-# from .shop import BrShop
+from .shop import Shop
 from .stats import BrPlayerStats
 from .utils import copy_doc, remove_prefix
 
@@ -582,6 +581,28 @@ class FortniteAPI:
         )
         return BrPlayerStats(data=data, http=self.http)
 
+    # SHOP
+    async def fetch_shop(self, /, *, language: Optional[GameLanguage] = None) -> Shop:
+        """|coro|
+
+        Fetches the current Fortnite item shop.
+
+        Parameters
+        ----------
+        language: Optional[:class:`GameLanguage`]
+            The language to display the playlist in. Defaults to ``None``.
+            This will override the default language set in the client.
+
+        Returns
+        -------
+        :class:`Shop`
+            The fetched item shop.
+        """
+        data = await self.http.get_shop(language=self._resolve_language_value(language))
+        return Shop(data=data, http=self.http)
+
+    # BETA METHODS
+
     async def beta_fetch_material_instances(self) -> List[MaterialInstance]:
         """|coro|
 
@@ -822,3 +843,8 @@ class SyncFortniteAPI:
 
         data = self.http.beta_get_material_instances()
         return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]
+
+    @copy_doc(FortniteAPI.fetch_shop)
+    def fetch_shop(self, /, *, language: Optional[GameLanguage] = None) -> Shop[SyncHTTPClient]:
+        data = self.http.get_shop(language=self._resolve_language_value(language))
+        return Shop(data=data, http=self.http)
