@@ -46,8 +46,6 @@ class News(Generic[HTTPClientT]):
         A list of Battle Royale news.
     stw: List[:class:`GameModeNews`]
         A list of Save the World news.
-    creative: List[:class:`GameModeNews`]
-        A list of Creative news.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
     """
@@ -60,9 +58,6 @@ class News(Generic[HTTPClientT]):
 
         _stw = data.get('stw')
         self.stw: Optional[GameModeNews[HTTPClientT]] = _stw and GameModeNews(data=_stw, http=http)
-
-        _creative = data.get('creative')
-        self.creative: Optional[GameModeNews[HTTPClientT]] = _creative and GameModeNews(data=_creative, http=http)
 
         self.raw_data: Dict[str, Any] = data
 
