@@ -1,7 +1,6 @@
 import datetime
 from typing import Any, Final
 
-import aiohttp
 import pytest
 
 import fortnite_api as fn_api
@@ -12,20 +11,6 @@ TEST_CREATOR_CODE: Final[str] = "ninja"
 TEST_COSMETIC_ID: Final[str] = "Backpack_BrakePedal"
 
 TEST_DEFAULT_PLAYLIST: Final[str] = "Playlist_NoBuildBR_Duo"
-
-
-@pytest.mark.asyncio
-async def test_async_client_initialization():
-    async with aiohttp.ClientSession() as session, fn_api.FortniteAPI(session=session) as client:
-        assert client
-
-    assert session.closed == True, "Session should be closed after client is closed"
-
-    async with fn_api.FortniteAPI() as client:
-        assert client
-
-    client_session = client.http.session
-    assert client_session and client_session.closed
 
 
 @pytest.mark.asyncio

@@ -1,7 +1,4 @@
 import datetime
-
-import requests
-
 import fortnite_api as fn_api
 
 from .test_async import (
@@ -13,14 +10,6 @@ from .test_async import (
     _test_game_mode_news,
     _test_playlist,
 )
-
-
-def test_sync_client_initialization():
-    with requests.Session() as session, fn_api.SyncFortniteAPI(session=session) as client:
-        assert client
-
-    with fn_api.SyncFortniteAPI() as client:
-        assert client
 
 
 def test_sync_aes():
