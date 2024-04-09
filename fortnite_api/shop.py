@@ -28,12 +28,9 @@ import datetime
 from typing import Any, Dict, Generic, List, Optional
 
 from .abc import Hashable
-
 from .asset import Asset
-
-from .utils import parse_time
-
 from .http import HTTPClientT
+from .utils import parse_time
 
 
 class Shop(Generic[HTTPClientT]):

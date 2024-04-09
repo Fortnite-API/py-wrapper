@@ -1,4 +1,5 @@
 import datetime
+
 import fortnite_api as fn_api
 
 from .test_async import (

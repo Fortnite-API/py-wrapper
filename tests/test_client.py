@@ -1,9 +1,10 @@
 import inspect
-import fortnite_api as fn_api
 
+import aiohttp
 import pytest
 import requests
-import aiohttp
+
+import fortnite_api as fn_api
 
 
 def test_sync_client_initialization():

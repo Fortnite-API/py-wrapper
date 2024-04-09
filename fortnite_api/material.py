@@ -23,14 +23,13 @@ SOFTWARE.
 """
 
 from __future__ import annotations
-import dataclasses
-from typing import Any, Generic, Dict, Optional, Tuple
 
-from .asset import Asset
+import dataclasses
+from typing import Any, Dict, Generic, Optional, Tuple
 
 from .abc import Hashable
+from .asset import Asset
 from .enums import CosmeticCompatibleMode
-
 from .http import HTTPClientT
 
 
