@@ -290,7 +290,7 @@ class HTTPMixin(abc.ABC):
         name: str,
         account_type: Optional[Literal['epic', 'psn', 'xbl']] = None,
         time_window: Optional[Literal['season', 'lifetime']] = None,
-        image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch']] = None,
+        image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch', 'none']] = None,
     ):
         r: Route = Route('GET', '/v2/stats/br/v2', name=name)
         params: Dict[str, str] = {'name': name}
@@ -310,7 +310,7 @@ class HTTPMixin(abc.ABC):
         self,
         account_id: str,
         time_window: Optional[Literal['season', 'lifetime']] = None,
-        image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch']] = None,
+        image: Optional[Literal['all', 'keyboardMouse', 'gamepad', 'touch', 'none']] = None,
     ):
         r: Route = Route('GET', '/v2/stats/br/v2/{account_id}', account_id=account_id)
         params: Dict[str, str] = {}

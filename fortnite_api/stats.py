@@ -24,7 +24,11 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Tuple
+
+from .asset import Asset
+
+from .http import HTTPClientT
 
 from .account import Account
 from .utils import parse_time
@@ -32,65 +36,194 @@ from .utils import parse_time
 if TYPE_CHECKING:
     import datetime
 
+__all__: Tuple[str, ...] = (
+    'BrPlayerStats',
+    'BrBattlePass',
+    'BrInputs',
+    'BrInputStats',
+    'BrGameModeStats',
+)
 
-class BrPlayerStats:
-    __slots__: Tuple[str, ...] = ('user', 'battle_pass', 'image_url', 'stats', 'raw_data')
 
-    def __init__(self, data: Dict[str, Any]) -> None:
-        self.user: Optional[Account] = (account := data.get('account')) and Account(data=account)
-        self.battle_pass: Optional[BrBattlePass] = (battle_pass := data.get('battlePass')) and BrBattlePass(data=battle_pass)
-        self.image_url: str = data['image']
+class BrPlayerStats(Generic[HTTPClientT]):
+    """Represents a Fortnite Battle Royale player's stats.
+
+    Attributes
+    ----------
+    user: :class:`Account`
+        The account of the player who's stats are being represented.
+    battle_pass: Optional[:class:`BrBattlePass`]
+        The player's battle pass level and progress, if available.
+    image: Optional[:class:`Asset`]
+        The requested statistics image, if requested.
+    stats: Optional[:class:`BrInputs`]
+        The player's stats for all input types. This is ``None`` if the player has no stats.
+    raw_data: :class:`dict`
+        The raw data received from the API.
+    """
+
+    __slots__: Tuple[str, ...] = ('user', 'battle_pass', 'image', 'stats', 'raw_data')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+
+        _user = data['account']
+        self.user: Account = Account(data=_user)
+
+        _battle_pass = data.get('battlePass')
+        self.battle_pass: Optional[BrBattlePass] = _battle_pass and BrBattlePass(data=_battle_pass)
+
+        _image = data.get('image')
+        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
+
         self.stats: Optional[BrInputs] = (inputs := data.get('inputs')) and BrInputs(data=inputs)
+
         self.raw_data: Dict[str, Any] = data
 
 
 class BrBattlePass:
-    __slots__: Tuple[str, ...] = ('level', 'progress', 'raw_data')
+    """Represents a Fortnite Battle Royale player's battle pass level and progress.
 
-    def __init__(self, data: Dict[str, Any]) -> None:
+    Attributes
+    ----------
+    level: :class:`int`
+        The player's battle pass level.
+    progress: :class:`int`
+        The progress through the current battle pass.
+    """
+
+    __slots__: Tuple[str, ...] = ('level', 'progress')
+
+    def __init__(self, *, data: Dict[str, Any]) -> None:
         self.level = data.get('level')
         self.progress = data.get('progress')
-        self.raw_data = data
 
 
 class BrInputs:
-    __slots__: Tuple[str, ...] = ('all', 'keyboard_mouse', 'gamepad', 'touch', 'raw_data')
+    """Represents a Fortnite player's stats for all input types.
 
-    def __init__(self, data: Dict[str, Any]):
+    Attributes
+    ----------
+    all: Optional[:class:`BrInputStats`]
+        The player's stats for all input types. This is ``None`` if the player has no stats.
+    keyboard_mouse: Optional[:class:`BrInputStats`]
+        The player's stats for keyboard and mouse input. This is ``None`` if the player has no stats.
+    gamepad: Optional[:class:`BrInputStats`]
+        The player's stats for gamepad input. This is ``None`` if the player has no stats.
+    touch: Optional[:class:`BrInputStats`]
+        The player's stats for touch input. This is ``None`` if the player has no stats.
+    """
+
+    __slots__: Tuple[str, ...] = ('all', 'keyboard_mouse', 'gamepad', 'touch')
+
+    def __init__(self, *, data: Dict[str, Any]):
 
         _all = data.get('all')
-        self.all = _all and BrInputStats(_all)
+        self.all: Optional[BrInputStats] = _all and BrInputStats(data=_all)
 
         _keyboard_mouse = data.get('keyboardMouse')
-        self.keyboard_mouse = _keyboard_mouse and BrInputStats(_keyboard_mouse)
+        self.keyboard_mouse: Optional[BrInputStats] = _keyboard_mouse and BrInputStats(data=_keyboard_mouse)
 
         _gamepad = data.get('gamepad')
-        self.gamepad = _gamepad and BrInputStats(_gamepad)
+        self.gamepad: Optional[BrInputStats] = _gamepad and BrInputStats(data=_gamepad)
 
         _touch = data.get('touch')
-        self.touch = _touch and BrInputStats(_touch)
-        self.raw_data = data
+        self.touch: Optional[BrInputStats] = _touch and BrInputStats(data=_touch)
 
 
 class BrInputStats:
+    """Represents a specific Fortnite player's stats for a specific input type.
+
+    Attributes
+    ----------
+    overall: Optional[:class:`BrGameModeStats`]
+        The overall stats for the player. This is ``None`` if the overall stats are not available.
+    solo: Optional[:class:`BrGameModeStats`]
+        The player's stats for solo game modes. This is ``None`` if the player has no stats for solo game modes.
+    duo: Optional[:class:`BrGameModeStats`]
+        The player's stats for duo game modes. This is ``None`` if the player has no stats for duo game modes.
+    trio: Optional[:class:`BrGameModeStats`]
+        The player's stats for trio game modes. This is ``None`` if the player has no stats for trio game modes.
+    squad: Optional[:class:`BrGameMode`]
+        The player's stats for squad game modes. This is ``None`` if the player has no stats for squad game modes.
+    """
+
     __slots__: Tuple[str, ...] = ('overall', 'solo', 'duo', 'trio', 'squad', 'raw_data')
 
-    def __init__(self, data: Dict[str, Any]) -> None:
-        self.overall: Optional[BrGameModeStats] = (overall := data.get('overall')) and BrGameModeStats(data=overall)
-        self.solo: Optional[BrGameModeStats] = (solo := data.get('solo')) and BrGameModeStats(data=solo)
-        self.duo: Optional[BrGameModeStats] = (duo := data.get('duo')) and BrGameModeStats(data=duo)
-        self.trio: Optional[BrGameModeStats] = (trio := data.get('trio')) and BrGameModeStats(data=trio)
-        self.squad: Optional[BrGameModeStats] = (squad := data.get('squad')) and BrGameModeStats(data=squad)
-        self.raw_data: Dict[str, Any] = data
+    def __init__(self, *, data: Dict[str, Any]) -> None:
+        _overall = data.get('overall')
+        self.overall: Optional[BrGameModeStats] = _overall and BrGameModeStats(data=_overall)
+
+        _solo = data.get('solo')
+        self.solo: Optional[BrGameModeStats] = _solo and BrGameModeStats(data=_solo)
+
+        _duo = data.get('duo')
+        self.duo: Optional[BrGameModeStats] = _duo and BrGameModeStats(data=_duo)
+
+        _trio = data.get('trio')
+        self.trio: Optional[BrGameModeStats] = _trio and BrGameModeStats(data=_trio)
+
+        _squad = data.get('squad')
+        self.squad: Optional[BrGameModeStats] = _squad and BrGameModeStats(data=_squad)
 
 
 class BrGameModeStats:
+    """Represents the specific stats for a Fortnite player in a specific game mode on a specific input type.
+
+    Attributes
+    ----------
+    score: :class:`int`
+        The total score for the stats for a specific game mode.
+    score_per_min: :class:`float`
+        The score per minute for the stats for a specific game mode. This is the score divided by the minutes played.
+    score_per_match: :class:`float`
+        The score per match for the stats for a specific game mode. This is the score divided by the matches played.
+    wins: :class:`int`
+        The total number of wins in this specific game mode.
+    top3: :class:`int`
+        The number of times the player has placed in the top 3 in this specific game mode.
+    top5: :class:`int`
+        The number of times the player has placed in the top 5 in this specific game mode.
+    top6: :class:`int`
+        The number of times the player has placed in the top 6 in this specific game mode.
+    top10: :class:`int`
+        The number of times the player has placed in the top 10 in this specific game mode.
+    top12: :class:`int`
+        The number of times the player has placed in the top 12 in this specific game mode.
+    top25: :class:`int`
+        The number of times the player has placed in the top 25 in this specific game mode.
+    kills: :class:`int`
+        The total number of kills in this specific game mode.
+    kills_per_min: :class:`float`
+        The kills per minute for the stats for a specific game mode. This is the kills divided by the minutes played.
+    kills_per_match: :class:`float`
+        The kills per match for the stats for a specific game mode. This is the kills divided by the matches played.
+    deaths: :class:`int`
+        The total number of deaths in this specific game mode.
+    kd: :class:`float`
+        The kill/death ratio for this specific game mode. This is the kills divided by the deaths.
+    matches: :class:`int`
+        The total number of matches played in this specific game mode.
+    win_rate: :class:`float`
+        The win rate for this specific game mode. This is the wins divided by the matches played.
+    minutes_played: :class:`int`
+        The total number of minutes played in this specific game mode.
+    players_outlived: :class:`int`
+        The total number of players outlived in this specific game mode.
+    last_modified: :class:`datetime.datetime`
+        The date when this data was last modified.
+    """
+
     __slots__: Tuple[str, ...] = (
         'score',
         'score_per_min',
         'score_per_match',
+        'wins',
+        'top3',
         'top5',
+        'top6',
+        'top10',
         'top12',
+        'top25',
         'kills',
         'kills_per_min',
         'kills_per_match',
@@ -104,19 +237,27 @@ class BrGameModeStats:
         'raw_data',
     )
 
-    def __init__(self, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any]) -> None:
         self.score: int = data['score']
-        self.score_per_min: int = data['scorePerMin']
-        self.score_per_match: int = data['scorePerMatch']
+        self.score_per_min: float = data['scorePerMin']
+        self.score_per_match: float = data['scorePerMatch']
+        self.wins: int = data['wins']
+
+        self.top3: int = data['top3']
         self.top5: int = data['top5']
+        self.top6: int = data['top6']
+        self.top10: int = data['top10']
         self.top12: int = data['top12']
+        self.top25: int = data['top25']
+
         self.kills: int = data['kills']
-        self.kills_per_min: int = data['killsPerMin']
-        self.kills_per_match: int = data['killsPerMatch']
+        self.kills_per_min: float = data['killsPerMin']
+        self.kills_per_match: float = data['killsPerMatch']
+
         self.deaths: int = data['deaths']
-        self.kd: int = data['kd']
+        self.kd: float = data['kd']
         self.matches: int = data['matches']
-        self.win_rate: int = data['winRate']
+        self.win_rate: float = data['winRate']
         self.minutes_played: int = data['minutesPlayed']
         self.players_outlived: int = data['playersOutlived']
         self.last_modified: datetime.datetime = parse_time(data['lastModified'])

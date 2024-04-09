@@ -380,20 +380,30 @@ class FortniteAPI:
         name: str,
         /,
         *,
-        type: AccountType = AccountType.EPIC,
-        time_window: TimeWindow = TimeWindow.LIFETIME,
-        image: StatsImageType = StatsImageType.ALL,
+        type: Optional[AccountType] = None,
+        time_window: Optional[TimeWindow] = None,
+        image: Optional[StatsImageType] = None,
     ) -> BrPlayerStats:
         data = await self.http.get_br_stats(
-            name=name, account_type=type.value, time_window=time_window.value, image=image.value
+            name=name,
+            account_type=type and type.value,
+            time_window=time_window and time_window.value,
+            image=image and image.value,
         )
-        return BrPlayerStats(data=data)
+        return BrPlayerStats(data=data, http=self.http)
 
     async def fetch_br_stats_by_id(
-        self, id: str, /, *, time_window: TimeWindow = TimeWindow.LIFETIME, image: StatsImageType = StatsImageType.ALL
+        self,
+        id: str,
+        /,
+        *,
+        time_window: Optional[TimeWindow] = None,
+        image: Optional[StatsImageType] = None,
     ) -> BrPlayerStats:
-        data = await self.http.get_br_stats_by_id(account_id=id, time_window=time_window.value, image=image.value)
-        return BrPlayerStats(data=data)
+        data = await self.http.get_br_stats_by_id(
+            account_id=id, time_window=time_window and time_window.value, image=image and image.value
+        )
+        return BrPlayerStats(data=data, http=self.http)
 
 
 class SyncFortniteAPI:
@@ -554,15 +564,27 @@ class SyncFortniteAPI:
         name: str,
         /,
         *,
-        type: AccountType = AccountType.EPIC,
-        time_window: TimeWindow = TimeWindow.LIFETIME,
-        image: StatsImageType = StatsImageType.ALL,
-    ) -> BrPlayerStats:
-        data = self.http.get_br_stats(name=name, account_type=type.value, time_window=time_window.value, image=image.value)
-        return BrPlayerStats(data=data)
+        type: Optional[AccountType] = None,
+        time_window: Optional[TimeWindow] = None,
+        image: Optional[StatsImageType] = None,
+    ) -> BrPlayerStats[SyncHTTPClient]:
+        data = self.http.get_br_stats(
+            name=name,
+            account_type=type and type.value,
+            time_window=time_window and time_window.value,
+            image=image and image.value,
+        )
+        return BrPlayerStats(data=data, http=self.http)
 
     def fetch_br_stats_by_id(
-        self, id: str, /, *, time_window: TimeWindow = TimeWindow.LIFETIME, image: StatsImageType = StatsImageType.ALL
-    ) -> BrPlayerStats:
-        data = self.http.get_br_stats_by_id(account_id=id, time_window=time_window.value, image=image.value)
-        return BrPlayerStats(data=data)
+        self,
+        id: str,
+        /,
+        *,
+        time_window: Optional[TimeWindow] = None,
+        image: Optional[StatsImageType] = None,
+    ) -> BrPlayerStats[SyncHTTPClient]:
+        data = self.http.get_br_stats_by_id(
+            account_id=id, time_window=time_window and time_window.value, image=image and image.value
+        )
+        return BrPlayerStats(data=data, http=self.http)
