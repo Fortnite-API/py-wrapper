@@ -51,8 +51,30 @@ TC = TypeVar('TC')
 P = ParamSpec('P')
 
 
+def _remove_coro(obj: T) -> T:
+    # Runs through all the functions of the object and anything
+    # that has a docstring that starts with '|coro|' is removed
+    for value in obj.__dict__.values():
+        try:
+            doc = getattr(value, '__doc__')
+        except AttributeError:
+            continue
+        else:
+            if doc and doc.startswith('|coro|'):
+                remove_prefix('|coro|')(value)
+
+    return obj
+
+
 class FortniteAPI:
     """Represents a Fortnite API client. This is the main class used to interact with the Fortnite API.
+
+    .. container:: operations
+
+        .. describe:: async with x:
+
+            This class is a context manager. This means you can use it with the ``async with`` statement.
+            This will automatically open and close the HTTP session for you. If you don't use the ``async with`` statement, you will have to manually close the session.
 
     Parameters
     ----------
@@ -346,30 +368,127 @@ class FortniteAPI:
     # MAPS
 
     async def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map:
+        """|coro|
+
+        Fetches the current map of Fortnite.
+
+        Parameters
+        ----------
+        language: Optional[:class:`GameLanguage`]
+            The language to display the map in. Defaults to ``None``.
+            This will override the default language set in the client.
+
+        Returns
+        -------
+        :class:`Map`
+            The fetched map.
+        """
         data = await self.http.get_map(language=self._resolve_language_value(language))
         return Map(data=data, http=self.http)
 
     # NEWS
 
     async def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News:
+        """|coro|
+
+        Fetch the news for Fortnite. This includes all news for all game modes.
+
+        Parameters
+        ----------
+        language: Optional[:class:`GameLanguage`]
+            The language to display the news in. Defaults to ``None``.
+            This will override the default language set in the client.
+
+        Returns
+        -------
+        :class:`News`
+            The fetched news.
+        """
         data = await self.http.get_news(language=self._resolve_language_value(language))
         return News(data=data, http=self.http)
 
     async def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        """|coro|
+
+        Fetches the current Battle Royale news.
+
+        Parameters
+        ----------
+        language : Optional[:class:`GameLanguage`]
+            The language to display the news in. Defaults to ``None``.
+            This will override the default language set in the client.
+
+        Returns
+        -------
+        :class:`GameModeNews`
+            The Battle Royale news.
+        """
         data = await self.http.get_news_br(language=self._resolve_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     async def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+        """|coro|
+
+        Fetches the current Save the World news.
+
+        Parameters
+        ----------
+        language : Optional[:class:`GameLanguage`]
+            The language to display the news in. Defaults to ``None``.
+            This will override the default language set in the client.
+
+        Returns
+        -------
+        :class:`GameModeNews`
+            The Save the World news.
+        """
         data = await self.http.get_news_stw(language=self._resolve_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     # PLAYLISTS
 
     async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
+        """|coro|
+
+        Fetches a list of current playlists available in Fortnite.
+
+        Parameters
+        ----------
+        language: Optional[:class:`GameLanguage`]
+            The language to display the playlists in. Defaults to ``None``.
+            This will override the default language set in the client.
+
+        Returns
+        -------
+        List[:class:`Playlist`]
+            The fetched current playlists available in Fortnite.
+        """
         data = await self.http.get_playlists(language=self._resolve_language_value(language))
         return [Playlist(data=entry, http=self.http) for entry in data]
 
     async def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
+        """|coro|
+
+        Fetch a specific playlist by its ID.
+
+        Parameters
+        ----------
+        id: :class:`str`
+            The ID of the playlist to fetch.
+        language: Optional[:class:`GameLanguage`]
+            The language to display the playlist in. Defaults to ``None``.
+            This will override the default language set in the client.
+
+        Returns
+        -------
+        :class:`Playlist`
+            The fetched playlist.
+
+        Raises
+        ------
+        NotFound
+            A playlist with that ID was not found.
+        """
         data = await self.http.get_playlist(id, language=self._resolve_language_value(language))
         return Playlist(data=data, http=self.http)
 
@@ -380,10 +499,36 @@ class FortniteAPI:
         name: str,
         /,
         *,
-        type: Optional[AccountType] = None,
-        time_window: Optional[TimeWindow] = None,
-        image: Optional[StatsImageType] = None,
+        type: AccountType = AccountType.EPIC,
+        time_window: TimeWindow = TimeWindow.LIFETIME,
+        image: StatsImageType = StatsImageType.NONE,
     ) -> BrPlayerStats:
+        """|coro|
+
+        Fetch stats for a Fortnite player by their name.
+
+        Parameters
+        ----------
+        name: :class:`str`
+            The name of the player to fetch stats for.
+        type: Optional[:class:`AccountType`]
+            The type of account to search statistics for. Defaults to :attr:`AccountType.EPIC`.
+        time_window: Optional[:class:`TimeWindow`]
+            The time window to search statistics for. Defaults to :attr:`TimeWindow.LIFETIME`.
+        image: Optional[:class:`StatsImageType`]
+            The type of image to display in the statistics. Defaults to :attr:`StatsImageType.NONE`. If this
+            is set to :attr:`StatsImageType.NONE`, there will be no image in the response.
+
+        Returns
+        -------
+        :class:`BrPlayerStats`
+            The fetched player statistics.
+
+        Raises
+        ------
+        NotFound
+            A player with that name was not found.
+        """
         data = await self.http.get_br_stats(
             name=name,
             account_type=type and type.value,
@@ -397,16 +542,60 @@ class FortniteAPI:
         id: str,
         /,
         *,
-        time_window: Optional[TimeWindow] = None,
-        image: Optional[StatsImageType] = None,
+        time_window: TimeWindow = TimeWindow.LIFETIME,
+        image: StatsImageType = StatsImageType.NONE,
     ) -> BrPlayerStats:
+        """|coro|
+
+        Fetch stats for a Fortnite player by their account ID.
+
+        Parameters
+        ----------
+        id: :class:`str`
+            The account ID of the player to fetch stats for.
+        time_window: Optional[:class:`TimeWindow`]
+            The time window to search statistics for. Defaults to :attr:`TimeWindow.LIFETIME`.
+        image: Optional[:class:`StatsImageType`]
+            The type of image to display in the statistics. Defaults to :attr:`StatsImageType.NONE`. If this
+            is set to :attr:`StatsImageType.NONE`, there will be no image in the response.
+
+        Returns
+        -------
+        :class:`BrPlayerStats`
+            The fetched player statistics.
+
+        Raises
+        ------
+        NotFound
+            A player with that ID was not found.
+        """
         data = await self.http.get_br_stats_by_id(
             account_id=id, time_window=time_window and time_window.value, image=image and image.value
         )
         return BrPlayerStats(data=data, http=self.http)
 
 
+@_remove_coro
 class SyncFortniteAPI:
+    """Represents a Sync Fortnite API client. This is the main class used to interact with the Fortnite API.
+
+    .. container:: operations
+
+        .. describe:: with x:
+
+            This class is a context manager. This means you can use it with the ``with`` statement.
+            This will automatically open and close the HTTP session for you. If you don't use the ``with`` statement, you will have to manually close the session.
+
+    Parameters
+    ----------
+    api_key: Optional[:class:`str`]
+        The API key to use for the client. Defaults to ``None``.
+    default_language: :class:`GameLanguage`
+        The default language to display the data in. Defaults to :attr:`GameLanguage.ENGLISH`.
+    session: Optional[:class:`requests.Session`]
+        The session to use for the HTTP requests. Defaults to ``None``. If not provided, a new session will be created for you.
+    """
+
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -432,13 +621,11 @@ class SyncFortniteAPI:
         return lang.value
 
     # COSMETICS
-    @remove_prefix("|coro|")
     @copy_doc(FortniteAPI.fetch_cosmetics_cars)
     def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar[SyncHTTPClient]]:
         data = self.http.get_cosmetics_cars(language=self._resolve_language_value(language))
         return [CosmeticCar(data=entry, http=self.http) for entry in data]
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetics_instruments)
     def fetch_cosmetics_instruments(
         self, *, language: Optional[GameLanguage] = None
@@ -446,25 +633,21 @@ class SyncFortniteAPI:
         data = self.http.get_cosmetics_instruments(language=self._resolve_language_value(language))
         return [CosmeticInstrument(data=entry, http=self.http) for entry in data]
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetics_lego_kits)
     def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego_kits(language=self._resolve_language_value(language))
         return [CosmeticLegoKit(data=entry, http=self.http) for entry in data]
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetics_tracks)
     def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack[SyncHTTPClient]]:
         data = self.http.get_cosmetics_tracks(language=self._resolve_language_value(language))
         return [CosmeticTrack(data=entry, http=self.http) for entry in data]
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetics_br)
     def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
         data = self.http.get_cosmetics_br(language=self._resolve_language_value(language))
         return [CosmeticBr(data=entry, http=self.http) for entry in data]
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetic_br)
     def fetch_cosmetic_br(
         self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None
@@ -472,13 +655,11 @@ class SyncFortniteAPI:
         data = self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_language_value(language))
         return CosmeticBr(data=data, http=self.http)
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetics_lego)
     def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLego[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
         return [CosmeticLego(data=entry, http=self.http) for entry in data]
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetics_all)
     def fetch_cosmetics_all(self, *, language: Optional[GameLanguage] = None) -> CosmeticsAll[SyncHTTPClient]:
         data = self.http.get_cosmetics_all(language=self._resolve_language_value(language))
@@ -486,13 +667,11 @@ class SyncFortniteAPI:
 
     # NEW COSMETICS
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetics_br_new)
     def fetch_cosmetics_br_new(self) -> NewBrCosmetics[SyncHTTPClient]:
         data = self.http.get_cosmetics_br_new()
         return NewBrCosmetics(data=data, http=self.http)
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_cosmetics_new)
     def fetch_cosmetics_new(self) -> NewCosmetics[SyncHTTPClient]:
         data = self.http.get_cosmetics_new()
@@ -500,20 +679,17 @@ class SyncFortniteAPI:
 
     # AES
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_aes)
     def fetch_aes(self, *, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
         data = self.http.get_aes(key_format.value)
         return Aes(data=data)
 
     # BANNERS
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_banners)
     def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[SyncHTTPClient]]:
         data = self.http.get_banners(language=self._resolve_language_value(language))
         return [Banner(data=entry, http=self.http) for entry in data]
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_banner_colors)
     def fetch_banner_colors(self) -> List[BannerColor]:
         data = self.http.get_banner_colors()
@@ -521,7 +697,6 @@ class SyncFortniteAPI:
 
     # CREATOR CODES
 
-    @remove_prefix('|coro|')
     @copy_doc(FortniteAPI.fetch_creator_code)
     def fetch_creator_code(self, /, *, name: str) -> CreatorCode:
         data = self.http.get_creator_code(name)
@@ -529,62 +704,68 @@ class SyncFortniteAPI:
 
     # MAPS
 
+    @copy_doc(FortniteAPI.fetch_map)
     def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map[SyncHTTPClient]:
         data = self.http.get_map(language=self._resolve_language_value(language))
         return Map(data=data, http=self.http)
 
     # NEWS
 
+    @copy_doc(FortniteAPI.fetch_news)
     def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News[SyncHTTPClient]:
         data = self.http.get_news(language=self._resolve_language_value(language))
         return News(data=data, http=self.http)
 
+    @copy_doc(FortniteAPI.fetch_news_br)
     def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews[SyncHTTPClient]:
         data = self.http.get_news_br(language=self._resolve_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
+    @copy_doc(FortniteAPI.fetch_news_stw)
     def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews[SyncHTTPClient]:
         data = self.http.get_news_stw(language=self._resolve_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     # PLAYLISTS
 
+    @copy_doc(FortniteAPI.fetch_playlists)
     def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist[SyncHTTPClient]]:
         data = self.http.get_playlists(language=self._resolve_language_value(language))
         return [Playlist(data=entry, http=self.http) for entry in data]
 
+    @copy_doc(FortniteAPI.fetch_playlist)
     def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist[SyncHTTPClient]:
         data = self.http.get_playlist(id, language=self._resolve_language_value(language))
         return Playlist(data=data, http=self.http)
 
     # PLAYER STATS
 
+    @copy_doc(FortniteAPI.fetch_br_stats)
     def fetch_br_stats(
         self,
         name: str,
         /,
         *,
-        type: Optional[AccountType] = None,
-        time_window: Optional[TimeWindow] = None,
-        image: Optional[StatsImageType] = None,
+        type: AccountType = AccountType.EPIC,
+        time_window: TimeWindow = TimeWindow.LIFETIME,
+        image: StatsImageType = StatsImageType.NONE,
     ) -> BrPlayerStats[SyncHTTPClient]:
         data = self.http.get_br_stats(
             name=name,
-            account_type=type and type.value,
-            time_window=time_window and time_window.value,
-            image=image and image.value,
+            account_type=type.value,
+            time_window=time_window.value,
+            image=image.value,
         )
         return BrPlayerStats(data=data, http=self.http)
 
+    @copy_doc(FortniteAPI.fetch_br_stats_by_id)
     def fetch_br_stats_by_id(
         self,
         id: str,
         /,
         *,
-        time_window: Optional[TimeWindow] = None,
-        image: Optional[StatsImageType] = None,
+        time_window: TimeWindow = TimeWindow.LIFETIME,
+        image: StatsImageType = StatsImageType.NONE,
     ) -> BrPlayerStats[SyncHTTPClient]:
-        data = self.http.get_br_stats_by_id(
-            account_id=id, time_window=time_window and time_window.value, image=image and image.value
-        )
+        data = self.http.get_br_stats_by_id(account_id=id, time_window=time_window.value, image=image.value)
         return BrPlayerStats(data=data, http=self.http)
