@@ -143,7 +143,6 @@ class CosmeticBrSearchTag(enum.Enum):
 class NewsType(enum.Enum):
     BATTLE_ROYALE = 'br'
     SAVE_THE_WORLD = 'stw'
-    CREATIVE = 'creative'
 
 
 class AccountType(enum.Enum):

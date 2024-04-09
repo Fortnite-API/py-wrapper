@@ -50,7 +50,7 @@ class News(Generic[HTTPClientT]):
         The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    __slots__: Tuple[str, ...] = ('br', 'stw', 'creative', 'raw_data')
+    __slots__: Tuple[str, ...] = ('br', 'stw', 'raw_data')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         _br = data.get('br')
