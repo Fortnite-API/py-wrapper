@@ -247,6 +247,11 @@ async def test_async_fetch_cosmetics_all():
     assert cosmetics_all.lego_kits
     assert cosmetics_all.raw_data
 
+    # Ensure that you can iter over the cosmetics
+    assert len(cosmetics_all) != 0
+    for cosmetic in cosmetics_all:
+        assert isinstance(cosmetic, fn_api.Cosmetic)
+
 
 @pytest.mark.asyncio
 async def test_async_map():

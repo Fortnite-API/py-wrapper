@@ -35,6 +35,22 @@ from .utils import get_with_fallback
 class CosmeticsAll(Generic[HTTPClientT]):
     """A class that represents a request to get all cosmetics.
 
+    .. container:: operations
+
+        .. describe:: len(x)
+
+            Returns the total amount of cosmetics.
+
+        .. describe:: iter(x)
+
+            Returns an iterator of the cosmetics. In the following
+            order: battle royale, tracks, instruments, cars, lego, lego kits.
+
+        .. describe:: for x in y
+
+            Iterates over the cosmetics. In the following order:
+            battle royale, tracks, instruments, cars, lego, lego kits.
+
     Attributes
     ----------
     br: List[:class:`CosmeticBr`]
@@ -79,3 +95,9 @@ class CosmeticsAll(Generic[HTTPClientT]):
         ]
 
         self.raw_data: Dict[str, Any] = data
+
+    def __iter__(self):
+        return iter(self.br + self.tracks + self.instruments + self.cars + self.lego + self.lego_kits)
+
+    def __len__(self):
+        return len(self.br + self.tracks + self.instruments + self.cars + self.lego + self.lego_kits)

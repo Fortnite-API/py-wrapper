@@ -210,6 +210,26 @@ def test_sync_fetch_cosmetics_new():
     assert isinstance(new_cosmetics.lego_kits, fn_api.NewCosmetic)
 
 
+def test_sync_fetch_cosmetics_all():
+    with fn_api.SyncFortniteAPI() as client:
+        cosmetics_all = client.fetch_cosmetics_all()
+
+    assert isinstance(cosmetics_all, fn_api.CosmeticsAll)
+
+    assert cosmetics_all.br
+    assert cosmetics_all.tracks
+    assert cosmetics_all.instruments
+    assert cosmetics_all.cars
+    assert cosmetics_all.lego
+    assert cosmetics_all.lego_kits
+    assert cosmetics_all.raw_data
+
+    # Ensure that you can iter over the cosmetics
+    assert len(cosmetics_all) != 0
+    for cosmetic in cosmetics_all:
+        assert isinstance(cosmetic, fn_api.Cosmetic)
+
+
 def test_sync_map():
     with fn_api.SyncFortniteAPI() as client:
         map = client.fetch_map()
