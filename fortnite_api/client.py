@@ -36,7 +36,7 @@ from .banner import Banner, BannerColor
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticTrack
 from .creator_code import CreatorCode
 from .enums import *
-from .errors import BetaAccessNotEnabledError
+from .errors import BetaAccessNotEnabled
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
 from .material import MaterialInstance
@@ -629,7 +629,7 @@ class FortniteAPI:
             The client does not have beta access enabled through :attr:`beta`.
         """
         if not self.beta:
-            raise BetaAccessNotEnabledError("Beta access is not enabled for this client.")
+            raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
         data = await self.http.beta_get_material_instances()
         return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]
@@ -839,7 +839,7 @@ class SyncFortniteAPI:
     @copy_doc(FortniteAPI.beta_fetch_material_instances)
     def beta_fetch_material_instances(self) -> List[MaterialInstance[SyncHTTPClient]]:
         if not self.beta:
-            raise BetaAccessNotEnabledError("Beta access is not enabled for this client.")
+            raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
         data = self.http.beta_get_material_instances()
         return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]

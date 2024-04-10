@@ -326,6 +326,7 @@ class HTTPClient(HTTPMixin):
             )
 
         response: Optional[aiohttp.ClientResponse] = None
+        data = None
         for tries in range(5):  # Just in case we get rate limited
             async with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
                 data = await self._parse_async_response(response)
@@ -342,26 +343,26 @@ class HTTPClient(HTTPMixin):
                     error = data.get('data', data).get('error', error)
 
                 if response.status == 401:
-                    raise Unauthorized(error)
+                    raise Unauthorized(error, response, data)
 
                 if response.status == 403:
-                    raise Forbidden(error)
+                    raise Forbidden(error, response, data)
 
                 if response.status == 404:
-                    raise NotFound(error)
+                    raise NotFound(error, response, data)
 
                 if response.status == 429:  # NOTE: Handle this better down the road
-                    raise RateLimited(error)
+                    raise RateLimited(error, response, data)
 
                 if response.status in {500, 502, 504}:
                     await asyncio.sleep(1 + tries * 2)
                     continue
 
                 if response.status > 500:
-                    raise ServiceUnavailable(error)
+                    raise ServiceUnavailable(error, response, data)
 
         if response is not None:
-            raise ServiceUnavailable('Service unavailable')
+            raise ServiceUnavailable('Service unavailable', response, data)
 
         raise RuntimeError('Unreachable code reached!')
 
@@ -382,6 +383,7 @@ class SyncHTTPClient(HTTPMixin):
             )
 
         response: Optional[requests.Response] = None
+        data = None
         for tries in range(5):
             with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
                 # We aren't able to parse the same as we are in async mode, so we'll need
@@ -409,25 +411,25 @@ class SyncHTTPClient(HTTPMixin):
                 error = data.get('error', error)
 
             if response.status_code == 401:
-                raise Unauthorized(error)
+                raise Unauthorized(error, response, data)
 
             if response.status_code == 403:
-                raise Forbidden(error)
+                raise Forbidden(error, response, data)
 
             if response.status_code == 404:
-                raise NotFound(error)
+                raise NotFound(error, response, data)
 
             if response.status_code == 429:  # NOTE: Handle this better down the road
-                raise RateLimited(error)
+                raise RateLimited(error, response, data)
 
             if response.status_code in {500, 502, 504}:
                 time.sleep(1 + tries * 2)
                 continue
 
             if response.status_code > 500:
-                raise ServiceUnavailable(error)
+                raise ServiceUnavailable(error, response, data)
 
         if response is not None:
-            raise ServiceUnavailable('Service unavailable')
+            raise ServiceUnavailable('Service unavailable', response, data)
 
         raise RuntimeError('Unreachable code reached!')

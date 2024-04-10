@@ -24,40 +24,128 @@ SOFTWARE.
 
 from __future__ import annotations
 
-# NOTE: Implement these further and add documentation
+from typing import TYPE_CHECKING, Any, Tuple, Union
+
+if TYPE_CHECKING:
+    import aiohttp
+    import requests
+
+__all__: Tuple[str, ...] = (
+    "FortniteAPIException",
+    "HTTPException",
+    "NotFound",
+    "Forbidden",
+    "ServiceUnavailable",
+    "RateLimited",
+    "Unauthorized",
+    "BetaAccessNotEnabled",
+)
 
 
 class FortniteAPIException(Exception):
+    """The base for all Fortnite API exceptions.
+
+    This class inherits from :class:`Exception`.
+
+    Attributes
+    ----------
+    message: :class:`str`
+        The error message describing the exception.
+    """
+
     pass
 
 
-class NotFound(FortniteAPIException):
+class HTTPException(FortniteAPIException):
+    """Represents a base HTTP Exception. Every HTTP exception inherits from this class.
+
+    Attributes
+    ----------
+    message: :class:`str`
+        The error message describing the exception.
+    response: Union[:class:`aiohttp.ClientResponse`, :class:`requests.Response`]
+        The response that was returned from the API. If the client is running async, it will be an aiohttp response,
+        otherwise it will be a requests response.
+    raw_data: Any
+        The raw data that was returned from the API.
+    """
+
+    def __init__(self, message: str, response: Union[aiohttp.ClientResponse, requests.Response], raw_data: Any) -> None:
+        self.message: str = message
+        self.response: Union[aiohttp.ClientResponse, requests.Response] = response
+        self.raw_data: Any = raw_data
+        super().__init__(message)
+
+    @property
+    def status_code(self) -> int:
+        """Returns the status code of the response.
+
+        Returns
+        -------
+        :class:`int`
+            The status code of the response.
+        """
+        if isinstance(self.response, requests.Response):
+            return self.response.status_code
+
+        return self.response.status
+
+
+class NotFound(HTTPException):
+    """Exception raised when a resource is not found.
+
+    This class inherits from :class:`HTTPException`.
+    """
+
     pass
 
 
-class Forbidden(FortniteAPIException):
+class Forbidden(HTTPException):
+    """Exception raised when the requested operation is forbidden.
+
+    This class inherits from :class:`HTTPException`.
+    """
+
     pass
 
 
-class MissingSearchParameter(FortniteAPIException):
+class ServiceUnavailable(HTTPException):
+    """Exception raised when the services of Fortnite API are unavailable.
+
+    This class inherits from :class:`HTTPException`.
+    """
+
     pass
 
 
-class MissingIDParameter(FortniteAPIException):
+class RateLimited(HTTPException):
+    """Exception raised when the client has been rate limited.
+
+    This class inherits from :class:`HTTPException`.
+    """
+
     pass
 
 
-class ServiceUnavailable(FortniteAPIException):
+class Unauthorized(HTTPException):
+    """Exception raised when the client is unauthorized to access the requested resource.
+
+    This class inherits from :class:`HTTPException`.
+    """
+
     pass
 
 
-class RateLimited(FortniteAPIException):
-    pass
+class BetaAccessNotEnabled(FortniteAPIException):
+    """Exception raised when beta access is not enabled.
 
+    This exception is raised when a user tries to access a feature or functionality that requires beta access,
+    but the beta access is not enabled.
 
-class Unauthorized(FortniteAPIException):
-    pass
+    Attributes
+    ----------
+    message: :class:`str`
+        The error message describing the exception.
+    """
 
-
-class BetaAccessNotEnabledError(FortniteAPIException):
     pass
