@@ -32,6 +32,8 @@ jobs:
       
       - name: Run Pytest Checks
         shell: bash
+        env:
+          TEST_API_KEY: ${{ secrets.TEST_API_KEY }}
         run: |
           python -m pytest --cov=fortnite_api --import-mode=importlib -vs tests/
 
