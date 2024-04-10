@@ -370,7 +370,7 @@ async def test_async_beta_fetch_material_instances():
     try:
         await fn_api.FortniteAPI().beta_fetch_material_instances()
         assert False, "Should not be able to call this without beta=True"
-    except fn_api.BetaAccessNotEnabledError:
+    except fn_api.BetaAccessNotEnabled:
         pass
 
     async with fn_api.FortniteAPI(beta=True) as client:

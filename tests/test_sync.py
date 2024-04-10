@@ -274,7 +274,7 @@ def test_sync_beta_fetch_material_instances():
     try:
         fn_api.SyncFortniteAPI().beta_fetch_material_instances()
         assert False, "Should not be able to call this without beta=True"
-    except fn_api.BetaAccessNotEnabledError:
+    except fn_api.BetaAccessNotEnabled:
         pass
 
     with fn_api.SyncFortniteAPI(beta=True) as client:

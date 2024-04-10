@@ -625,7 +625,7 @@ class FortniteAPI:
 
         Raises
         ------
-        BetaAccessNotEnabledError
+        BetaAccessNotEnabled
             The client does not have beta access enabled through :attr:`beta`.
         """
         if not self.beta:
