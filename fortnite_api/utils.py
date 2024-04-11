@@ -40,7 +40,7 @@ K_co = TypeVar('K_co', bound='Hashable', covariant=True)
 V_co = TypeVar('V_co', covariant=True)
 T = TypeVar('T')
 
-__all__: Tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json')
+__all__: Tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json', 'MISSING')
 
 BACKUP_TIMESTAMP: str = '0001-01-01T00:00:00'
 
@@ -152,3 +152,23 @@ def get_with_fallback(dict: Dict[K_co, V_co], key: K_co, default_factory: Callab
         return default_factory()
 
     return result
+
+
+# A function name that transform some large dict into something that can be used in a get
+# request as a payload (so turns into camelCase from snake case, and transforms booleans into strings)
+def _transform_dict_for_get_request(data: Dict[str, Any]) -> Dict[str, Any]:
+    updated = data.copy()
+    for key, value in updated.items():
+        if isinstance(value, bool):
+            updated[key] = str(value).lower()
+
+        elif isinstance(value, dict):
+            inner: Dict[str, Any] = value  # narrow the dict type to pass it along (should always be [str, Any])
+            updated[key] = _transform_dict_for_get_request(inner)
+
+        if '_' in key:
+            # Need to transform this to camelCase, so anything that is after "_" will be capitalized
+            parts = key.split('_')
+            updated[''.join(parts[0] + part.capitalize() for part in parts[1:])] = updated.pop(key)
+
+    return updated
