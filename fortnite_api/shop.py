@@ -27,6 +27,8 @@ from __future__ import annotations
 import datetime
 from typing import Any, Tuple, Dict, Generic, List, Optional
 
+from .enums import TileSize
+
 from .abc import Hashable
 from .asset import Asset
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
@@ -159,7 +161,7 @@ class ShopEntry(Generic[HTTPClientT]):
         The offer ID of this entry.
     display_asset_path: Optional[:class:`str`]
         The display asset path of this entry.
-    tile_size: :class:`str`
+    tile_size: :class:`TileSize`
         The tile size of this entry.
     new_display_asset_path: :class:`str`
         The new display asset path of this entry.
@@ -218,7 +220,15 @@ class ShopEntry(Generic[HTTPClientT]):
         self.dev_name: str = data['devName']
         self.offer_id: str = data['offerId']
         self.display_asset_path: Optional[str] = data.get('displayAssetPath')
-        self.tile_size: str = data['tileSize']
+
+        _tile_size: str = data['tileSize']
+
+        # A check to correct an Epic games spelling mistake.
+        if _tile_size.lower() == 'nomal':
+            _tile_size = 'Normal'
+
+        self.tile_size: TileSize = TileSize(_tile_size)
+
         self.new_display_asset_path: str = data['newDisplayAssetPath']
         self.new_display_asset: ShopEntryNewDisplayAsset[HTTPClientT] = ShopEntryNewDisplayAsset(
             data=data['newDisplayAsset'], http=http

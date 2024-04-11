@@ -181,3 +181,12 @@ class CosmeticCompatibleMode(enum.Enum):
     LEGO = 'ECosmeticCompatibleMode::Juno'
     ROCKET_RACING = 'ECosmeticCompatibleMode::DelMar'
     FESTIVAL = 'ECosmeticCompatibleMode::Sparks'
+
+
+# Values are: Small, Normal, DoubleWide and TripleWide
+# There was also a case, where Epic got a type in the tile size and it was spelled "nomal" instead of normal. In-game it was shown properly as Normal width, so this might be the fallback.
+class TileSize(enum.Enum):
+    SMALL = 'Small'
+    NORMAL = 'Normal'
+    DOUBLE_WIDE = 'DoubleWide'
+    TRIPLE_WIDE = 'TripleWide'
