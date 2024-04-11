@@ -363,3 +363,16 @@ def test_sync_fetch_shop():
 
         for cosmetic in entry.br_items + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:
             assert isinstance(cosmetic, fn_api.Cosmetic)
+
+
+def test_sync_search_cosmetics():
+    with fn_api.SyncFortniteAPI() as client:
+        cosmetics_multiple_set = client.search_br_cosmetics(multiple=True, has_set=True)
+        cosmetic_single_set = client.search_br_cosmetics(multiple=False, has_set=True)
+
+    assert isinstance(cosmetics_multiple_set, list)
+    for cosmetic in cosmetics_multiple_set:
+        assert cosmetic.set is not None
+
+    assert isinstance(cosmetic_single_set, fn_api.CosmeticBr)
+    assert cosmetic_single_set.set is not None
