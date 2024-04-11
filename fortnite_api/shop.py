@@ -62,9 +62,9 @@ class ShopEntryBanner:
     Attributes
     ----------
     value: :class:`str`
-        The content of the banner.
+        The text of the banner.
     intensity: :class:`str`
-        The visual style or intensity of the banner.
+        The intensity of the banner.
     backend_value: :class:`str`
         The backend value of the banner.
     """
@@ -91,7 +91,7 @@ class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
     index: :class:`int`
         The index of the layout.
     show_ineligible_offers: :class:`str`
-        The show ineligible offers flag of the layout.
+        Whether ineligible offers are displayed in the layout or not.
     background: Optional[:class:`Asset`]
         The background asset of the layout, if any.
     """
