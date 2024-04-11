@@ -27,10 +27,9 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
 
-from ..enums import CosmeticBrType
-
 from ..abc import Hashable
 from ..asset import Asset
+from ..enums import CosmeticBrType
 from ..http import HTTPClientT
 from ..images import Images
 from ..utils import get_with_fallback, parse_time

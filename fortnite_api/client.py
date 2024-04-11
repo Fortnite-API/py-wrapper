@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, List, Literal, Optional, TypeVar, overload, Union
+from typing import Any, List, Literal, Optional, TypeVar, Union, overload
 
 import aiohttp
 import requests
