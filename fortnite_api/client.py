@@ -24,7 +24,8 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, List, Optional, TypeVar
+import datetime
+from typing import Any, List, Literal, Optional, TypeVar, overload, Union
 
 import aiohttp
 import requests
@@ -298,6 +299,180 @@ class FortniteAPI:
         """
         data = await self.http.get_cosmetics_new()
         return NewCosmetics(data=data, http=self.http)
+
+    @overload
+    async def search_br_cosmetics(
+        self,
+        *,
+        multiple: Literal[True] = True,
+        language: GameLanguage = GameLanguage.ENGLISH,
+        search_language: GameLanguage = GameLanguage.ENGLISH,
+        match_method: Literal['full', 'contains', 'starts', 'ends'],
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        type: Optional[CosmeticBrType] = None,
+        type_display: Optional[str] = None,
+        type_backend: Optional[str] = None,
+        rarity: Optional[CosmeticBrRarity] = None,
+        rarity_display: Optional[str] = None,
+        rarity_backend: Optional[str] = None,
+        has_series: Optional[bool] = None,
+        series: Optional[str] = None,
+        series_backend: Optional[str] = None,
+        has_set: Optional[bool] = None,
+        set: Optional[str] = None,
+        set_text: Optional[str] = None,
+        set_backend: Optional[str] = None,
+        has_introduction: Optional[bool] = None,
+        introduction_backend: Optional[str] = None,
+        introduction_chapter: Optional[str] = None,
+        introduction_season: Optional[str] = None,
+        has_featured_image: Optional[bool] = None,
+        has_variants: Optional[bool] = None,
+        gameplay_tag: Optional[str] = None,
+        has_meta_tags: Optional[bool] = None,
+        has_dynamic_pak_id: Optional[bool] = None,
+        dynamic_pak_id: Optional[str] = None,
+        added: Optional[datetime.datetime] = None,
+        added_since: Optional[datetime.datetime] = None,
+        unseen_for: Optional[int] = None,
+        last_appearance: Optional[datetime.datetime] = None,
+    ) -> List[CosmeticBr]: ...
+
+    @overload
+    async def search_br_cosmetics(
+        self,
+        *,
+        multiple: Literal[False] = False,
+        language: GameLanguage = GameLanguage.ENGLISH,
+        search_language: GameLanguage = GameLanguage.ENGLISH,
+        match_method: Literal['full', 'contains', 'starts', 'ends'],
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        type: Optional[CosmeticBrType] = None,
+        type_display: Optional[str] = None,
+        type_backend: Optional[str] = None,
+        rarity: Optional[CosmeticBrRarity] = None,
+        rarity_display: Optional[str] = None,
+        rarity_backend: Optional[str] = None,
+        has_series: Optional[bool] = None,
+        series: Optional[str] = None,
+        series_backend: Optional[str] = None,
+        has_set: Optional[bool] = None,
+        set: Optional[str] = None,
+        set_text: Optional[str] = None,
+        set_backend: Optional[str] = None,
+        has_introduction: Optional[bool] = None,
+        introduction_backend: Optional[str] = None,
+        introduction_chapter: Optional[str] = None,
+        introduction_season: Optional[str] = None,
+        has_featured_image: Optional[bool] = None,
+        has_variants: Optional[bool] = None,
+        gameplay_tag: Optional[str] = None,
+        has_meta_tags: Optional[bool] = None,
+        has_dynamic_pak_id: Optional[bool] = None,
+        dynamic_pak_id: Optional[str] = None,
+        added: Optional[datetime.datetime] = None,
+        added_since: Optional[datetime.datetime] = None,
+        unseen_for: Optional[int] = None,
+        last_appearance: Optional[datetime.datetime] = None,
+    ) -> CosmeticBr: ...
+
+    async def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr, List[CosmeticBr]]:
+        """|coro|
+
+        Searches all Battle Royale cosmetics available in Fortnite and returns
+        the best match(es) based on the search criteria. Passing any of the parameters to this function will filter the search results.
+
+        Parameters
+        ----------
+        multiple: :class:`bool`
+            Denotes if multiple matches should be returned. If this is ``True`` then a list of matches will be returned. If ``False``, then only the best match will be returned.
+        language: :class:`GameLanguage`
+            The output language to display the cosmetics in. Defaults to the client's default language or :attr:`GameLanguage`.
+        search_language: :class:`GameLanguage`
+            The search language to use for the search. Defaults to the client's default language or :attr:`GameLanguage.ENGLISH`.
+        match_method: :class:`str`
+            The method to use for matching the search query. This can be one of the following: ``full``, ``contains``, ``starts``, ``ends``. Defaults to ``full``.
+        id: Optional[:class:`str`]
+            The ID of the cosmetic.
+        name: Optional[:class:`str`]
+            The name of the cosmetic.
+        description: Optional[:class:`str`]
+            The description of the cosmetic.
+        type: Optional[:class:`CosmeticBrType`]
+            The cosmetic's type.
+        type_display: Optional[:class:`str`]
+            The display type of the cosmetic.
+        type_backend: Optional[:class:`str`]
+            The backend type of the cosmetic.
+        rarity: Optional[:class:`CosmeticBrRarity`]
+            The rarity of the cosmetic.
+        rarity_display: Optional[:class:`str`]
+            The display rarity of the cosmetic.
+        rarity_backend: Optional[:class:`str`]
+            The backend rarity of the cosmetic.
+        has_series: Optional[:class:`bool`]
+            If the cosmetic has a series.
+        series: Optional[:class:`str`]
+            The series of the cosmetic.
+        series_backend: Optional[:class:`str`]
+            The backend series of the cosmetic.
+        has_set: Optional[:class:`bool`]
+            If the cosmetic has a set.
+        set: Optional[:class:`str`]
+            The set of the cosmetic.
+        set_text: Optional[:class:`str`]
+            The text of the set of the cosmetic.
+        set_backend: Optional[:class:`str`]
+            The backend set of the cosmetic.
+        has_introduction: Optional[:class:`bool`]
+            If the cosmetic has an introduction.
+        introduction_backend: Optional[:class:`str`]
+            The backend introduction value of the cosmetic.
+        introduction_chapter: Optional[:class:`str`]
+            The chapter when the cosmetic was introduced.
+        introduction_season: Optional[:class:`str`]
+            The season that the cosmetic was introduced.
+        has_featured_image: Optional[:class:`bool`]
+            If the cosmetic has a featured image.
+        has_variants: Optional[:class:`bool`]
+            If the cosmetic has variants.
+        gameplay_tag: Optional[:class:`str`]
+            A gameplay tag of the cosmetic.
+        has_meta_tags: Optional[:class:`bool`]
+            If the cosmetic has meta tags.
+        has_dynamic_pak_id: Optional[:class:`bool`]
+            If the cosmetic has a dynamic pak ID.
+        dynamic_pak_id: Optional[:class:`str`]
+            The dynamic pak ID of the cosmetic.
+        added: Optional[:class:`datetime.datetime`]
+            The date when the cosmetic was added.
+        added_since: Optional[:class:`datetime.datetime`]
+            The date since the cosmetic was added.
+        unseen_for: Optional[:class:`int`]
+            The amount, in days, that the cosmetic has been unseen.
+        last_appearance: Optional[:class:`datetime.datetime`]
+            The last appearance of the cosmetic.
+
+        Raises
+        ------
+        NotFound
+            No cosmetics were found with the search criteria.
+        """
+        multiple = kwargs.pop('multiple')
+
+        kwargs['language'] = self._resolve_language_value(kwargs['language'])
+        kwargs['search_language'] = self._resolve_language_value(kwargs['search_language'])
+
+        if multiple is True:
+            data = await self.http.search_cosmetic_all(**kwargs)
+            return [CosmeticBr(data=entry, http=self.http) for entry in data]
+        else:
+            data = await self.http.search_cosmetic(**kwargs)
+            return CosmeticBr(data=data, http=self.http)
 
     # AES
 
@@ -742,6 +917,100 @@ class SyncFortniteAPI:
     def fetch_cosmetics_new(self) -> NewCosmetics[SyncHTTPClient]:
         data = self.http.get_cosmetics_new()
         return NewCosmetics(data=data, http=self.http)
+
+    @overload
+    def search_br_cosmetics(
+        self,
+        *,
+        multiple: Literal[True] = True,
+        language: GameLanguage = GameLanguage.ENGLISH,
+        search_language: GameLanguage = GameLanguage.ENGLISH,
+        match_method: Literal['full', 'contains', 'starts', 'ends'],
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        type: Optional[CosmeticBrType] = None,
+        type_display: Optional[str] = None,
+        type_backend: Optional[str] = None,
+        rarity: Optional[CosmeticBrRarity] = None,
+        rarity_display: Optional[str] = None,
+        rarity_backend: Optional[str] = None,
+        has_series: Optional[bool] = None,
+        series: Optional[str] = None,
+        series_backend: Optional[str] = None,
+        has_set: Optional[bool] = None,
+        set: Optional[str] = None,
+        set_text: Optional[str] = None,
+        set_backend: Optional[str] = None,
+        has_introduction: Optional[bool] = None,
+        introduction_backend: Optional[str] = None,
+        introduction_chapter: Optional[str] = None,
+        introduction_season: Optional[str] = None,
+        has_featured_image: Optional[bool] = None,
+        has_variants: Optional[bool] = None,
+        gameplay_tag: Optional[str] = None,
+        has_meta_tags: Optional[bool] = None,
+        has_dynamic_pak_id: Optional[bool] = None,
+        dynamic_pak_id: Optional[str] = None,
+        added: Optional[datetime.datetime] = None,
+        added_since: Optional[datetime.datetime] = None,
+        unseen_for: Optional[int] = None,
+        last_appearance: Optional[datetime.datetime] = None,
+    ) -> List[CosmeticBr[SyncHTTPClient]]: ...
+
+    @overload
+    def search_br_cosmetics(
+        self,
+        *,
+        multiple: Literal[False] = False,
+        language: GameLanguage = GameLanguage.ENGLISH,
+        search_language: GameLanguage = GameLanguage.ENGLISH,
+        match_method: Literal['full', 'contains', 'starts', 'ends'],
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        type: Optional[CosmeticBrType] = None,
+        type_display: Optional[str] = None,
+        type_backend: Optional[str] = None,
+        rarity: Optional[CosmeticBrRarity] = None,
+        rarity_display: Optional[str] = None,
+        rarity_backend: Optional[str] = None,
+        has_series: Optional[bool] = None,
+        series: Optional[str] = None,
+        series_backend: Optional[str] = None,
+        has_set: Optional[bool] = None,
+        set: Optional[str] = None,
+        set_text: Optional[str] = None,
+        set_backend: Optional[str] = None,
+        has_introduction: Optional[bool] = None,
+        introduction_backend: Optional[str] = None,
+        introduction_chapter: Optional[str] = None,
+        introduction_season: Optional[str] = None,
+        has_featured_image: Optional[bool] = None,
+        has_variants: Optional[bool] = None,
+        gameplay_tag: Optional[str] = None,
+        has_meta_tags: Optional[bool] = None,
+        has_dynamic_pak_id: Optional[bool] = None,
+        dynamic_pak_id: Optional[str] = None,
+        added: Optional[datetime.datetime] = None,
+        added_since: Optional[datetime.datetime] = None,
+        unseen_for: Optional[int] = None,
+        last_appearance: Optional[datetime.datetime] = None,
+    ) -> CosmeticBr[SyncHTTPClient]: ...
+
+    @copy_doc(FortniteAPI.search_br_cosmetics)
+    def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr[SyncHTTPClient], List[CosmeticBr[SyncHTTPClient]]]:
+        multiple = kwargs.pop('multiple')
+
+        kwargs['language'] = self._resolve_language_value(kwargs['language'])
+        kwargs['search_language'] = self._resolve_language_value(kwargs['search_language'])
+
+        if multiple is True:
+            data = self.http.search_cosmetic_all(**kwargs)
+            return [CosmeticBr(data=entry, http=self.http) for entry in data]
+        else:
+            data = self.http.search_cosmetic(**kwargs)
+            return CosmeticBr(data=data, http=self.http)
 
     # AES
 
