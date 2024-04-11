@@ -41,4 +41,5 @@ from .news import *
 from .playlist import *
 from .shop import *
 from .stats import *
-from .utils import *
+
+from . import utils as utils
