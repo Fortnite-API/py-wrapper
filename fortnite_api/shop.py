@@ -27,7 +27,7 @@ from __future__ import annotations
 import datetime
 from typing import Any, Tuple, Dict, Generic, List, Optional
 
-from .enums import TileSize
+from .enums import TileSize, BannerIntensity
 
 from .abc import Hashable
 from .asset import Asset
@@ -65,7 +65,7 @@ class ShopEntryBanner:
     ----------
     value: :class:`str`
         The text of the banner.
-    intensity: :class:`str`
+    intensity: :class:`BannerIntensity`
         The intensity of the banner.
     backend_value: :class:`str`
         The backend value of the banner.
@@ -75,7 +75,7 @@ class ShopEntryBanner:
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.value: str = data['value']
-        self.intensity: str = data['intensity']
+        self.intensity: BannerIntensity = BannerIntensity(data['intensity'])
         self.backend_value: str = data['backendValue']
 
 

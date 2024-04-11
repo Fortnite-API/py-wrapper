@@ -190,3 +190,9 @@ class TileSize(enum.Enum):
     NORMAL = 'Normal'
     DOUBLE_WIDE = 'DoubleWide'
     TRIPLE_WIDE = 'TripleWide'
+
+
+class BannerIntensity(enum.Enum):
+    LOW = 'Low'
+    MEDIUM = 'Medium'
+    HIGH = 'High'
