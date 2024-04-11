@@ -27,6 +27,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
 
+from ..enums import CosmeticBrType
+
 from ..abc import Hashable
 from ..asset import Asset
 from ..http import HTTPClientT
@@ -71,7 +73,7 @@ class CosmeticType:
 
     Attributes
     ----------
-    value: :class:`str`
+    value: :class:`CosmeticBrType`
         The value of the cosmetic type.
     display_value: :class:`str`
         The display value of the cosmetic type. This is the value that is displayed to the user.
@@ -82,7 +84,7 @@ class CosmeticType:
     __slots__: Tuple[str, ...] = ('value', 'display_value', 'backend_value')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.value: str = data['value']
+        self.value: CosmeticBrType = CosmeticBrType(data['value'])
         self.display_value: str = data['displayValue']
         self.backend_value: str = data['backendValue']
 
