@@ -28,7 +28,7 @@ import datetime
 
 import fortnite_api as fn_api
 
-from .test_async import (
+from .test_async_methods import (
     TEST_ACCOUNT_ID,
     TEST_ACCOUNT_NAME,
     TEST_COSMETIC_ID,
