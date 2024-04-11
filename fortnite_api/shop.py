@@ -25,13 +25,12 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Tuple, Dict, Generic, List, Optional
-
-from .enums import TileSize, BannerIntensity
+from typing import Any, Dict, Generic, List, Optional, Tuple
 
 from .abc import Hashable
 from .asset import Asset
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
+from .enums import BannerIntensity, TileSize
 from .http import HTTPClientT
 from .material import MaterialInstance
 from .utils import get_with_fallback, parse_time
