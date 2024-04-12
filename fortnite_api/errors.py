@@ -39,6 +39,7 @@ __all__: Tuple[str, ...] = (
     "RateLimited",
     "Unauthorized",
     "BetaAccessNotEnabled",
+    "BetaUnknownException",
 )
 
 
@@ -137,10 +138,10 @@ class Unauthorized(HTTPException):
 
 
 class BetaAccessNotEnabled(FortniteAPIException):
-    """Exception raised when beta access is not enabled.
-
-    This exception is raised when a user tries to access a feature or functionality that requires beta access,
+    """Exception raised when a user tries to access a feature or functionality that requires beta access,
     but the beta access is not enabled.
+
+    This class inherits :class:`FortniteAPIException`.
 
     Attributes
     ----------
@@ -149,3 +150,23 @@ class BetaAccessNotEnabled(FortniteAPIException):
     """
 
     pass
+
+
+class BetaUnknownException(FortniteAPIException):
+    """Exception raised when an unknown exception occurs while trying to access a beta feature.
+
+    This class inherits :class:`FortniteAPIException`.
+
+    Attributes
+    ----------
+    message: :class:`str`
+        The error message describing the exception.
+    original: :class:`HTTPException`
+        The original exception that occurred.
+    """
+
+    def __init__(self, *, original: HTTPException) -> None:
+        super().__init__(
+            f"An unknown exception occurred while trying to access a beta feature. Original exception: {original}"
+        )
+        self.original: HTTPException = original

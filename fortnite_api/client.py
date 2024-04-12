@@ -37,7 +37,7 @@ from .banner import Banner, BannerColor
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticTrack
 from .creator_code import CreatorCode
 from .enums import *
-from .errors import BetaAccessNotEnabled
+from .errors import BetaAccessNotEnabled, BetaUnknownException, HTTPException
 from .flags import DEFAULT_OPTIMIZATION_FLAGS, OptimizationFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
@@ -813,11 +813,18 @@ class FortniteAPI:
         ------
         BetaAccessNotEnabled
             The client does not have beta access enabled through :attr:`beta`.
+        BetaUnknownException
+            An unknown error occurred while fetching the material instances. This could be due to
+            an issue with the API or the client.
         """
         if not self.beta:
             raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
-        data = await self.http.beta_get_material_instances()
+        try:
+            data = await self.http.beta_get_material_instances()
+        except HTTPException as exc:
+            raise BetaUnknownException(original=exc) from exc
+
         return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]
 
 
@@ -1126,7 +1133,11 @@ class SyncFortniteAPI:
         if not self.beta:
             raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
-        data = self.http.beta_get_material_instances()
+        try:
+            data = self.http.beta_get_material_instances()
+        except HTTPException as exc:
+            raise BetaUnknownException(original=exc) from exc
+
         return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]
 
     @copy_doc(FortniteAPI.fetch_shop)
