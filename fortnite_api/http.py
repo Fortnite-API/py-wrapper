@@ -26,9 +26,10 @@ from __future__ import annotations
 
 import abc
 import asyncio
+import logging
 import sys
 import time
-from typing import Any, Coroutine, Dict, Literal, Optional, Union
+from typing import TYPE_CHECKING, Any, Coroutine, Dict, Literal, Optional, Union
 
 import aiohttp
 import requests
@@ -42,6 +43,11 @@ T = TypeVar('T', bound='Any')
 AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
 
 HTTPClientT = TypeVar('HTTPClientT', bound='Union[HTTPClient, SyncHTTPClient]', default='HTTPClient')
+
+if TYPE_CHECKING:
+    from .flags import OptimizationFlags
+
+_log = logging.getLogger(__name__)
 
 
 # Similar to how dpy manages routes, we'll follow this pattern as well
@@ -61,12 +67,11 @@ class Route:
 
 
 class HTTPMixin(abc.ABC):
-    def __init__(
-        self,
-        *,
-        token: Optional[str] = None,
-    ) -> None:
+
+    def __init__(self, *, token: Optional[str] = None, optimization_flags: Optional[OptimizationFlags] = None) -> None:
         self.token: Optional[str] = token
+        self.optimization_flags: Optional[OptimizationFlags] = optimization_flags
+
         self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {0}) Python/{1[0]}.{1[1]}'.format(
             __version__, sys.version_info
         )
@@ -74,6 +79,10 @@ class HTTPMixin(abc.ABC):
         self.headers: Dict[str, Any] = {'User-Agent': self.user_agent}
         if self.token is not None:
             self.headers['Authorization'] = self.token
+
+        self.params: Dict[str, Any] = {}
+        if self.optimization_flags is not None:
+            self.params['responseOptions'] = str(self.optimization_flags)
 
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any: ...
@@ -325,10 +334,15 @@ class HTTPClient(HTTPMixin):
                 'aiohttp.ClientSession is not set. Must either pass session to FortniteAPI constructor or use the async context manager.'
             )
 
+        # Update the params with the optimization flags
+        kwargs.setdefault('params', {}).update(self.params)
+
         response: Optional[aiohttp.ClientResponse] = None
         data = None
         for tries in range(5):  # Just in case we get rate limited
             async with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
+                _log.debug('Request to %s %s returned status %s', route.method, route.url, response.status)
+
                 data = await self._parse_async_response(response)
 
                 if 300 > response.status >= 200:  # Everything is ok
@@ -382,10 +396,15 @@ class SyncHTTPClient(HTTPMixin):
                 'requests.Session is not set. Must either pass session to FortniteAPI constructor or use the context manager.'
             )
 
+        # Update the params with the optimization flags
+        kwargs.setdefault('params', {}).update(self.params)
+
         response: Optional[requests.Response] = None
         data = None
         for tries in range(5):
             with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
+                _log.debug('Request to %s %s returned status %s', route.method, route.url, response.status_code)
+
                 # We aren't able to parse the same as we are in async mode, so we'll need
                 # to use some other logic here
                 content_type = response.headers.get('Content-Type')

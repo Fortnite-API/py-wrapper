@@ -35,6 +35,7 @@ from .cosmetics import *
 from .creator_code import *
 from .enums import *
 from .errors import *
+from .flags import *
 from .map import *
 from .material import *
 from .new import *
