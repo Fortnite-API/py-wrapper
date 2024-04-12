@@ -25,7 +25,9 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
-from typing import List
+from typing import List, Tuple
+
+__all__: Tuple[str, ...] = ('OptimizationFlags', 'DEFAULT_OPTIMIZATION_FLAGS')
 
 
 class OptimizationFlags(enum.IntFlag):
@@ -69,3 +71,6 @@ class OptimizationFlags(enum.IntFlag):
             enabled_flags.append("ignore_null")
 
         return ",".join(enabled_flags)
+
+
+DEFAULT_OPTIMIZATION_FLAGS: OptimizationFlags = OptimizationFlags.IGNORE_NULL

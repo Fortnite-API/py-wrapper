@@ -38,7 +38,7 @@ from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego
 from .creator_code import CreatorCode
 from .enums import *
 from .errors import BetaAccessNotEnabled
-from .flags import OptimizationFlags
+from .flags import DEFAULT_OPTIMIZATION_FLAGS, OptimizationFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
 from .material import MaterialInstance
@@ -92,8 +92,8 @@ class FortniteAPI:
 
         All beta endpoints are prefixed with ``beta_``.
     optimization_flags: Optional[:class:`OptimizationFlags`]
-        Any optimization flags to use for the client. This will speed up the client by enabling API optimizations
-        that are not enabled by default. Read the documentation for :class:`OptimizationFlags` for more information.
+        Any optimization flags to use for the client. Enabling these can speed up the client or reduce
+        the amount of bandwidth used. Read the documentation for :class:`OptimizationFlags` for more information. By default, :attr:`OptimizationFlags.IGNORE_NULL` is enabled.
     """
 
     def __init__(
@@ -103,7 +103,7 @@ class FortniteAPI:
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[aiohttp.ClientSession] = None,
         beta: bool = False,
-        optimization_flags: Optional[OptimizationFlags] = None,
+        optimization_flags: OptimizationFlags = DEFAULT_OPTIMIZATION_FLAGS,
     ) -> None:
         self.http: HTTPClient = HTTPClient(session=session, token=api_key, optimization_flags=optimization_flags)
         self.default_language: Optional[GameLanguage] = default_language
