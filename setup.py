@@ -18,6 +18,9 @@ extras_require = {
     'test': ['pytest', 'pytest-asyncio', 'pytest-cov', 'python-dotenv'],
     'docs': ['sphinx', 'sphinxcontrib_trio', 'sphinxcontrib-websupport', 'typing-extensions', 'furo', 'enum-tools[sphinx]'],
     'dev': ['black', 'isort'],
+    'speed': [
+        'orjson',
+    ],
 }
 
 with open('requirements.txt') as f:
