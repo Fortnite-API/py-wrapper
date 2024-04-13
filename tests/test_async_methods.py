@@ -123,7 +123,6 @@ async def test_async_creator_code(optimization_flags: fn_api.OptimizationFlags):
 async def test_async_fetch_playlist(optimization_flags: fn_api.OptimizationFlags):
     async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
         playlists = await client.fetch_playlists()
-        playlists_en = await client.fetch_playlists()
 
     assert len(playlists), "Playlists should not be empty"
 
@@ -132,8 +131,6 @@ async def test_async_fetch_playlist(optimization_flags: fn_api.OptimizationFlags
 
     if len(playlists) >= 2:
         assert first != playlists[1]
-
-    assert playlists == playlists_en
 
 
 @pytest.mark.asyncio

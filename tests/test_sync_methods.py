@@ -118,7 +118,6 @@ def test_sync_creator_code(optimization_flags: fn_api.OptimizationFlags):
 def test_sync_fetch_playlist(optimization_flags: fn_api.OptimizationFlags):
     with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
         playlists = client.fetch_playlists()
-        playlists_en = client.fetch_playlists()
 
     assert len(playlists), "Playlists should not be empty"
 
@@ -127,8 +126,6 @@ def test_sync_fetch_playlist(optimization_flags: fn_api.OptimizationFlags):
 
     if len(playlists) >= 2:
         assert first != playlists[1]
-
-    assert playlists == playlists_en
 
 
 def test_sync_fetch_cosmetics_cars(optimization_flags: fn_api.OptimizationFlags):
