@@ -94,7 +94,19 @@ class FortniteAPI:
         All beta endpoints are prefixed with ``beta_``.
     optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
         Any optimization flags to use for the client. Enabling these can speed up the client or reduce
-        the amount of bandwidth used. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information. By default, :attr:`fortnite_api.OptimizationFlags.IGNORE_NULL` is enabled.
+        the amount of bandwidth used. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information. By default, :attr:`fortnite_api.OptimizationFlags.IGNORE_NULL` is enabled. Optionally,
+        you can pass ``None`` or :meth:`fortnite_api.OptimizationFlags.none` to remove all flags.
+
+    Attributes
+    ----------
+    default_language: Optional[:class:`fortnite_api.GameLanguage`]
+        The default language, if any, passed to the client.
+    beta: :class:`bool`
+        Denotes if the client can make requests to beta endpoints.
+    optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
+        Any optimization flags set on the client. By default,
+        :attr:`fortnite_api.OptimizationFlags.IGNORE_NULL` is enabled.
+        This can be ``None`` to remove all flags.
     """
 
     def __init__(
@@ -426,10 +438,10 @@ class FortniteAPI:
             list of matches will be returned. If ``False``, then only the best match will be returned.
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The output language to display the cosmetics in. Will override the default language
-            set in the client. Defaults to the client's :attr:`~default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
+            set in the client. Defaults to the client's :attr:`default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
         search_language: Optional[:class:`fortnite_api.GameLanguage`]
             The search language to use for the search. Will override the default language set in the client. Defaults to
-            the client's :attr:`~default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
+            the client's :attr:`default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
         match_method: Optional[:class:`str`]
             The method to use for matching the search query. This can be one of the following:
             ``full``, ``contains``, ``starts``, ``ends``. Defaults to ``full``.
@@ -749,7 +761,7 @@ class FortniteAPI:
             The time window to search statistics for. Defaults to :attr:`fortnite_api.TimeWindow.LIFETIME`.
         image: Optional[:class:`fortnite_api.StatsImageType`]
             The type of image to display in the statistics. Defaults to :attr:`fortnite_api.StatsImageType.NONE`. If this
-            is set to :attr:`fortnite_api.fortnite_api.StatsImageType.NONE`, there will be no image in the response.
+            is set to :attr:`fortnite_api.StatsImageType.NONE`, there will be no image in the response.
 
         Returns
         -------
@@ -835,7 +847,7 @@ class FortniteAPI:
 
         .. note::
 
-            This is a beta method. This cannot be called unless :attr:`~beta`
+            This is a beta method. This cannot be called unless :attr:`beta`
             is set to ``True`` in the client.
 
         .. warning::
@@ -896,6 +908,17 @@ class SyncFortniteAPI:
     optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
         Any optimization flags to use for the client. This will speed up the client by enabling API optimizations
         that are not enabled by default. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information.
+
+    Attributes
+    ----------
+    default_language: Optional[:class:`fortnite_api.GameLanguage`]
+        The default language, if any, passed to the client.
+    beta: :class:`bool`
+        Denotes if the client can make requests to beta endpoints.
+    optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
+        Any optimization flags set on the client. By default,
+        :attr:`fortnite_api.OptimizationFlags.IGNORE_NULL` is enabled.
+        This can be ``None`` to remove all flags.
     """
 
     def __init__(
