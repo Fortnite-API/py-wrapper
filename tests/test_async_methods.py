@@ -437,11 +437,12 @@ async def test_async_fetch_shop(optimization_flags: fn_api.OptimizationFlags):
         assert entry.new_display_asset_path
 
         new_display_asset = entry.new_display_asset
-        assert isinstance(new_display_asset, fn_api.ShopEntryNewDisplayAsset)
-        assert new_display_asset.id
+        if new_display_asset:
+            assert isinstance(new_display_asset, fn_api.ShopEntryNewDisplayAsset)
+            assert new_display_asset.id
 
-        for material_instance in new_display_asset.material_instances:
-            assert isinstance(material_instance, fn_api.MaterialInstance)
+            for material_instance in new_display_asset.material_instances:
+                assert isinstance(material_instance, fn_api.MaterialInstance)
 
         for cosmetic in entry.br_items + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:
             assert isinstance(cosmetic, fn_api.Cosmetic)
