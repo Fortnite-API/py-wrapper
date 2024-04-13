@@ -15,8 +15,8 @@ with open('README.md') as f:
     readme = f.read()
 
 extras_require = {
-    'test': ['pytest', 'pytest-asyncio', 'pytest-cov', 'python-dotenv'],
-    'docs': ['sphinx', 'sphinxcontrib_trio', 'sphinxcontrib-websupport', 'typing-extensions', 'furo', 'enum-tools[sphinx]'],
+    'tests': ['pytest', 'pytest-asyncio', 'pytest-cov', 'python-dotenv'],
+    'docs': ['sphinx', 'sphinxcontrib_trio', 'sphinxcontrib-websupport', 'typing-extensions', 'furo', 'sphinx-copybutton'],
     'dev': ['black', 'isort'],
     'speed': [
         'orjson',

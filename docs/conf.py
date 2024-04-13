@@ -11,6 +11,7 @@ import logging
 import os
 import re
 import sys
+from typing import Any, Dict
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -31,7 +32,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinxcontrib_trio',
-    'enum_tools.autoenum',
+    'sphinx_copybutton',
 ]
 
 autodoc_member_order = 'bysource'
@@ -166,8 +167,10 @@ resource_links = {
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-# html_theme_options = {
-# }
+html_theme_options: Dict[str, Any] = {
+    "source_repository": "https://github.com/Fortnite-API/py-wrapper",
+    "source_branch": "main",
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
