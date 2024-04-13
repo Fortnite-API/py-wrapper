@@ -40,6 +40,10 @@ class OptimizationFlags(enum.IntFlag):
 
             Returns a new OptimizationFlags object with the bits set in both x and y.
 
+    Attributes
+    ----------
+    IGNORE_NULL
+        Ignores null values in the response. This can speed up the client by a good amount.
 
     Example
     -------
@@ -49,12 +53,6 @@ class OptimizationFlags(enum.IntFlag):
 
         FLAGS = OptimizationFlags.IGNORE_NULL | OptimizationFlags.
         async def main():
-
-
-    Attributes
-    ----------
-    IGNORE_NULL
-        Ignores null values in the response. This can speed up the client by a good amount.
     """
 
     IGNORE_NULL: int = 0 >> 0
