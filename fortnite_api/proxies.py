@@ -25,9 +25,9 @@ SOFTWARE.
 from __future__ import annotations
 
 from collections.abc import Iterator
-from typing import Callable, Generic, Iterable, List, Dict, cast, overload, Union, SupportsIndex, Any
+from typing import Any, Callable, Dict, Generic, Iterable, List, SupportsIndex, Union, cast, overload
 
-from typing_extensions import TypeVar, Self
+from typing_extensions import Self, TypeVar
 
 T = TypeVar('T')
 K_co = TypeVar('K_co', covariant=True, default='str')
@@ -130,6 +130,10 @@ class TransformerListProxy(Generic[T, K_co, V_co], List[T]):
     def __eq__(self, value: object) -> bool:
         self._transform_all()
         return super().__eq__(value)
+
+    def __ne__(self, value: object) -> bool:
+        self._transform_all()
+        return super().__ne__(value)
 
     def __iter__(self) -> Iterator[T]:
         for index in range(super().__len__()):

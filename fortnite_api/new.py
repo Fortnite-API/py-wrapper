@@ -30,6 +30,7 @@ from typing import Any, Dict, Generic, List, Optional, Type
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
 from .enums import CosmeticType
 from .http import HTTPClientT
+from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
 
@@ -204,6 +205,9 @@ class NewCosmetics(Generic[HTTPClientT]):
             type=cosmetic_type,
             hash=hashes[internal_key],
             last_addition=last_addition,
-            items=[cosmetic_class(data=item, http=self._http) for item in cosmetic_items],
+            items=TransformerListProxy(
+                cosmetic_items,
+                lambda x: cosmetic_class(data=x, http=self._http),
+            ),
             http=self._http,
         )

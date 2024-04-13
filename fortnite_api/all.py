@@ -22,13 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import Any, Dict, Generic, List
+from typing import Any, Dict, Generic
 
 from .cosmetics import CosmeticBr, CosmeticInstrument, CosmeticTrack
 from .cosmetics.car import CosmeticCar
 from .cosmetics.lego import CosmeticLego
 from .cosmetics.lego_kit import CosmeticLegoKit
 from .http import HTTPClientT
+from .proxies import TransformerListProxy
 from .utils import get_with_fallback
 
 
@@ -73,31 +74,63 @@ class CosmeticsAll(Generic[HTTPClientT]):
         self._http: HTTPClientT = http
 
         _br = get_with_fallback(data, 'br', list)
-        self.br: List[CosmeticBr[HTTPClientT]] = [CosmeticBr(data=cosmetic, http=self._http) for cosmetic in _br]
+        self.br: TransformerListProxy[CosmeticBr[HTTPClientT]] = TransformerListProxy(
+            _br,
+            lambda x: CosmeticBr(data=x, http=self._http),
+        )
 
         _tracks = get_with_fallback(data, 'tracks', list)
-        self.tracks: List[CosmeticTrack[HTTPClientT]] = [CosmeticTrack(data=track, http=self._http) for track in _tracks]
+        self.tracks: TransformerListProxy[CosmeticTrack[HTTPClientT]] = TransformerListProxy(
+            _tracks,
+            lambda x: CosmeticTrack(data=x, http=self._http),
+        )
 
         _instruments = get_with_fallback(data, 'instruments', list)
-        self.instruments: List[CosmeticInstrument[HTTPClientT]] = [
-            CosmeticInstrument(data=instrument, http=self._http) for instrument in _instruments
-        ]
+        self.instruments: TransformerListProxy[CosmeticInstrument[HTTPClientT]] = TransformerListProxy(
+            _instruments,
+            lambda x: CosmeticInstrument(data=x, http=self._http),
+        )
 
         _cars = get_with_fallback(data, 'cars', list)
-        self.cars: List[CosmeticCar[HTTPClientT]] = [CosmeticCar(data=car, http=self._http) for car in _cars]
+        self.cars: TransformerListProxy[CosmeticCar[HTTPClientT]] = TransformerListProxy(
+            _cars,
+            lambda x: CosmeticCar(data=x, http=self._http),
+        )
 
         _lego = get_with_fallback(data, 'lego', list)
-        self.lego: List[CosmeticLego[HTTPClientT]] = [CosmeticLego(data=lego, http=self._http) for lego in _lego]
+        self.lego: TransformerListProxy[CosmeticLego[HTTPClientT]] = TransformerListProxy(
+            _lego,
+            lambda x: CosmeticLego(data=x, http=self._http),
+        )
 
         _lego_kits = get_with_fallback(data, 'legoKits', list)
-        self.lego_kits: List[CosmeticLegoKit[HTTPClientT]] = [
-            CosmeticLegoKit(data=lego_kit, http=self._http) for lego_kit in _lego_kits
-        ]
+        self.lego_kits: TransformerListProxy[CosmeticLegoKit[HTTPClientT]] = TransformerListProxy(
+            _lego_kits,
+            lambda x: CosmeticLegoKit(data=x, http=self._http),
+        )
 
         self.raw_data: Dict[str, Any] = data
 
     def __iter__(self):
-        return iter(self.br + self.tracks + self.instruments + self.cars + self.lego + self.lego_kits)
+        for br in self.br:
+            yield br
+
+        for track in self.tracks:
+            yield track
+
+        for instrument in self.instruments:
+            yield instrument
+
+        for car in self.cars:
+            yield car
+
+        for lego in self.lego:
+            yield lego
+
+        for lego_kit in self.lego_kits:
+            yield lego_kit
 
     def __len__(self):
-        return len(self.br + self.tracks + self.instruments + self.cars + self.lego + self.lego_kits)
+        return (
+            len(self.br) + len(self.tracks) + len(self.instruments) + len(self.cars) + len(self.lego) + len(self.lego_kits)
+        )

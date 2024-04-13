@@ -23,8 +23,9 @@ SOFTWARE.
 """
 
 from __future__ import annotations
+
 import dataclasses
-from typing import List, Dict
+from typing import Dict, List
 
 from fortnite_api.proxies import TransformerListProxy
 

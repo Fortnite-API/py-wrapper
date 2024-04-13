@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, List, Literal, Optional, TypeVar, Union, overload
+from typing import Any, Literal, Optional, TypeVar, Union, overload
 
 import aiohttp
 import requests
@@ -45,6 +45,7 @@ from .material import MaterialInstance
 from .new import NewBrCosmetics, NewCosmetics
 from .news import GameModeNews, News
 from .playlist import Playlist
+from .proxies import TransformerListProxy
 from .shop import Shop
 from .stats import BrPlayerStats
 from .utils import _transform_dict_for_get_request, copy_doc, remove_prefix
@@ -143,7 +144,7 @@ class FortniteAPI:
         data = await self.http.get_cosmetics_all(language=self._resolve_language_value(language))
         return CosmeticsAll(data=data, http=self.http)
 
-    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr]:
+    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> TransformerListProxy[CosmeticBr]:
         """|coro|
 
         Fetches all Battle Royale cosmetics available in Fortnite.
@@ -160,9 +161,12 @@ class FortniteAPI:
             The fetched Battle Royale cosmetics.
         """
         data = await self.http.get_cosmetics_br(language=self._resolve_language_value(language))
-        return [CosmeticBr(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticBr(data=x, http=self.http),
+        )
 
-    async def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar]:
+    async def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> TransformerListProxy[CosmeticCar]:
         """|coro|
 
         Fetches all Car cosmetics available in Fortnite.
@@ -179,9 +183,14 @@ class FortniteAPI:
             The fetched car cosmetics.
         """
         data = await self.http.get_cosmetics_cars(language=self._resolve_language_value(language))
-        return [CosmeticCar(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticCar(data=x, http=self.http),
+        )
 
-    async def fetch_cosmetics_instruments(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticInstrument]:
+    async def fetch_cosmetics_instruments(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[CosmeticInstrument]:
         """|coro|
 
         Fetches all instruments available in Fortnite.
@@ -198,9 +207,14 @@ class FortniteAPI:
             The fetched instruments.
         """
         data = await self.http.get_cosmetics_instruments(language=self._resolve_language_value(language))
-        return [CosmeticInstrument(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticInstrument(data=x, http=self.http),
+        )
 
-    async def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit]:
+    async def fetch_cosmetics_lego_kits(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[CosmeticLegoKit]:
         """|coro|
 
         Fetches all lego kits available in Fortnite.
@@ -217,9 +231,12 @@ class FortniteAPI:
             The fetched lego kits.
         """
         data = await self.http.get_cosmetics_lego_kits(language=self._resolve_language_value(language))
-        return [CosmeticLegoKit(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticLegoKit(data=x, http=self.http),
+        )
 
-    async def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLego]:
+    async def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> TransformerListProxy[CosmeticLego]:
         """|coro|
 
         Fetches all lego cosmetics available in Fortnite.
@@ -236,9 +253,15 @@ class FortniteAPI:
             The fetched lego cosmetics.
         """
         data = await self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
-        return [CosmeticLego(data=entry, http=self.http) for entry in data]
 
-    async def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack]:
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticLego(data=x, http=self.http),
+        )
+
+    async def fetch_cosmetics_tracks(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[CosmeticTrack]:
         """|coro|
 
         Fetches all audio tracks available in Fortnite.
@@ -255,7 +278,11 @@ class FortniteAPI:
             The fetched audio tracks.
         """
         data = await self.http.get_cosmetics_tracks(language=self._resolve_language_value(language))
-        return [CosmeticTrack(data=entry, http=self.http) for entry in data]
+
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticTrack(data=x, http=self.http),
+        )
 
     async def fetch_cosmetic_br(self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None) -> CosmeticBr:
         """|coro|
@@ -344,7 +371,7 @@ class FortniteAPI:
         added_since: Optional[datetime.datetime] = ...,
         unseen_for: Optional[int] = ...,
         last_appearance: Optional[datetime.datetime] = ...,
-    ) -> List[CosmeticBr]: ...
+    ) -> TransformerListProxy[CosmeticBr]: ...
 
     @overload
     async def search_br_cosmetics(
@@ -386,7 +413,7 @@ class FortniteAPI:
         last_appearance: Optional[datetime.datetime] = ...,
     ) -> CosmeticBr: ...
 
-    async def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr, List[CosmeticBr]]:
+    async def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr, TransformerListProxy[CosmeticBr]]:
         """|coro|
 
         Searches all Battle Royale cosmetics available in Fortnite and returns
@@ -480,7 +507,10 @@ class FortniteAPI:
         payload = _transform_dict_for_get_request(kwargs)
         if multiple is True:
             data = await self.http.search_cosmetic_all(**payload)
-            return [CosmeticBr(data=entry, http=self.http) for entry in data]
+            return TransformerListProxy(
+                data,
+                lambda x: CosmeticBr(data=x, http=self.http),
+            )
         else:
             data = await self.http.search_cosmetic(**payload)
             return CosmeticBr(data=data, http=self.http)
@@ -506,7 +536,7 @@ class FortniteAPI:
         return Aes(data=data)
 
     # BANNERS
-    async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner]:
+    async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> TransformerListProxy[Banner]:
         """|coro|
 
         Fetch all banners available in Fortnite.
@@ -523,9 +553,12 @@ class FortniteAPI:
             The fetched banners.
         """
         data = await self.http.get_banners(language=self._resolve_language_value(language))
-        return [Banner(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: Banner(data=x, http=self.http),
+        )
 
-    async def fetch_banner_colors(self) -> List[BannerColor]:
+    async def fetch_banner_colors(self) -> TransformerListProxy[BannerColor]:
         """|coro|
 
         Fetch all banner colors available in Fortnite.
@@ -536,7 +569,10 @@ class FortniteAPI:
             The fetched banner colors.
         """
         data = await self.http.get_banner_colors()
-        return [BannerColor(data=entry) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: BannerColor(data=x),
+        )
 
     # CREATOR CODES
 
@@ -640,7 +676,7 @@ class FortniteAPI:
 
     # PLAYLISTS
 
-    async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
+    async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> TransformerListProxy[Playlist]:
         """|coro|
 
         Fetches a list of current playlists available in Fortnite.
@@ -657,7 +693,10 @@ class FortniteAPI:
             The fetched current playlists available in Fortnite.
         """
         data = await self.http.get_playlists(language=self._resolve_language_value(language))
-        return [Playlist(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: Playlist(data=x, http=self.http),
+        )
 
     async def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
         """|coro|
@@ -789,7 +828,7 @@ class FortniteAPI:
 
     # BETA METHODS
 
-    async def beta_fetch_material_instances(self) -> List[MaterialInstance]:
+    async def beta_fetch_material_instances(self) -> TransformerListProxy[MaterialInstance]:
         """|coro|
 
         Fetches all the material instances available in Fortnite.
@@ -825,7 +864,10 @@ class FortniteAPI:
         except HTTPException as exc:
             raise BetaUnknownException(original=exc) from exc
 
-        return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]
+        return TransformerListProxy(
+            data,
+            lambda x: MaterialInstance(data=x, http=self.http),
+        )
 
 
 @_remove_coro_doc
@@ -885,31 +927,54 @@ class SyncFortniteAPI:
 
     # COSMETICS
     @copy_doc(FortniteAPI.fetch_cosmetics_cars)
-    def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar[SyncHTTPClient]]:
+    def fetch_cosmetics_cars(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[CosmeticCar[SyncHTTPClient]]:
         data = self.http.get_cosmetics_cars(language=self._resolve_language_value(language))
-        return [CosmeticCar(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticCar(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_cosmetics_instruments)
     def fetch_cosmetics_instruments(
         self, *, language: Optional[GameLanguage] = None
-    ) -> List[CosmeticInstrument[SyncHTTPClient]]:
+    ) -> TransformerListProxy[CosmeticInstrument[SyncHTTPClient]]:
         data = self.http.get_cosmetics_instruments(language=self._resolve_language_value(language))
-        return [CosmeticInstrument(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticInstrument(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_cosmetics_lego_kits)
-    def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit[SyncHTTPClient]]:
+    def fetch_cosmetics_lego_kits(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[CosmeticLegoKit[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego_kits(language=self._resolve_language_value(language))
-        return [CosmeticLegoKit(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticLegoKit(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_cosmetics_tracks)
-    def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack[SyncHTTPClient]]:
+    def fetch_cosmetics_tracks(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[CosmeticTrack[SyncHTTPClient]]:
         data = self.http.get_cosmetics_tracks(language=self._resolve_language_value(language))
-        return [CosmeticTrack(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticTrack(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_cosmetics_br)
-    def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
+    def fetch_cosmetics_br(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[CosmeticBr[SyncHTTPClient]]:
         data = self.http.get_cosmetics_br(language=self._resolve_language_value(language))
-        return [CosmeticBr(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticBr(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_cosmetic_br)
     def fetch_cosmetic_br(
@@ -919,9 +984,14 @@ class SyncFortniteAPI:
         return CosmeticBr(data=data, http=self.http)
 
     @copy_doc(FortniteAPI.fetch_cosmetics_lego)
-    def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLego[SyncHTTPClient]]:
+    def fetch_cosmetics_lego(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[CosmeticLego[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
-        return [CosmeticLego(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticLego(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_cosmetics_all)
     def fetch_cosmetics_all(self, *, language: Optional[GameLanguage] = None) -> CosmeticsAll[SyncHTTPClient]:
@@ -978,7 +1048,7 @@ class SyncFortniteAPI:
         added_since: Optional[datetime.datetime] = ...,
         unseen_for: Optional[int] = ...,
         last_appearance: Optional[datetime.datetime] = ...,
-    ) -> List[CosmeticBr[SyncHTTPClient]]: ...
+    ) -> TransformerListProxy[CosmeticBr[SyncHTTPClient]]: ...
 
     @overload
     def search_br_cosmetics(
@@ -1021,7 +1091,9 @@ class SyncFortniteAPI:
     ) -> CosmeticBr[SyncHTTPClient]: ...
 
     @copy_doc(FortniteAPI.search_br_cosmetics)
-    def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr[SyncHTTPClient], List[CosmeticBr[SyncHTTPClient]]]:
+    def search_br_cosmetics(
+        self, **kwargs: Any
+    ) -> Union[CosmeticBr[SyncHTTPClient], TransformerListProxy[CosmeticBr[SyncHTTPClient]]]:
         multiple = kwargs.pop('multiple')
 
         kwargs['language'] = self._resolve_language_value(kwargs.get('language'))
@@ -1030,7 +1102,10 @@ class SyncFortniteAPI:
         payload = _transform_dict_for_get_request(kwargs)
         if multiple is True:
             data = self.http.search_cosmetic_all(**payload)
-            return [CosmeticBr(data=entry, http=self.http) for entry in data]
+            return TransformerListProxy(
+                data,
+                lambda x: CosmeticBr(data=x, http=self.http),
+            )
         else:
             data = self.http.search_cosmetic(**payload)
             return CosmeticBr(data=data, http=self.http)
@@ -1044,14 +1119,20 @@ class SyncFortniteAPI:
 
     # BANNERS
     @copy_doc(FortniteAPI.fetch_banners)
-    def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[SyncHTTPClient]]:
+    def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> TransformerListProxy[Banner[SyncHTTPClient]]:
         data = self.http.get_banners(language=self._resolve_language_value(language))
-        return [Banner(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: Banner(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_banner_colors)
-    def fetch_banner_colors(self) -> List[BannerColor]:
+    def fetch_banner_colors(self) -> TransformerListProxy[BannerColor]:
         data = self.http.get_banner_colors()
-        return [BannerColor(data=entry) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: BannerColor(data=x),
+        )
 
     # CREATOR CODES
 
@@ -1087,9 +1168,14 @@ class SyncFortniteAPI:
     # PLAYLISTS
 
     @copy_doc(FortniteAPI.fetch_playlists)
-    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist[SyncHTTPClient]]:
+    def fetch_playlists(
+        self, /, *, language: Optional[GameLanguage] = None
+    ) -> TransformerListProxy[Playlist[SyncHTTPClient]]:
         data = self.http.get_playlists(language=self._resolve_language_value(language))
-        return [Playlist(data=entry, http=self.http) for entry in data]
+        return TransformerListProxy(
+            data,
+            lambda x: Playlist(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_playlist)
     def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist[SyncHTTPClient]:
@@ -1129,7 +1215,7 @@ class SyncFortniteAPI:
         return BrPlayerStats(data=data, http=self.http)
 
     @copy_doc(FortniteAPI.beta_fetch_material_instances)
-    def beta_fetch_material_instances(self) -> List[MaterialInstance[SyncHTTPClient]]:
+    def beta_fetch_material_instances(self) -> TransformerListProxy[MaterialInstance[SyncHTTPClient]]:
         if not self.beta:
             raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
@@ -1138,7 +1224,10 @@ class SyncFortniteAPI:
         except HTTPException as exc:
             raise BetaUnknownException(original=exc) from exc
 
-        return [MaterialInstance(data=material_instance, http=self.http) for material_instance in data]
+        return TransformerListProxy(
+            data,
+            lambda x: MaterialInstance(data=x, http=self.http),
+        )
 
     @copy_doc(FortniteAPI.fetch_shop)
     def fetch_shop(self, /, *, language: Optional[GameLanguage] = None) -> Shop[SyncHTTPClient]:
