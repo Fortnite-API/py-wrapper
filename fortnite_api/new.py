@@ -25,13 +25,15 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, Generic, List, Optional, Type
+from typing import Any, Dict, Generic, List, Optional, Type, Tuple
 
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
 from .enums import CosmeticType
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
+
+__all__: Tuple[str, ...] = ('NewCosmetic', 'NewBrCosmetics', 'NewCosmetics')
 
 
 class NewCosmetic(Generic[CosmeticT]):

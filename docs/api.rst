@@ -55,6 +55,91 @@ Objects
 .. autoclass:: fortnite_api.creator_code.CreatorCode
     :members:
 
+.. autoclass:: fortnite_api.images.Images
+    :members:
+
+.. autoclass:: fortnite_api.map.Map
+    :members:
+
+.. autoclass:: fortnite_api.map.MapImages
+    :members:
+
+.. autoclass:: fortnite_api.map.POI
+    :members:
+
+.. autoclass:: fortnite_api.map.POILocation
+    :members:
+
+.. autoclass:: fortnite_api.material.MaterialInstanceImages
+    :members:
+
+.. autoclass:: fortnite_api.material.MaterialInstanceColors
+    :members:
+
+.. autoclass:: fortnite_api.material.MaterialInstance
+    :members:
+
+.. autoclass:: fortnite_api.new.NewCosmetic
+    :members:
+
+.. autoclass:: fortnite_api.new.NewBrCosmetics
+    :members:
+
+.. autoclass:: fortnite_api.new.NewCosmetics 
+    :members:
+
+.. autoclass:: fortnite_api.news.News
+    :members:
+
+.. autoclass:: fortnite_api.news.GameModeNews
+    :members:
+
+.. autoclass:: fortnite_api.news.NewsMotd
+    :members:
+
+.. autoclass:: fortnite_api.news.NewsMessage
+    :members:
+
+.. autoclass:: fortnite_api.playlist.PlaylistImages
+    :members:
+
+.. autoclass:: fortnite_api.playlist.Playlist
+    :members:
+
+.. autoclass:: fortnite_api.shop.ShopEntryBundle
+    :members:
+
+.. autoclass:: fortnite_api.shop.ShopEntryBanner
+    :members:
+
+.. autoclass:: fortnite_api.shop.ShopEntryLayout
+    :members:
+
+.. autoclass:: fortnite_api.shop.ShopEntryNewDisplayAsset
+    :members:
+
+.. autoclass:: fortnite_api.shop.ShopEntry 
+    :members:
+
+.. autoclass:: fortnite_api.shop.Shop
+    :members:
+
+.. autoclass:: fortnite_api.stats.BrPlayerStats
+    :members:
+
+.. autoclass:: fortnite_api.stats.BrBattlePass
+    :members:
+
+.. autoclass:: fortnite_api.stats.BrInputs
+    :members:
+
+.. autoclass:: fortnite_api.stats.BrInputStats
+    :members:
+
+.. autoclass:: fortnite_api.stats.BrGameModeStats
+    :members:
+
+
 Flags
 -----
 .. autoclass:: fortnite_api.flags.OptimizationFlags
@@ -92,3 +177,9 @@ Enumerations
 .. autoclass:: fortnite_api.enums.CosmeticCompatibleMode
 
 .. autoclass:: fortnite_api.enums.BannerIntensity
+
+
+Helper Utilities
+----------------
+.. autoclass:: fortnite_api.proxies.TransformerListProxy
+    :members:

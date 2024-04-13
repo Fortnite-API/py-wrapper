@@ -35,6 +35,15 @@ from .http import HTTPClientT
 from .material import MaterialInstance
 from .utils import get_with_fallback, parse_time
 
+__all__: Tuple[str, ...] = (
+    'ShopEntryBundle',
+    'ShopEntryBanner',
+    'ShopEntryLayout',
+    'ShopEntryNewDisplayAsset',
+    'ShopEntry',
+    'Shop',
+)
+
 
 class ShopEntryBundle(Generic[HTTPClientT]):
     """Represents a shop entry bundle.
