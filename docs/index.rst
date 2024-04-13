@@ -14,7 +14,7 @@ View the documentation for the library to learn about the features and
 view the attributes and methods of Fortnite API objects.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    api
