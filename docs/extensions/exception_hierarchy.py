@@ -8,11 +8,11 @@ class exception_hierarchy(nodes.General, nodes.Element):
     pass
 
 
-def visit_exception_hierarchy_node(self, node: nodes.Node):
+def visit_exception_hierarchy_node(self, node: exception_hierarchy):
     self.body.append(self.starttag(node, 'div', CLASS='exception-hierarchy-content'))
 
 
-def depart_exception_hierarchy_node(self, node: nodes.Node):
+def depart_exception_hierarchy_node(self, node: exception_hierarchy):
     self.body.append('</div>\n')
 
 
