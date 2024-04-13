@@ -2,17 +2,18 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 import sphinx.application
 from sphinx.locale import _
+from sphinx.writers.html5 import HTML5Translator
 
 
 class exception_hierarchy(nodes.General, nodes.Element):
     pass
 
 
-def visit_exception_hierarchy_node(self, node: exception_hierarchy):
+def visit_exception_hierarchy_node(self: HTML5Translator, node: exception_hierarchy):
     self.body.append(self.starttag(node, 'div', CLASS='exception-hierarchy-content'))
 
 
-def depart_exception_hierarchy_node(self, node: exception_hierarchy):
+def depart_exception_hierarchy_node(self: HTML5Translator, node: exception_hierarchy):
     self.body.append('</div>\n')
 
 
@@ -24,7 +25,7 @@ class ExceptionHierarchyDirective(Directive):
     def run(self):
         self.assert_has_content()
         node = exception_hierarchy('\n'.join(self.content))
-        self.state.nested_parse(self.content, self.content_offset, node)
+        self.state.nested_parse(self.content, self.content_offset, node)  # type: ignore
         return [node]
 
 
