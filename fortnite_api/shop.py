@@ -229,8 +229,10 @@ class ShopEntry(Generic[HTTPClientT]):
         self.tile_size: TileSize = TileSize(_tile_size)
 
         self.new_display_asset_path: str = data['newDisplayAssetPath']
-        self.new_display_asset: ShopEntryNewDisplayAsset[HTTPClientT] = ShopEntryNewDisplayAsset(
-            data=data['newDisplayAsset'], http=http
+
+        _new_display_asset = data.get('newDisplayAsset')
+        self.new_display_asset: Optional[ShopEntryNewDisplayAsset[HTTPClientT]] = (
+            _new_display_asset and ShopEntryNewDisplayAsset(data=data['newDisplayAsset'], http=http)
         )
 
         self.br_items: List[CosmeticBr[HTTPClientT]] = [
