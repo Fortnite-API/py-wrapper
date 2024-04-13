@@ -31,4 +31,4 @@ jobs:
             - name: Build Documentation
               run: |
                 cd docs
-                sphinx-build -b html -D -j auto -a -n -T -W --keep-going . _build/html
+                sphinx-build -b html -j auto -a -n -T -W --keep-going . _build/html
