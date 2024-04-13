@@ -24,7 +24,7 @@ SOFTWARE.
 
 __version__ = '3.0.0'
 
-from . import utils as utils, proxies as proxies
+from . import proxies as proxies, utils as utils
 from .abc import *
 from .account import *
 from .aes import *
@@ -37,6 +37,7 @@ from .creator_code import *
 from .enums import *
 from .errors import *
 from .flags import *
+from .images import *
 from .map import *
 from .material import *
 from .new import *
@@ -44,4 +45,3 @@ from .news import *
 from .playlist import *
 from .shop import *
 from .stats import *
-from .images import *
