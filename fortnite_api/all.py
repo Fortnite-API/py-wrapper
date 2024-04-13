@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import Any, Dict, Generic
+from typing import Any, Dict, Generic, Tuple
 
 from .cosmetics import CosmeticBr, CosmeticInstrument, CosmeticTrack
 from .cosmetics.car import CosmeticCar
@@ -31,6 +31,8 @@ from .cosmetics.lego_kit import CosmeticLegoKit
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback
+
+__all__: Tuple[str, ...] = ('CosmeticsAll',)
 
 
 class CosmeticsAll(Generic[HTTPClientT]):

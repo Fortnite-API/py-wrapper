@@ -127,24 +127,6 @@ class CosmeticBrType(enum.Enum):
     SHOUT = 'shout'
 
 
-class CosmeticBrSearchTag(enum.Enum):
-    YELLOW = 'Yellow'
-    WINTER = 'Winter'
-    WESTERN = 'Western'
-    UMBRELLA = 'Umbrella'
-    BEAR = 'Bear'
-    FOOD = 'Food'
-    HAZE = 'Haze'
-    PINK = 'Pink'
-    SUPERMAN = 'Superman'
-    SUMMER = 'Summer'
-
-
-class NewsType(enum.Enum):
-    BATTLE_ROYALE = 'br'
-    SAVE_THE_WORLD = 'stw'
-
-
 class AccountType(enum.Enum):
     EPIC = 'epic'
     PSN = 'psn'
@@ -167,13 +149,6 @@ class StatsImageType(enum.Enum):
 class CreatorCodeStatus(enum.Enum):
     ACTIVE = 'active'
     DISABLED = 'disabled'
-
-
-class ShopTileSize(enum.Enum):
-    SMALL = 'Small'
-    NORMAL = 'Normal'
-    DOUBLE_WIDE = 'DoubleWide'
-    TRIPLE_WIDE = 'TripleWide'
 
 
 class CosmeticCompatibleMode(enum.Enum):

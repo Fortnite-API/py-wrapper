@@ -28,7 +28,6 @@ import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple
 
 from ..asset import Asset
-from ..enums import CosmeticBrSearchTag
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time
 from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
@@ -160,7 +159,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The variants of the cosmetic, if any.
     built_in_emote_ids: List[:class:`str`]
         The built-in emote IDs of the cosmetic.
-    search_tags: List[:class:`CosmeticBrSearchTag`]
+    search_tags: List[:class:`str`]
         The search tags of the cosmetic.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the cosmetic.
@@ -248,8 +247,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         built_in_emote_ids: List[str] = get_with_fallback(data, 'builtInEmoteId', list)
         self.built_in_emote_ids: List[str] = built_in_emote_ids
 
-        search_tags: List[str] = get_with_fallback(data, 'searchTags', list)
-        self.search_tags: List[CosmeticBrSearchTag] = [CosmeticBrSearchTag(tag) for tag in search_tags]
+        self.search_tags: List[str] = get_with_fallback(data, 'searchTags', list)
 
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
         self.meta_tags: List[str] = get_with_fallback(data, 'metaTags', list)

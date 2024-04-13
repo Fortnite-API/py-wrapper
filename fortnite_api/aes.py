@@ -33,7 +33,7 @@ from .utils import parse_time
 if TYPE_CHECKING:
     import datetime
 
-__all__: Tuple[str, ...] = ('Aes', 'DynamicKey')
+__all__: Tuple[str, ...] = ('Aes', 'DynamicKey', 'Version')
 
 VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})')
 
