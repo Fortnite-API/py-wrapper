@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, Generic, List, Optional, Type, Tuple
+from typing import Any, Dict, Generic, List, Optional, Tuple, Type
 
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
 from .enums import CosmeticType
