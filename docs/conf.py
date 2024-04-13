@@ -31,6 +31,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinxcontrib_trio',
+    'enum_tools.autoenum',
 ]
 
 autodoc_member_order = 'bysource'
