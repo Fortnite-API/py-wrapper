@@ -15,14 +15,14 @@ with open('README.md') as f:
     readme = f.read()
 
 extras_require = {
-    'test': ['pytest', 'pytest-asyncio', 'pytest-cov'],
+    'test': ['pytest', 'pytest-asyncio', 'pytest-cov', 'python-dotenv'],
     'docs': [
         'sphinx',
         'sphinxcontrib_trio',
         'sphinxcontrib-websupport',
         'typing-extensions',
     ],
-    'dev': ['black', 'isort', 'python-dotenv'],
+    'dev': ['black', 'isort'],
 }
 
 with open('requirements.txt') as f:
