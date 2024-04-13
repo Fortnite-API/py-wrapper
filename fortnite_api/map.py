@@ -38,9 +38,9 @@ class MapImages(Generic[HTTPClientT]):
 
     Attributes
     ----------
-    blank: :class:`Asset`
+    blank: :class:`fortnite_api.Asset`
         The asset pointing to an image of the map that does not contain any POI names.
-    pois: :class:`Asset`
+    pois: :class:`fortnite_api.Asset`
         The asset pointing to an image of the map that contains the POI names.
     """
 
@@ -56,7 +56,7 @@ class Map(Generic[HTTPClientT]):
 
     Attributes
     ----------
-    images: :class:`MapImages`
+    images: :class:`fortnite_api.MapImages`
         The images of the map.
     raw_data: :class:`dict`
         The raw data of the map.
@@ -72,7 +72,7 @@ class Map(Generic[HTTPClientT]):
 
     @property
     def pois(self) -> List[POI]:
-        """List[:class:`POI`]: The list of POIs in the map."""
+        """List[:class:`fortnite_api.POI`]: The list of POIs in the map."""
         return list(self._pois.values())
 
     def get_poi(self, /, id: str) -> Optional[POI]:
@@ -85,7 +85,7 @@ class Map(Generic[HTTPClientT]):
 
         Returns
         -------
-        Optional[:class:`POI`]
+        Optional[:class:`fortnite_api.POI`]
             The POI if found, else ``None``.
         """
         return self._pois.get(id)
@@ -100,7 +100,7 @@ class POI(Hashable):
         The ID of the POI.
     name: :class:`str`
         The name of the POI.
-    location: :class:`POILocation`
+    location: :class:`fortnite_api.POILocation`
         The location of the POI.
     """
 

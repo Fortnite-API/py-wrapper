@@ -68,7 +68,7 @@ class CosmeticTrackDifficulty:
 class CosmeticTrack(Cosmetic[HTTPClientT]):
     """Represents a track cosmetic in Fortnite.
 
-    This class inherits from :class:`Cosmetic`.
+    This class inherits from :class:`fortnite_api.Cosmetic`.
 
     Attributes
     ----------
@@ -86,13 +86,13 @@ class CosmeticTrack(Cosmetic[HTTPClientT]):
         The BPM of the track.
     duration: :class:`int`
         The duration of the track, in seconds.
-    difficulty: :class:`CosmeticTrackDifficulty`
+    difficulty: :class:`fortnite_api.CosmeticTrackDifficulty`
         The difficulty of the track.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the track.
     genres: List[:class:`str`]
         The genres of the track.
-    album_art: :class:`Asset`
+    album_art: :class:`fortnite_api.Asset`
         The album art of the track.
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the track.

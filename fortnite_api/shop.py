@@ -54,7 +54,7 @@ class ShopEntryBundle(Generic[HTTPClientT]):
         The name of the bundle.
     info: :class:`str`
         The information of the bundle.
-    image: :class:`Asset`
+    image: :class:`fortnite_api.Asset`
         The image of the bundle.
     """
 
@@ -73,7 +73,7 @@ class ShopEntryBanner:
     ----------
     value: :class:`str`
         The text of the banner.
-    intensity: :class:`BannerIntensity`
+    intensity: :class:`fortnite_api.BannerIntensity`
         The intensity of the banner.
     backend_value: :class:`str`
         The backend value of the banner.
@@ -102,7 +102,7 @@ class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
         The index of the layout.
     show_ineligible_offers: :class:`str`
         Whether ineligible offers are displayed in the layout or not.
-    background: Optional[:class:`Asset`]
+    background: Optional[:class:`fortnite_api.Asset`]
         The background asset of the layout, if any.
     """
 
@@ -127,7 +127,7 @@ class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
         The ID of the display asset.
     cosmetic_id: Optional[:class:`str`]
         The ID of the cosmetic item associated with the display asset, if any.
-    material_instances: List[:class:`MaterialInstance`]
+    material_instances: List[:class:`fortnite_api.MaterialInstance`]
         A list of material instances used by the display asset.
     """
 
@@ -149,9 +149,9 @@ class ShopEntry(Generic[HTTPClientT]):
         The regular price of the entry.
     final_price: :class:`int`
         The final price of the entry. This is in case it is on sale.
-    bundle: Optional[:class:`ShopEntryBundle`]
+    bundle: Optional[:class:`fortnite_api.ShopEntryBundle`]
         The bundle that this entry belongs to, if any.
-    banner: Optional[:class:`ShopEntryBanner`]
+    banner: Optional[:class:`fortnite_api.ShopEntryBanner`]
         The banner information for this shop entry, if any.
     giftable: :class:`bool`
         Whether this entry is giftable.
@@ -161,7 +161,7 @@ class ShopEntry(Generic[HTTPClientT]):
         The sort priority of this entry.
     layout_id: :class:`str`
         The layout ID of this entry.
-    layout: :class:`ShopEntryLayout`
+    layout: :class:`fortnite_api.ShopEntryLayout`
         The layout of this entry.
     dev_name: :class:`str`
         The internal dev name of this entry.
@@ -169,21 +169,21 @@ class ShopEntry(Generic[HTTPClientT]):
         The offer ID of this entry.
     display_asset_path: Optional[:class:`str`]
         The display asset path of this entry.
-    tile_size: :class:`TileSize`
+    tile_size: :class:`fortnite_api.TileSize`
         The tile size of this entry.
     new_display_asset_path: :class:`str`
         The new display asset path of this entry.
-    new_display_asset: :class:`ShopEntryNewDisplayAsset`
+    new_display_asset: :class:`fortnite_api.ShopEntryNewDisplayAsset`
         The new display asset of this entry.
-    br_items: List[:class:`CosmeticBr`]
+    br_items: List[:class:`fortnite_api.CosmeticBr`]
         The Battle Royale cosmetics in this entry.
-    tracks: List[:class:`CosmeticTrack`]
+    tracks: List[:class:`fortnite_api.CosmeticTrack`]
         The tracks in this entry.
-    instruments: List[:class:`CosmeticInstrument`]
+    instruments: List[:class:`fortnite_api.CosmeticInstrument`]
         The instruments in this entry.
-    cars: List[:class:`CosmeticCar`]
+    cars: List[:class:`fortnite_api.CosmeticCar`]
         The cars in this entry.
-    lego_kits: List[:class:`CosmeticLegoKit`]
+    lego_kits: List[:class:`fortnite_api.CosmeticLegoKit`]
         The LEGO kits in this entry.
     """
 
@@ -270,9 +270,9 @@ class Shop(Generic[HTTPClientT]):
         A unique hash that represents this shop.
     date: :class:`datetime.datetime`
         The date when this shop was last updated.
-    vbuck_icon: :class:`Asset`
+    vbuck_icon: :class:`fortnite_api.Asset`
         An asset of the V-buck icon.
-    entries: List[:class:`ShopEntry`]
+    entries: List[:class:`fortnite_api.ShopEntry`]
         A list of shop entries. Each entry contains cosmetics that are available in the shop.
     raw_data: :class:`dict`
         The raw data of the shop.

@@ -39,9 +39,9 @@ class CreatorCode:
     -----------
     code: :class:`str`
         The creator code.
-    account: :class:`Account`
+    account: :class:`fortnite_api.Account`
         The account associated with the creator code.
-    status: :class:`CreatorCodeStatus`
+    status: :class:`fortnite_api.CreatorCodeStatus`
         The status of the creator code.
     verified: :class:`bool`
         Whether the creator code is verified.

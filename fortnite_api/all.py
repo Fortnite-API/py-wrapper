@@ -56,19 +56,19 @@ class CosmeticsAll(Generic[HTTPClientT]):
 
     Attributes
     ----------
-    br: List[:class:`CosmeticBr`]
+    br: List[:class:`fortnite_api.CosmeticBr`]
         The battle royale cosmetics.
-    tracks: List[:class:`CosmeticTrack`]
+    tracks: List[:class:`fortnite_api.CosmeticTrack`]
         The tracks cosmetics.
-    instruments: List[:class:`CosmeticInstrument`]
+    instruments: List[:class:`fortnite_api.CosmeticInstrument`]
         The instruments cosmetics.
-    cars: List[:class:`CosmeticCar`]
+    cars: List[:class:`fortnite_api.CosmeticCar`]
         The cars cosmetics.
-    lego: List[:class:`CosmeticLego`]
+    lego: List[:class:`fortnite_api.CosmeticLego`]
         The lego cosmetics.
-    lego_kits: List[:class:`CosmeticLegoKit`]
+    lego_kits: List[:class:`fortnite_api.CosmeticLegoKit`]
         The lego kits cosmetics.
-    raw_data: Dict[:class:`str`, Any]
+    raw_data: :class:`dict`
         The raw data of the cosmetics.
     """
 

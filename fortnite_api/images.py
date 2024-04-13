@@ -37,9 +37,9 @@ class Images(Generic[HTTPClientT]):
 
     Attributes
     ----------
-    small_icon: Optional[:class:`Asset`]
+    small_icon: Optional[:class:`fortnite_api.Asset`]
         The small icon of the image.
-    icon: Optional[:class:`Asset`]
+    icon: Optional[:class:`fortnite_api.Asset`]
         The icon of the image.
     """
 

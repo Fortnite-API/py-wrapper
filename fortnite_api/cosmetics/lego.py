@@ -42,11 +42,11 @@ __all__: Tuple[str, ...] = ('CosmeticLego', 'CosmeticLegoImages')
 class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
     """A class representing the images of a lego cosmetic.
 
-    This class inherits from :class:`CosmeticImages`.
+    This class inherits from :class:`fortnite_api.CosmeticImages`.
 
     Attributes
     ----------
-    wide: Optional[:class:`Asset`]
+    wide: Optional[:class:`fortnite_api.Asset`]
         The wide image of the lego cosmetic.
     """
 
@@ -60,7 +60,7 @@ class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
 class CosmeticLego(Cosmetic[HTTPClientT]):
     """Represents a Lego cosmetic.
 
-    This class inherits from :class:`Cosmetic`.
+    This class inherits from :class:`fortnite_api.Cosmetic`.
 
     Attributes
     ----------
@@ -68,7 +68,7 @@ class CosmeticLego(Cosmetic[HTTPClientT]):
         The ID of the cosmetic that this lego cosmetic is based on.
     sound_library_tags: List[:class:`str`]
         The sound library tags of the lego cosmetic.
-    images: Optional[:class:`CosmeticLegoImages`]
+    images: Optional[:class:`fortnite_api.CosmeticLegoImages`]
         The images of the lego cosmetic.
     path: Optional[:class:`str`]
         The path of the lego cosmetic.
@@ -103,12 +103,12 @@ class CosmeticLego(Cosmetic[HTTPClientT]):
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to fetch the cosmetic in.
 
         Returns
         -------
-        :class:`CosmeticBr`
+        :class:`fortnite_api.CosmeticBr`
             The Battle Royale cosmetic that this lego cosmetic is based on.
         """
         return self._http.get_cosmetic_br(self.cosmetic_id, language=language and language.value)

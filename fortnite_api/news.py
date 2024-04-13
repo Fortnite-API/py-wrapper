@@ -42,9 +42,9 @@ class News(Generic[HTTPClientT]):
 
     Attributes
     -----------
-    br: List[:class:`GameModeNews`]
+    br: List[:class:`fortnite_api.GameModeNews`]
         A list of Battle Royale news.
-    stw: List[:class:`GameModeNews`]
+    stw: List[:class:`fortnite_api.GameModeNews`]
         A list of Save the World news.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
@@ -71,11 +71,11 @@ class GameModeNews(Generic[HTTPClientT]):
         The hash of the news.
     date: :class:`datetime.datetime`
         The date when the news was published.
-    image: Optional[:class:`Asset`]
+    image: Optional[:class:`fortnite_api.Asset`]
         The display image of the news, if available.
-    motds: List[:class:`NewsMotd`]
+    motds: List[:class:`fortnite_api.NewsMotd`]
         A list of Message of the Day (MOTD) for the game mode.
-    messages: List[:class:`NewsMessage`]
+    messages: List[:class:`fortnite_api.NewsMessage`]
         A list of messages for the game mode.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.

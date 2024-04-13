@@ -29,7 +29,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time
-from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
+from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticTypeInfo
 
 __all__: Tuple[str, ...] = ('CosmeticInstrument',)
 
@@ -37,7 +37,7 @@ __all__: Tuple[str, ...] = ('CosmeticInstrument',)
 class CosmeticInstrument(Cosmetic[HTTPClientT]):
     """Represents an instrument cosmetic in Fortnite.
 
-    This class inherits from :class:`Cosmetic`.
+    This class inherits from :class:`fortnite_api.Cosmetic`.
 
     Attributes
     ----------
@@ -45,13 +45,13 @@ class CosmeticInstrument(Cosmetic[HTTPClientT]):
         The name of the instrument.
     description: :class:`str`
         The description of the instrument.
-    type: Optional[:class:`CosmeticType`]
+    type: Optional[:class:`fortnite_api.CosmeticTypeInfo`]
         The type of the instrument.
-    rarity: Optional[:class:`CosmeticRarity`]
+    rarity: Optional[:class:`fortnite_api.CosmeticRarity`]
         The rarity of the instrument.
-    images: Optional[:class:`CosmeticImages`]
+    images: Optional[:class:`fortnite_api.CosmeticImages`]
         Any instrument images.
-    series: Optional[:class:`CosmeticSeries`]
+    series: Optional[:class:`fortnite_api.CosmeticSeries`]
         The series of the instrument.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the instrument.
@@ -83,7 +83,7 @@ class CosmeticInstrument(Cosmetic[HTTPClientT]):
         self.description: str = data['description']
 
         _type = data.get('type')
-        self.type: Optional[CosmeticType] = _type and CosmeticType(data=_type)
+        self.type: Optional[CosmeticTypeInfo] = _type and CosmeticTypeInfo(data=_type)
 
         _rarity = data.get('rarity')
         self.rarity: Optional[CosmeticRarity] = _rarity and CosmeticRarity(data=_rarity)

@@ -48,13 +48,13 @@ class BrPlayerStats(Generic[HTTPClientT]):
 
     Attributes
     ----------
-    user: :class:`Account`
+    user: :class:`fortnite_api.Account`
         The account of the player who's stats are being represented.
-    battle_pass: Optional[:class:`BrBattlePass`]
+    battle_pass: Optional[:class:`fortnite_api.BrBattlePass`]
         The player's battle pass level and progress, if available.
-    image: Optional[:class:`Asset`]
+    image: Optional[:class:`fortnite_api.Asset`]
         The requested statistics image, if requested.
-    stats: Optional[:class:`BrInputs`]
+    stats: Optional[:class:`fortnite_api.BrInputs`]
         The player's stats for all input types. This is ``None`` if the player has no stats.
     raw_data: :class:`dict`
         The raw data received from the API.
@@ -140,7 +140,7 @@ class BrInputStats:
         The player's stats for solo game modes. This is ``None`` if the player has no stats for solo game modes.
     duo: Optional[:class:`BrGameModeStats`]
         The player's stats for duo game modes. This is ``None`` if the player has no stats for duo game modes.
-    squad: Optional[:class:`BrGameMode`]
+    squad: Optional[:class:`BrGameModeStats`]
         The player's stats for squad game modes. This is ``None`` if the player has no stats for squad game modes.
     """
 
@@ -176,27 +176,27 @@ class BrGameModeStats:
     top3: Optional[:class:`int`]
         The number of times the player has placed in the top 3 (10 players left remaining)
         in this specific game mode. This is only available when the game mode for these
-        stats is a :attr:`BrInputStats.squad` game mode or :attr:`BrInputStats.overall`.
+        stats is a :attr:`fortnite_api.BrInputStats.squad` game mode or :attr:`fortnite_api.BrInputStats.overall`.
     top5: Optional[:class:`int`]
         The number of times the player has placed in the top 5 (10 players left remaining)
         in this specific game mode. This is only available when the game mode
-        for these stats is a :attr:`BrInputStats.duo` game mode or :attr:`BrInputStats.overall`.
+        for these stats is a :attr:`fortnite_api.BrInputStats.duo` game mode or :attr:`fortnite_api.BrInputStats.overall`.
     top6: Optional[:class:`int`]
         The number of times the player has placed in the top 6 (25 players left remaining)
         in this specific game mode. This is only available when the game mode
-        for these stats is a :attr:`BrInputStats.squad` game mode or :attr:`BrInputStats.overall`.
+        for these stats is a :attr:`fortnite_api.BrInputStats.squad` game mode or :attr:`fortnite_api.BrInputStats.overall`.
     top10: Optional[:class:`int`]
         The number of times the player has placed in the top 10 (10 players left remaining) in
         this specific game mode. This is only available when the game mode for these
-        stats is a :attr:`BrInputStats.solo` game mode or :attr:`BrInputStats.overall`.
+        stats is a :attr:`fortnite_api.BrInputStats.solo` game mode or :attr:`fortnite_api.BrInputStats.overall`.
     top12: Optional[:class:`int`]
         The number of times the player has placed in the top 12 (25 players left remaining)
         in this specific game mode. This is only available when the game mode
-        for these stats is a :attr:`BrInputStats.duo` game mode or :attr:`BrInputStats.overall`.
+        for these stats is a :attr:`fortnite_api.BrInputStats.duo` game mode or :attr:`fortnite_api.BrInputStats.overall`.
     top25: Optional[:class:`int`]
         The number of times the player has placed in the top 25 (25 players left remaining)
         in this specific game mode. This is only available when the game mode for
-        these stats is a :attr:`BrInputStats.solo` game mode or :attr:`BrInputStats.overall`.
+        these stats is a :attr:`fortnite_api.BrInputStats.solo` game mode or :attr:`fortnite_api.BrInputStats.overall`.
     kills: :class:`int`
         The total number of kills in this specific game mode.
     kills_per_min: :class:`float`

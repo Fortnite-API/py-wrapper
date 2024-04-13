@@ -34,7 +34,7 @@ __all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BannerColour')
 
 
 class Banner(Hashable, Generic[HTTPClientT]):
-    """A representation of a banner given to the :class:`FortniteAPI` client
+    """A representation of a banner given to the :class:`fortnite_api.FortniteAPI` client
     as a response. This represents a banner within the Fortnite game.
 
     Attributes
@@ -54,7 +54,7 @@ class Banner(Hashable, Generic[HTTPClientT]):
         The developer name of the banner, this is used internally by the
         Epic Games team.
         'icon',
-    images: :class:`Images`
+    images: :class:`fortnite_api.Images`
         The images of the banner.
     """
 
@@ -82,7 +82,7 @@ class Banner(Hashable, Generic[HTTPClientT]):
 
 
 class BannerColor(Hashable):
-    """Represents a color of a :class:`Banner`.
+    """Represents a color of a :class:`fortnite_api.Banner`.
 
     Attributes
     ----------
@@ -91,12 +91,12 @@ class BannerColor(Hashable):
     color: :class:`str`
         The color of the banner.
     colour: :class:`str`
-        An alias to :attr:`color`.
+        An alias to :attr:`~color`.
     category: :class:`str`
         The category of the banner.
     sub_category_group: :class:`int`
         The sub category group of the banner.
-    raw_data: :class:`Dict[str, Any]`
+    raw_data: :class:`dict`
         The raw data of the banner color.
     """
 

@@ -43,9 +43,9 @@ class PlaylistImages(Generic[HTTPClientT]):
 
     Attributes
     ------------
-    showcase: Optional[:class:`Asset`]
+    showcase: Optional[:class:`fortnite_api.Asset`]
         A showcase image for the playlist, if any.
-    mission_icon: Optional[:class:`Asset`]
+    mission_icon: Optional[:class:`fortnite_api.Asset`]
         A mission icon for the playlist, if any.
     """
 
@@ -98,7 +98,7 @@ class Playlist(Hashable, Generic[HTTPClientT]):
         Whether this playlist is a large team game.
     accumulate_to_profile_stats: :class:`bool`
         Whether this playlist accumulates to profile stats.
-    images: Optional[:class:`PlaylistImages`]
+    images: Optional[:class:`fortnite_api.PlaylistImages`]
         The images associated with the playlist.
     gameplay_tags: List[:class:`str`]
         The gameplay tags for the playlist.
@@ -106,7 +106,7 @@ class Playlist(Hashable, Generic[HTTPClientT]):
         The path of the playlist.
     added: :class:`datetime.datetime`
         The time the playlist was added.
-    raw_data: Dict[:class:`str`, Any]
+    raw_data: :class:`dict`
         The raw data received from the API.
     """
 

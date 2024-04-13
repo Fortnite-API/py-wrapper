@@ -40,9 +40,9 @@ class MaterialInstanceImages(Generic[HTTPClientT]):
 
     Attributes
     ----------
-    offer_image: :class:`Asset`
+    offer_image: :class:`fortnite_api.Asset`
         The offer image of the Material instance. This is the image that is shown in the battle royale shop.
-    background: :class:`Asset`
+    background: :class:`fortnite_api.Asset`
         The background of the Material instance. This is the background gradient of the material instance.
     """
 
@@ -92,11 +92,11 @@ class MaterialInstance(Hashable, Generic[HTTPClientT]):
     ----------
     id: :class:`str`
         The ID of the Material instance.
-    primary_mode: :class:`CosmeticCompatibleMode`
+    primary_mode: :class:`fortnite_api.CosmeticCompatibleMode`
         The primary mode of the Material instance. This denotes what the cosmetic material instance is compatible with.
-    images: :class:`MaterialInstanceImages`
+    images: :class:`fortnite_api.MaterialInstanceImages`
         Represents some images of the Material instance, as they are rendered in game.
-    colors: Optional[:class:`MaterialInstanceColors`]
+    colors: Optional[:class:`fortnite_api.MaterialInstanceColors`]
         Holds some metadata about the colors of the Material instance, such
         as the background color A and B, if it exists.
     scalings: :class:`dict`

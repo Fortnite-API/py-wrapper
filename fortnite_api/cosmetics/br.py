@@ -30,9 +30,15 @@ from typing import Any, Dict, Generic, List, Optional, Tuple
 from ..asset import Asset
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time
-from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticType
+from .common import Cosmetic, CosmeticImages, CosmeticRarity, CosmeticSeries, CosmeticTypeInfo
 
-__all__: Tuple[str, ...] = ('CosmeticBrSet', 'CosmeticBrIntroduction', 'CosmeticBrVariantOption', 'CosmeticBr')
+__all__: Tuple[str, ...] = (
+    'CosmeticBrSet',
+    'CosmeticBrIntroduction',
+    'CosmeticBrVariant',
+    'CosmeticBrVariantOption',
+    'CosmeticBr',
+)
 
 
 class CosmeticBrSet:
@@ -91,7 +97,7 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
         The option's name.
     unlock_requirements: Optional[:class:`str`]
         The unlock requirements of the variant option, if available.
-    image: :class:`Asset`
+    image: :class:`fortnite_api.Asset`
         The image of the variant option.
     """
 
@@ -113,7 +119,7 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
         The channel of the variant.
     type: Optional[:class:`str`]
         The type of the variant.
-    options: List[:class:`CosmeticBrVariantOption`]
+    options: List[:class:`fortnite_api.CosmeticBrVariantOption`]
         The options for the variant, if any.
     """
 
@@ -143,19 +149,19 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The unlock requirements of the cosmetic, if available.
     custom_exclusive_callout: Optional[:class:`str`]
         The custom exclusive callout of the cosmetic, if available.
-    type: Optional[:class:`CosmeticType`]
+    type: Optional[:class:`fortnite_api.CosmeticTypeInfo`]
         The type of the cosmetic.
-    rarity: Optional[:class:`CosmeticRarity`]
+    rarity: Optional[:class:`fortnite_api.CosmeticRarity`]
         The cosmetic's rarity.
-    series: Optional[:class:`CosmeticSeries`]
+    series: Optional[:class:`fortnite_api.CosmeticSeries`]
         The series of the cosmetic, if any.
-    set: Optional[:class:`CosmeticBrSet`]
+    set: Optional[:class:`fortnite_api.CosmeticBrSet`]
         The set that the cosmetic belongs to, if any.
-    introduction: Optional[:class:`CosmeticBrIntroduction`]
+    introduction: Optional[:class:`fortnite_api.CosmeticBrIntroduction`]
         Metadata about when the cosmetic was introduced, if available.
-    images: Optional[:class:`CosmeticImages`]
+    images: Optional[:class:`fortnite_api.CosmeticImages`]
         The images of the cosmetic.
-    variants: List[:class:`CosmeticBrVariant`]
+    variants: List[:class:`fortnite_api.CosmeticBrVariant`]
         The variants of the cosmetic, if any.
     built_in_emote_ids: List[:class:`str`]
         The built-in emote IDs of the cosmetic.
@@ -222,7 +228,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         self.custom_exclusive_callout: Optional[str] = data.get('customExclusiveCallout')
 
         _type = data.get('type')
-        self.type: Optional[CosmeticType] = _type and CosmeticType(data=_type)
+        self.type: Optional[CosmeticTypeInfo] = _type and CosmeticTypeInfo(data=_type)
 
         rarity = data.get('rarity')
         self.rarity: Optional[CosmeticRarity] = rarity and CosmeticRarity(data=rarity)

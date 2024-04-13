@@ -36,7 +36,14 @@ from ..utils import get_with_fallback, parse_time
 
 CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
 
-__all__: Tuple[str, ...] = ('Cosmetic', 'CosmeticType', 'CosmeticRarity', 'CosmeticSeries', 'CosmeticImages', 'CosmeticT')
+__all__: Tuple[str, ...] = (
+    'Cosmetic',
+    'CosmeticTypeInfo',
+    'CosmeticRarity',
+    'CosmeticSeries',
+    'CosmeticImages',
+    'CosmeticT',
+)
 
 
 class Cosmetic(Hashable, Generic[HTTPClientT]):
@@ -67,12 +74,12 @@ class Cosmetic(Hashable, Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
 
-class CosmeticType:
+class CosmeticTypeInfo:
     """Represents a cosmetic type.
 
     Attributes
     ----------
-    value: :class:`CosmeticBrType`
+    value: :class:`fortnite_api.CosmeticBrType`
         The value of the cosmetic type.
     display_value: :class:`str`
         The display value of the cosmetic type. This is the value that is displayed to the user.
@@ -118,7 +125,7 @@ class CosmeticSeries(Generic[HTTPClientT]):
         The value of the cosmetic series.
     backend_value: :class:`str`
         The internal marker of the cosmetic series.
-    image: Optional[:class:`Asset`]
+    image: Optional[:class:`fortnite_api.Asset`]
         The image of the cosmetic series. Will be ``None`` if the cosmetic series has no image.
     colors: List[:class:`str`]
         A list of colors that are associated with the cosmetic series.
@@ -144,15 +151,15 @@ class CosmeticSeries(Generic[HTTPClientT]):
 class CosmeticImages(Images[HTTPClientT]):
     """Represents the images of a cosmetic.
 
-    This inherits from :class:`Images`.
+    This inherits from :class:`fortnite_api.Images`.
 
     Attributes
     ----------
-    featured: Optional[:class:`Asset`]
+    featured: Optional[:class:`fortnite_api.Asset`]
         The featured image of the cosmetic, if available.
-    lego: Optional[:class:`Asset`]
+    lego: Optional[:class:`fortnite_api.Asset`]
         The LEGO image of the cosmetic, if available.
-    other: Dict[:class:`str`, :class:`Asset`]
+    other: Dict[:class:`str`, :class:`fortnite_api.Asset`]
         A mapping other images to their respective asset.
     """
 

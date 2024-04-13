@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time
-from .common import Cosmetic, CosmeticImages, CosmeticType
+from .common import Cosmetic, CosmeticImages, CosmeticTypeInfo
 
 __all__: Tuple[str, ...] = ('CosmeticLegoKit',)
 
@@ -36,17 +36,17 @@ __all__: Tuple[str, ...] = ('CosmeticLegoKit',)
 class CosmeticLegoKit(Cosmetic[HTTPClientT]):
     """Represents a LEGO kit cosmetic in Fortnite.
 
-    This class inherits from :class:`Cosmetic`.
+    This class inherits from :class:`fortnite_api.Cosmetic`.
 
     Attributes
     ----------
     name: :class:`str`
         The name of the LEGO kit.
-    type: Optional[:class:`CosmeticType`]
+    type: Optional[:class:`fortnite_api.CosmeticTypeInfo`]
         The type of the LEGO kit.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the LEGO kit.
-    images: Optional[:class:`CosmeticImages`]
+    images: Optional[:class:`fortnite_api.CosmeticImages`]
         Any LEGO kit images.
     path: Optional[:class:`str`]
         The path of the LEGO kit.
@@ -62,7 +62,7 @@ class CosmeticLegoKit(Cosmetic[HTTPClientT]):
         self.name: str = data['name']
 
         _type = data.get('type')
-        self.type: Optional[CosmeticType] = _type and CosmeticType(data=_type)
+        self.type: Optional[CosmeticTypeInfo] = _type and CosmeticTypeInfo(data=_type)
 
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
 

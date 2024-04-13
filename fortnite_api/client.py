@@ -84,17 +84,17 @@ class FortniteAPI:
     ----------
     api_key: Optional[:class:`str`]
         The API key to use for the client. Defaults to ``None``.
-    default_language: Optional[:class:`GameLanguage`]
-        The default language to display the data in. Defaults to :attr:`GameLanguage.ENGLISH`.
+    default_language: Optional[:class:`fortnite_api.GameLanguage`]
+        The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH`.
     session: Optional[:class:`aiohttp.ClientSession`]
         The session to use for the HTTP requests. Defaults to ``None``. If not provided, a new session will be created for you.
     beta: :class:`bool`
         Whether or not the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``. This is to prevent accidental usage of beta endpoints.
 
         All beta endpoints are prefixed with ``beta_``.
-    optimization_flags: Optional[:class:`OptimizationFlags`]
+    optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
         Any optimization flags to use for the client. Enabling these can speed up the client or reduce
-        the amount of bandwidth used. Read the documentation for :class:`OptimizationFlags` for more information. By default, :attr:`OptimizationFlags.IGNORE_NULL` is enabled.
+        the amount of bandwidth used. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information. By default, :attr:`fortnite_api.OptimizationFlags.IGNORE_NULL` is enabled.
     """
 
     def __init__(
@@ -132,13 +132,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        :class:`CosmeticsAll`
+        :class:`fortnite_api.CosmeticsAll`
             The fetched cosmetics.
         """
         data = await self.http.get_cosmetics_all(language=self._resolve_language_value(language))
@@ -151,13 +151,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        List[:class:`CosmeticBr`]
+        List[:class:`fortnite_api.CosmeticBr`]
             The fetched Battle Royale cosmetics.
         """
         data = await self.http.get_cosmetics_br(language=self._resolve_language_value(language))
@@ -173,13 +173,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        List[:class:`CosmeticCar`]
+        List[:class:`fortnite_api.CosmeticCar`]
             The fetched car cosmetics.
         """
         data = await self.http.get_cosmetics_cars(language=self._resolve_language_value(language))
@@ -197,13 +197,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        List[:class:`CosmeticInstrument`]
+        List[:class:`fortnite_api.CosmeticInstrument`]
             The fetched instruments.
         """
         data = await self.http.get_cosmetics_instruments(language=self._resolve_language_value(language))
@@ -221,13 +221,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        List[:class:`CosmeticLegoKit`]
+        List[:class:`fortnite_api.CosmeticLegoKit`]
             The fetched lego kits.
         """
         data = await self.http.get_cosmetics_lego_kits(language=self._resolve_language_value(language))
@@ -243,13 +243,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        List[:class:`CosmeticLego`]
+        List[:class:`fortnite_api.CosmeticLego`]
             The fetched lego cosmetics.
         """
         data = await self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
@@ -268,13 +268,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        List[:class:`CosmeticTrack`]
+        List[:class:`fortnite_api.CosmeticTrack`]
             The fetched audio tracks.
         """
         data = await self.http.get_cosmetics_tracks(language=self._resolve_language_value(language))
@@ -293,13 +293,13 @@ class FortniteAPI:
         ----------
         cosmetic_id: :class:`str`
             The ID of the cosmetic to fetch.
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        :class:`CosmeticBr`
+        :class:`fortnite_api.CosmeticBr`
             The cosmetic fetched.
         """
         data = await self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_language_value(language))
@@ -314,7 +314,7 @@ class FortniteAPI:
 
         Returns
         -------
-        :class:`NewBrCosmetics`
+        :class:`fortnite_api.NewBrCosmetics`
             The fetched new Battle Royale cosmetics.
         """
         data = await self.http.get_cosmetics_br_new()
@@ -327,7 +327,7 @@ class FortniteAPI:
 
         Returns
         -------
-        :class:`NewCosmetics`
+        :class:`fortnite_api.NewCosmetics`
             The fetched new cosmetics.
         """
         data = await self.http.get_cosmetics_new()
@@ -424,12 +424,12 @@ class FortniteAPI:
         multiple: Optional[:class:`bool`]
             Denotes if multiple matches should be returned. If this is ``True`` then a
             list of matches will be returned. If ``False``, then only the best match will be returned.
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The output language to display the cosmetics in. Will override the default language
-            set in the client. Defaults to the client's :attr:`default_language` or :attr:`GameLanguage.ENGLISH`.
-        search_language: Optional[:class:`GameLanguage`]
+            set in the client. Defaults to the client's :attr:`~default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
+        search_language: Optional[:class:`fortnite_api.GameLanguage`]
             The search language to use for the search. Will override the default language set in the client. Defaults to
-            the client's :attr:`default_language` or :attr:`GameLanguage.ENGLISH`.
+            the client's :attr:`~default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
         match_method: Optional[:class:`str`]
             The method to use for matching the search query. This can be one of the following:
             ``full``, ``contains``, ``starts``, ``ends``. Defaults to ``full``.
@@ -439,13 +439,13 @@ class FortniteAPI:
             The name of the cosmetic.
         description: Optional[:class:`str`]
             The description of the cosmetic.
-        type: Optional[:class:`CosmeticBrType`]
+        type: Optional[:class:`fortnite_api.CosmeticBrType`]
             The cosmetic's type.
         type_display: Optional[:class:`str`]
             The display type of the cosmetic.
         type_backend: Optional[:class:`str`]
             The backend type of the cosmetic.
-        rarity: Optional[:class:`CosmeticBrRarity`]
+        rarity: Optional[:class:`fortnite_api.CosmeticBrRarity`]
             The rarity of the cosmetic.
         rarity_display: Optional[:class:`str`]
             The display rarity of the cosmetic.
@@ -524,12 +524,12 @@ class FortniteAPI:
 
         Parameters
         ----------
-        key_format: :class:`KeyFormat`
-            The format to return the key in. Defaults to :attr:`KeyFormat.HEX`.
+        key_format: :class:`fortnite_api.KeyFormat`
+            The format to return the key in. Defaults to :attr:`fortnite_api.KeyFormat.HEX`.
 
         Returns
         -------
-        :class:`Aes`
+        :class:`fortnite_api.Aes`
             The fetched AES key.
         """
         data = await self.http.get_aes(key_format.value)
@@ -543,13 +543,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the banners in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        List[:class:`Banner`]
+        List[:class:`fortnite_api.Banner`]
             The fetched banners.
         """
         data = await self.http.get_banners(language=self._resolve_language_value(language))
@@ -565,7 +565,7 @@ class FortniteAPI:
 
         Returns
         -------
-        List[:class:`BannerColor`]
+        List[:class:`fortnite_api.BannerColor`]
             The fetched banner colors.
         """
         data = await self.http.get_banner_colors()
@@ -588,7 +588,7 @@ class FortniteAPI:
 
         Returns
         -------
-        :class:`CreatorCode`
+        :class:`fortnite_api.CreatorCode`
             The fetched creator code.
         """
         data = await self.http.get_creator_code(name)
@@ -603,13 +603,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the map in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        :class:`Map`
+        :class:`fortnite_api.Map`
             The fetched map.
         """
         data = await self.http.get_map(language=self._resolve_language_value(language))
@@ -624,13 +624,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        :class:`News`
+        :class:`fortnite_api.News`
             The fetched news.
         """
         data = await self.http.get_news(language=self._resolve_language_value(language))
@@ -643,13 +643,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language : Optional[:class:`GameLanguage`]
+        language : Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        :class:`GameModeNews`
+        :class:`fortnite_api.GameModeNews`
             The Battle Royale news.
         """
         data = await self.http.get_news_br(language=self._resolve_language_value(language))
@@ -662,13 +662,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language : Optional[:class:`GameLanguage`]
+        language : Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        :class:`GameModeNews`
+        :class:`fortnite_api.GameModeNews`
             The Save the World news.
         """
         data = await self.http.get_news_stw(language=self._resolve_language_value(language))
@@ -683,13 +683,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlists in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        List[:class:`Playlist`]
+        List[:class:`fortnite_api.Playlist`]
             The fetched current playlists available in Fortnite.
         """
         data = await self.http.get_playlists(language=self._resolve_language_value(language))
@@ -707,13 +707,13 @@ class FortniteAPI:
         ----------
         id: :class:`str`
             The ID of the playlist to fetch.
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlist in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        :class:`Playlist`
+        :class:`fortnite_api.Playlist`
             The fetched playlist.
 
         Raises
@@ -743,17 +743,17 @@ class FortniteAPI:
         ----------
         name: :class:`str`
             The name of the player to fetch stats for.
-        type: Optional[:class:`AccountType`]
-            The type of account to search statistics for. Defaults to :attr:`AccountType.EPIC`.
-        time_window: Optional[:class:`TimeWindow`]
-            The time window to search statistics for. Defaults to :attr:`TimeWindow.LIFETIME`.
-        image: Optional[:class:`StatsImageType`]
-            The type of image to display in the statistics. Defaults to :attr:`StatsImageType.NONE`. If this
-            is set to :attr:`StatsImageType.NONE`, there will be no image in the response.
+        type: Optional[:class:`fortnite_api.AccountType`]
+            The type of account to search statistics for. Defaults to :attr:`fortnite_api.AccountType.EPIC`.
+        time_window: Optional[:class:`fortnite_api.TimeWindow`]
+            The time window to search statistics for. Defaults to :attr:`fortnite_api.TimeWindow.LIFETIME`.
+        image: Optional[:class:`fortnite_api.StatsImageType`]
+            The type of image to display in the statistics. Defaults to :attr:`fortnite_api.StatsImageType.NONE`. If this
+            is set to :attr:`fortnite_api.fortnite_api.StatsImageType.NONE`, there will be no image in the response.
 
         Returns
         -------
-        :class:`BrPlayerStats`
+        :class:`fortnite_api.BrPlayerStats`
             The fetched player statistics.
 
         Raises
@@ -785,15 +785,15 @@ class FortniteAPI:
         ----------
         id: :class:`str`
             The account ID of the player to fetch stats for.
-        time_window: Optional[:class:`TimeWindow`]
-            The time window to search statistics for. Defaults to :attr:`TimeWindow.LIFETIME`.
-        image: Optional[:class:`StatsImageType`]
-            The type of image to display in the statistics. Defaults to :attr:`StatsImageType.NONE`. If this
-            is set to :attr:`StatsImageType.NONE`, there will be no image in the response.
+        time_window: Optional[:class:`fortnite_api.TimeWindow`]
+            The time window to search statistics for. Defaults to :attr:`fortnite_api.TimeWindow.LIFETIME`.
+        image: Optional[:class:`fortnite_api.StatsImageType`]
+            The type of image to display in the statistics. Defaults to :attr:`fortnite_api.StatsImageType.NONE`. If this
+            is set to :attr:`fortnite_api.StatsImageType.NONE`, there will be no image in the response.
 
         Returns
         -------
-        :class:`BrPlayerStats`
+        :class:`fortnite_api.BrPlayerStats`
             The fetched player statistics.
 
         Raises
@@ -814,13 +814,13 @@ class FortniteAPI:
 
         Parameters
         ----------
-        language: Optional[:class:`GameLanguage`]
+        language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlist in. Defaults to ``None``.
             This will override the default language set in the client.
 
         Returns
         -------
-        :class:`Shop`
+        :class:`fortnite_api.Shop`
             The fetched item shop.
         """
         data = await self.http.get_shop(language=self._resolve_language_value(language))
@@ -835,7 +835,7 @@ class FortniteAPI:
 
         .. note::
 
-            This is a beta method. This cannot be called unless :attr:`beta`
+            This is a beta method. This cannot be called unless :attr:`~beta`
             is set to ``True`` in the client.
 
         .. warning::
@@ -845,13 +845,13 @@ class FortniteAPI:
 
         Returns
         --------
-        List[:class:`MaterialInstance`]
+        List[:class:`fortnite_api.MaterialInstance`]
             The fetched material instances.
 
         Raises
         ------
         BetaAccessNotEnabled
-            The client does not have beta access enabled through :attr:`beta`.
+            The client does not have beta access enabled through :attr:`~beta`.
         BetaUnknownException
             An unknown error occurred while fetching the material instances. This could be due to
             an issue with the API or the client.
@@ -885,17 +885,17 @@ class SyncFortniteAPI:
     ----------
     api_key: Optional[:class:`str`]
         The API key to use for the client. Defaults to ``None``.
-    default_language: :class:`GameLanguage`
-        The default language to display the data in. Defaults to :attr:`GameLanguage.ENGLISH`.
+    default_language: :class:`fortnite_api.GameLanguage`
+        The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH`.
     session: Optional[:class:`requests.Session`]
         The session to use for the HTTP requests. Defaults to ``None``. If not provided, a new session will be created for you.
     beta: :class:`bool`
         Whether or not the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``.
 
         All beta endpoints are prefixed with ``beta_``.
-    optimization_flags: Optional[:class:`OptimizationFlags`]
+    optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
         Any optimization flags to use for the client. This will speed up the client by enabling API optimizations
-        that are not enabled by default. Read the documentation for :class:`OptimizationFlags` for more information.
+        that are not enabled by default. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information.
     """
 
     def __init__(

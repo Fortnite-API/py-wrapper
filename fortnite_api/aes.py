@@ -85,11 +85,11 @@ class Aes:
         The main encryption key. Can be ``None`` if Fortnite was recently updated.
     build: :class:`str`
         The current build where the Aes key refers to.
-    version: Optional[:class:`Version`]
+    version: Optional[:class:`fortnite_api.Version`]
         The current version where the Aes key refers to. This will only be ``None`` in the case that the API returned an invalid :attr`build` value.
     updated: :class:`datetime.datetime`
         The date where the Aes was updates.
-    dynamic_keys: List[:class:`DynamicKey`]
+    dynamic_keys: List[:class:`fortnite_api.DynamicKey`]
         All current dynamic keys
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.

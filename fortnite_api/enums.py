@@ -124,17 +124,17 @@ class CosmeticType(enum.Enum):
     Attributes
     ----------
     BR
-        Type of a :class:`fortnite_api.cosmetic.CosmeticBr` cosmetic.
+        Type of a :class:`fortnite_api.CosmeticBr` cosmetic.
     TRACKS
-        Type of a :class:`fortnite_api.cosmetic.CosmeticTrack` cosmetic.
+        Type of a :class:`fortnite_api.CosmeticTrack` cosmetic.
     INSTRUMENTS
-        Type of a :class:`fortnite_api.cosmetic.CosmeticInstrument` cosmetic.
+        Type of a :class:`fortnite_api.CosmeticInstrument` cosmetic.
     CARS
-        Type of a :class:`fortnite_api.cosmetic.CosmeticCar` cosmetic.
+        Type of a :class:`fortnite_api.CosmeticCar` cosmetic.
     LEGO
-        Type of a :class:`fortnite_api.cosmetic.CosmeticLego` cosmetic.
+        Type of a :class:`fortnite_api.CosmeticLego` cosmetic.
     LEGO_KITS
-        Type of a :class:`fortnite_api.cosmetic.CosmeticLegoKit` cosmetic.
+        Type of a :class:`fortnite_api.CosmeticLegoKit` cosmetic.
     """
 
     BR = "br"
@@ -146,7 +146,7 @@ class CosmeticType(enum.Enum):
 
 
 class CosmeticBrRarity(enum.Enum):
-    """Represents a rarity of a :class:`fortnite_api.cosmetic.CosmeticBr` cosmetic.
+    """Represents a rarity of a :class:`fortnite_api.CosmeticBr` cosmetic.
 
     Attributes
     ----------
@@ -189,7 +189,7 @@ class CosmeticBrRarity(enum.Enum):
 
 
 class CosmeticBrType(enum.Enum):
-    """Represents a type of a :class:`fortnite_api.cosmetic.CosmeticBr` cosmetic.
+    """Represents a type of a :class:`fortnite_api.CosmeticBr` cosmetic.
 
     Attributes
     ----------

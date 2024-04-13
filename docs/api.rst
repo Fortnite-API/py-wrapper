@@ -5,178 +5,243 @@ API Reference
 
 Clients
 -------
-.. autoclass:: fortnite_api.FortniteAPI
+
+.. automodule:: fortnite_api.FortniteAPI
     :members:
 
-
-.. autoclass:: fortnite_api.SyncFortniteAPI
+.. automodule:: fortnite_api.SyncFortniteAPI
     :members:
+
 
 Base Classes
 ------------
 
-.. autoclass:: fortnite_api.abc.IdComparable
+.. autoclass:: fortnite_api.IdComparable
     :members:
 
-.. autoclass:: fortnite_api.abc.Hashable
+.. autoclass:: fortnite_api.Hashable
     :members:
-
 
 Objects
 -------
 
-.. autoclass:: fortnite_api.account.Account
+.. autoclass:: fortnite_api.Account
     :members:
 
-.. autoclass:: fortnite_api.aes.Aes
+.. autoclass:: fortnite_api.Aes
     :members:
 
-.. autoclass:: fortnite_api.aes.Version
+.. autoclass:: fortnite_api.Version
     :members:
 
-.. autoclass:: fortnite_api.aes.DynamicKey
+.. autoclass:: fortnite_api.DynamicKey
     :members:
 
-.. autoclass:: fortnite_api.all.CosmeticsAll
+.. autoclass:: fortnite_api.CosmeticsAll
     :members:
 
-.. autoclass:: fortnite_api.asset.Asset
+.. autoclass:: fortnite_api.Asset
     :members:
 
-.. autoclass:: fortnite_api.banner.Banner
+.. autoclass:: fortnite_api.Banner
     :members:
 
-.. autoclass:: fortnite_api.banner.BannerColor
+.. autoclass:: fortnite_api.BannerColor
     :members:
 
-.. autoclass:: fortnite_api.banner.BannerColour
+.. autoclass:: fortnite_api.BannerColour
     :members:
 
-.. autoclass:: fortnite_api.creator_code.CreatorCode
+.. autoclass:: fortnite_api.CreatorCode
     :members:
 
-.. autoclass:: fortnite_api.images.Images
+.. autoclass:: fortnite_api.Images
     :members:
 
-.. autoclass:: fortnite_api.map.Map
+.. autoclass:: fortnite_api.Map
     :members:
 
-.. autoclass:: fortnite_api.map.MapImages
+.. autoclass:: fortnite_api.MapImages
     :members:
 
-.. autoclass:: fortnite_api.map.POI
+.. autoclass:: fortnite_api.POI
     :members:
 
-.. autoclass:: fortnite_api.map.POILocation
+.. autoclass:: fortnite_api.POILocation
     :members:
 
-.. autoclass:: fortnite_api.material.MaterialInstanceImages
+.. autoclass:: fortnite_api.MaterialInstanceImages
     :members:
 
-.. autoclass:: fortnite_api.material.MaterialInstanceColors
+.. autoclass:: fortnite_api.MaterialInstanceColors
     :members:
 
-.. autoclass:: fortnite_api.material.MaterialInstance
+.. autoclass:: fortnite_api.MaterialInstance
     :members:
 
-.. autoclass:: fortnite_api.new.NewCosmetic
+.. autoclass:: fortnite_api.NewCosmetic
     :members:
 
-.. autoclass:: fortnite_api.new.NewBrCosmetics
+.. autoclass:: fortnite_api.NewBrCosmetics
     :members:
 
-.. autoclass:: fortnite_api.new.NewCosmetics 
+.. autoclass:: fortnite_api.NewCosmetics 
     :members:
 
-.. autoclass:: fortnite_api.news.News
+.. autoclass:: fortnite_api.News
     :members:
 
-.. autoclass:: fortnite_api.news.GameModeNews
+.. autoclass:: fortnite_api.GameModeNews
     :members:
 
-.. autoclass:: fortnite_api.news.NewsMotd
+.. autoclass:: fortnite_api.NewsMotd
     :members:
 
-.. autoclass:: fortnite_api.news.NewsMessage
+.. autoclass:: fortnite_api.NewsMessage
     :members:
 
-.. autoclass:: fortnite_api.playlist.PlaylistImages
+.. autoclass:: fortnite_api.PlaylistImages
     :members:
 
-.. autoclass:: fortnite_api.playlist.Playlist
+.. autoclass:: fortnite_api.Playlist
     :members:
 
-.. autoclass:: fortnite_api.shop.ShopEntryBundle
+.. autoclass:: fortnite_api.ShopEntryBundle
     :members:
 
-.. autoclass:: fortnite_api.shop.ShopEntryBanner
+.. autoclass:: fortnite_api.ShopEntryBanner
     :members:
 
-.. autoclass:: fortnite_api.shop.ShopEntryLayout
+.. autoclass:: fortnite_api.ShopEntryLayout
     :members:
 
-.. autoclass:: fortnite_api.shop.ShopEntryNewDisplayAsset
+.. autoclass:: fortnite_api.ShopEntryNewDisplayAsset
     :members:
 
-.. autoclass:: fortnite_api.shop.ShopEntry 
+.. autoclass:: fortnite_api.ShopEntry 
     :members:
 
-.. autoclass:: fortnite_api.shop.Shop
+.. autoclass:: fortnite_api.Shop
     :members:
 
-.. autoclass:: fortnite_api.stats.BrPlayerStats
+.. autoclass:: fortnite_api.BrPlayerStats
     :members:
 
-.. autoclass:: fortnite_api.stats.BrBattlePass
+.. autoclass:: fortnite_api.BrBattlePass
     :members:
 
-.. autoclass:: fortnite_api.stats.BrInputs
+.. autoclass:: fortnite_api.BrInputs
     :members:
 
-.. autoclass:: fortnite_api.stats.BrInputStats
+.. autoclass:: fortnite_api.BrInputStats
     :members:
 
-.. autoclass:: fortnite_api.stats.BrGameModeStats
+.. autoclass:: fortnite_api.BrGameModeStats
+    :members:
+
+
+Cosmetic Objects
+----------------
+
+.. autoclass:: fortnite_api.Cosmetic 
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticTypeInfo
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticRarity
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticSeries 
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticImages
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticBrSet
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticBrIntroduction
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticBrVariant 
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticBrVariantOption
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticBr
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticCar
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticInstrument
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticLegoKit 
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticLego
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticLegoImages
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticTrackDifficulty
+    :members:
+
+.. autoclass:: fortnite_api.CosmeticTrack
     :members:
 
 
 Flags
 -----
-.. autoclass:: fortnite_api.flags.OptimizationFlags
+.. autoclass:: fortnite_api.OptimizationFlags
     :members:
 
 
 Enumerations
 ------------
 
-.. autoclass:: fortnite_api.enums.KeyFormat
+.. autoclass:: fortnite_api.KeyFormat
     :members:
 
-.. autoclass:: fortnite_api.enums.GameLanguage
+.. autoclass:: fortnite_api.GameLanguage
     :members:
 
-.. autoclass:: fortnite_api.enums.MatchMethod
+.. autoclass:: fortnite_api.MatchMethod
     :members:
 
-.. autoclass:: fortnite_api.enums.CosmeticType
+.. autoclass:: fortnite_api.CosmeticType
+    :members:
 
-.. autoclass:: fortnite_api.enums.CosmeticBrRarity
+.. autoclass:: fortnite_api.CosmeticBrRarity
+    :members:
 
-.. autoclass:: fortnite_api.enums.CosmeticBrType
+.. autoclass:: fortnite_api.CosmeticBrType
+    :members:
 
-.. autoclass:: fortnite_api.enums.AccountType
+.. autoclass:: fortnite_api.AccountType
+    :members:
 
-.. autoclass:: fortnite_api.enums.TimeWindow
+.. autoclass:: fortnite_api.TimeWindow
+    :members:
     
-.. autoclass:: fortnite_api.enums.StatsImageType
+.. autoclass:: fortnite_api.StatsImageType
+    :members:
 
-.. autoclass:: fortnite_api.enums.CreatorCodeStatus
+.. autoclass:: fortnite_api.CreatorCodeStatus
+    :members:
 
-.. autoclass:: fortnite_api.enums.TileSize
+.. autoclass:: fortnite_api.TileSize
+    :members:
 
-.. autoclass:: fortnite_api.enums.CosmeticCompatibleMode
+.. autoclass:: fortnite_api.CosmeticCompatibleMode
+    :members:
 
-.. autoclass:: fortnite_api.enums.BannerIntensity
+.. autoclass:: fortnite_api.BannerIntensity
+    :members:
 
 
 Helper Utilities

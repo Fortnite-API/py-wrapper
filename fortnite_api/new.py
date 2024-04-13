@@ -39,23 +39,23 @@ __all__: Tuple[str, ...] = ('NewCosmetic', 'NewBrCosmetics', 'NewCosmetics')
 class NewCosmetic(Generic[CosmeticT]):
     """Represents a response from the new cosmetics endpoint for a given cosmetic type. The types are as follows:
 
-    - ``CosmeticType.BR`` -> List of :class:`CosmeticBr`
-    - ``CosmeticType.TRACKS`` -> List of :class:`CosmeticTrack`
-    - ``CosmeticType.INSTRUMENTS`` -> List of :class:`CosmeticInstrument`
-    - ``CosmeticType.CARS`` -> List of :class:`CosmeticCar`
-    - ``CosmeticType.LEGO`` -> List of :class:`CosmeticLego`
-    - ``CosmeticType.LEGO_KITS`` -> List of :class:`CosmeticLegoKit`
+    - :attr:`fortnite_api.CosmeticType.BR` -> List of :class:`fortnite_api.CosmeticBr`
+    - :attr:`fortnite_api.CosmeticType.TRACKS` -> List of :class:`fortnite_api.CosmeticTrack`
+    - :attr:`fortnite_api.CosmeticType.INSTRUMENTS` -> List of :class:`fortnite_api.CosmeticInstrument`
+    - :attr:`fortnite_api.CosmeticType.CARS` -> List of :class:`fortnite_api.CosmeticCar`
+    - :attr:`fortnite_api.CosmeticType.LEGO` -> List of :class:`fortnite_api.CosmeticLego`
+    - :attr:`fortnite_api.CosmeticType.LEGO_KITS` -> List of :class:`fortnite_api.CosmeticLegoKit`
 
     Attributes
     ----------
-    type: :class:`CosmeticType`
+    type: :class:`fortnite_api.CosmeticType`
         The type of new cosmetics displayed.
     hash: Optional[:class:`str`]
         The hash of the new cosmetics. Can be ``None`` if no
         new cosmetics have been given for the cosmetic type.
     last_addition: :class:`datetime.datetime`
         The last addition of new cosmetics.
-    items: List[:class:`BrCosmetic`]
+    items: List[:class:`fortnite_api.CosmeticBr`]
         The new cosmetics. This corresponds to the type of new cosmetics.
         Can be empty if no new cosmetics have been given.
     """
@@ -80,7 +80,7 @@ class NewCosmetic(Generic[CosmeticT]):
 class NewBrCosmetics(NewCosmetic[CosmeticBr[HTTPClientT]]):
     """Represents a returned response from the new BR cosmetics endpoint.
 
-    This inherits from :class:`NewCosmetic`.
+    This inherits from :class:`fortnite_api.NewCosmetic`.
 
     Attributes
     ----------
@@ -90,7 +90,7 @@ class NewBrCosmetics(NewCosmetic[CosmeticBr[HTTPClientT]]):
         The previous build of Fortnite.
     date: :class:`datetime.datetime`
         The date of the new cosmetics.
-    raw_data: Dict[:class:`str`, Any]
+    raw_data: :class:`dict`
         The raw data of the new cosmetics.
     """
 
@@ -127,17 +127,17 @@ class NewCosmetics(Generic[HTTPClientT]):
         The combined hash of all new cosmetics.
     global_last_addition: :class:`datetime.datetime`
         The last time a new cosmetic was added.
-    br: :class:`NewCosmetic`
+    br: :class:`fortnite_api.NewCosmetic`
         The new BR cosmetics.
-    tracks: :class:`NewCosmetic`
+    tracks: :class:`fortnite_api.NewCosmetic`
         The new track cosmetics.
-    instruments: :class:`NewCosmetic`
+    instruments: :class:`fortnite_api.NewCosmetic`
         The new instrument cosmetics.
-    cars: :class:`NewCosmetic`
+    cars: :class:`fortnite_api.NewCosmetic`
         The new car cosmetics.
-    lego: :class:`NewCosmetic`
+    lego: :class:`fortnite_api.NewCosmetic`
         The new lego cosmetics.
-    lego_kits: :class:`NewCosmetic`
+    lego_kits: :class:`fortnite_api.NewCosmetic`
         The new lego kit cosmetics.
     """
 

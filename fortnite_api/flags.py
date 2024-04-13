@@ -59,7 +59,7 @@ class OptimizationFlags(enum.IntFlag):
 
     @classmethod
     def none(cls) -> OptimizationFlags:
-        """:class:`OptimizationFlags`: Returns an OptimizationFlags object with no flags enabled."""
+        """:class:`fortnite_api.OptimizationFlags`: Returns an OptimizationFlags object with no flags enabled."""
         return cls(0)
 
     def _to_http_param(self) -> str:

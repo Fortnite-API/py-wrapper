@@ -59,7 +59,7 @@ class IdComparable:
 class Hashable(IdComparable):
     """Represents a hashable object.
 
-    This inherits :class:`IdComparable` and adds a hash function.
+    This inherits :class:`fortnite_api.IdComparable` and adds a hash function.
 
     .. container:: operations
 

@@ -117,7 +117,7 @@ class Asset(Generic[HTTPClientT]):
 
         Returns
         --------
-        :class:`Asset`
+        :class:`fortnite_api.Asset`
             The resized asset.
 
         Raises

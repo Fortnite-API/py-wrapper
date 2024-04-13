@@ -95,7 +95,7 @@ class HTTPException(FortniteAPIException):
 class NotFound(HTTPException):
     """Exception raised when a resource is not found.
 
-    This class inherits from :class:`HTTPException`.
+    This class inherits from :class:`fortnite_api.HTTPException`.
     """
 
     pass
@@ -104,7 +104,7 @@ class NotFound(HTTPException):
 class Forbidden(HTTPException):
     """Exception raised when the requested operation is forbidden.
 
-    This class inherits from :class:`HTTPException`.
+    This class inherits from :class:`fortnite_api.HTTPException`.
     """
 
     pass
@@ -113,7 +113,7 @@ class Forbidden(HTTPException):
 class ServiceUnavailable(HTTPException):
     """Exception raised when the services of Fortnite API are unavailable.
 
-    This class inherits from :class:`HTTPException`.
+    This class inherits from :class:`fortnite_api.HTTPException`.
     """
 
     pass
@@ -122,7 +122,7 @@ class ServiceUnavailable(HTTPException):
 class RateLimited(HTTPException):
     """Exception raised when the client has been rate limited.
 
-    This class inherits from :class:`HTTPException`.
+    This class inherits from :class:`fortnite_api.HTTPException`.
     """
 
     pass
@@ -131,7 +131,7 @@ class RateLimited(HTTPException):
 class Unauthorized(HTTPException):
     """Exception raised when the client is unauthorized to access the requested resource.
 
-    This class inherits from :class:`HTTPException`.
+    This class inherits from :class:`fortnite_api.HTTPException`.
     """
 
     pass
@@ -141,7 +141,7 @@ class BetaAccessNotEnabled(FortniteAPIException):
     """Exception raised when a user tries to access a feature or functionality that requires beta access,
     but the beta access is not enabled.
 
-    This class inherits :class:`FortniteAPIException`.
+    This class inherits :class:`fortnite_api.FortniteAPIException`.
 
     Attributes
     ----------
@@ -155,13 +155,13 @@ class BetaAccessNotEnabled(FortniteAPIException):
 class BetaUnknownException(FortniteAPIException):
     """Exception raised when an unknown exception occurs while trying to access a beta feature.
 
-    This class inherits :class:`FortniteAPIException`.
+    This class inherits :class:`fortnite_api.FortniteAPIException`.
 
     Attributes
     ----------
     message: :class:`str`
         The error message describing the exception.
-    original: :class:`HTTPException`
+    original: :class:`fortnite_api.HTTPException`
         The original exception that occurred.
     """
 
