@@ -17,6 +17,7 @@ from typing import Any, Dict
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('..'))
+sys.path.append(os.path.abspath('extensions'))
 
 # -- General configuration ------------------------------------------------
 
@@ -33,12 +34,11 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinxcontrib_trio',
     'sphinx_copybutton',
+    'exception_hierarchy',
 ]
 
 autodoc_member_order = 'bysource'
 autodoc_typehints = 'none'
-# maybe consider this?
-# napoleon_attr_annotations = False
 
 extlinks = {
     'issue': ('https://github.com//Fortite-API/py-wrapper/issues%s', 'GH-'),
@@ -190,7 +190,7 @@ html_theme_options: Dict[str, Any] = {
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = './images/tixte_logo.ico'
+# html_favicon = './images/[logo].ico'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

@@ -6,10 +6,10 @@ API Reference
 Clients
 -------
 
-.. automodule:: fortnite_api.FortniteAPI
+.. autoclass:: fortnite_api.FortniteAPI
     :members:
 
-.. automodule:: fortnite_api.SyncFortniteAPI
+.. autoclass:: fortnite_api.SyncFortniteAPI
     :members:
 
 
@@ -248,3 +248,54 @@ Helper Utilities
 ----------------
 .. autoclass:: fortnite_api.proxies.TransformerListProxy
     :members:
+
+Exceptions
+----------
+
+Exception Hierarchy
+~~~~~~~~~~~~~~~~~~~
+
+.. exception_hierarchy::
+    - :exc:`Exception`
+        - :exc:`FortniteAPIException`
+            - :exc:`HTTPException`
+                - :exc:`NotFound`
+                - :exc:`Forbidden`
+                - :exc:`ServiceUnavailable`
+                - :exc:`RateLimited`
+                - :exc:`Unauthorized`
+            - :exc:`BetaAccessNotEnabled`
+            - :exc:`BetaUnknownException`
+
+Exception Classes
+~~~~~~~~~~~~~~~~~
+
+.. autoclass:: FortniteAPIException
+    :members:
+
+.. autoclass:: HTTPException
+    :members:
+
+.. autoclass:: NotFound
+    :members:
+
+.. autoclass:: Forbidden
+    :members:
+
+.. autoclass:: ServiceUnavailable
+    :members:
+
+.. autoclass:: RateLimited
+    :members:
+
+.. autoclass:: Unauthorized
+    :members:
+
+.. autoclass:: BetaAccessNotEnabled
+    :members:
+
+.. autoclass:: BetaUnknownException
+    :members:
+
+
+
