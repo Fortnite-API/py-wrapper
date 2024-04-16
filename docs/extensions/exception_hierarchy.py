@@ -1,8 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+import sphinx.application
 from docutils import nodes
 from docutils.parsers.rst import Directive
-import sphinx.application
 from sphinx.locale import _
-from sphinx.writers.html5 import HTML5Translator
+
+if TYPE_CHECKING:
+    from sphinx.writers.html5 import HTML5Translator
 
 
 class exception_hierarchy(nodes.General, nodes.Element):
