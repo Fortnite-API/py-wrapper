@@ -375,10 +375,10 @@ class TileSize(enum.Enum):
         A triple wide sized tile.
     """
 
-    SMALL = 'Small'
-    NORMAL = 'Normal'
-    DOUBLE_WIDE = 'DoubleWide'
-    TRIPLE_WIDE = 'TripleWide'
+    SMALL = 'Size_1_x_1'
+    NORMAL = 'Size_1_x_2'
+    DOUBLE_WIDE = 'Size_2_x_2'
+    TRIPLE_WIDE = 'Size_3_x_2'
 
 
 class BannerIntensity(enum.Enum):
