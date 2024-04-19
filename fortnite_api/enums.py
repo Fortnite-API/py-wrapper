@@ -322,7 +322,6 @@ class StatsImageType(enum.Enum):
     NONE = 'none'
 
 
-
 class CreatorCodeStatus(enum.Enum):
     """Represents the status of a creator code.
 
@@ -337,7 +336,7 @@ class CreatorCodeStatus(enum.Enum):
     ACTIVE = 'active'
     DISABLED = 'disabled'
 
-    
+
 class CosmeticCompatibleMode(enum.Enum):
     """A class that represents the compatibility of a cosmetic material instance with other modes.
 
