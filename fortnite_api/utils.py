@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, Dict, Hashable, Tuple, TypeVar
+from typing import Any, Callable, Dict, Hashable, Tuple, TypeVar, Union
 
 try:
     import orjson  # type: ignore
@@ -66,12 +66,12 @@ MISSING: Any = _MissingSentinel()
 
 if _has_orjson:
 
-    def to_json(string: str) -> Dict[Any, Any]:
+    def to_json(string: Union[str, bytes]) -> Dict[Any, Any]:
         return orjson.loads(string)  # type: ignore
 
 else:
 
-    def to_json(string: str) -> Dict[Any, Any]:
+    def to_json(string: Union[str, bytes]) -> Dict[Any, Any]:
         return json.loads(string)  # type: ignore
 
 
@@ -80,7 +80,17 @@ def parse_time(timestamp: str) -> datetime.datetime:
     if timestamp == BACKUP_TIMESTAMP:
         return datetime.datetime.fromisoformat(timestamp)
 
-    return datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S%z')
+    # If the timestamp str contains ms or us, strptime with them. If not, fallback
+    # to default strptime.
+    try:
+        return datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')
+    except ValueError:
+        return datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S%z')
+
+
+def now() -> datetime.datetime:
+    # Returns the current time in the same format as the API
+    return datetime.datetime.now(datetime.timezone.utc)
 
 
 def copy_doc(obj: Any) -> Callable[[T], T]:
