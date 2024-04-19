@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Tuple, Union
+from typing import TYPE_CHECKING, Any, Optional, Tuple, Union
 
 if TYPE_CHECKING:
     import aiohttp
@@ -62,8 +62,8 @@ class HTTPException(FortniteAPIException):
 
     Attributes
     ----------
-    message: :class:`str`
-        The error message describing the exception.
+    message: Optional[:class:`str`]
+        The error message describing the exception, if any.
     response: Union[:class:`aiohttp.ClientResponse`, :class:`requests.Response`]
         The response that was returned from the API. If the client is running async, it will be an aiohttp response,
         otherwise it will be a requests response.
@@ -71,8 +71,10 @@ class HTTPException(FortniteAPIException):
         The raw data that was returned from the API.
     """
 
-    def __init__(self, message: str, response: Union[aiohttp.ClientResponse, requests.Response], data: Any, /) -> None:
-        self.message: str = message
+    def __init__(
+        self, message: Optional[str], response: Union[aiohttp.ClientResponse, requests.Response], data: Any, /
+    ) -> None:
+        self.message: Optional[str] = message
         self.response: Union[aiohttp.ClientResponse, requests.Response] = response
         self.data: Any = data
         super().__init__(message)
