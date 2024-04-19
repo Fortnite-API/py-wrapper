@@ -29,7 +29,8 @@ import asyncio
 import logging
 import sys
 import time
-from typing import TYPE_CHECKING, Any, Coroutine, Dict, Literal, Optional, Union
+from typing import TYPE_CHECKING, Any, ClassVar, Coroutine, Dict, Literal, Optional, Union
+from urllib.parse import quote as _uriquote
 
 import aiohttp
 import requests
@@ -37,7 +38,7 @@ from typing_extensions import TypeAlias, TypeVar
 
 from . import __version__
 from .errors import *
-from .utils import to_json
+from .utils import now, parse_time, to_json
 
 T = TypeVar('T', bound='Any')
 AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
@@ -50,20 +51,43 @@ if TYPE_CHECKING:
 _log = logging.getLogger(__name__)
 
 
-# Similar to how dpy manages routes, we'll follow this pattern as well
 class Route:
-    BASE_URL = 'https://fortnite-api.com'
+    """Represents a route to a specific endpoint. This is an internally created structure, and is exposed to the user for
+    advanced handling of ratelimits and listening to requests a client makes.
 
-    def __init__(self, method: str, endpoint: str, **params: Any) -> None:
+    Attributes
+    ----------
+    method: :class:`str`
+        The HTTP method to use when making the request.
+    path: :class:`str`
+        The path to the endpoint.
+    params: :class:`dict`
+        The path parameters given to the endpoint.
+    url: :class:`str`
+        The formatted URL that is used to make the request.
+    """
+
+    # General scheme for this used from https://github.com/Rapptz/discord.py/blob/master/discord/http.py#L292-L327
+    # The idea is that, to simplify request logic, a Route can be passed to a request method and it will handle all the
+    # params and URL formatting for you.
+
+    BASE_URL: ClassVar[str] = 'https://fortnite-api.com'
+
+    def __init__(self, method: str, path: str, **params: Any) -> None:
         self.method: str = method
-        self.endpoint: str = endpoint
+        self.path: str = path
         self.params: Optional[Dict[str, Any]] = params
 
-        url = self.BASE_URL + endpoint
+        url = self.BASE_URL + path
         if params:
-            url = url.format(**params)
+            url = url.format_map({k: _uriquote(v) if isinstance(v, str) else v for k, v in params.items()})
 
         self.url: str = url
+
+    @property
+    def key(self) -> str:
+        """:class:`str`: The key for the route. This is a unique identifier for the route used for ratelimit management."""
+        return f'{self.method}:{self.path}'
 
 
 class HTTPMixin(abc.ABC):
@@ -339,43 +363,61 @@ class HTTPClient(HTTPMixin):
 
         response: Optional[aiohttp.ClientResponse] = None
         data = None
-        for tries in range(5):  # Just in case we get rate limited
+        error = None
+
+        for tries in range(5):
             async with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
                 _log.debug('Request to %s %s returned status %s', route.method, route.url, response.status)
-
                 data = await self._parse_async_response(response)
 
-                if 300 > response.status >= 200:  # Everything is ok
-                    if isinstance(data, dict):
-                        return data.get('data', data)
-
-                    return data
-
-                # Let's try and find an error message
-                error: str = 'Error message not provided!'
+            if 300 > response.status >= 200:
                 if isinstance(data, dict):
-                    error = data.get('data', data).get('error', error)
+                    # Fortnite API wraps everything in a "data" key, so unwrap it if possible.
+                    return data.get('data', data)
 
-                if response.status == 401:
-                    raise Unauthorized(error, response, data)
+                return data
 
-                if response.status == 403:
-                    raise Forbidden(error, response, data)
+            # Let's try and find an error message
+            error = 'Error message not provided!'
+            if isinstance(data, dict):
+                error = data.get('data', data).get('error', error)
 
-                if response.status == 404:
-                    raise NotFound(error, response, data)
+            if response.status == 401:
+                raise Unauthorized(error, response, data)
 
-                if response.status == 429:  # NOTE: Handle this better down the road
+            if response.status == 403:
+                raise Forbidden(error, response, data)
+
+            if response.status == 404:
+                raise NotFound(error, response, data)
+
+            if response.status == 429:
+                # The client has been rate limited
+                # We're going to wait for the limit to be up and then retry
+                reset = response.headers.get('X-Ratelimit-Reset')
+                if reset is None:
                     raise RateLimited(error, response, data)
 
-                if response.status in {500, 502, 504}:
-                    await asyncio.sleep(1 + tries * 2)
-                    continue
+                then = parse_time(reset)
+                wait_time = (then - now()).total_seconds()
+                # If, for some reason, the time is negative, we'll continue
+                if wait_time > 0:
+                    await asyncio.sleep((then - now()).total_seconds())
 
-                if response.status > 500:
-                    raise ServiceUnavailable(error, response, data)
+                continue
+
+            if response.status in {500, 502, 504}:
+                await asyncio.sleep(1 + tries * 2)
+                continue
+
+            if response.status > 500:
+                raise ServiceUnavailable(error, response, data)
 
         if response is not None:
+            # If we hit the limit 5 times, there are bigger issues.
+            if response.status == 429:
+                raise RateLimited(error, response, data)
+
             raise ServiceUnavailable('Service unavailable', response, data)
 
         raise RuntimeError('Unreachable code reached!')
@@ -390,6 +432,21 @@ class SyncHTTPClient(HTTPMixin):
         if self.session is not None:
             self.session.close()
 
+    def _parse_sync_response(self, response: requests.Response) -> Union[Dict[str, Any], str, bytes]:
+        content_type = response.headers.get('Content-Type')
+        if content_type and content_type.startswith('image/'):
+            return response.content
+
+        try:
+            data = response.text
+        except Exception:
+            data = response.content
+
+        if content_type and content_type.startswith('application/json'):
+            return to_json(data)
+
+        return data
+
     def request(self, route: Route, **kwargs: Any) -> Any:
         if self.session is None:
             raise RuntimeError(
@@ -401,22 +458,12 @@ class SyncHTTPClient(HTTPMixin):
 
         response: Optional[requests.Response] = None
         data = None
+        error = None
         for tries in range(5):
             with self.session.request(route.method, route.url, headers=self.headers, **kwargs) as response:
                 _log.debug('Request to %s %s returned status %s', route.method, route.url, response.status_code)
 
-                # We aren't able to parse the same as we are in async mode, so we'll need
-                # to use some other logic here
-                content_type = response.headers.get('Content-Type')
-                if content_type and content_type.startswith('application/json'):
-                    data = to_json(response.text)
-                elif content_type and content_type.startswith('image/'):
-                    return response.content
-                else:
-                    try:
-                        data = response.text
-                    except Exception:
-                        data = response.content
+                data = self._parse_sync_response(response)
 
             if 300 > response.status_code >= 200:  # Everything is ok
                 if isinstance(data, dict):
@@ -425,7 +472,7 @@ class SyncHTTPClient(HTTPMixin):
                 return data
 
             # Let's try and find an error message
-            error: str = 'Error message not provided!'
+            error = 'Error message not provided!'
             if isinstance(data, dict):
                 error = data.get('error', error)
 
@@ -438,8 +485,21 @@ class SyncHTTPClient(HTTPMixin):
             if response.status_code == 404:
                 raise NotFound(error, response, data)
 
-            if response.status_code == 429:  # NOTE: Handle this better down the road
-                raise RateLimited(error, response, data)
+            if response.status_code == 429:
+                # The client has been rate limited
+                # We're going to wait for the limit to be up and then retry
+                reset = response.headers.get('X-Ratelimit-Reset')
+                if reset is None:
+                    raise RateLimited(error, response, data)
+
+                then = parse_time(reset)
+                wait_time = (then - now()).total_seconds()
+
+                # If, for some reason, the time is negative, we'll continue
+                if wait_time > 0:
+                    time.sleep((then - now()).total_seconds())
+
+                continue
 
             if response.status_code in {500, 502, 504}:
                 time.sleep(1 + tries * 2)
@@ -449,6 +509,9 @@ class SyncHTTPClient(HTTPMixin):
                 raise ServiceUnavailable(error, response, data)
 
         if response is not None:
+            if response.status_code == 429:
+                raise RateLimited(error, response, data)
+
             raise ServiceUnavailable('Service unavailable', response, data)
 
         raise RuntimeError('Unreachable code reached!')
