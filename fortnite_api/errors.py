@@ -67,14 +67,14 @@ class HTTPException(FortniteAPIException):
     response: Union[:class:`aiohttp.ClientResponse`, :class:`requests.Response`]
         The response that was returned from the API. If the client is running async, it will be an aiohttp response,
         otherwise it will be a requests response.
-    raw_data: Any
+    data: Any
         The raw data that was returned from the API.
     """
 
-    def __init__(self, message: str, response: Union[aiohttp.ClientResponse, requests.Response], raw_data: Any) -> None:
+    def __init__(self, message: str, response: Union[aiohttp.ClientResponse, requests.Response], data: Any, /) -> None:
         self.message: str = message
         self.response: Union[aiohttp.ClientResponse, requests.Response] = response
-        self.raw_data: Any = raw_data
+        self.data: Any = data
         super().__init__(message)
 
     @property
