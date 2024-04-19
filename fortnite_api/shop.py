@@ -229,13 +229,7 @@ class ShopEntry(Generic[HTTPClientT]):
         self.offer_id: str = data['offerId']
         self.display_asset_path: Optional[str] = data.get('displayAssetPath')
 
-        _tile_size: str = data['tileSize']
-
-        # A check to correct an Epic games spelling mistake.
-        if _tile_size.lower() == 'nomal':
-            _tile_size = 'Normal'
-
-        self.tile_size: TileSize = TileSize(_tile_size)
+        self.tile_size: TileSize = TileSize(data['tileSize'])
 
         self.new_display_asset_path: str = data['newDisplayAssetPath']
 
