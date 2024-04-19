@@ -13,3 +13,4 @@ view the attributes and methods of Fortnite API objects.
    :caption: Contents:
 
    api
+   migrating
