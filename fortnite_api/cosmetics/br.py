@@ -137,6 +137,8 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
 class CosmeticBr(Cosmetic[HTTPClientT]):
     """Represents a Battle Royale cosmetic.
 
+    This class inherits from :class:`fortnite_api.Cosmetic`.
+
     Attributes
     ----------
     name: :class:`str`
