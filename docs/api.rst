@@ -172,27 +172,34 @@ Cosmetic Objects
 
 .. autoclass:: fortnite_api.CosmeticBr
     :members:
+    :inherited-members:
 
 .. autoclass:: fortnite_api.CosmeticCar
     :members:
+    :inherited-members:
 
 .. autoclass:: fortnite_api.CosmeticInstrument
     :members:
+    :inherited-members:
 
 .. autoclass:: fortnite_api.CosmeticLegoKit 
     :members:
+    :inherited-members:
 
 .. autoclass:: fortnite_api.CosmeticLego
     :members:
+    :inherited-members:
 
 .. autoclass:: fortnite_api.CosmeticLegoImages
     :members:
+    :inherited-members:
 
 .. autoclass:: fortnite_api.CosmeticTrackDifficulty
     :members:
 
 .. autoclass:: fortnite_api.CosmeticTrack
     :members:
+    :inherited-members:
 
 
 Flags
