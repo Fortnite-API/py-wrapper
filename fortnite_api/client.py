@@ -26,11 +26,11 @@ from __future__ import annotations
 
 import datetime
 import functools
-from typing import Any, Literal, Optional, TypeVar, Union, overload, Callable
+from typing import Any, Callable, Literal, Optional, TypeVar, Union, overload
 
 import aiohttp
 import requests
-from typing_extensions import ParamSpec, Self, Concatenate, Coroutine
+from typing_extensions import Concatenate, Coroutine, ParamSpec, Self
 
 from .aes import Aes
 from .all import CosmeticsAll

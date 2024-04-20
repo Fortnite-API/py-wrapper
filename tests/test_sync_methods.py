@@ -24,8 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-import pytest
 import datetime
+
+import pytest
 
 import fortnite_api as fn_api
 
