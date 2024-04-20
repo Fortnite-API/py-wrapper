@@ -217,7 +217,7 @@ the client itself. This means that to fetch cosmetics, you no longer need to do:
     :caption: Fetching cosmetics using Version 2. This does not work in Version 3.
 
     cosmetics = await client.cosmetics.fetch()
-    reveaL_type(cosmetics)
+    reveal_type(cosmetics)
     >>> List[fortnite_api.Cosmetic]
 
 But rather, you do:
