@@ -6,12 +6,12 @@ wrapper to the new version, and in doing so, help you understand the changes tha
 
 Client 
 ------
-The :class:`fortnite_api.FortniteAPI` client has been made async by default. This means that all methods 
-to fetch data from the API are now async. All synchronous functionality has been extended into the 
-:class:`fortnite_api.SyncFortniteAPI` class. 
+The :class:`fortnite_api.FortniteAPI` client now only has async functions. All methods 
+that fetch data from the API are now async. All synchronous functionality has been extended into the 
+:class:`fortnite_api.SyncFortniteAPI` class.
 
-This means there is no longer a `run_async` parameter on the client. Creating an instance of a 
-FortniteAPI client is now done like so:
+This means there is no longer a `run_async` parameter on the client. Rather, the sync and async functionality is now completely
+determined by which instance of a client you use. Now, creating an instance of the client should be done with its respective context manager:
 
 .. code-block:: python3
 
