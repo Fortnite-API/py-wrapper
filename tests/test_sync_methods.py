@@ -24,6 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
+import pytest
 import datetime
 
 import fortnite_api as fn_api
@@ -288,11 +289,8 @@ def test_sync_fetch_playlist_by_id(optimization_flags: fn_api.OptimizationFlags)
 
 def test_sync_beta_fetch_material_instances(optimization_flags: fn_api.OptimizationFlags):
     # Ensure you cannot call this without beta=True
-    try:
+    with pytest.raises(fn_api.BetaAccessNotEnabled):
         fn_api.SyncFortniteAPI().beta_fetch_material_instances()
-        assert False, "Should not be able to call this without beta=True"
-    except fn_api.BetaAccessNotEnabled:
-        pass
 
     with fn_api.SyncFortniteAPI(beta=True) as client:
         material_instances = client.beta_fetch_material_instances()
