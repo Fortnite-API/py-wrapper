@@ -27,7 +27,7 @@ from __future__ import annotations
 import enum
 from typing import List, Tuple
 
-__all__: Tuple[str, ...] = ('OptimizationFlags', 'DEFAULT_OPTIMIZATION_FLAGS')
+__all__: Tuple[str, ...] = ('OptimizationFlags',)
 
 
 class OptimizationFlags(enum.IntFlag):
@@ -53,6 +53,8 @@ class OptimizationFlags(enum.IntFlag):
 
         FLAGS = OptimizationFlags.IGNORE_NULL | OptimizationFlags.
         async def main():
+            async with FortniteAPI(api_key="", optimization_flags=FLAGS) as api:
+                ...
     """
 
     IGNORE_NULL: int = 0 >> 0
@@ -62,6 +64,13 @@ class OptimizationFlags(enum.IntFlag):
         """:class:`fortnite_api.OptimizationFlags`: Returns an OptimizationFlags object with no flags enabled."""
         return cls(0)
 
+    @classmethod
+    def default(cls) -> OptimizationFlags:
+        """:class:`fortnite_api.OptimizationFlags`: Returns an OptimizationFlags object with the default flags enabled.
+        This is equivalent to :attr:`~IGNORE_NULL`, and is what the client uses by default.
+        """
+        return cls(cls.IGNORE_NULL)
+
     def _to_http_param(self) -> str:
         # Transforms the enabled flags into a string that can be used as a query parameter
         enabled_flags: List[str] = []
@@ -69,6 +78,3 @@ class OptimizationFlags(enum.IntFlag):
             enabled_flags.append("ignore_null")
 
         return ",".join(enabled_flags)
-
-
-DEFAULT_OPTIMIZATION_FLAGS: OptimizationFlags = OptimizationFlags.IGNORE_NULL
