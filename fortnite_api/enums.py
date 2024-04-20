@@ -25,6 +25,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
+from typing import Type
+from typing_extensions import Self
 
 
 class KeyFormat(enum.Enum):
@@ -379,6 +381,16 @@ class TileSize(enum.Enum):
     NORMAL = 'Size_1_x_2'
     DOUBLE_WIDE = 'Size_2_x_2'
     TRIPLE_WIDE = 'Size_3_x_2'
+
+    @classmethod
+    def from_value(cls: Type[Self], value: str, /) -> Self:
+        # This method wraps an edge case that Epic games has for tile sizes. When no tile
+        # size is specified, the API wraps it with "Normal" instead of "Size_1_x_2". This method
+        # is a workaround for that.
+        if value.lower() == 'normal':
+            return cls['NORMAL']
+
+        return cls(value)
 
 
 class BannerIntensity(enum.Enum):

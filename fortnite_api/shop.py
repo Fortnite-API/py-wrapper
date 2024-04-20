@@ -229,7 +229,7 @@ class ShopEntry(Generic[HTTPClientT]):
         self.offer_id: str = data['offerId']
         self.display_asset_path: Optional[str] = data.get('displayAssetPath')
 
-        self.tile_size: TileSize = TileSize(data['tileSize'])
+        self.tile_size: TileSize = TileSize.from_value(data['tileSize'])
 
         self.new_display_asset_path: str = data['newDisplayAssetPath']
 
