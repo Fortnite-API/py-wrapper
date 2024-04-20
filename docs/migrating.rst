@@ -1,5 +1,6 @@
 Migrating
 =========
+
 The change from Version 2.x.x of the library (dubbed as "Version 2" from here on out) to Version 3 is a major change. But don't worry, we've got 
 you covered. This document will help you migrate your code from the old version of the FortniteAPI Python
 wrapper to the new version, and in doing so, help you understand the changes that have been made.
@@ -13,8 +14,8 @@ Before we dive into the specifics of the changes, it's important to understand t
 to the client. The client is your main interface between your code and the Fortnite API. It is the single, most important
 object in this library. In Version 2, the client was a class that held all different types of endpoints as attributes.
 
-.. code-block:: python3
-    :caption: Fetching cosmetics using Version 2. This does not work in Version 3.
+.. outdated-code-block:: python3
+    :since: v2.6.6
 
     from fortnite_api import FortniteAPI
 
@@ -213,8 +214,8 @@ Version 2 previously held all cosmetic endpoints under the ``client.cosmetics`` 
 In Version 3, this is not the case. Instead, all cosmetic endpoints, as well as all endpoints, are now methods of 
 the client itself. This means that to fetch cosmetics, you no longer need to do:
 
-.. code-block:: python3
-    :caption: Fetching cosmetics using Version 2. This does not work in Version 3.
+.. outdated-code-block:: python3
+    :since: v2.6.6
 
     cosmetics = await client.cosmetics.fetch()
     reveal_type(cosmetics)
@@ -292,8 +293,8 @@ In Version 2, all playlist endpoints were contained under the ``client.playlist`
 In Version 3, this is not the case. Rather, the playlist endpoints are now methods of the client itself.
 Previously, you could fetch the playlists using,
 
-.. code-block:: python3
-    :caption: Fetching playlists using Version 2. This does not work in Version 3.
+.. outdated-code-block:: python3
+    :since: v2.6.6
     
     import fortnite_api
 

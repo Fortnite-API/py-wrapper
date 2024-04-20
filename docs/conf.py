@@ -35,6 +35,7 @@ extensions = [
     'sphinxcontrib_trio',
     'sphinx_copybutton',
     'exception_hierarchy',
+    'outdated_code_blocks',
 ]
 
 autodoc_member_order = 'bysource'
@@ -195,7 +196,10 @@ html_theme_options: Dict[str, Any] = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = []
+html_static_path = ['_static']
+
+# Load the custom CSS files into sphinx.
+html_css_files = ['outdated_code_blocks.css']
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
