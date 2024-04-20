@@ -25,11 +25,12 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Literal, Optional, TypeVar, Union, overload
+import functools
+from typing import Any, Literal, Optional, TypeVar, Union, overload, Callable
 
 import aiohttp
 import requests
-from typing_extensions import ParamSpec, Self
+from typing_extensions import ParamSpec, Self, Concatenate, Coroutine
 
 from .aes import Aes
 from .all import CosmeticsAll
@@ -38,7 +39,7 @@ from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego
 from .creator_code import CreatorCode
 from .enums import *
 from .errors import BetaAccessNotEnabled, BetaUnknownException, HTTPException
-from .flags import DEFAULT_OPTIMIZATION_FLAGS, OptimizationFlags
+from .flags import OptimizationFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
 from .material import MaterialInstance
@@ -53,6 +54,8 @@ from .utils import _transform_dict_for_get_request, copy_doc, remove_prefix
 T = TypeVar('T')
 TC = TypeVar('TC')
 P = ParamSpec('P')
+FortniteAPI_T = TypeVar('FortniteAPI_T', bound='FortniteAPI')
+SyncFortniteAPI_T = TypeVar('SyncFortniteAPI_T', bound='SyncFortniteAPI')
 
 
 def _remove_coro_doc(obj: T) -> T:
@@ -68,6 +71,30 @@ def _remove_coro_doc(obj: T) -> T:
                 remove_prefix('|coro|')(value)
 
     return obj
+
+
+def async_beta_method(
+    func: Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]
+) -> Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]:
+    @functools.wraps(func)
+    async def wrapped_beta_method(self: FortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
+        if not self.beta:
+            raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
+
+        return await func(self, *args, **kwargs)
+
+    return wrapped_beta_method
+
+
+def sync_beta_method(func: Callable[Concatenate[SyncFortniteAPI_T, P], T]) -> Callable[Concatenate[SyncFortniteAPI_T, P], T]:
+    @functools.wraps(func)
+    def wrapped_beta_method(self: SyncFortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
+        if not self.beta:
+            raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
+
+        return func(self, *args, **kwargs)
+
+    return wrapped_beta_method
 
 
 class FortniteAPI:
@@ -116,7 +143,7 @@ class FortniteAPI:
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[aiohttp.ClientSession] = None,
         beta: bool = False,
-        optimization_flags: OptimizationFlags = DEFAULT_OPTIMIZATION_FLAGS,
+        optimization_flags: OptimizationFlags = OptimizationFlags.default(),
     ) -> None:
         self.http: HTTPClient = HTTPClient(session=session, token=api_key, optimization_flags=optimization_flags)
         self.default_language: Optional[GameLanguage] = default_language
@@ -840,6 +867,7 @@ class FortniteAPI:
 
     # BETA METHODS
 
+    @async_beta_method
     async def beta_fetch_material_instances(self) -> TransformerListProxy[MaterialInstance]:
         """|coro|
 
@@ -868,9 +896,6 @@ class FortniteAPI:
             An unknown error occurred while fetching the material instances. This could be due to
             an issue with the API or the client.
         """
-        if not self.beta:
-            raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
-
         try:
             data = await self.http.beta_get_material_instances()
         except HTTPException as exc:
@@ -1238,10 +1263,8 @@ class SyncFortniteAPI:
         return BrPlayerStats(data=data, http=self.http)
 
     @copy_doc(FortniteAPI.beta_fetch_material_instances)
+    @sync_beta_method
     def beta_fetch_material_instances(self) -> TransformerListProxy[MaterialInstance[SyncHTTPClient]]:
-        if not self.beta:
-            raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
-
         try:
             data = self.http.beta_get_material_instances()
         except HTTPException as exc:
