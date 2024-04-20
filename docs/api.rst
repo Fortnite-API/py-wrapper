@@ -236,7 +236,7 @@ Enumerations
 
 .. autoclass:: fortnite_api.TileSize
     :members:
-    :ignore-members: from_value
+    :exclude-members: from_value
 
 .. autoclass:: fortnite_api.CosmeticCompatibleMode
     :members:
