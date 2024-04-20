@@ -384,13 +384,20 @@ class TileSize(enum.Enum):
 
     @classmethod
     def from_value(cls: Type[Self], value: str, /) -> Self:
-        # This method wraps an edge case that Epic games has for tile sizes. When no tile
-        # size is specified, the API wraps it with "Normal" instead of "Size_1_x_2". This method
-        # is a workaround for that.
-        if value.lower() == 'normal':
-            return cls['NORMAL']
-
-        return cls(value)
+        # Epic games has a default for the tile size. If no conventional
+        # size has been specified, such as "Size_1_x_2", it will default
+        # to the name of the enum value, such as "Normal", or "TripleWide".
+        # We'll try and convert to a normal value, and if it fails then we'll
+        # parse the value as a string and try to create a new enum value.
+        try:
+            return cls(value)
+        except ValueError:
+            # This may be a fallback value. Parse its title case ("TripleWide" -> "TRIPLE_WIDE"). So replace
+            # each uppercase after the first one with an underscore and the uppercase letter.
+            value = ''.join(
+                [f'_{char}' if char.isupper() and index != 0 else char.upper() for index, char in enumerate(value)]
+            )
+            return cls[value]
 
 
 class BannerIntensity(enum.Enum):
