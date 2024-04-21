@@ -231,7 +231,11 @@ But rather, you do:
     >>> fortnite_api.CosmeticsAll
 
 This change has been made to ensure a consistent naming convention between all types of endpoints,
-and to make the library more intuitive to use. A complete mapping of the old methods and their new counterparts
+and to make the library more intuitive to use. 
+
+Fetching Cosmetics Method Changes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A complete mapping of the old methods and their new counterparts
 are as follows:
 
 .. list-table:: 
@@ -331,16 +335,207 @@ under the :class:`fortnite_api.SyncFortniteAPI` client instead.
 
 Shop
 ----
-.. Changes to the shop endpoint
+Shop Objects
+~~~~~~~~~~~~
+Although the names of shop objects have changed, a majority of the shop functionality remains the same. A mapping of the old 
+shop objects to the new shop objects is as follows:
+
+.. list-table::
+    :header-rows: 1
+
+    *   - Old Name
+        - New Name
+    *   - ``Shop``
+        - :class:`fortnite_api.Shop`
+    *   - ``ShopEntry``
+        - :class:`fortnite_api.ShopEntry`
+    *   - ``ShopBundle``
+        - :class:`fortnite_api.ShopEntryBundle`
+    *   - ``ShopBanner``
+        - :class:`fortnite_api.ShopEntryBanner`
+    *   - ``ShopLayout``
+        - :class:`fortnite_api.ShopEntryLayout`
+    *   - ``ShopNewDisplayAsset``
+        - :class:`fortnite_api.ShopEntryNewDisplayAsset`
+    *   - ``ShopMaterialInstance``
+        - Depreciated, moved to a more generic :class:`fortnite_api.MaterialInstance` class for the material instance endpoints. More on this later.
+    *   - ``ShopMaterialInstanceImages``
+        - Depreciated, moved to more generic :class:`fortnite_api.MaterialInstanceImages` class for material instances. More on this later.
+    *   - ``BrShop``
+        - Depreciated.
+    *   - ``BrShopSection``
+        - Depreciated.
+    *   - ``BrShopEntry``
+        - Depreciated.
+    *   - ``BrShopBundle``
+        - Depreciated.
+    *   - ``BrShopBanner``
+        - Depreciated.
+    *   - ``BrShopSectionNew``
+        - Depreciated.
+    *   - ``BrShopLayout``
+        - Depreciated.
+    *   - ``BrShopNewDisplayAsset``
+        - Depreciated.
+    *   - ``BrShopMaterialInstance``
+        - Depreciated.
+    
+As you can see, the `BrShop` objects have been depreciated in Version 3. This is because that endpoint has been depreciated. The current implementation shows the shop as a whole, rather than specifically for Battle Royale.
+
+Fetching Shop Data
+~~~~~~~~~~~~~~~~~~
+In Version 3, the shop data is longer fetched using the ``client.shop`` namespace. Previously, you could fetch the shop data using,
+
+.. outdated-code-block:: python3
+    :since: v2.6.6
+
+    import fortnite_api
+
+    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
+    shop = client.shop.fetch_all()
+
+This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client. 
+
+Shop Method Changes
+^^^^^^^^^^^^^^^^^^^
+A complete mapping of the old methods and their new counterparts are as follows:
+
+.. list-table::
+    :header-rows: 1
+
+    *   - Old Method
+        - New Method
+    *   - ``client.shop.fetch_all()``
+        - :meth:`fortnite_api.FortniteAPI.fetch_shop`
+    *   - ``client.shop.fetch_br()``
+        - Depreciated.
+    *   - ``client.shop.fetch()``
+        - Depreciated. ``client.shop.fetch()`` was an alias to ``fetch_br``, which has been depreciated.
+
+Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
+under the :class:`fortnite_api.SyncFortniteAPI` client instead.
 
 
-AES
+Aes
 ---
-.. Changes to the AES endpoint
+Aes Objects
+~~~~~~~~~~~
+The AES objects remain almost identical to as they were in Version 2. A mapping of the old AES objects to the new AES objects is as follows:
+
+.. list-table::
+    :header-rows: 1
+
+    *   - Old Name
+        - New Name
+    *   - ``AES``
+        - :class:`fortnite_api.Aes`
+    *   - ``DynamicKey``
+        - :class:`fortnite_api.DynamicKey`
+
+Additionally, a new object relating to :class:`~fortnite_api.Aes` information has been added. This is,
+
+- :class:`fortnite_api.Version`: Represents a version of a build in Fortnite. Holds the major and minor version of the build.
+
+Fetching Aes Data
+~~~~~~~~~~~~~~~~~
+In Version 3, the AES data is no longer fetched using the ``client.aes`` namespace. Previously, you could fetch the AES data using,
+
+.. outdated-code-block:: python3
+    :since: v2.6.6
+
+    import fortnite_api
+
+    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
+    client.aes.fetch()
+
+This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client.
+
+AES Method Changes
+^^^^^^^^^^^^^^^^^^
+A complete mapping of the old methods and their new counterparts are as follows:
+
+.. list-table::
+    :header-rows: 1
+
+    *   - Old Method
+        - New Method
+    *   - ``client.aes.fetch()``
+        - :meth:`fortnite_api.FortniteAPI.fetch_aes`
+
+Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
+under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+
+So, fetching the AES data in Version 3 can be done as follows:
+
+.. code-block:: python3
+    
+    client = fortnite_api.SyncFortniteAPI()
+    aes = client.fetch_aes()
+    reveal_type(aes)
+    >>> fortnite_api.Aes
 
 News 
 ----
-.. Changes to the news endpoint
+News objects 
+~~~~~~~~~~~~
+News objects remain the same in Version 3, with no significant changes made to them. A mapping of the old news objects to the new news objects is as follows:
+
+.. list-table::
+    :header-rows: 1
+    *   - Old Name
+        - New Name
+    *   - ``News``
+        - :class:`fortnite_api.News`
+    *   - ``GameModeNews``
+        - :class:`fortnite_api.GameModeNews`
+    *   - ``NewsMotd``
+        - :class:`fortnite_api.NewsMotd`
+    *   - ``NewsMessage``
+        - :class:`fortnite_api.NewsMessage`
+
+Fetching News Data
+~~~~~~~~~~~~~~~~~~
+In Version 2, the news data was fetched using the ``client.news`` namespace. Previously, you could fetch the news data using,
+
+.. outdated-code-block:: python3
+    :since: v2.6.6
+
+    import fortnite_api
+
+    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
+    news = client.news.fetch()
+    reveal_type(news)
+    >>> fortnite_api.News
+
+However, this approach is no longer valid in Version 3. Instead, you should use direct methods on the client.
+
+News Method Changes
+^^^^^^^^^^^^^^^^^^
+A complete mapping of the old methods and their new counterparts are as follows:
+
+.. list-table::
+    :header-rows: 1
+
+    *   - Old Method
+        - New Method
+    *   - ``client.news.fetch()``
+        - :meth:`fortnite_api.FortniteAPI.fetch_news`
+    *   - ``client.news.fetch_by_type()``
+        - Fetching by type has been depreciated. Rather, use these two methods: :meth:`fortnite_api.FortniteAPI.fetch_news_br`, and :meth:`fortnite_api.FortniteAPI.fetch_news_stw`
+
+
+Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
+under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+
+Now, fetching the news data in Version 3 can be done as follows:
+
+.. code-block:: python3
+
+    async with fortnite_api.FortniteAPI(api_key='') as client:
+        news = await client.fetch_news()
+        reveal_type(news)
+        >>> fortnite_api.News
+
 
 Creator Code 
 ------------
