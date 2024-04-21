@@ -41,6 +41,9 @@ extensions = [
 autodoc_member_order = 'bysource'
 autodoc_typehints = 'none'
 
+# Warn about all references to unknown targets
+nitpicky = True
+
 extlinks = {
     'issue': ('https://github.com//Fortite-API/py-wrapper/issues%s', 'GH-'),
 }
