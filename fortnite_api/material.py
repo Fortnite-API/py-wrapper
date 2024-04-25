@@ -41,7 +41,9 @@ class MaterialInstanceImages(Generic[HTTPClientT]):
     Attributes
     ----------
     offer_image: :class:`fortnite_api.Asset`
-        The offer image of the Material instance. This is the image that is shown in the battle royale shop.
+        The offer image of the Material instance. This is the image that is shown in the item shop.
+    texture: Optional[:class:`fortnite_api.Asset`]
+        The texture of the Material instance. This is the texture of the material instance.
     background: :class:`fortnite_api.Asset`
         The background of the Material instance. This is the background gradient of the material instance.
     """
@@ -50,6 +52,9 @@ class MaterialInstanceImages(Generic[HTTPClientT]):
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.offer_image: Asset[HTTPClientT] = Asset(url=data['OfferImage'], http=http)
+
+        _texture = data.get('Texture')
+        self.texture: Optional[Asset[HTTPClientT]] = _texture and Asset(url=_texture, http=http)
 
         _background = data.get('Background')
         self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
