@@ -48,7 +48,7 @@ class MaterialInstanceImages(Generic[HTTPClientT]):
         The background of the Material instance. This is the background gradient of the material instance.
     """
 
-    __slots__: Tuple[str, ...] = ('offer_image', 'background')
+    __slots__: Tuple[str, ...] = ('offer_image', 'background', 'texture')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.offer_image: Asset[HTTPClientT] = Asset(url=data['OfferImage'], http=http)
