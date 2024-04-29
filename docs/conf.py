@@ -101,7 +101,7 @@ branch = 'master' if version.endswith('a') else 'v' + version
 # Usually you set "language" from the command line for these cases.
 language = "en"
 
-locale_dirs = ['locale/']
+# locale_dirs = ['locale/']
 gettext_compact = False
 
 # There are two options for replacing |today|: either, you set today to some
