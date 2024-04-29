@@ -361,46 +361,6 @@ class CosmeticCompatibleMode(enum.Enum):
     FESTIVAL = 'ECosmeticCompatibleMode::Sparks'
 
 
-# Values are: Small, Normal, DoubleWide and TripleWide
-# There was also a case, where Epic got a type in the tile size and it was spelled "nomal" instead of normal. In-game it was shown properly as Normal width, so this might be the fallback.
-class TileSize(enum.Enum):
-    """Represents the given size of a tile in the item shop.
-
-    Attributes
-    ----------
-    SMALL
-        A small sized tile.
-    NORMAL
-        A normal sized title.
-    DOUBLE_WIDE
-        A double wide sized tile.
-    TRIPLE_WIDE
-        A triple wide sized tile.
-    """
-
-    SMALL = 'Size_1_x_1'
-    NORMAL = 'Size_1_x_2'
-    DOUBLE_WIDE = 'Size_2_x_2'
-    TRIPLE_WIDE = 'Size_3_x_2'
-
-    @classmethod
-    def from_value(cls: Type[Self], value: str, /) -> Self:
-        # Epic games has a default for the tile size. If no conventional
-        # size has been specified, such as "Size_1_x_2", it will default
-        # to the name of the enum value, such as "Normal", or "TripleWide".
-        # We'll try and convert to a normal value, and if it fails then we'll
-        # parse the value as a string and try to create a new enum value.
-        try:
-            return cls(value)
-        except ValueError:
-            # This may be a fallback value. Parse its title case ("TripleWide" -> "TRIPLE_WIDE"). So replace
-            # each uppercase after the first one with an underscore and the uppercase letter.
-            value = ''.join(
-                [f'_{char}' if char.isupper() and index != 0 else char.upper() for index, char in enumerate(value)]
-            )
-            return cls[value]
-
-
 class BannerIntensity(enum.Enum):
     """Denotes the intensity of a :class:`fortnite_api.ShopEntryBanner`.
 

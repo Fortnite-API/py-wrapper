@@ -422,13 +422,12 @@ async def test_async_fetch_shop(optimization_flags: fn_api.OptimizationFlags):
         assert isinstance(layout, fn_api.ShopEntryLayout)
         assert layout.id
         assert layout.name
-        assert layout.index
+        assert isinstance(layout.index, int)
         assert layout.show_ineligible_offers
 
         assert entry.dev_name
         assert entry.offer_id
         assert entry.tile_size
-        assert entry.new_display_asset_path
 
         new_display_asset = entry.new_display_asset
         if new_display_asset:

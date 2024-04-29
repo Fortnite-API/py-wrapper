@@ -124,6 +124,9 @@ Objects
 .. autoclass:: fortnite_api.Shop
     :members:
 
+.. autoclass:: fortnite_api.TileSize
+    :members:
+
 .. autoclass:: fortnite_api.BrPlayerStats
     :members:
 
@@ -240,10 +243,6 @@ Enumerations
 
 .. autoclass:: fortnite_api.CreatorCodeStatus
     :members:
-
-.. autoclass:: fortnite_api.TileSize
-    :members:
-    :exclude-members: from_value
 
 .. autoclass:: fortnite_api.CosmeticCompatibleMode
     :members:

@@ -24,13 +24,15 @@ SOFTWARE.
 
 from __future__ import annotations
 
+import re
 import datetime
-from typing import Any, Dict, Generic, List, Optional, Tuple
+from typing import Any, Dict, Generic, List, Optional, Tuple, Type
+from typing_extensions import Self
 
 from .abc import Hashable
 from .asset import Asset
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
-from .enums import BannerIntensity, TileSize
+from .enums import BannerIntensity
 from .http import HTTPClientT
 from .material import MaterialInstance
 from .utils import get_with_fallback, parse_time
@@ -42,7 +44,83 @@ __all__: Tuple[str, ...] = (
     'ShopEntryNewDisplayAsset',
     'ShopEntry',
     'Shop',
+    'TileSize',
 )
+
+# Matches a tile size: size_<int>_x_<int>
+_TILE_SIZE_REGEX = re.compile(r'size_(?P<width>\d+)_x_(?P<height>\d+)', re.IGNORECASE)
+
+
+class TileSize:
+    """Represents the size of a tile in the shop.
+
+    .. container:: operations
+
+        .. describe:: x == y
+
+            Checks if two tile sizes are equal.
+
+        .. describe:: x != y
+
+            Checks if two tile sizes are not equal.
+
+    Attributes
+    ----------
+    width: :class:`int`
+        The width of the tile.
+    height: :class:`int`
+        The height of the tile.
+    internal: :class:`str`
+        The internal representation of the tile size. This can be the default Epic API value
+        in the format ``Size_<width>_x_<height>``, or a default Epic games fallback value,
+        which is one of the following: ``mini``, ``small``, ``normal``, ``doublewide``, ``triplewide``.
+    """
+
+    __slots__: Tuple[str, ...] = ('width', 'height', 'internal')
+
+    def __init__(self, *, width: int, height: int, internal: str) -> None:
+        self.width: int = width
+        self.height: int = height
+        self.internal: str = internal
+
+    def __repr__(self) -> str:
+        return f'<TileSize width={self.width} height={self.height}>'
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, TileSize):
+            return False
+
+        return value.width == self.width and value.height == self.height
+
+    @classmethod
+    def _from_fallback(cls: Type[Self], value: str, /) -> Self:
+        value = value.lower()
+
+        if value == 'mini':
+            return cls(width=1, height=1, internal=value)
+        elif value == 'small':
+            return cls(width=1, height=1, internal=value)
+        elif value == 'normal':
+            return cls(width=1, height=2, internal=value)
+        elif value == 'doublewide':
+            return cls(width=2, height=2, internal=value)
+        elif value == 'triplewide':
+            return cls(width=3, height=2, internal=value)
+        else:
+            # this is some sort of unknown default fallback from the API, and should
+            # never realistically happen. We'll default to a normal tile size.
+            return cls(width=1, height=2, internal=value)
+
+    @classmethod
+    def from_value(cls: Type[Self], value: str, /) -> Self:
+        # Try and match the regex
+        match = _TILE_SIZE_REGEX.match(value)
+        if not match:
+            # This did not match conventional tile sizes, so we'll fallback to that
+            # the Epic API uses.
+            return cls._from_fallback(value)
+
+        return cls(width=int(match.group('width')), height=int(match.group('height')), internal=value)
 
 
 class ShopEntryBundle(Generic[HTTPClientT]):
@@ -171,7 +249,7 @@ class ShopEntry(Generic[HTTPClientT]):
         The display asset path of this entry.
     tile_size: :class:`fortnite_api.TileSize`
         The tile size of this entry.
-    new_display_asset_path: :class:`str`
+    new_display_asset_path: Optional[:class:`str`]
         The new display asset path of this entry.
     new_display_asset: :class:`fortnite_api.ShopEntryNewDisplayAsset`
         The new display asset of this entry.
@@ -231,7 +309,7 @@ class ShopEntry(Generic[HTTPClientT]):
 
         self.tile_size: TileSize = TileSize.from_value(data['tileSize'])
 
-        self.new_display_asset_path: str = data['newDisplayAssetPath']
+        self.new_display_asset_path: Optional[str] = data.get('newDisplayAssetPath')
 
         _new_display_asset = data.get('newDisplayAsset')
         self.new_display_asset: Optional[ShopEntryNewDisplayAsset[HTTPClientT]] = (
