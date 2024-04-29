@@ -24,9 +24,10 @@ SOFTWARE.
 
 from __future__ import annotations
 
-import re
 import datetime
+import re
 from typing import Any, Dict, Generic, List, Optional, Tuple, Type
+
 from typing_extensions import Self
 
 from .abc import Hashable
