@@ -482,6 +482,7 @@ News objects remain the same in Version 3, with no significant changes made to t
 
 .. list-table::
     :header-rows: 1
+    
     *   - Old Name
         - New Name
     *   - ``News``
@@ -510,7 +511,7 @@ In Version 2, the news data was fetched using the ``client.news`` namespace. Pre
 However, this approach is no longer valid in Version 3. Instead, you should use direct methods on the client.
 
 News Method Changes
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 A complete mapping of the old methods and their new counterparts are as follows:
 
 .. list-table::
