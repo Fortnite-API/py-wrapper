@@ -56,7 +56,6 @@ class Banner(Hashable, Generic[HTTPClientT]):
     dev_name: :class:`str`
         The developer name of the banner, this is used internally by the
         Epic Games team.
-        'icon',
     images: :class:`fortnite_api.Images`
         The images of the banner.
     """
