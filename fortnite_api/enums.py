@@ -341,7 +341,7 @@ class CreatorCodeStatus(enum.Enum):
 
 
 class CosmeticCompatibleMode(enum.Enum):
-    """A class that represents the compatibility of a cosmetic material instance with other modes.
+    """A class that represents the compatibility of a cosmetic :class:`fortnite_api.MaterialInstance` with other modes.
 
     Attributes
     ----------
