@@ -256,6 +256,8 @@ Helper Utilities
 Exceptions
 ----------
 
+.. _api-exception-hierarchy:
+
 Exception Hierarchy
 ~~~~~~~~~~~~~~~~~~~
 

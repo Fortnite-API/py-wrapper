@@ -14,3 +14,4 @@ view the attributes and methods of Fortnite API objects.
 
    api
    migrating
+   changelog
