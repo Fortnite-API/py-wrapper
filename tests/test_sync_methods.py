@@ -31,10 +31,7 @@ import pytest
 import fortnite_api as fn_api
 
 from .conftest import TEST_ACCOUNT_ID, TEST_ACCOUNT_NAME, TEST_COSMETIC_ID, TEST_CREATOR_CODE, TEST_DEFAULT_PLAYLIST
-from .test_async_methods import (
-    _test_game_mode_news,
-    _test_playlist,
-)
+from .test_async_methods import _test_game_mode_news, _test_playlist
 
 
 def test_sync_aes(api_key: str, optimization_flags: fn_api.OptimizationFlags):

@@ -25,8 +25,9 @@ SOFTWARE.
 from __future__ import annotations
 
 import os
-import pytest
 from typing import Final
+
+import pytest
 
 from fortnite_api import OptimizationFlags
 
