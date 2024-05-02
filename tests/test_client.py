@@ -67,3 +67,35 @@ def test_client_method_equivalence():
             if doc and inspect.iscoroutinefunction(method):
                 # This is some documented coroutine function, ensure it's on the sync client
                 assert hasattr(fn_api.SyncFortniteAPI, method.__name__)
+
+
+@pytest.mark.asyncio
+async def test_async_client_without_content_manager():
+    session = aiohttp.ClientSession()
+    client = fn_api.FortniteAPI(session=session)
+    assert client
+    assert client.http.session is not None
+
+    # Ensure we can make a request
+    await client.fetch_aes()
+
+    await session.close()
+    assert client.http.session.closed
+
+    # Ensure we can't make a request after closing the session
+    with pytest.raises(RuntimeError):
+        await client.fetch_aes()
+
+
+def test_sync_client_without_content_manager():
+    session = requests.Session()
+    client = fn_api.SyncFortniteAPI(session=session)
+    assert client
+    assert client.http.session is not None
+
+    # Ensure we can make a request
+    client.fetch_aes()
+
+    # Requests Session close doesn't actually close the session, so we'll just close it and
+    # assume it's closed.
+    session.close()

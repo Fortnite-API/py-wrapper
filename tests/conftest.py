@@ -24,9 +24,26 @@ SOFTWARE.
 
 from __future__ import annotations
 
+import os
 import pytest
+from typing import Final
 
 from fortnite_api import OptimizationFlags
+
+# Constants for general testing
+TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"
+TEST_ACCOUNT_NAME: Final[str] = "Ninja"
+TEST_CREATOR_CODE: Final[str] = "ninja"
+
+# Constant for testing cosmetics
+TEST_COSMETIC_ID: Final[str] = "Backpack_BrakePedal"
+
+# Constants for testing playlist fetching
+TEST_DEFAULT_PLAYLIST: Final[str] = "Playlist_NoBuildBR_Duo"
+
+# Constants for fetching stats
+TEST_STAT_ACCOUNT_NAME = "Luc1412"
+TEST_STAT_ACCOUNT_ID = '369644c6224d4845aa2b00e63b60241d'
 
 
 @pytest.fixture(
@@ -37,3 +54,20 @@ from fortnite_api import OptimizationFlags
 )
 def optimization_flags(request: pytest.FixtureRequest):
     yield
+
+
+@pytest.fixture(scope='session')
+def api_key():
+    # This fixture is called once per test session, so we can check if we are in a CI environment
+    # or a local development environment. If we are in a CI environment, we can get the API key from
+    # the environment variables, otherwise we can load it from a .env file.
+
+    gh_actions = os.environ.get('GITHUB_ACTIONS')
+    if gh_actions and gh_actions == 'true':
+        return os.environ['TEST_API_KEY']
+
+    # This is a local development environment, try and load a .env file and get the API key
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    return os.environ['TEST_API_KEY']

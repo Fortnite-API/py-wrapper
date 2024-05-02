@@ -25,29 +25,13 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-import os
 from typing import Any
 
 import pytest
 
 import fortnite_api
 
-TEST_STAT_ACCOUNT_NAME = "Luc1412"
-TEST_STAT_ACCOUNT_ID = '369644c6224d4845aa2b00e63b60241d'
-
-
-# This is a module-scoped fixture, meaning it will only be called once for the entire module
-@pytest.fixture(scope='module')
-def api_key():
-    gh_actions = os.environ.get('GITHUB_ACTIONS')
-    if gh_actions and gh_actions == 'true':
-        return os.environ['TEST_API_KEY']
-
-    # This is a local development environment, try and load a .env file and get the API key
-    from dotenv import load_dotenv
-
-    load_dotenv()
-    return os.environ['TEST_API_KEY']
+from .conftest import TEST_STAT_ACCOUNT_ID, TEST_STAT_ACCOUNT_NAME
 
 
 def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
@@ -90,17 +74,34 @@ def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_br_stats(api_key: str):
-    async with fortnite_api.FortniteAPI(api_key=api_key) as client:
-        stats = await client.fetch_br_stats(TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
+async def test_async_fetch_br_stats_by_name(api_key: str, optimization_flags: fortnite_api.OptimizationFlags):
+    async with fortnite_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
+        stats = await client.fetch_br_stats(name=TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
     _test_stats(stats)
 
 
-def test_sync_fetch_br_stats(api_key: str):
-    with fortnite_api.SyncFortniteAPI(api_key=api_key) as client:
-        stats = client.fetch_br_stats(TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
+@pytest.mark.asyncio
+async def test_async_fetch_br_stats_by_account_id(api_key: str, optimization_flags: fortnite_api.OptimizationFlags):
+    async with fortnite_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
+        stats = await client.fetch_br_stats(account_id=TEST_STAT_ACCOUNT_ID, image=fortnite_api.StatsImageType.ALL)
+
+    assert stats is not None
+    _test_stats(stats)
+
+
+def test_sync_fetch_br_stats_by_name(api_key: str, optimization_flags: fortnite_api.OptimizationFlags):
+    with fortnite_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
+        stats = client.fetch_br_stats(name=TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
+
+    assert stats is not None
+    _test_stats(stats)
+
+
+def test_sync_fetch_br_stats_by_account_id(api_key: str, optimization_flags: fortnite_api.OptimizationFlags):
+    with fortnite_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
+        stats = client.fetch_br_stats(account_id=TEST_STAT_ACCOUNT_ID, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
     _test_stats(stats)

@@ -25,23 +25,18 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Final
+from typing import Any
 
 import pytest
 
 import fortnite_api as fn_api
 
-TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"
-TEST_ACCOUNT_NAME: Final[str] = "Ninja"
-TEST_CREATOR_CODE: Final[str] = "ninja"
-TEST_COSMETIC_ID: Final[str] = "Backpack_BrakePedal"
-
-TEST_DEFAULT_PLAYLIST: Final[str] = "Playlist_NoBuildBR_Duo"
+from .conftest import TEST_ACCOUNT_ID, TEST_ACCOUNT_NAME, TEST_COSMETIC_ID, TEST_CREATOR_CODE, TEST_DEFAULT_PLAYLIST
 
 
 @pytest.mark.asyncio
-async def test_async_aes(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_aes(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         aes = await client.fetch_aes()
 
         # Ensure that the AES can be fetched with BASE64
@@ -66,8 +61,8 @@ async def test_async_aes(optimization_flags: fn_api.OptimizationFlags):
 
 
 @pytest.mark.asyncio
-async def test_async_banners(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_banners(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         banners = await client.fetch_banners()
 
     for banner in banners:
@@ -83,8 +78,8 @@ async def test_async_banners(optimization_flags: fn_api.OptimizationFlags):
 
 
 @pytest.mark.asyncio
-async def test_async_banner_colors(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_banner_colors(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         banner_colors = await client.fetch_banner_colors()
 
     for color in banner_colors:
@@ -104,8 +99,8 @@ async def test_async_banner_colors(optimization_flags: fn_api.OptimizationFlags)
 
 
 @pytest.mark.asyncio
-async def test_async_creator_code(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_creator_code(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         creator_code = await client.fetch_creator_code(name=TEST_CREATOR_CODE)
 
     assert isinstance(creator_code, fn_api.CreatorCode)
@@ -120,8 +115,8 @@ async def test_async_creator_code(optimization_flags: fn_api.OptimizationFlags):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlist(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_playlist(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         playlists = await client.fetch_playlists()
 
     assert len(playlists), "Playlists should not be empty"
@@ -134,8 +129,8 @@ async def test_async_fetch_playlist(optimization_flags: fn_api.OptimizationFlags
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_br(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_br(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_br = await client.fetch_cosmetics_br()
 
     for cosmetic in cosmetics_br:
@@ -143,8 +138,8 @@ async def test_async_fetch_cosmetics_br(optimization_flags: fn_api.OptimizationF
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_cars(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_cars(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_cars = await client.fetch_cosmetics_cars()
 
     for cosmetic in cosmetics_cars:
@@ -152,8 +147,8 @@ async def test_async_fetch_cosmetics_cars(optimization_flags: fn_api.Optimizatio
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_instruments(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_instruments(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_instruments = await client.fetch_cosmetics_instruments()
 
     for cosmetic in cosmetics_instruments:
@@ -161,8 +156,8 @@ async def test_async_fetch_cosmetics_instruments(optimization_flags: fn_api.Opti
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_lego_kits(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_lego_kits(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         lego_kits = await client.fetch_cosmetics_lego_kits()
 
     for kit in lego_kits:
@@ -170,8 +165,8 @@ async def test_async_fetch_cosmetics_lego_kits(optimization_flags: fn_api.Optimi
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_lego(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_lego(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         lego = await client.fetch_cosmetics_lego()
 
     for lego in lego:
@@ -179,8 +174,8 @@ async def test_async_fetch_cosmetics_lego(optimization_flags: fn_api.Optimizatio
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_tracks(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_tracks(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_tracks = await client.fetch_cosmetics_tracks()
 
     for cosmetic in cosmetics_tracks:
@@ -188,8 +183,8 @@ async def test_async_fetch_cosmetics_tracks(optimization_flags: fn_api.Optimizat
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetic_br(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetic_br(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetic_br = await client.fetch_cosmetic_br(TEST_COSMETIC_ID)
 
     assert isinstance(cosmetic_br, fn_api.CosmeticBr)
@@ -197,8 +192,8 @@ async def test_async_fetch_cosmetic_br(optimization_flags: fn_api.OptimizationFl
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_br_new(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_br_new(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         new_cosmetics_br = await client.fetch_cosmetics_br_new()
 
     assert isinstance(new_cosmetics_br, fn_api.NewBrCosmetics)
@@ -209,8 +204,8 @@ async def test_async_fetch_cosmetics_br_new(optimization_flags: fn_api.Optimizat
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_new(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_new(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         new_cosmetics = await client.fetch_cosmetics_new()
 
     assert isinstance(new_cosmetics, fn_api.NewCosmetics)
@@ -230,8 +225,8 @@ async def test_async_fetch_cosmetics_new(optimization_flags: fn_api.Optimization
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_all(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_cosmetics_all(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_all = await client.fetch_cosmetics_all()
 
     assert isinstance(cosmetics_all, fn_api.CosmeticsAll)
@@ -251,8 +246,8 @@ async def test_async_fetch_cosmetics_all(optimization_flags: fn_api.Optimization
 
 
 @pytest.mark.asyncio
-async def test_async_map(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_map(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         map = await client.fetch_map()
 
     assert isinstance(map, fn_api.Map)
@@ -275,8 +270,8 @@ async def test_async_map(optimization_flags: fn_api.OptimizationFlags):
 
 
 @pytest.mark.asyncio
-async def test_fetch_news(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_fetch_news(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         news = await client.fetch_news()
 
     assert isinstance(news, fn_api.News)
@@ -314,8 +309,8 @@ def _test_game_mode_news(news: fn_api.GameModeNews[Any]):
 
 
 @pytest.mark.asyncio
-async def test_fetch_news_methods(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_fetch_news_methods(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         news_br = await client.fetch_news_br()
         news_stw = await client.fetch_news_stw()
 
@@ -348,8 +343,8 @@ def _test_playlist(playlist: fn_api.Playlist[Any]):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlists(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_playlists(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         playlists = await client.fetch_playlists()
 
     for playlist in playlists:
@@ -357,8 +352,8 @@ async def test_async_fetch_playlists(optimization_flags: fn_api.OptimizationFlag
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlist_by_id(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_playlist_by_id(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         playlist = await client.fetch_playlist(TEST_DEFAULT_PLAYLIST)
 
     assert playlist.id == TEST_DEFAULT_PLAYLIST
@@ -366,7 +361,7 @@ async def test_async_fetch_playlist_by_id(optimization_flags: fn_api.Optimizatio
 
 
 @pytest.mark.asyncio
-async def test_async_beta_fetch_material_instances(optimization_flags: fn_api.OptimizationFlags):
+async def test_async_beta_fetch_material_instances(api_key: str, optimization_flags: fn_api.OptimizationFlags):
 
     # Ensure you cannot call this without beta=True
     with pytest.raises(fn_api.BetaAccessNotEnabled):
@@ -386,8 +381,8 @@ async def test_async_beta_fetch_material_instances(optimization_flags: fn_api.Op
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_shop(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_fetch_shop(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         shop = await client.fetch_shop()
 
     assert isinstance(shop, fn_api.Shop)
@@ -442,8 +437,8 @@ async def test_async_fetch_shop(optimization_flags: fn_api.OptimizationFlags):
 
 
 @pytest.mark.asyncio
-async def test_async_search_cosmetics(optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.FortniteAPI(optimization_flags=optimization_flags) as client:
+async def test_async_search_cosmetics(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    async with fn_api.FortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_multiple_set = await client.search_br_cosmetics(multiple=True, has_set=True)
 
         cosmetic_single_set = await client.search_br_cosmetics(multiple=False, has_set=True)

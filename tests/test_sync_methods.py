@@ -30,19 +30,15 @@ import pytest
 
 import fortnite_api as fn_api
 
+from .conftest import TEST_ACCOUNT_ID, TEST_ACCOUNT_NAME, TEST_COSMETIC_ID, TEST_CREATOR_CODE, TEST_DEFAULT_PLAYLIST
 from .test_async_methods import (
-    TEST_ACCOUNT_ID,
-    TEST_ACCOUNT_NAME,
-    TEST_COSMETIC_ID,
-    TEST_CREATOR_CODE,
-    TEST_DEFAULT_PLAYLIST,
     _test_game_mode_news,
     _test_playlist,
 )
 
 
-def test_sync_aes(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_aes(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         aes = client.fetch_aes()
 
         # Ensure that the AES can be fetched with BASE64
@@ -66,8 +62,8 @@ def test_sync_aes(optimization_flags: fn_api.OptimizationFlags):
     assert aes_b64 != aes
 
 
-def test_sync_banners(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_banners(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         banners = client.fetch_banners()
 
     for banner in banners:
@@ -82,8 +78,8 @@ def test_sync_banners(optimization_flags: fn_api.OptimizationFlags):
         # TODO: Banner images tests (not added because of pending Images class implementation)
 
 
-def test_sync_banner_colors(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_banner_colors(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         banner_colors = client.fetch_banner_colors()
 
     for color in banner_colors:
@@ -102,8 +98,8 @@ def test_sync_banner_colors(optimization_flags: fn_api.OptimizationFlags):
             assert first != banner_colors[1]
 
 
-def test_sync_creator_code(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_creator_code(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         creator_code = client.fetch_creator_code(name=TEST_CREATOR_CODE)
 
     assert isinstance(creator_code, fn_api.CreatorCode)
@@ -117,8 +113,8 @@ def test_sync_creator_code(optimization_flags: fn_api.OptimizationFlags):
     assert creator_code.verified is False
 
 
-def test_sync_fetch_playlist(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_playlist(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         playlists = client.fetch_playlists()
 
     assert len(playlists), "Playlists should not be empty"
@@ -130,56 +126,56 @@ def test_sync_fetch_playlist(optimization_flags: fn_api.OptimizationFlags):
         assert first != playlists[1]
 
 
-def test_sync_fetch_cosmetics_cars(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetics_cars(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_cars = client.fetch_cosmetics_cars()
 
     for cosmetic in cosmetics_cars:
         assert isinstance(cosmetic, fn_api.CosmeticCar)
 
 
-def test_sync_fetch_cosmetics_instruments(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetics_instruments(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_instruments = client.fetch_cosmetics_instruments()
 
     for cosmetic in cosmetics_instruments:
         assert isinstance(cosmetic, fn_api.CosmeticInstrument)
 
 
-def test_sync_fetch_cosmetics_lego_kits(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetics_lego_kits(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         lego_kits = client.fetch_cosmetics_lego_kits()
 
     for kit in lego_kits:
         assert isinstance(kit, fn_api.CosmeticLegoKit)
 
 
-def test_sync_fetch_cosmetics_tracks(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetics_tracks(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_tracks = client.fetch_cosmetics_tracks()
 
     for cosmetic in cosmetics_tracks:
         assert isinstance(cosmetic, fn_api.CosmeticTrack)
 
 
-def test_sync_fetch_cosmetics_br(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetics_br(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_br = client.fetch_cosmetics_br()
 
     for cosmetic in cosmetics_br:
         assert isinstance(cosmetic, fn_api.CosmeticBr)
 
 
-def test_sync_fetch_cosmetic_br(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetic_br(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetic_br = client.fetch_cosmetic_br(TEST_COSMETIC_ID)
 
     assert isinstance(cosmetic_br, fn_api.CosmeticBr)
     assert cosmetic_br.id == TEST_COSMETIC_ID
 
 
-def test_sync_fetch_cosmetics_br_new(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetics_br_new(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         new_cosmetics_br = client.fetch_cosmetics_br_new()
 
     assert isinstance(new_cosmetics_br, fn_api.NewBrCosmetics)
@@ -189,8 +185,8 @@ def test_sync_fetch_cosmetics_br_new(optimization_flags: fn_api.OptimizationFlag
     assert new_cosmetics_br.previous_build
 
 
-def test_sync_fetch_cosmetics_new(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetics_new(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         new_cosmetics = client.fetch_cosmetics_new()
 
     assert isinstance(new_cosmetics, fn_api.NewCosmetics)
@@ -209,8 +205,8 @@ def test_sync_fetch_cosmetics_new(optimization_flags: fn_api.OptimizationFlags):
     assert isinstance(new_cosmetics.lego_kits, fn_api.NewCosmetic)
 
 
-def test_sync_fetch_cosmetics_all(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_cosmetics_all(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_all = client.fetch_cosmetics_all()
 
     assert isinstance(cosmetics_all, fn_api.CosmeticsAll)
@@ -229,8 +225,8 @@ def test_sync_fetch_cosmetics_all(optimization_flags: fn_api.OptimizationFlags):
         assert isinstance(cosmetic, fn_api.Cosmetic)
 
 
-def test_sync_map(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_map(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         map = client.fetch_map()
 
     assert isinstance(map, fn_api.Map)
@@ -252,16 +248,16 @@ def test_sync_map(optimization_flags: fn_api.OptimizationFlags):
         assert isinstance(poi.location, fn_api.POILocation)
 
 
-def test_fetch_news(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_fetch_news(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         news = client.fetch_news()
 
     assert isinstance(news, fn_api.News)
     assert news.raw_data
 
 
-def test_fetch_news_methods(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_fetch_news_methods(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         news_br = client.fetch_news_br()
         news_stw = client.fetch_news_stw()
 
@@ -272,23 +268,23 @@ def test_fetch_news_methods(optimization_flags: fn_api.OptimizationFlags):
     _test_game_mode_news(news_stw)
 
 
-def test_sync_fetch_playlists(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_playlists(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         playlists = client.fetch_playlists()
 
     for playlist in playlists:
         _test_playlist(playlist)
 
 
-def test_sync_fetch_playlist_by_id(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_playlist_by_id(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         playlist = client.fetch_playlist(TEST_DEFAULT_PLAYLIST)
 
     assert playlist.id == TEST_DEFAULT_PLAYLIST
     _test_playlist(playlist)
 
 
-def test_sync_beta_fetch_material_instances(optimization_flags: fn_api.OptimizationFlags):
+def test_sync_beta_fetch_material_instances(api_key: str, optimization_flags: fn_api.OptimizationFlags):
     # Ensure you cannot call this without beta=True
     with pytest.raises(fn_api.BetaAccessNotEnabled):
         fn_api.SyncFortniteAPI().beta_fetch_material_instances()
@@ -306,8 +302,8 @@ def test_sync_beta_fetch_material_instances(optimization_flags: fn_api.Optimizat
         assert instance == instance
 
 
-def test_sync_fetch_shop(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_fetch_shop(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         shop = client.fetch_shop()
 
     assert isinstance(shop, fn_api.Shop)
@@ -361,8 +357,8 @@ def test_sync_fetch_shop(optimization_flags: fn_api.OptimizationFlags):
             assert isinstance(cosmetic, fn_api.Cosmetic)
 
 
-def test_sync_search_cosmetics(optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncFortniteAPI(optimization_flags=optimization_flags) as client:
+def test_sync_search_cosmetics(api_key: str, optimization_flags: fn_api.OptimizationFlags):
+    with fn_api.SyncFortniteAPI(api_key=api_key, optimization_flags=optimization_flags) as client:
         cosmetics_multiple_set = client.search_br_cosmetics(multiple=True, has_set=True)
         cosmetic_single_set = client.search_br_cosmetics(multiple=False, has_set=True)
 
