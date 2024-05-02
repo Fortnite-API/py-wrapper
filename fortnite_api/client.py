@@ -767,9 +767,9 @@ class FortniteAPI:
 
     async def fetch_br_stats(
         self,
-        name: str,
-        /,
         *,
+        name: Optional[str] = None,
+        account_id: Optional[str] = None,
         type: AccountType = AccountType.EPIC,
         time_window: TimeWindow = TimeWindow.LIFETIME,
         image: StatsImageType = StatsImageType.NONE,
@@ -780,10 +780,14 @@ class FortniteAPI:
 
         Parameters
         ----------
-        name: :class:`str`
-            The name of the player to fetch stats for.
+        name: Optional[:class:`str`]
+            The name of the player to fetch stats for. Cannot be used with ``account_id``.
+        account_id: Optional[:class:`str`]
+            The account ID of the player to fetch stats for. Cannot be used with ``name``.
         type: Optional[:class:`fortnite_api.AccountType`]
-            The type of account to search statistics for. Defaults to :attr:`fortnite_api.AccountType.EPIC`.
+            The type of account to search statistics for. This parameter is only to narrow the search when
+            fetching account stats by name. It will not do anything when fetching by ``account_id``.
+            Defaults to :attr:`fortnite_api.AccountType.EPIC`.
         time_window: Optional[:class:`fortnite_api.TimeWindow`]
             The time window to search statistics for. Defaults to :attr:`fortnite_api.TimeWindow.LIFETIME`.
         image: Optional[:class:`fortnite_api.StatsImageType`]
@@ -799,51 +803,29 @@ class FortniteAPI:
         ------
         NotFound
             A player with that name was not found.
+        ValueError
+            You cannot pass both a ``name`` and an ``account_id`` to fetch stats at the
+            same time, or, you must pass either a ``name`` or an ``account_id`` to fetch stats.
         """
-        data = await self.http.get_br_stats(
-            name=name,
-            account_type=type and type.value,
-            time_window=time_window and time_window.value,
-            image=image and image.value,
-        )
-        return BrPlayerStats(data=data, http=self.http)
+        if name is not None and account_id is not None:
+            raise ValueError("You cannot pass both a name and an ID to fetch stats.")
 
-    async def fetch_br_stats_by_id(
-        self,
-        id: str,
-        /,
-        *,
-        time_window: TimeWindow = TimeWindow.LIFETIME,
-        image: StatsImageType = StatsImageType.NONE,
-    ) -> BrPlayerStats:
-        """|coro|
+        if account_id is not None:
+            data = await self.http.get_br_stats_by_id(
+                account_id=account_id, time_window=time_window and time_window.value, image=image and image.value
+            )
+            return BrPlayerStats(data=data, http=self.http)
 
-        Fetch stats for a Fortnite player by their account ID.
+        if name is not None:
+            data = await self.http.get_br_stats(
+                name=name,
+                account_type=type and type.value,
+                time_window=time_window and time_window.value,
+                image=image and image.value,
+            )
+            return BrPlayerStats(data=data, http=self.http)
 
-        Parameters
-        ----------
-        id: :class:`str`
-            The account ID of the player to fetch stats for.
-        time_window: Optional[:class:`fortnite_api.TimeWindow`]
-            The time window to search statistics for. Defaults to :attr:`fortnite_api.TimeWindow.LIFETIME`.
-        image: Optional[:class:`fortnite_api.StatsImageType`]
-            The type of image to display in the statistics. Defaults to :attr:`fortnite_api.StatsImageType.NONE`. If this
-            is set to :attr:`fortnite_api.StatsImageType.NONE`, there will be no image in the response.
-
-        Returns
-        -------
-        :class:`fortnite_api.BrPlayerStats`
-            The fetched player statistics.
-
-        Raises
-        ------
-        NotFound
-            A player with that ID was not found.
-        """
-        data = await self.http.get_br_stats_by_id(
-            account_id=id, time_window=time_window and time_window.value, image=image and image.value
-        )
-        return BrPlayerStats(data=data, http=self.http)
+        raise ValueError("You must pass either a name or an account_id to fetch stats.")
 
     # SHOP
     async def fetch_shop(self, /, *, language: Optional[GameLanguage] = None) -> Shop:
@@ -1235,32 +1217,32 @@ class SyncFortniteAPI:
     @copy_doc(FortniteAPI.fetch_br_stats)
     def fetch_br_stats(
         self,
-        name: str,
-        /,
         *,
+        name: Optional[str] = None,
+        account_id: Optional[str] = None,
         type: AccountType = AccountType.EPIC,
         time_window: TimeWindow = TimeWindow.LIFETIME,
         image: StatsImageType = StatsImageType.NONE,
     ) -> BrPlayerStats[SyncHTTPClient]:
-        data = self.http.get_br_stats(
-            name=name,
-            account_type=type.value,
-            time_window=time_window.value,
-            image=image.value,
-        )
-        return BrPlayerStats(data=data, http=self.http)
+        if name is not None and account_id is not None:
+            raise ValueError("You cannot pass both a name and an ID to fetch stats.")
 
-    @copy_doc(FortniteAPI.fetch_br_stats_by_id)
-    def fetch_br_stats_by_id(
-        self,
-        id: str,
-        /,
-        *,
-        time_window: TimeWindow = TimeWindow.LIFETIME,
-        image: StatsImageType = StatsImageType.NONE,
-    ) -> BrPlayerStats[SyncHTTPClient]:
-        data = self.http.get_br_stats_by_id(account_id=id, time_window=time_window.value, image=image.value)
-        return BrPlayerStats(data=data, http=self.http)
+        if account_id is not None:
+            data = self.http.get_br_stats_by_id(
+                account_id=account_id, time_window=time_window and time_window.value, image=image and image.value
+            )
+            return BrPlayerStats(data=data, http=self.http)
+
+        if name is not None:
+            data = self.http.get_br_stats(
+                name=name,
+                account_type=type and type.value,
+                time_window=time_window and time_window.value,
+                image=image and image.value,
+            )
+            return BrPlayerStats(data=data, http=self.http)
+
+        raise ValueError("You must pass either a name or an account_id to fetch stats.")
 
     @copy_doc(FortniteAPI.beta_fetch_material_instances)
     @sync_beta_method
