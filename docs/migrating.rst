@@ -736,8 +736,7 @@ The Map Objects have received a facelift in Version 3. A mapping of the old Map 
     
 There is a new object relating to maps. This is,
 
-- :class:`fortnite_api.MapImages`: Represents the image representation of the map. This is what you see when 
-you open the map in game. It holds both a blank image and one that has the :class:`~fortnite_api.POI` locations named on it.
+- :class:`fortnite_api.MapImages`: Represents the image representation of the map. This is what you see when you open the map in game. It holds both a blank image and one that has the :class:`~fortnite_api.POI` locations named on it.
 
 Fetching Maps
 ~~~~~~~~~~~~~~
@@ -824,6 +823,6 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.NewCosmetic`: A class that holds specific metadata about new cosmetics, such as the last addition date, the hash of the new cosmetics, and the cosmetics type. This is served from :class:`fortnite_api.NewCosmetics`.
 
-- :class:`fortnite_api.TransformerListProxy`: An internal class that is used to transform a list of objects into a list of another type of object. This is used internally in the library as an optimization so that objects are only created when they are needed.
+- :class:`fortnite_api.proxies.TransformerListProxy`: An internal class that is used to transform a list of objects into a list of another type of object. This is used internally in the library as an optimization so that objects are only created when they are needed.
 
 - :class:`fortnite_api.TileSize`: Represents the size of a tile in the Fortnite item shop.
