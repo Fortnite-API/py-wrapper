@@ -30,7 +30,10 @@ from .abc import Hashable
 from .http import HTTPClientT
 from .images import Images
 
-__all__: Tuple[str, ...] = ('Banner', 'BannerColor', 'BannerColour')
+__all__: Tuple[str, ...] = (
+    'Banner',
+    'BannerColor',
+)
 
 
 class Banner(Hashable, Generic[HTTPClientT]):
@@ -111,6 +114,3 @@ class BannerColor(Hashable):
         self.category: str = data['category']
         self.sub_category_group: int = data['subCategoryGroup']  # TODO: Convert this to enum?
         self.raw_data = data
-
-
-BannerColour = BannerColor

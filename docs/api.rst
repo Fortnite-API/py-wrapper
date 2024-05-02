@@ -49,9 +49,6 @@ Objects
 .. autoclass:: fortnite_api.BannerColor
     :members:
 
-.. autoclass:: fortnite_api.BannerColour
-    :members:
-
 .. autoclass:: fortnite_api.CreatorCode
     :members:
 
