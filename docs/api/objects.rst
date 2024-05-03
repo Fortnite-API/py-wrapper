@@ -1,29 +1,9 @@
 .. currentmodule:: fortnite_api
-
-API Reference
-=============
-
-Clients
--------
-
-.. autoclass:: fortnite_api.FortniteAPI
-    :members:
-
-.. autoclass:: fortnite_api.SyncFortniteAPI
-    :members:
-
-
-Base Classes
-------------
-
-.. autoclass:: fortnite_api.IdComparable
-    :members:
-
-.. autoclass:: fortnite_api.Hashable
-    :members:
-
+    
 Objects
--------
+=======
+
+The API has many objects that represent different parts of the Fortnite API. Below is a list of all the objects and their attributes and methods.
 
 .. autoclass:: fortnite_api.Account
     :members:
@@ -252,56 +232,3 @@ Helper Utilities
 ----------------
 .. autoclass:: fortnite_api.proxies.TransformerListProxy
     :members:
-
-Exceptions
-----------
-
-.. _api-exception-hierarchy:
-
-Exception Hierarchy
-~~~~~~~~~~~~~~~~~~~
-
-.. exception_hierarchy::
-    - :exc:`Exception`
-        - :exc:`FortniteAPIException`
-            - :exc:`HTTPException`
-                - :exc:`NotFound`
-                - :exc:`Forbidden`
-                - :exc:`ServiceUnavailable`
-                - :exc:`RateLimited`
-                - :exc:`Unauthorized`
-            - :exc:`BetaAccessNotEnabled`
-            - :exc:`BetaUnknownException`
-
-Exception Classes
-~~~~~~~~~~~~~~~~~
-
-.. autoclass:: FortniteAPIException
-    :members:
-
-.. autoclass:: HTTPException
-    :members:
-
-.. autoclass:: NotFound
-    :members:
-
-.. autoclass:: Forbidden
-    :members:
-
-.. autoclass:: ServiceUnavailable
-    :members:
-
-.. autoclass:: RateLimited
-    :members:
-
-.. autoclass:: Unauthorized
-    :members:
-
-.. autoclass:: BetaAccessNotEnabled
-    :members:
-
-.. autoclass:: BetaUnknownException
-    :members:
-
-
-
