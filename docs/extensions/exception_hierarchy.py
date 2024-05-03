@@ -66,3 +66,9 @@ def setup(app: sphinx.application.Sphinx):
     )
 
     app.add_directive('exception_hierarchy', ExceptionHierarchyDirective)
+
+    # Tell sphinx that it is okay for the exception hierarchy to be used in parallel
+    return {
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }
