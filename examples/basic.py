@@ -1,5 +1,7 @@
-# This example introduces you to the basic usage of the FortniteAPI client in an asynchronous context.
-# It will familiarize you with the client and how to use it to fetch data from the Fortnite API.
+"""
+This example introduces you to the basic usage of the FortniteAPI client in an asynchronous context.
+It familiarizes you with the client and how to use it to fetch data from the Fortnite API.
+"""
 
 import asyncio
 
@@ -18,7 +20,6 @@ async def main():
         cosmetics = await client.fetch_cosmetics_all()
 
         # In this case, fetch_cosmetics_all returns an instance of "fortnite_api.CosmeticsAll"
-
         assert isinstance(cosmetics, fortnite_api.CosmeticsAll)
 
         # We can iterate through the BR (battle royale) cosmetics and print out all their IDS.

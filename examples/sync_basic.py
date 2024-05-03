@@ -1,5 +1,12 @@
-# This example introduces you to the basic usage of the FortniteAPI client in a synchronous context.
-# It will familiarize you with the client and how to use it to fetch data from the Fortnite API.
+"""
+This example introduces you to the basic usage of the FortniteAPI client in a synchronous context.
+It familiarizes you with the client and how to use it to fetch data from the Fortnite API.
+
+Any asynchronous code in this example directory can be converted to synchronous code simply
+by changing the client definition and removing all async/await keywords. The library ensures
+that the interfaces are the same for both synchronous and asynchronous contexts.
+"""
+
 import fortnite_api
 
 
