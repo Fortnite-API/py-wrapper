@@ -123,6 +123,8 @@ class ShopTileSize(Enum):
     NORMAL = 'Size_1_x_2'
     DOUBLE_WIDE = 'Size_2_x_2'
     TRIPLE_WIDE = 'Size_3_x_2'
+    QUAD_WIDE = 'Size_4_x_2'
+    PENTA_WIDE = 'Size_5_x_2'
 
 
 class CosmeticCompatibleMode(Enum):
