@@ -58,10 +58,10 @@ FortniteAPI_T = TypeVar('FortniteAPI_T', bound='FortniteAPI')
 SyncFortniteAPI_T = TypeVar('SyncFortniteAPI_T', bound='SyncFortniteAPI')
 
 
-def _remove_coro_doc(obj: T) -> T:
+def _remove_coro_doc(cls: T) -> T:
     # Runs through all the functions of the object and anything
     # that has a docstring that starts with '|coro|' is removed
-    for value in obj.__dict__.values():
+    for value in cls.__dict__.values():
         try:
             doc = getattr(value, '__doc__')
         except AttributeError:
@@ -70,7 +70,7 @@ def _remove_coro_doc(obj: T) -> T:
             if doc and doc.startswith('|coro|'):
                 remove_prefix('|coro|')(value)
 
-    return obj
+    return cls
 
 
 def async_beta_method(
