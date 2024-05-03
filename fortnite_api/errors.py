@@ -163,12 +163,12 @@ class BetaUnknownException(FortniteAPIException):
     ----------
     message: :class:`str`
         The error message describing the exception.
-    original: :class:`fortnite_api.HTTPException`
+    original: Exception
         The original exception that occurred.
     """
 
-    def __init__(self, *, original: HTTPException) -> None:
+    def __init__(self, *, original: Exception) -> None:
         super().__init__(
             f"An unknown exception occurred while trying to access a beta feature. Original exception: {original}"
         )
-        self.original: HTTPException = original
+        self.original: Exception = original

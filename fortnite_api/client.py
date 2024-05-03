@@ -38,7 +38,7 @@ from .banner import Banner, BannerColor
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticTrack
 from .creator_code import CreatorCode
 from .enums import *
-from .errors import BetaAccessNotEnabled, BetaUnknownException, HTTPException
+from .errors import BetaAccessNotEnabled, BetaUnknownException
 from .flags import OptimizationFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
@@ -81,7 +81,10 @@ def async_beta_method(
         if not self.beta:
             raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
-        return await func(self, *args, **kwargs)
+        try:
+            return await func(self, *args, **kwargs)
+        except Exception as exc:
+            raise BetaUnknownException(original=exc) from exc
 
     return wrapped_beta_method
 
@@ -92,7 +95,10 @@ def sync_beta_method(func: Callable[Concatenate[SyncFortniteAPI_T, P], T]) -> Ca
         if not self.beta:
             raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
-        return func(self, *args, **kwargs)
+        try:
+            return func(self, *args, **kwargs)
+        except Exception as exc:
+            raise BetaUnknownException(original=exc)
 
     return wrapped_beta_method
 
@@ -878,10 +884,7 @@ class FortniteAPI:
             An unknown error occurred while fetching the material instances. This could be due to
             an issue with the API or the client.
         """
-        try:
-            data = await self.http.beta_get_material_instances()
-        except HTTPException as exc:
-            raise BetaUnknownException(original=exc) from exc
+        data = await self.http.beta_get_material_instances()
 
         return TransformerListProxy(
             data,
@@ -1247,10 +1250,7 @@ class SyncFortniteAPI:
     @copy_doc(FortniteAPI.beta_fetch_material_instances)
     @sync_beta_method
     def beta_fetch_material_instances(self) -> TransformerListProxy[MaterialInstance[SyncHTTPClient]]:
-        try:
-            data = self.http.beta_get_material_instances()
-        except HTTPException as exc:
-            raise BetaUnknownException(original=exc) from exc
+        data = self.http.beta_get_material_instances()
 
         return TransformerListProxy(
             data,
