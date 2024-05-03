@@ -7,7 +7,6 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import logging
 import os
 import re
 import sys
@@ -130,7 +129,7 @@ exclude_patterns = ['_build']
 # show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'friendly'
+pygments_style = 'vs'
 
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
@@ -138,20 +137,6 @@ pygments_style = 'friendly'
 # If true, keep warnings as "system message" paragraphs in the built documents.
 # keep_warnings = False
 
-
-# Ignore warnings about inconsistent order and/or count of references in translated messages.
-# This makes no sense, different languages can have different word order...
-def _i18n_warning_filter(record: logging.LogRecord) -> bool:
-    return not record.msg.startswith(
-        (
-            'inconsistent references in translated message',
-            'inconsistent term references in translated message',
-        )
-    )
-
-
-_i18n_logger = logging.getLogger('sphinx')
-_i18n_logger.addFilter(_i18n_warning_filter)
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -182,10 +167,10 @@ html_theme_options: Dict[str, Any] = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-# html_title = None
+html_title = "FortniteAPI Documentation"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-# html_short_title = None
+html_short_title = "FortniteAPI"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
