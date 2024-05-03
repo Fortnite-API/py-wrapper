@@ -3,20 +3,22 @@
 Migrating
 =========
 
-The change from Version 2.x.x of the library (dubbed as "Version 2" from here on out) to Version 3 is a major change. But don't worry, we've got 
-you covered. This document will help you migrate your code from the old version of the FortniteAPI Python
+The change from Version 2.x.x of the library (dubbed as "Version 2" from here on out) to Version 3 is a major change.
+Version 3 of the library has been rebuilt from the ground up to be more intuitive, more consistent, and more powerful. 
+
+Don't worry though, we've got you covered. This document will help you migrate your code from the old version of the FortniteAPI Python
 wrapper to the new version, and in doing so, help you understand the changes that have been made.
 
-Any objects not touched upon in a specific section of this document are mentioned in :ref:`the Additional Objects section <migrating-additional-objects>` at the bottom.
-
 The documentation is key to understanding the changes that have been made. As you get reworking your code, you must work
-hand in hand with the documentation to ensure a smooth transition.
+hand in hand with the documentation to ensure a smooth transition. 
+
+*Any objects not touched upon in a specific section of this document are mentioned in* :ref:`the Additional Objects section <migrating-additional-objects>` *at the bottom.*
 
 Client 
 ------
 Before we dive into the specifics of the changes, it's important to understand the general changes that have been made 
 to the client. The client is your main interface between your code and the Fortnite API. It is the single, most important
-object in this library. In Version 2, the client was a class that held all different types of endpoints as attributes.
+object in this library. In Version 2, the client held all available endpoints in specific ``namespaces``. For example,
 
 .. outdated-code-block:: python3
     :since: v2.6.6
@@ -24,13 +26,34 @@ object in this library. In Version 2, the client was a class that held all diffe
     from fortnite_api import FortniteAPI
 
     client = FortniteAPI(api_key='', run_async=False)
+
+    # All cosmetics endpoints are available under "client.cosmetics"
     client.cosmetics.fetch()
+
+    # All playlist endpoints are available under "client.playlist"
     client.playlist.fetch_all()
 
-This is no longer the case in Version 3. In Version 3, the client is a class that holds all different types of endpoints as methods. Keep this in mind as you read through the changes that have been made. Version 3 of the library has been
-rebuilt from the ground up to be more intuitive, more consistent, and more powerful.
+The namespaces approach created obtuse code that was difficult to maintain, type-hint, and understand.
 
-Great, let's dive into how creating a client has changed.
+In Version 3, however, the client now holds all available endpoints as direct methods.
+So for example, after creating an instance of the client, you simply call the methods directly on the client itself: 
+
+.. code-block:: python3
+
+    from fortnite_api import SyncFortniteAPI 
+
+    # "with" discussed later
+    with SyncFortniteAPI() as client:
+        # Method to fetch all cosmetics
+        client.fetch_cosmetics_all()
+
+        # Method to fetch all playlists
+        client.fetch_playlists()
+
+Notice the ``with`` statement? We'll touch on that in :ref:`creating-the-client`. 
+
+The biggest key takeaway here is that
+the client now holds all available endpoints as direct methods. This makes the library more intuitive to use, and easier to maintain.
 
 Async and Sync Specific Classes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,6 +61,8 @@ In Version 2, you could specify whether you wanted to use the client in an async
 ``run_async`` parameter to the client. In Version 3, the :class:`fortnite_api.FortniteAPI` client only has async
 functions. Don't worry though, all synchronous functionality has been extended into the 
 :class:`fortnite_api.SyncFortniteAPI` class with exactly the same interface as its async counterpart.
+
+.. _creating-the-client:
 
 Creating the Client
 ~~~~~~~~~~~~~~~~~~~
@@ -77,8 +102,7 @@ HTTP session is closed properly when the context manager is exited, it's a good 
 
 Although it is recommended you use the built in context managers, it is not strictly required. 
 You are completely free to use both clients without the context manager if you choose. In that case, however, 
-you are in the driver's seat, and must be in charge of managing the HTTP session. Thus, it's your 
-responsibility to pass it to the client and close it when you're done with it.
+you are in the driver's seat, and must be in charge of managing the HTTP session, ie. close the session when you're done with it.
 
 Async client without context manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -216,7 +240,7 @@ Fetching Cosmetics
 ~~~~~~~~~~~~~~~~~~~
 Version 2 previously held all cosmetic endpoints under the ``client.cosmetics`` namespace. 
 In Version 3, this is not the case. Instead, all cosmetic endpoints, as well as all endpoints, are now methods of 
-the client itself. This means that to fetch cosmetics, you no longer need to do:
+the client itself. This means that to fetch cosmetics, you no longer do:
 
 .. outdated-code-block:: python3
     :since: v2.6.6
@@ -292,7 +316,7 @@ objects to the new playlist objects is as follows:
 
 Additionally, a new playlist object has been added to the library:
 
-- :class:`fortnite_api.PlaylistImages`: This object represents the images of a playlist, if available. In Version 2, this information used to be wrapped in the :class:`fortnite_api.Playlist` object itself, however, it has been separated into its own object in Version 3.
+- :class:`fortnite_api.PlaylistImages`: This object represents the images of a playlist, if available. In Version 2, this information used to be wrapped in the :class:`fortnite_api.Playlist` object itself, but this has been separated.
 
 Fetching Playlists
 ~~~~~~~~~~~~~~~~~~
@@ -302,11 +326,8 @@ Previously, you could fetch the playlists using,
 
 .. outdated-code-block:: python3
     :since: v2.6.6
-    
-    import fortnite_api
 
-    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
-    playlists = client.playlist.fetch_all()
+    playlists = await client.playlist.fetch_all()
     reveal_type(playlists)
     >>> List[fortnite_api.Playlist]
 
@@ -392,12 +413,17 @@ In Version 3, the shop data is longer fetched using the ``client.shop`` namespac
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    import fortnite_api
-
-    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
-    shop = client.shop.fetch_all()
+    shop = await client.shop.fetch_all()
+    reveal_type(shop)
+    >>> fortnite_api.Shop
 
 This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client. 
+
+.. code-block:: python3
+
+    shop = await client.fetch_shop()
+    reveal_type(shop)
+    >>> fortnite_api.Shop
 
 Shop method changes
 ^^^^^^^^^^^^^^^^^^^
@@ -437,7 +463,7 @@ The AES objects remain almost identical to as they were in Version 2. A mapping 
 
 Additionally, a new object relating to :class:`~fortnite_api.Aes` information has been added. This is,
 
-- :class:`fortnite_api.Version`: Represents a version of a build in Fortnite. Holds the major and minor version of the build.
+- :class:`fortnite_api.Version`: Represents a version of a build in Fortnite. Holds the major and minor version of the build of Fortnite.
 
 Fetching Aes Data
 ~~~~~~~~~~~~~~~~~
@@ -446,12 +472,17 @@ In Version 3, the AES data is no longer fetched using the ``client.aes`` namespa
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    import fortnite_api
-
-    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
-    client.aes.fetch()
+    aes = await client.aes.fetch()
+    reveal_type(aes)
+    >>> fortnite_api.AES
 
 This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client.
+
+.. code-block:: python3
+
+    aes = await client.fetch_aes()
+    reveal_type(aes)
+    >>> fortnite_api.Aes
 
 AES method changes
 ^^^^^^^^^^^^^^^^^^
@@ -467,15 +498,6 @@ A complete mapping of the old methods and their new counterparts are as follows:
 
 Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncFortniteAPI` client instead.
-
-So, fetching the AES data in Version 3 can be done as follows:
-
-.. code-block:: python3
-    
-    client = fortnite_api.SyncFortniteAPI()
-    aes = client.fetch_aes()
-    reveal_type(aes)
-    >>> fortnite_api.Aes
 
 News 
 ----
@@ -504,14 +526,17 @@ In Version 2, the news data was fetched using the ``client.news`` namespace. Pre
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    import fortnite_api
-
-    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
-    news = client.news.fetch()
+    news = await client.news.fetch()
     reveal_type(news)
     >>> fortnite_api.News
 
 However, this approach is no longer valid in Version 3. Instead, you should use direct methods on the client.
+
+.. code-block:: python3
+
+    news = await client.fetch_news()
+    reveal_type(news)
+    >>> fortnite_api.News
 
 News method changes
 ^^^^^^^^^^^^^^^^^^^
@@ -530,16 +555,6 @@ A complete mapping of the old methods and their new counterparts are as follows:
 
 Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncFortniteAPI` client instead.
-
-Now, fetching the news data in Version 3 can be done as follows:
-
-.. code-block:: python3
-
-    async with fortnite_api.FortniteAPI(api_key='') as client:
-        news = await client.fetch_news()
-        reveal_type(news)
-        >>> fortnite_api.News
-
 
 Creator Code 
 ------------
@@ -563,7 +578,7 @@ In Version 2, the creator code data was fetched using the ``client.creator_code`
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    creator_code = client.creator_code.fetch('username')
+    creator_code = await client.creator_code.fetch('username')
     reveal_type(creator_code)
     >>> fortnite_api.CreatorCode
 
@@ -571,7 +586,7 @@ However, this approach is no longer valid in Version 3. Instead, you should use 
 
 .. code-block:: python3
 
-    creator_code = client.fetch_creator_code(name='username')
+    creator_code = await client.fetch_creator_code(name='username')
     reveal_type(creator_code)
     >>> fortnite_api.CreatorCode
 
@@ -587,7 +602,7 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - ``client.creator_code.fetch()``
         - :meth:`fortnite_api.FortniteAPI.fetch_creator_code`
     *   - ``client.creator_code.exists()``
-        - Depreciated, try to fetch the creator code and handle not found exceptions manually.
+        - Removed, try to fetch the creator code and handle not found exceptions manually.
     *   - ``client.creator_code.search_first()``
         - Depreciated, search creator code endpoints do not work anymore.
     *   - ``client.creator_code.search_all()``
@@ -595,6 +610,19 @@ A complete mapping of the old methods and their new counterparts are as follows:
 
 Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+
+In Version 2, the ``client.creator_code.exists()`` method worked by fetching the creator code and returning ``False`` if :class:`~fortnite_api.NotFound` was raised. This method has been removed in Version 3. If you need similar functionality, you should fetch the creator code and handle the exception if it was not found. For example,
+
+.. code-block:: python3
+
+    try:
+        creator_code = await client.fetch_creator_code(name='username')
+    except fortnite_api.NotFound:
+        print('Creator code not found')
+    else:
+        print(creator_code)
+
+For more information on exceptions, they are all listed in the :ref:`exceptions section <migrating-exceptions>`.
 
 BR Stats
 --------
@@ -625,7 +653,7 @@ In Version 2, the BR stats data was fetched using the ``client.stats`` namespace
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    stats = client.stats.fetch_by_name('username')
+    stats = await client.stats.fetch_by_name('username')
     reveal_type(stats)
     >>> fortnite_api.BrPlayerStats
 
@@ -633,7 +661,7 @@ However, this approach is no longer valid in Version 3. Instead, you should use 
 
 .. code-block:: python3
 
-    stats = client.fetch_br_stats('username')
+    stats = await client.fetch_br_stats('username')
     reveal_type(stats)
     >>> fortnite_api.BrPlayerStats
 
@@ -647,9 +675,9 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.stats.fetch_by_name()``
-        - Moved to :meth:`fortnite_api.FortniteAPI.fetch_br_stats` with a parameter ``name``.
+        - Moved to :meth:`fortnite_api.FortniteAPI.fetch_br_stats` with a ``name`` parameter.
     *   - ``client.stats.fetch_by_id()``
-        - Moved to the :meth:`fortnite_api.FortniteAPI.fetch_br_stats` with a parameter ``account_id``.
+        - Moved to the :meth:`fortnite_api.FortniteAPI.fetch_br_stats` with a ``account_id`` parameter.
 
 Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and 
 under the :class:`fortnite_api.SyncFortniteAPI` client instead.
@@ -679,11 +707,11 @@ Previously in Version 2, the banners were fetched using the ``client.banner`` na
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    banners = client.banner.fetch()
+    banners = await client.banner.fetch()
     reveal_type(banners)
     >>> List[fortnite_api.Banner]
 
-    colors = client.banner.fetch_colors()
+    colors = await client.banner.fetch_colors()
     reveal_type(colors)
     >>> List[fortnite_api.BannerColor]
 
@@ -691,11 +719,11 @@ However, this approach is no longer valid in Version 3. Instead, you should use 
 
 .. code-block:: python3
 
-    banners = client.fetch_banners()
+    banners = await client.fetch_banners()
     reveal_type(banners)
     >>> List[fortnite_api.Banner]
 
-    colors = client.fetch_banner_colors()
+    colors = await client.fetch_banner_colors()
     reveal_type(colors)
     >>> List[fortnite_api.BannerColor]
 
@@ -740,21 +768,21 @@ There is a new object relating to maps. This is,
 
 Fetching Maps
 ~~~~~~~~~~~~~~
-In Version 2, the maps were fetched using the ``client.map`` namespace. Thus, you could fetch the maps using,
+In Version 2, the maps were fetched using the ``client.map`` namespace. For example,
 
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    map = client.map.fetch()
-    reveal_type(map)
+    fortnite_map = await client.map.fetch()
+    reveal_type(fortnite_map)
     >>> fortnite_api.Map
 
 In Version 3, this approach is no longer valid. Instead, you should use direct methods on the client.
 
 .. code-block:: python3
 
-    map = client.fetch_map()
-    reveal_type(map)
+    fortnite_map = await client.fetch_map()
+    reveal_type(fortnite_map)
     >>> fortnite_api.Map
 
 Map method changes
@@ -771,6 +799,32 @@ A complete mapping of the old methods and their new counterparts are as follows:
 
 Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and 
 under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+
+
+.. _migrating-exceptions:
+
+Exceptions
+----------
+Exceptions have been refactored in Version 3. The exception hierarchy has been restructured to make it more intuitive and easier to understand. The exceptions that are raised when an error occurs while fetching data from the Fortnite API are now more descriptive and provide more information about what went wrong.
+
+- :class:`fortnite_api.FortniteAPIException`: The base exception class for all exceptions raised by the library. This is a subclass of :class:`Exception`.
+
+- :class:`fortnite_api.HTTPException`: A subclass of :class:`fortnite_api.FortniteAPIException` that is raised when an error occurs while making an HTTP request to the Fortnite API. All HTTP errors are subclasses of this exception.
+
+- :class:`fortnite_api.NotFound`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the requested resource is not found. This is raised when a 404 status code is returned by the Fortnite API.
+
+- :class:`fortnite_api.Forbidden`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the client does not have permission to access the requested resource. This is raised when a 403 status code is returned by the Fortnite API.
+
+- :class:`fortnite_api.ServiceUnavailable`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the Fortnite API is unavailable. This is raised when a 503 status code is returned by the Fortnite API. Ideally your program should globally handle this exception in the event of a service outage.
+
+- :class:`fortnite_api.RateLimited`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the client has been rate limited by the Fortnite API. This is raised when a 429 status code is returned by the Fortnite API. Typical endpoints do not have ratelimits, however, stats endpoints do.
+
+- :class:`fortnite_api.Unauthorized`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the client is not authorized to access the requested resource. This will be raised when the client attempts to request to stat endpoints without an api key set. This is raised when a 401 status code is returned by the Fortnite API.
+
+- :class:`fortnite_api.BetaAccessNotEnabled`: A subclass of :class:`fortnite_api.FortniteAPIException` raised when a client attempts to call a beta method without the :attr:`~fortnite_api.FortniteAPI.beta` flag enabled on the client.
+
+- :class:`fortnite_api.BetaUnknownException`: A special subclass of :class:`fortnite_api.FortniteAPIException` that wraps an exception that ocurred while calling or processing a beta endpoint. This will contain the original exception that was raised.
+
 
 .. _migrating-additional-objects:
 
