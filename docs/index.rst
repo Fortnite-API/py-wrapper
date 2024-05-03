@@ -9,11 +9,8 @@ The entirety of the public API is documented here. If you're looking for a speci
 
 If you're not sure where to start, check out the :class:`fortnite_api.FortniteAPI` class for a list of all available methods you can use to interact with the API. 
 
-API Reference
-~~~~~~~~~~~~~
-
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    api/index
 
