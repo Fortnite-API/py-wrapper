@@ -35,6 +35,7 @@ extensions = [
     'sphinx_copybutton',
     'exception_hierarchy',
     'outdated_code_blocks',
+    'attribute_table',
 ]
 
 autodoc_member_order = 'bysource'
@@ -187,7 +188,7 @@ html_favicon = './images/logo.ico'
 html_static_path = ['_static']
 
 # Load the custom CSS files into sphinx.
-html_css_files = ['outdated_code_blocks.css']
+html_css_files = ['outdated_code_blocks.css', 'attribute_tables.css']
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
