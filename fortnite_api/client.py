@@ -27,7 +27,7 @@ from __future__ import annotations
 import datetime
 import functools
 import inspect
-from typing import Any, Callable, Literal, Optional, TypeVar, Union, cast, overload, List
+from typing import Any, Callable, List, Literal, Optional, TypeVar, Union, cast, overload
 
 import aiohttp
 import requests
