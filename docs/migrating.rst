@@ -110,8 +110,9 @@ When using the async client without the context manager, you must pass the sessi
 
 .. code-block:: python3
 
-    from fortnite_api import FortniteAPI
     import asyncio
+
+    from fortnite_api import FortniteAPI
 
     async def main():
         session = aiohttp.ClientSession()
@@ -128,8 +129,9 @@ When using the sync client without the context manager, you must pass the sessio
 
 .. code-block:: python3
 
-    from fortnite_api import SyncFortniteAPI
     import requests
+
+    from fortnite_api import SyncFortniteAPI
 
     session = requests.Session()
     client = SyncFortniteAPI(api_key='', session=session)    
