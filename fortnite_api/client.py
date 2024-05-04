@@ -58,6 +58,9 @@ P = ParamSpec('P')
 FortniteAPI_T = TypeVar('FortniteAPI_T', bound='FortniteAPI')
 SyncFortniteAPI_T = TypeVar('SyncFortniteAPI_T', bound='SyncFortniteAPI')
 
+FetchFunc = Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]
+SyncFetchFunc = Callable[Concatenate[SyncFortniteAPI_T, P], T]
+
 
 def _remove_coro_doc(cls: T) -> T:
     # Runs through all the functions of the object and anything
@@ -75,20 +78,16 @@ def _remove_coro_doc(cls: T) -> T:
 
 
 @overload
-def beta_method(
-    func: Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]
-) -> Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]: ...
+def beta_method(func: FetchFunc[FortniteAPI_T, P, T]) -> FetchFunc[FortniteAPI_T, P, T]: ...
 
 
 @overload
-def beta_method(func: Callable[Concatenate[SyncFortniteAPI_T, P], T]) -> Callable[Concatenate[SyncFortniteAPI_T, P], T]: ...
+def beta_method(func: SyncFetchFunc[SyncFortniteAPI_T, P, T]) -> SyncFetchFunc[SyncFortniteAPI_T, P, T]: ...
 
 
 def beta_method(
-    func: Union[
-        Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]], Callable[Concatenate[SyncFortniteAPI_T, P], T]
-    ]
-) -> Union[Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]], Callable[Concatenate[SyncFortniteAPI_T, P], T]]:
+    func: Union[FetchFunc[FortniteAPI_T, P, T], SyncFetchFunc[SyncFortniteAPI_T, P, T]]
+) -> Union[FetchFunc[FortniteAPI_T, P, T], SyncFetchFunc[SyncFortniteAPI_T, P, T]]:
     if inspect.iscoroutinefunction(func):
         # This is coroutine, so we need to wrap it in an async function
         @functools.wraps(func)
@@ -105,7 +104,7 @@ def beta_method(
     else:
         # Pyright cannot automatically infer the return type of
         # this function, so we need to manually specify it.
-        func = cast(Callable[Concatenate[SyncFortniteAPI_T, P], T], func)
+        func = cast(SyncFetchFunc[SyncFortniteAPI_T, P, T], func)
 
         @functools.wraps(func)
         def _wrapped_sync_beta_method(self: SyncFortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
