@@ -37,7 +37,10 @@ __all__: Tuple[str, ...] = (
 
 
 class Banner(Hashable, Generic[HTTPClientT]):
-    """A representation of a banner given to the :class:`fortnite_api.FortniteAPI` client
+    """
+    .. attributetable:: fortnite_api.Banner
+    
+    A representation of a banner given to the :class:`fortnite_api.FortniteAPI` client
     as a response. This represents a banner within the Fortnite game.
 
     Attributes
@@ -84,7 +87,10 @@ class Banner(Hashable, Generic[HTTPClientT]):
 
 
 class BannerColor(Hashable):
-    """Represents a color of a :class:`fortnite_api.Banner`.
+    """
+    .. attributetable:: fortnite_api.BannerColor
+    
+    Represents a color of a :class:`fortnite_api.Banner`.
 
     Attributes
     ----------

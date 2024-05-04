@@ -40,13 +40,16 @@ __all__: Tuple[str, ...] = ('Asset',)
 
 class _AssetRoute(Route):
     def __init__(self, url: str) -> None:
-        self.BASE_URL: None = None
+        self.BASE_URL = ''  # type: ignore
         self.url: str = url
         self.method: str = 'GET'
 
 
 class Asset(Generic[HTTPClientT]):
-    """Represents an asset given to the client. This can be from
+    """
+    .. attributetable:: fortnite_api.Asset
+
+    Represents an asset given to the client. This can be from
     an image on a banner to a cosmetic image.
     """
 

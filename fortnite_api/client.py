@@ -120,7 +120,10 @@ def beta_method(
 
 
 class FortniteAPI:
-    """Represents a Fortnite API client. This is the main class used to interact with the Fortnite API.
+    """
+    .. attributetable:: fortnite_api.FortniteAPI
+
+    Represents a Fortnite API client. This is the main class used to interact with the Fortnite API.
 
     .. container:: operations
 
@@ -904,7 +907,10 @@ class FortniteAPI:
 
 @_remove_coro_doc
 class SyncFortniteAPI:
-    """Represents a Sync Fortnite API client. This is the main class used to interact with the Fortnite API.
+    """
+    .. attributetable:: fortnite_api.SyncFortniteAPI
+
+    Represents a Sync Fortnite API client. This is the main class used to interact with the Fortnite API.
 
     .. container:: operations
 

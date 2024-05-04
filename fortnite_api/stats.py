@@ -44,7 +44,10 @@ __all__: Tuple[str, ...] = (
 
 
 class BrPlayerStats(Generic[HTTPClientT]):
-    """Represents a Fortnite Battle Royale player's stats.
+    """
+    .. attributetable:: fortnite_api.BrPlayerStats
+
+    Represents a Fortnite Battle Royale player's stats.
 
     Attributes
     ----------
@@ -80,7 +83,10 @@ class BrPlayerStats(Generic[HTTPClientT]):
 
 
 class BrBattlePass:
-    """Represents a Fortnite Battle Royale player's battle pass level and progress.
+    """
+    .. attributetable:: fortnite_api.BrBattlePass
+
+    Represents a Fortnite Battle Royale player's battle pass level and progress.
 
     Attributes
     ----------
@@ -98,7 +104,10 @@ class BrBattlePass:
 
 
 class BrInputs:
-    """Represents a Fortnite player's stats for all input types.
+    """
+    .. attributetable:: fortnite_api.BrInputs
+
+    Represents a Fortnite player's stats for all input types.
 
     Attributes
     ----------
@@ -130,7 +139,10 @@ class BrInputs:
 
 
 class BrInputStats:
-    """Represents a specific Fortnite player's stats for a specific input type.
+    """
+    .. attributetable:: fortnite_api.BrInputStats
+
+    Represents a specific Fortnite player's stats for a specific input type.
 
     Attributes
     ----------
@@ -161,7 +173,10 @@ class BrInputStats:
 
 
 class BrGameModeStats:
-    """Represents the specific stats for a Fortnite player in a specific game mode on a specific input type.
+    """
+    .. attributetable:: fortnite_api.BrGameModeStats
+
+    Represents the specific stats for a Fortnite player in a specific game mode on a specific input type.
 
     Attributes
     ----------

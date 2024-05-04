@@ -58,7 +58,10 @@ class FortniteAPIException(Exception):
 
 
 class HTTPException(FortniteAPIException):
-    """Represents a base HTTP Exception. Every HTTP exception inherits from this class.
+    """
+    .. attributetable:: fortnite_api.HTTPException
+
+    Represents a base HTTP Exception. Every HTTP exception inherits from this class.
 
     Attributes
     ----------
@@ -95,7 +98,10 @@ class HTTPException(FortniteAPIException):
 
 
 class NotFound(HTTPException):
-    """Exception raised when a resource is not found.
+    """
+    .. attributetable:: fortnite_api.NotFound
+
+    Exception raised when a resource is not found.
 
     This class inherits from :class:`fortnite_api.HTTPException`.
     """
@@ -104,7 +110,10 @@ class NotFound(HTTPException):
 
 
 class Forbidden(HTTPException):
-    """Exception raised when the requested operation is forbidden.
+    """
+    .. attributetable:: fortnite_api.Forbidden
+
+    Exception raised when the requested operation is forbidden.
 
     This class inherits from :class:`fortnite_api.HTTPException`.
     """
@@ -113,7 +122,10 @@ class Forbidden(HTTPException):
 
 
 class ServiceUnavailable(HTTPException):
-    """Exception raised when the services of Fortnite API are unavailable.
+    """
+    .. attributetable:: fortnite_api.ServiceUnavailable
+
+    Exception raised when the services of Fortnite API are unavailable.
 
     This class inherits from :class:`fortnite_api.HTTPException`.
     """
@@ -122,7 +134,10 @@ class ServiceUnavailable(HTTPException):
 
 
 class RateLimited(HTTPException):
-    """Exception raised when the client has been rate limited.
+    """
+    .. attributetable:: fortnite_api.RateLimited
+
+    Exception raised when the client has been rate limited.
 
     This class inherits from :class:`fortnite_api.HTTPException`.
     """
@@ -131,7 +146,10 @@ class RateLimited(HTTPException):
 
 
 class Unauthorized(HTTPException):
-    """Exception raised when the client is unauthorized to access the requested resource.
+    """
+    .. attributetable:: fortnite_api.Unauthorized
+
+    Exception raised when the client is unauthorized to access the requested resource.
 
     This class inherits from :class:`fortnite_api.HTTPException`.
     """
@@ -140,7 +158,10 @@ class Unauthorized(HTTPException):
 
 
 class BetaAccessNotEnabled(FortniteAPIException):
-    """Exception raised when a user tries to access a feature or functionality that requires beta access,
+    """
+    .. attributetable:: fortnite_api.BetaAccessNotEnabled
+
+    Exception raised when a user tries to access a feature or functionality that requires beta access,
     but the beta access is not enabled.
 
     This class inherits :class:`fortnite_api.FortniteAPIException`.
@@ -155,7 +176,10 @@ class BetaAccessNotEnabled(FortniteAPIException):
 
 
 class BetaUnknownException(FortniteAPIException):
-    """Exception raised when an unknown exception occurs while trying to access a beta feature.
+    """
+    .. attributetable:: fortnite_api.BetaUnknownException
+
+    Exception raised when an unknown exception occurs while trying to access a beta feature.
 
     This class inherits :class:`fortnite_api.FortniteAPIException`.
 

@@ -33,7 +33,10 @@ __all__: Tuple[str, ...] = ('CreatorCode',)
 
 
 class CreatorCode:
-    """Represents a Creator Code.
+    """
+    .. attributetable:: fortnite_api.CreatorCode
+
+    Represents a Creator Code.
 
     Attributes
     -----------

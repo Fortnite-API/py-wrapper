@@ -40,7 +40,10 @@ __all__: Tuple[str, ...] = ('CosmeticLego', 'CosmeticLegoImages')
 
 
 class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
-    """A class representing the images of a lego cosmetic.
+    """
+    .. attributetable:: fortnite_api.CosmeticLegoImages
+
+    A class representing the images of a lego cosmetic.
 
     This class inherits from :class:`fortnite_api.CosmeticImages`.
 
@@ -58,7 +61,10 @@ class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
 
 
 class CosmeticLego(Cosmetic[HTTPClientT]):
-    """Represents a Lego cosmetic.
+    """
+    .. attributetable:: fortnite_api.CosmeticLego
+
+    Represents a Lego cosmetic.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
 

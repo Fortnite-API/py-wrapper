@@ -34,7 +34,10 @@ __all__: Tuple[str, ...] = ('CosmeticLegoKit',)
 
 
 class CosmeticLegoKit(Cosmetic[HTTPClientT]):
-    """Represents a LEGO kit cosmetic in Fortnite.
+    """
+    .. attributetable:: fortnite_api.CosmeticLegoKit
+
+    Represents a LEGO kit cosmetic in Fortnite.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
 

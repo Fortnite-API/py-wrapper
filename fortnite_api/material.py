@@ -36,7 +36,10 @@ __all__: Tuple[str, ...] = ('MaterialInstanceImages', 'MaterialInstanceColors', 
 
 
 class MaterialInstanceImages(Generic[HTTPClientT]):
-    """Represents some images of a Material instance, as they are rendered in game.
+    """
+    .. attributetable:: fortnite_api.MaterialInstanceImages
+
+    Represents some images of a Material instance, as they are rendered in game.
 
     Attributes
     ----------
@@ -61,7 +64,10 @@ class MaterialInstanceImages(Generic[HTTPClientT]):
 
 
 class MaterialInstanceColors:
-    """Represents some metadata about the colors of a Material instance. Every material instance image
+    """
+    .. attributetable:: fortnite_api.MaterialInstanceColors
+
+    Represents some metadata about the colors of a Material instance. Every material instance image
     has a background gradient, made up of a background color A and background color B that falls off to a
     specific color. This class represents that information.
 
@@ -84,7 +90,10 @@ class MaterialInstanceColors:
 
 
 class MaterialInstance(Hashable, Generic[HTTPClientT]):
-    """Material instancing is a way to create a parent Material that you can
+    """
+    .. attributetable:: fortnite_api.MaterialInstance
+    
+    Material instancing is a way to create a parent Material that you can
     use as a base to make a wide variety of different looking children (Material instances).
 
     Fortnite takes advantage of this concept for its cosmetics. This allows developers to create a single

@@ -33,7 +33,10 @@ __all__: Tuple[str, ...] = ('Account',)
 
 
 class Account(Hashable):
-    """Represents a account.
+    """
+    .. attributetable:: fortnite_api.Account
+
+    Represents a account.
 
     .. container:: operations
 

@@ -33,7 +33,10 @@ __all__: Tuple[str, ...] = ('Images',)
 
 
 class Images(Generic[HTTPClientT]):
-    """Represents image data passed from the API.
+    """
+    .. attributetable:: fortnite_api.Images
+
+    Represents image data passed from the API.
 
     Attributes
     ----------

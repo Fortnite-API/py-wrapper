@@ -31,7 +31,10 @@ __all__: Tuple[str, ...] = ('OptimizationFlags',)
 
 
 class OptimizationFlags(enum.IntFlag):
-    """Represents optimization flags for a given Fortnite API client. This will allow to you
+    """
+    .. attributetable:: fortnite_api.OptimizationFlags
+    
+    Represents optimization flags for a given Fortnite API client. This will allow to you
     speed up the client by enabling API optimizations that are not enabled by default.
 
     .. container:: operations

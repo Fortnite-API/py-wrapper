@@ -39,7 +39,10 @@ __all__: Tuple[str, ...] = ('PlaylistImages', 'Playlist')
 
 
 class PlaylistImages(Generic[HTTPClientT]):
-    """Represents images that are associated with a Fortnite Playlist.
+    """
+    .. attributetable:: fortnite_api.PlaylistImages
+
+    Represents images that are associated with a Fortnite Playlist.
 
     Attributes
     ------------
@@ -60,7 +63,10 @@ class PlaylistImages(Generic[HTTPClientT]):
 
 
 class Playlist(Hashable, Generic[HTTPClientT]):
-    """Represents a Fortnite Playlist.
+    """
+    .. attributetable:: fortnite_api.Playlist
+
+    Represents a Fortnite Playlist.
 
     Attributes
     -----------

@@ -42,7 +42,10 @@ __all__: Tuple[str, ...] = (
 
 
 class CosmeticBrSet:
-    """Represents a set that a given cosmetic belongs to.
+    """
+    .. attributetable:: fortnite_api.CosmeticBrSet
+
+    Represents a set that a given cosmetic belongs to.
 
     Attributes
     ----------
@@ -63,7 +66,10 @@ class CosmeticBrSet:
 
 
 class CosmeticBrIntroduction:
-    """Holds some metadata about when a cosmetic was introduced.
+    """
+    .. attributetable:: fortnite_api.CosmeticBrIntroduction
+
+    Holds some metadata about when a cosmetic was introduced.
 
     Attributes
     ----------
@@ -87,7 +93,10 @@ class CosmeticBrIntroduction:
 
 
 class CosmeticBrVariantOption(Generic[HTTPClientT]):
-    """Represents a variant option for a cosmetic.
+    """
+    .. attributetable:: fortnite_api.CosmeticBrVariantOption
+
+    Represents a variant option for a cosmetic.
 
     Attributes
     ----------
@@ -111,7 +120,10 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
 
 
 class CosmeticBrVariant(Generic[HTTPClientT]):
-    """Represents a variant for a cosmetic.
+    """
+    .. attributetable:: fortnite_api.CosmeticBrVariant
+
+    Represents a variant for a cosmetic.
 
     Attributes
     ----------
@@ -135,7 +147,10 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
 
 
 class CosmeticBr(Cosmetic[HTTPClientT]):
-    """Represents a Battle Royale cosmetic.
+    """
+    .. attributetable:: fortnite_api.CosmeticBr
+
+    Represents a Battle Royale cosmetic.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
 

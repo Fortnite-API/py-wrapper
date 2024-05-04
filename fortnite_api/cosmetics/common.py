@@ -47,7 +47,10 @@ __all__: Tuple[str, ...] = (
 
 
 class Cosmetic(Hashable, Generic[HTTPClientT]):
-    """Represents a cosmetic. Every cosmetic type inherits from this class.
+    """
+    .. attributetable:: fortnite_api.Cosmetic
+
+    Represents a cosmetic. Every cosmetic type inherits from this class.
 
     Attributes
     ----------
@@ -75,7 +78,10 @@ class Cosmetic(Hashable, Generic[HTTPClientT]):
 
 
 class CosmeticTypeInfo:
-    """Represents a cosmetic type.
+    """
+    .. attributetable:: fortnite_api.CosmeticTypeInfo
+
+    Represents a cosmetic type.
 
     Attributes
     ----------
@@ -96,7 +102,10 @@ class CosmeticTypeInfo:
 
 
 class CosmeticRarity:
-    """Represents a cosmetic rarity.
+    """
+    .. attributetable:: fortnite_api.CosmeticRarity
+
+    Represents a cosmetic rarity.
 
     Attributes
     ----------
@@ -117,7 +126,10 @@ class CosmeticRarity:
 
 
 class CosmeticSeries(Generic[HTTPClientT]):
-    """Represents the series of a cosmetic.
+    """
+    .. attributetable:: fortnite_api.CosmeticSeries
+
+    Represents the series of a cosmetic.
 
     Attributes
     ----------
@@ -149,7 +161,10 @@ class CosmeticSeries(Generic[HTTPClientT]):
 
 
 class CosmeticImages(Images[HTTPClientT]):
-    """Represents the images of a cosmetic.
+    """
+    .. attributetable:: fortnite_api.CosmeticImages
+
+    Represents the images of a cosmetic.
 
     This inherits from :class:`fortnite_api.Images`.
 

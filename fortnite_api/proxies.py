@@ -34,7 +34,10 @@ V_co = TypeVar('V_co', covariant=True, default='Any')
 
 
 class TransformerListProxy(Generic[T, K_co, V_co], List[T]):
-    """A proxy for a list that allows for half-created type T objects to be stored in the list. This is an internal
+    """
+    .. attributetable:: fortnite_api.proxies.TransformerListProxy
+
+    A proxy for a list that allows for half-created type T objects to be stored in the list. This is an internal
     optimization that allows objects to be created only as-needed when the list is accessed.
 
     This class has been exposed to the documentation because it may be useful for some high level users. However, you

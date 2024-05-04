@@ -38,7 +38,10 @@ __all__: Tuple[str, ...] = ('News', 'GameModeNews', 'NewsMotd', 'NewsMessage')
 
 
 class News(Generic[HTTPClientT]):
-    """Represents Game News.
+    """
+    .. attributetable:: fortnite_api.News
+
+    Represents Game News.
 
     Attributes
     -----------
@@ -63,7 +66,10 @@ class News(Generic[HTTPClientT]):
 
 
 class GameModeNews(Generic[HTTPClientT]):
-    """Represents News of a specific game mode.
+    """
+    .. attributetable:: fortnite_api.GameModeNews
+
+    Represents News of a specific game mode.
 
     Attributes
     ----------
@@ -100,7 +106,10 @@ class GameModeNews(Generic[HTTPClientT]):
 
 
 class NewsMotd(Hashable, Generic[HTTPClientT]):
-    """Represents News of a specific game mode.
+    """
+    .. attributetable:: fortnite_api.NewsMotd
+
+    Represents News of a specific game mode.
 
     Attributes
     -----------
@@ -150,7 +159,10 @@ class NewsMotd(Hashable, Generic[HTTPClientT]):
 
 
 class NewsMessage(Generic[HTTPClientT]):
-    """Represents News of a specific game mode.
+    """
+    .. attributetable:: fortnite_api.NewsMessage
+
+    Represents News of a specific game mode.
 
     Attributes
     ----------

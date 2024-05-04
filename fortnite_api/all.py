@@ -36,7 +36,10 @@ __all__: Tuple[str, ...] = ('CosmeticsAll',)
 
 
 class CosmeticsAll(Generic[HTTPClientT]):
-    """A class that represents a request to get all cosmetics.
+    """
+    .. attributetable:: fortnite_api.CosmeticsAll
+    
+    A class that represents a request to get all cosmetics.
 
     .. container:: operations
 

@@ -34,7 +34,10 @@ __all__: Tuple[str, ...] = ('Map', 'MapImages', 'POI', 'POILocation')
 
 
 class MapImages(Generic[HTTPClientT]):
-    """Represents the images of a given POI map.
+    """
+    .. attributetable:: fortnite_api.MapImages
+
+    Represents the images of a given POI map.
 
     Attributes
     ----------
@@ -52,7 +55,10 @@ class MapImages(Generic[HTTPClientT]):
 
 
 class Map(Generic[HTTPClientT]):
-    """Represents a Fortnite map.
+    """
+    .. attributetable:: fortnite_api.Map
+
+    Represents a Fortnite map.
 
     Attributes
     ----------
@@ -92,7 +98,10 @@ class Map(Generic[HTTPClientT]):
 
 
 class POI(Hashable):
-    """Represents a specific POI in a Fortnite map.
+    """
+    .. attributetable:: fortnite_api.POI
+
+    Represents a specific POI in a Fortnite map.
 
     Attributes
     ----------
@@ -113,7 +122,10 @@ class POI(Hashable):
 
 
 class POILocation:
-    """Holds the x, y, z coordinates of a POI in a Fortnite map.
+    """
+    .. attributetable:: fortnite_api.POILocation
+
+    Holds the x, y, z coordinates of a POI in a Fortnite map.
 
     Attributes
     ----------

@@ -40,7 +40,10 @@ VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subvers
 
 @dataclasses.dataclass(init=True, repr=True, eq=True, order=False, unsafe_hash=True, frozen=True)
 class Version:
-    """Represents a version of a build of Fortnite.
+    """
+    .. attributetable:: fortnite_api.Version
+
+    Represents a version of a build of Fortnite.
 
     Attributes
     ----------
@@ -55,7 +58,10 @@ class Version:
 
 
 class Aes:
-    """Represents the object given to the client from the AES endpoint.
+    """
+    .. attributetable:: fortnite_api.Aes
+
+    Represents the object given to the client from the AES endpoint.
 
     .. container:: operations
 
@@ -137,7 +143,10 @@ class Aes:
 
 
 class DynamicKey:
-    """Represents a dynamic key.
+    """
+    .. attributetable:: fortnite_api.DynamicKey
+
+    Represents a dynamic key.
 
     .. container:: operations
 

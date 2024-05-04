@@ -63,7 +63,10 @@ _BACKUP_TILE_MAPPING: Mapping[str, Tuple[int, int]] = {
 
 
 class TileSize:
-    """Represents the size of a tile in the shop.
+    """
+    .. attributetable:: fortnite_api.TileSize
+
+    Represents the size of a tile in the shop.
 
     .. container:: operations
 
@@ -130,7 +133,10 @@ class TileSize:
 
 
 class ShopEntryBundle(Generic[HTTPClientT]):
-    """Represents a shop entry bundle.
+    """
+    .. attributetable:: fortnite_api.ShopEntryBundle
+
+    Represents a shop entry bundle.
 
     Attributes
     ----------
@@ -151,7 +157,10 @@ class ShopEntryBundle(Generic[HTTPClientT]):
 
 
 class ShopEntryBanner:
-    """A class to represent a shop entry banner.
+    """
+    .. attributetable:: fortnite_api.ShopEntryBanner
+
+    A class to represent a shop entry banner.
 
     Attributes
     ----------
@@ -172,7 +181,10 @@ class ShopEntryBanner:
 
 
 class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
-    """Represents the layout of a shop entry.
+    """
+    .. attributetable:: fortnite_api.ShopEntryLayout
+
+    Represents the layout of a shop entry.
 
     Attributes
     ----------
@@ -202,7 +214,10 @@ class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
 
 
 class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
-    """Represents a new display asset for a shop entry. A display asset is an asset that is
+    """
+    .. attributetable:: fortnite_api.ShopEntryNewDisplayAsset
+
+    Represents a new display asset for a shop entry. A display asset is an asset that is
     used to visually represent a cosmetic item in the shop.
 
     Attributes
@@ -224,7 +239,10 @@ class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
 
 
 class ShopEntry(Generic[HTTPClientT]):
-    """Represents an item shop entry. Each entry in the shop contains
+    """
+    .. attributetable:: fortnite_api.ShopEntry
+
+    Represents an item shop entry. Each entry in the shop contains
     related cosmetics that are available in the shop.
 
     Attributes
@@ -340,7 +358,10 @@ class ShopEntry(Generic[HTTPClientT]):
 
 
 class Shop(Generic[HTTPClientT]):
-    """Represents the Fortnite shop.
+    """
+    .. attributetable:: fortnite_api.Shop
+
+    Represents the Fortnite shop.
 
     Attributes
     ----------

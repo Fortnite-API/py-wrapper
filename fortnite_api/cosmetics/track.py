@@ -36,7 +36,10 @@ __all__: Tuple[str, ...] = ('CosmeticTrackDifficulty', 'CosmeticTrack')
 
 
 class CosmeticTrackDifficulty:
-    """Represents the difficulty of a track cosmetic in Fortnite.
+    """
+    .. attributetable:: fortnite_api.CosmeticTrackDifficulty
+
+    Represents the difficulty of a track cosmetic in Fortnite.
 
     Attributes
     ----------
@@ -66,7 +69,10 @@ class CosmeticTrackDifficulty:
 
 
 class CosmeticTrack(Cosmetic[HTTPClientT]):
-    """Represents a track cosmetic in Fortnite.
+    """
+    .. attributetable:: fortnite_api.CosmeticTrack
+
+    Represents a track cosmetic in Fortnite.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
 

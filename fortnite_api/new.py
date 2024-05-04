@@ -37,7 +37,10 @@ __all__: Tuple[str, ...] = ('NewCosmetic', 'NewBrCosmetics', 'NewCosmetics')
 
 
 class NewCosmetic(Generic[CosmeticT]):
-    """Represents a response from the new cosmetics endpoint for a given cosmetic type. The types are as follows:
+    """
+    .. attributetable:: fortnite_api.NewCosmetic
+    
+    Represents a response from the new cosmetics endpoint for a given cosmetic type. The types are as follows:
 
     - :attr:`fortnite_api.CosmeticType.BR` -> List of :class:`fortnite_api.CosmeticBr`
     - :attr:`fortnite_api.CosmeticType.TRACKS` -> List of :class:`fortnite_api.CosmeticTrack`
@@ -78,7 +81,10 @@ class NewCosmetic(Generic[CosmeticT]):
 
 
 class NewBrCosmetics(NewCosmetic[CosmeticBr[HTTPClientT]]):
-    """Represents a returned response from the new BR cosmetics endpoint.
+    """
+    .. attributetable:: fortnite_api.NewBrCosmetics
+    
+    Represents a returned response from the new BR cosmetics endpoint.
 
     This inherits from :class:`fortnite_api.NewCosmetic`.
 
@@ -113,7 +119,10 @@ class NewBrCosmetics(NewCosmetic[CosmeticBr[HTTPClientT]]):
 
 
 class NewCosmetics(Generic[HTTPClientT]):
-    """Represents a response from the new cosmetics endpoint.
+    """
+    .. attributetable:: fortnite_api.NewCosmetics
+    
+    Represents a response from the new cosmetics endpoint.
 
     Attributes
     ----------

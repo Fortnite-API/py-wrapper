@@ -35,7 +35,10 @@ __all__: Tuple[str, ...] = ('CosmeticInstrument',)
 
 
 class CosmeticInstrument(Cosmetic[HTTPClientT]):
-    """Represents an instrument cosmetic in Fortnite.
+    """
+    .. attributetable:: fortnite_api.CosmeticInstrument
+
+    Represents an instrument cosmetic in Fortnite.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
 
