@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import Any, Dict, Generic, List, Optional, Tuple, Type
+from typing import Any, Dict, Generic, List, Mapping, Optional, Tuple, Type
 
 from typing_extensions import Self
 
@@ -50,6 +50,16 @@ __all__: Tuple[str, ...] = (
 
 # Matches a tile size: size_<int>_x_<int>
 _TILE_SIZE_REGEX = re.compile(r'size_(?P<width>\d+)_x_(?P<height>\d+)', re.IGNORECASE)
+
+_BACKUP_TILE_MAPPING: Mapping[str, Tuple[int, int]] = {
+    'mini': (1, 1),
+    'small': (1, 1),
+    'normal': (1, 2),
+    'doublewide': (2, 2),
+    'triplewide': (3, 2),
+    'quadwide': (4, 2),
+    'pentawide': (5, 2),
+}
 
 
 class TileSize:
@@ -97,20 +107,15 @@ class TileSize:
     def _from_fallback(cls: Type[Self], value: str, /) -> Self:
         value = value.lower()
 
-        if value == 'mini':
-            return cls(width=1, height=1, internal=value)
-        elif value == 'small':
-            return cls(width=1, height=1, internal=value)
-        elif value == 'normal':
-            return cls(width=1, height=2, internal=value)
-        elif value == 'doublewide':
-            return cls(width=2, height=2, internal=value)
-        elif value == 'triplewide':
-            return cls(width=3, height=2, internal=value)
-        else:
-            # this is some sort of unknown default fallback from the API, and should
-            # never realistically happen. We'll default to a normal tile size.
-            return cls(width=1, height=2, internal=value)
+        # Check for known API backups
+        backup = _BACKUP_TILE_MAPPING.get(value)
+        if backup is not None:
+            width, height = backup
+            return cls(width=width, height=height, internal=value)
+
+        # This is some sort of unknown default fallback from the API, and should
+        # never realistically happen. We'll default to a normal tile size.
+        return cls(width=1, height=2, internal=value)
 
     @classmethod
     def from_value(cls: Type[Self], value: str, /) -> Self:
