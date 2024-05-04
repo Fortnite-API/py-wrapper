@@ -948,8 +948,8 @@ class SyncFortniteAPI:
         *,
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[requests.Session] = None,
-        optimization_flags: Optional[OptimizationFlags] = None,
         beta: bool = False,
+        optimization_flags: OptimizationFlags = OptimizationFlags.default(),
     ) -> None:
         self.http: SyncHTTPClient = SyncHTTPClient(session=session, token=api_key, optimization_flags=optimization_flags)
         self.default_language: Optional[GameLanguage] = default_language
