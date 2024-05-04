@@ -57,7 +57,7 @@ class OptimizationFlags(enum.IntFlag):
                 ...
     """
 
-    IGNORE_NULL: int = 0 >> 0
+    IGNORE_NULL: int = enum.auto()
 
     @classmethod
     def none(cls) -> OptimizationFlags:
