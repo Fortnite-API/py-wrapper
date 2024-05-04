@@ -797,6 +797,10 @@ class FortniteAPI:
 
         Fetch stats for a Fortnite player by their name.
 
+        .. note::
+
+            The ratelimit for this endpoint is max 3 requests per second, 180 per minute.
+
         Parameters
         ----------
         name: Optional[:class:`str`]
