@@ -26,7 +26,8 @@ from __future__ import annotations
 
 import datetime
 import functools
-from typing import Any, Callable, Literal, Optional, TypeVar, Union, overload, List
+import inspect
+from typing import Any, Callable, Literal, Optional, TypeVar, Union, cast, overload, List
 
 import aiohttp
 import requests
@@ -73,34 +74,50 @@ def _remove_coro_doc(cls: T) -> T:
     return cls
 
 
-def async_beta_method(
+@overload
+def beta_method(
     func: Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]
-) -> Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]:
-    @functools.wraps(func)
-    async def wrapped_beta_method(self: FortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
-        if not self.beta:
-            raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
-
-        try:
-            return await func(self, *args, **kwargs)
-        except Exception as exc:
-            raise BetaUnknownException(original=exc) from exc
-
-    return wrapped_beta_method
+) -> Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]: ...
 
 
-def sync_beta_method(func: Callable[Concatenate[SyncFortniteAPI_T, P], T]) -> Callable[Concatenate[SyncFortniteAPI_T, P], T]:
-    @functools.wraps(func)
-    def wrapped_beta_method(self: SyncFortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
-        if not self.beta:
-            raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
+@overload
+def beta_method(func: Callable[Concatenate[SyncFortniteAPI_T, P], T]) -> Callable[Concatenate[SyncFortniteAPI_T, P], T]: ...
 
-        try:
-            return func(self, *args, **kwargs)
-        except Exception as exc:
-            raise BetaUnknownException(original=exc)
 
-    return wrapped_beta_method
+def beta_method(
+    func: Union[
+        Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]], Callable[Concatenate[SyncFortniteAPI_T, P], T]
+    ]
+) -> Union[Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]], Callable[Concatenate[SyncFortniteAPI_T, P], T]]:
+    if inspect.iscoroutinefunction(func):
+        # This is coroutine, so we need to wrap it in an async function
+        @functools.wraps(func)
+        async def _wrapped_async_beta_method(self: FortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
+            if not self.beta:
+                raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
+
+            try:
+                return await func(self, *args, **kwargs)
+            except Exception as exc:
+                raise BetaUnknownException(original=exc) from exc
+
+        return _wrapped_async_beta_method
+    else:
+        # Pyright cannot automatically infer the return type of
+        # this function, so we need to manually specify it.
+        func = cast(Callable[Concatenate[SyncFortniteAPI_T, P], T], func)
+
+        @functools.wraps(func)
+        def _wrapped_sync_beta_method(self: SyncFortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
+            if not self.beta:
+                raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
+
+            try:
+                return func(self, *args, **kwargs)
+            except Exception as exc:
+                raise BetaUnknownException(original=exc) from exc
+
+        return _wrapped_sync_beta_method
 
 
 class FortniteAPI:
@@ -849,7 +866,7 @@ class FortniteAPI:
 
     # BETA METHODS
 
-    @async_beta_method
+    @beta_method
     async def beta_fetch_material_instances(self) -> List[MaterialInstance]:
         """|coro|
 
@@ -1228,7 +1245,7 @@ class SyncFortniteAPI:
         raise ValueError("You must pass either a name or an account_id to fetch stats.")
 
     @copy_doc(FortniteAPI.beta_fetch_material_instances)
-    @sync_beta_method
+    @beta_method
     def beta_fetch_material_instances(self) -> List[MaterialInstance[SyncHTTPClient]]:
         data = self.http.beta_get_material_instances()
 
