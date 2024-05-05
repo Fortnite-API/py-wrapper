@@ -39,7 +39,7 @@ from .banner import Banner, BannerColor
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticTrack
 from .creator_code import CreatorCode
 from .enums import *
-from .errors import BetaAccessNotEnabled, BetaUnknownException
+from .errors import BetaAccessNotEnabled, BetaUnknownException, MissingAPIKey
 from .flags import OptimizationFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
@@ -644,7 +644,7 @@ class FortniteAPI:
     async def fetch_creator_code(self, /, *, name: str) -> CreatorCode:
         """|coro|
 
-        Fetch information about a creator code in Fortnite from its name.
+        Fetch information about a creator code in Fortnite from the creator code name.
 
         Parameters
         ----------
@@ -655,6 +655,11 @@ class FortniteAPI:
         -------
         :class:`fortnite_api.CreatorCode`
             The fetched creator code.
+
+        Raises
+        ------
+        NotFound
+            A creator code with that name was not found.
         """
         data = await self.http.get_creator_code(name)
         return CreatorCode(data=data)
@@ -836,7 +841,14 @@ class FortniteAPI:
         ValueError
             You cannot pass both a ``name`` and an ``account_id`` to fetch stats at the
             same time, or, you must pass either a ``name`` or an ``account_id`` to fetch stats.
+        RateLimitExceeded
+            The rate limit for this endpoint has been exceeded.
+        MissingAPIKey
+            The client does not have an API key set to fetch player stats.
         """
+        if self.http.token is None:
+            raise MissingAPIKey("An API key is required to fetch player stats.")
+
         if name is not None and account_id is not None:
             raise ValueError("You cannot pass both a name and an ID to fetch stats.")
 
@@ -906,7 +918,7 @@ class FortniteAPI:
             The client does not have beta access enabled through :attr:`~beta`.
         BetaUnknownException
             An unknown error occurred while fetching the material instances. This could be due to
-            an issue with the API or the client.
+            an issue with the API or the client. Any unknown errors raised will be wrapped in this exception.
         """
         data = await self.http.beta_get_material_instances()
 
