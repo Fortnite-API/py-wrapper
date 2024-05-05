@@ -18,33 +18,37 @@ Exception Hierarchy
             - :exc:`~fortnite_api.Unauthorized`
         - :exc:`~fortnite_api.BetaAccessNotEnabled`
         - :exc:`~fortnite_api.BetaUnknownException`
+        - :exc:`~fortnite_api.MissingAPIKey`
 
 Exception Classes
 -----------------
 
-.. autoclass:: FortniteAPIException
+.. autoclass:: fortnite_api.FortniteAPIException
     :members:
 
-.. autoclass:: HTTPException
+.. autoclass:: fortnite_api.HTTPException
     :members:
 
-.. autoclass:: NotFound
+.. autoclass:: fortnite_api.NotFound
     :members:
 
-.. autoclass:: Forbidden
+.. autoclass:: fortnite_api.Forbidden
     :members:
 
-.. autoclass:: ServiceUnavailable
+.. autoclass:: fortnite_api.ServiceUnavailable
     :members:
 
-.. autoclass:: RateLimited
+.. autoclass:: fortnite_api.RateLimited
     :members:
 
-.. autoclass:: Unauthorized
+.. autoclass:: fortnite_api.Unauthorized
     :members:
 
-.. autoclass:: BetaAccessNotEnabled
+.. autoclass:: fortnite_api.BetaAccessNotEnabled
     :members:
 
-.. autoclass:: BetaUnknownException
+.. autoclass:: fortnite_api.BetaUnknownException
+    :members:
+
+.. autoclass:: fortnite_api.MissingAPIKey
     :members:

@@ -40,6 +40,7 @@ __all__: Tuple[str, ...] = (
     "Unauthorized",
     "BetaAccessNotEnabled",
     "BetaUnknownException",
+    "MissingAPIKey",
 )
 
 
@@ -196,3 +197,20 @@ class BetaUnknownException(FortniteAPIException):
             f"An unknown exception occurred while trying to access a beta feature. Original exception: {original}"
         )
         self.original: Exception = original
+
+
+class MissingAPIKey(FortniteAPIException):
+    """
+    .. attributetable:: fortnite_api.MissingAPIKey
+
+    Exception raised when the client does not have an API key set.
+
+    This class inherits :class:`fortnite_api.FortniteAPIException`.
+
+    Attributes
+    ----------
+    message: :class:`str`
+        The error message describing the exception.
+    """
+
+    pass
