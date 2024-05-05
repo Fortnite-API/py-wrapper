@@ -38,41 +38,46 @@ __all__: Tuple[str, ...] = ('CosmeticsAll',)
 class CosmeticsAll(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticsAll
-    
-    A class that represents a request to get all cosmetics.
+
+    A class that represents a request to fetch all cosmetics available in Fortnite.
 
     .. container:: operations
 
         .. describe:: len(x)
 
-            Returns the total amount of cosmetics.
+            Returns the total amount of cosmetics available.
 
         .. describe:: iter(x)
 
-            Returns an iterator of the cosmetics. In the following
-            order: battle royale, tracks, instruments, cars, lego, lego kits.
+            Returns an iterator of the cosmetics, working through one unique cosmetic type before
+            continuing onto the next. Works in the following
+            order: :class:`~fortnite_api.CosmeticBr`, :class:`~fortnite_api.CosmeticTrack`,
+            :class:`~fortnite_api.CosmeticInstrument`, :class:`~fortnite_api.CosmeticCar`,
+            :class:`~fortnite_api.CosmeticLego`, :class:`~fortnite_api.CosmeticLegoKit`.
 
-        .. describe:: for x in y
+            .. code-block:: python3
 
-            Iterates over the cosmetics. In the following order:
-            battle royale, tracks, instruments, cars, lego, lego kits.
+                all_cosmetics = await client.fetch_all_cosmetics()
+                for cosmetic in all_cosmetics:
+                    print(cosmetic.id, cosmetic.type)
 
     Attributes
     ----------
     br: List[:class:`fortnite_api.CosmeticBr`]
-        The battle royale cosmetics.
+        A list of all battle royale cosmetics.
     tracks: List[:class:`fortnite_api.CosmeticTrack`]
-        The tracks cosmetics.
+        A list of all track cosmetics.
     instruments: List[:class:`fortnite_api.CosmeticInstrument`]
-        The instruments cosmetics.
+        A list of all instrument cosmetics.
     cars: List[:class:`fortnite_api.CosmeticCar`]
-        The cars cosmetics.
+        A list of all car cosmetics.
     lego: List[:class:`fortnite_api.CosmeticLego`]
-        The lego cosmetics.
+        A list of all lego cosmetics.
     lego_kits: List[:class:`fortnite_api.CosmeticLegoKit`]
-        The lego kits cosmetics.
+        A list of all lego kit cosmetics.
     raw_data: :class:`dict`
-        The raw data of the cosmetics.
+        The raw data of the request. Can be used to recreate the object without
+        fetching the data again.
     """
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
