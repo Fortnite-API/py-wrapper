@@ -55,11 +55,11 @@ from .utils import _transform_dict_for_get_request, copy_doc, remove_prefix
 T = TypeVar('T')
 TC = TypeVar('TC')
 P = ParamSpec('P')
-FortniteAPI_T = TypeVar('FortniteAPI_T', bound='FortniteAPI')
-SyncFortniteAPI_T = TypeVar('SyncFortniteAPI_T', bound='SyncFortniteAPI')
+Client_T = TypeVar('Client_T', bound='Client')
+SyncClient_T = TypeVar('SyncClient_T', bound='SyncClient')
 
-FetchFunc = Callable[Concatenate[FortniteAPI_T, P], Coroutine[Any, Any, T]]
-SyncFetchFunc = Callable[Concatenate[SyncFortniteAPI_T, P], T]
+FetchFunc = Callable[Concatenate[Client_T, P], Coroutine[Any, Any, T]]
+SyncFetchFunc = Callable[Concatenate[SyncClient_T, P], T]
 
 
 def _remove_coro_doc(cls: T) -> T:
@@ -78,20 +78,20 @@ def _remove_coro_doc(cls: T) -> T:
 
 
 @overload
-def beta_method(func: FetchFunc[FortniteAPI_T, P, T]) -> FetchFunc[FortniteAPI_T, P, T]: ...
+def beta_method(func: FetchFunc[Client_T, P, T]) -> FetchFunc[Client_T, P, T]: ...
 
 
 @overload
-def beta_method(func: SyncFetchFunc[SyncFortniteAPI_T, P, T]) -> SyncFetchFunc[SyncFortniteAPI_T, P, T]: ...
+def beta_method(func: SyncFetchFunc[SyncClient_T, P, T]) -> SyncFetchFunc[SyncClient_T, P, T]: ...
 
 
 def beta_method(
-    func: Union[FetchFunc[FortniteAPI_T, P, T], SyncFetchFunc[SyncFortniteAPI_T, P, T]]
-) -> Union[FetchFunc[FortniteAPI_T, P, T], SyncFetchFunc[SyncFortniteAPI_T, P, T]]:
+    func: Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]]
+) -> Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]]:
     if inspect.iscoroutinefunction(func):
         # This is coroutine, so we need to wrap it in an async function
         @functools.wraps(func)
-        async def _wrapped_async_beta_method(self: FortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
+        async def _wrapped_async_beta_method(self: Client_T, *args: P.args, **kwargs: P.kwargs) -> T:
             if not self.beta:
                 raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
@@ -104,10 +104,10 @@ def beta_method(
     else:
         # Pyright cannot automatically infer the return type of
         # this function, so we need to manually specify it.
-        func = cast(SyncFetchFunc[SyncFortniteAPI_T, P, T], func)
+        func = cast(SyncFetchFunc[SyncClient_T, P, T], func)
 
         @functools.wraps(func)
-        def _wrapped_sync_beta_method(self: SyncFortniteAPI_T, *args: P.args, **kwargs: P.kwargs) -> T:
+        def _wrapped_sync_beta_method(self: SyncClient_T, *args: P.args, **kwargs: P.kwargs) -> T:
             if not self.beta:
                 raise BetaAccessNotEnabled("Beta access is not enabled for this client.")
 
@@ -119,11 +119,11 @@ def beta_method(
         return _wrapped_sync_beta_method
 
 
-class FortniteAPI:
+class Client:
     """
-    .. attributetable:: fortnite_api.FortniteAPI
+    .. attributetable:: fortnite_api.Client
 
-    Represents a Fortnite API client. This is the main class used to interact with the Fortnite API.
+    Represents a Fortnite API Client. This is the main class used to interact with the Fortnite API.
 
     .. container:: operations
 
@@ -941,9 +941,9 @@ class FortniteAPI:
 
 
 @_remove_coro_doc
-class SyncFortniteAPI:
+class SyncClient:
     """
-    .. attributetable:: fortnite_api.SyncFortniteAPI
+    .. attributetable:: fortnite_api.SyncClient
 
     Represents a Sync Fortnite API client. This is the main class used to interact with the Fortnite API.
 
@@ -1010,7 +1010,7 @@ class SyncFortniteAPI:
         return lang.value
 
     # COSMETICS
-    @copy_doc(FortniteAPI.fetch_cosmetics_cars)
+    @copy_doc(Client.fetch_cosmetics_cars)
     def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar[SyncHTTPClient]]:
         data = self.http.get_cosmetics_cars(language=self._resolve_language_value(language))
         return TransformerListProxy(
@@ -1018,7 +1018,7 @@ class SyncFortniteAPI:
             lambda x: CosmeticCar(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_cosmetics_instruments)
+    @copy_doc(Client.fetch_cosmetics_instruments)
     def fetch_cosmetics_instruments(
         self, *, language: Optional[GameLanguage] = None
     ) -> List[CosmeticInstrument[SyncHTTPClient]]:
@@ -1028,7 +1028,7 @@ class SyncFortniteAPI:
             lambda x: CosmeticInstrument(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_cosmetics_lego_kits)
+    @copy_doc(Client.fetch_cosmetics_lego_kits)
     def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego_kits(language=self._resolve_language_value(language))
         return TransformerListProxy(
@@ -1036,7 +1036,7 @@ class SyncFortniteAPI:
             lambda x: CosmeticLegoKit(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_cosmetics_tracks)
+    @copy_doc(Client.fetch_cosmetics_tracks)
     def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack[SyncHTTPClient]]:
         data = self.http.get_cosmetics_tracks(language=self._resolve_language_value(language))
         return TransformerListProxy(
@@ -1044,7 +1044,7 @@ class SyncFortniteAPI:
             lambda x: CosmeticTrack(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_cosmetics_br)
+    @copy_doc(Client.fetch_cosmetics_br)
     def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
         data = self.http.get_cosmetics_br(language=self._resolve_language_value(language))
         return TransformerListProxy(
@@ -1052,14 +1052,14 @@ class SyncFortniteAPI:
             lambda x: CosmeticBr(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_cosmetic_br)
+    @copy_doc(Client.fetch_cosmetic_br)
     def fetch_cosmetic_br(
         self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None
     ) -> CosmeticBr[SyncHTTPClient]:
         data = self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_language_value(language))
         return CosmeticBr(data=data, http=self.http)
 
-    @copy_doc(FortniteAPI.fetch_cosmetics_lego)
+    @copy_doc(Client.fetch_cosmetics_lego)
     def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLego[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
         return TransformerListProxy(
@@ -1067,19 +1067,19 @@ class SyncFortniteAPI:
             lambda x: CosmeticLego(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_cosmetics_all)
+    @copy_doc(Client.fetch_cosmetics_all)
     def fetch_cosmetics_all(self, *, language: Optional[GameLanguage] = None) -> CosmeticsAll[SyncHTTPClient]:
         data = self.http.get_cosmetics_all(language=self._resolve_language_value(language))
         return CosmeticsAll(data=data, http=self.http)
 
     # NEW COSMETICS
 
-    @copy_doc(FortniteAPI.fetch_cosmetics_br_new)
+    @copy_doc(Client.fetch_cosmetics_br_new)
     def fetch_cosmetics_br_new(self) -> NewBrCosmetics[SyncHTTPClient]:
         data = self.http.get_cosmetics_br_new()
         return NewBrCosmetics(data=data, http=self.http)
 
-    @copy_doc(FortniteAPI.fetch_cosmetics_new)
+    @copy_doc(Client.fetch_cosmetics_new)
     def fetch_cosmetics_new(self) -> NewCosmetics[SyncHTTPClient]:
         data = self.http.get_cosmetics_new()
         return NewCosmetics(data=data, http=self.http)
@@ -1164,7 +1164,7 @@ class SyncFortniteAPI:
         last_appearance: Optional[datetime.datetime] = ...,
     ) -> CosmeticBr[SyncHTTPClient]: ...
 
-    @copy_doc(FortniteAPI.search_br_cosmetics)
+    @copy_doc(Client.search_br_cosmetics)
     def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr[SyncHTTPClient], List[CosmeticBr[SyncHTTPClient]]]:
         multiple = kwargs.pop('multiple')
 
@@ -1184,13 +1184,13 @@ class SyncFortniteAPI:
 
     # AES
 
-    @copy_doc(FortniteAPI.fetch_aes)
+    @copy_doc(Client.fetch_aes)
     def fetch_aes(self, *, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
         data = self.http.get_aes(key_format.value)
         return Aes(data=data)
 
     # BANNERS
-    @copy_doc(FortniteAPI.fetch_banners)
+    @copy_doc(Client.fetch_banners)
     def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[SyncHTTPClient]]:
         data = self.http.get_banners(language=self._resolve_language_value(language))
         return TransformerListProxy(
@@ -1198,7 +1198,7 @@ class SyncFortniteAPI:
             lambda x: Banner(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_banner_colors)
+    @copy_doc(Client.fetch_banner_colors)
     def fetch_banner_colors(self) -> List[BannerColor]:
         data = self.http.get_banner_colors()
         return TransformerListProxy(
@@ -1208,38 +1208,38 @@ class SyncFortniteAPI:
 
     # CREATOR CODES
 
-    @copy_doc(FortniteAPI.fetch_creator_code)
+    @copy_doc(Client.fetch_creator_code)
     def fetch_creator_code(self, /, *, name: str) -> CreatorCode:
         data = self.http.get_creator_code(name)
         return CreatorCode(data=data)
 
     # MAPS
 
-    @copy_doc(FortniteAPI.fetch_map)
+    @copy_doc(Client.fetch_map)
     def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map[SyncHTTPClient]:
         data = self.http.get_map(language=self._resolve_language_value(language))
         return Map(data=data, http=self.http)
 
     # NEWS
 
-    @copy_doc(FortniteAPI.fetch_news)
+    @copy_doc(Client.fetch_news)
     def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News[SyncHTTPClient]:
         data = self.http.get_news(language=self._resolve_language_value(language))
         return News(data=data, http=self.http)
 
-    @copy_doc(FortniteAPI.fetch_news_br)
+    @copy_doc(Client.fetch_news_br)
     def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews[SyncHTTPClient]:
         data = self.http.get_news_br(language=self._resolve_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
-    @copy_doc(FortniteAPI.fetch_news_stw)
+    @copy_doc(Client.fetch_news_stw)
     def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews[SyncHTTPClient]:
         data = self.http.get_news_stw(language=self._resolve_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     # PLAYLISTS
 
-    @copy_doc(FortniteAPI.fetch_playlists)
+    @copy_doc(Client.fetch_playlists)
     def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist[SyncHTTPClient]]:
         data = self.http.get_playlists(language=self._resolve_language_value(language))
         return TransformerListProxy(
@@ -1247,14 +1247,14 @@ class SyncFortniteAPI:
             lambda x: Playlist(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_playlist)
+    @copy_doc(Client.fetch_playlist)
     def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist[SyncHTTPClient]:
         data = self.http.get_playlist(id, language=self._resolve_language_value(language))
         return Playlist(data=data, http=self.http)
 
     # PLAYER STATS
 
-    @copy_doc(FortniteAPI.fetch_br_stats)
+    @copy_doc(Client.fetch_br_stats)
     def fetch_br_stats(
         self,
         *,
@@ -1284,7 +1284,7 @@ class SyncFortniteAPI:
 
         raise ValueError("You must pass either a name or an account_id to fetch stats.")
 
-    @copy_doc(FortniteAPI.beta_fetch_material_instances)
+    @copy_doc(Client.beta_fetch_material_instances)
     @beta_method
     def beta_fetch_material_instances(self) -> List[MaterialInstance[SyncHTTPClient]]:
         data = self.http.beta_get_material_instances()
@@ -1294,7 +1294,7 @@ class SyncFortniteAPI:
             lambda x: MaterialInstance(data=x, http=self.http),
         )
 
-    @copy_doc(FortniteAPI.fetch_shop)
+    @copy_doc(Client.fetch_shop)
     def fetch_shop(self, /, *, language: Optional[GameLanguage] = None) -> Shop[SyncHTTPClient]:
         data = self.http.get_shop(language=self._resolve_language_value(language))
         return Shop(data=data, http=self.http)

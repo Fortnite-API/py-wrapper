@@ -355,7 +355,7 @@ class HTTPClient(HTTPMixin):
     async def request(self, route: Route, **kwargs: Any) -> Any:
         if self.session is None:
             raise RuntimeError(
-                'aiohttp.ClientSession is not set. Must either pass session to FortniteAPI constructor or use the async context manager.'
+                'aiohttp.ClientSession is not set. Must either pass session to Client constructor or use the async context manager.'
             )
 
         # Update the params with the optimization flags
@@ -450,7 +450,7 @@ class SyncHTTPClient(HTTPMixin):
     def request(self, route: Route, **kwargs: Any) -> Any:
         if self.session is None:
             raise RuntimeError(
-                'requests.Session is not set. Must either pass session to FortniteAPI constructor or use the context manager.'
+                'requests.Session is not set. Must either pass session to Client constructor or use the context manager.'
             )
 
         # Update the params with the optimization flags

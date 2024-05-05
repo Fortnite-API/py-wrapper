@@ -23,7 +23,7 @@ object in this library. In Version 2, the client held all available endpoints in
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
+    client = fortnite_api.Client(api_key='', run_async=False)
 
     # All cosmetics endpoints are available under "client.cosmetics"
     client.cosmetics.fetch()
@@ -39,7 +39,7 @@ So for example, after creating an instance of the client, you simply call the me
 .. code-block:: python3
 
     # "with" discussed later
-    with fortnite_api.SyncFortniteAPI() as client:
+    with fortnite_api.SyncClient() as client:
         # Method to fetch all cosmetics
         client.fetch_cosmetics_all()
 
@@ -54,9 +54,9 @@ the client now holds all available endpoints as direct methods. This makes the l
 Async and Sync Specific Classes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 In Version 2, you could specify whether you wanted to use the client in an async or sync manner by passing a 
-``run_async`` parameter to the client. In Version 3, the :class:`fortnite_api.FortniteAPI` client only has async
+``run_async`` parameter to the client. In Version 3, the :class:`fortnite_api.Client` client only has async
 functions. Don't worry though, all synchronous functionality has been extended into the 
-:class:`fortnite_api.SyncFortniteAPI` class with exactly the same interface as its async counterpart.
+:class:`fortnite_api.SyncClient` class with exactly the same interface as its async counterpart.
 
 .. _creating-the-client:
 
@@ -67,25 +67,25 @@ or sync methods. Now, creating an instance of the client should be done as follo
 
 Async client
 ^^^^^^^^^^^^
-To create an async client, you use the :class:`fortnite_api.FortniteAPI` class. This class is used to make async requests to the Fortnite API.
+To create an async client, you use the :class:`fortnite_api.Client` class. This class is used to make async requests to the Fortnite API.
 
 .. code-block:: python3
 
     import asyncio
 
     async def main():
-        async with fortnite_api.FortniteAPI(api_key='') as client:
+        async with fortnite_api.Client(api_key='') as client:
             ... 
     
     asyncio.run(main())
 
 Sync client
 ^^^^^^^^^^^
-To create a sync client, you use the :class:`fortnite_api.SyncFortniteAPI` class. This class is used to make synchronous requests to the Fortnite API.
+To create a sync client, you use the :class:`fortnite_api.SyncClient` class. This class is used to make synchronous requests to the Fortnite API.
 
 .. code-block:: python3
 
-    with fortnite_api.SyncFortniteAPI(api_key='') as client:
+    with fortnite_api.SyncClient(api_key='') as client:
         ...
 
 .. _client-context-managers:
@@ -102,7 +102,7 @@ Thus, when creating and using an instance of the client, it is recommended that 
 
 .. code-block:: python3
 
-    async with fortnite_api.FortniteAPI(api_key='') as client: # Session created
+    async with fortnite_api.Client(api_key='') as client: # Session created
         print('Client session is open for requests.')
         ... # Some operations with the client
         
@@ -110,7 +110,7 @@ Thus, when creating and using an instance of the client, it is recommended that 
 
 .. code-block:: python3
 
-    with fortnite_api.SyncFortniteAPI(api_key='') as client: # Session created
+    with fortnite_api.SyncClient(api_key='') as client: # Session created
         print('Client session is open for requests.')
         ... # Some operations with the client
 
@@ -129,7 +129,7 @@ When using the async client without the context manager, you must pass the sessi
 
     async def main():
         session = aiohttp.ClientSession()
-        client = fortnite_api.FortniteAPI(api_key='', session=session)    
+        client = fortnite_api.Client(api_key='', session=session)    
         ...
         
         await session.close()
@@ -145,7 +145,7 @@ When using the sync client without the context manager, you must pass the sessio
     import requests
 
     session = requests.Session()
-    client = fortnite_api.SyncFortniteAPI(api_key='', session=session)    
+    client = fortnite_api.SyncClient(api_key='', session=session)    
     ...
 
     session.close()
@@ -176,7 +176,7 @@ Async client
     *   - ``optimization_flags``
         - This is a new parameter that allows you to toggle certain optimizations on or off. This parameter is not required, and defaults to :meth:`~fortnite_api.OptimizationFlags.default` if not given. 
 
-See the documentation for these parameters in :class:`fortnite_api.FortniteAPI`.
+See the documentation for these parameters in :class:`fortnite_api.Client`.
 
 Sync client
 ^^^^^^^^^^^
@@ -196,7 +196,7 @@ Sync client
     *   - ``optimization_flags``
         - This is a new parameter that allows you to toggle certain optimizations on or off. This parameter is not required, and defaults to :meth:`~fortnite_api.OptimizationFlags.default` if not given. 
 
-See the documentation for these parameters in :class:`fortnite_api.SyncFortniteAPI`.
+See the documentation for these parameters in :class:`fortnite_api.SyncClient`.
 
 Cosmetics
 ---------
@@ -285,30 +285,30 @@ are as follows:
     *   - Old Method
         - New Method
     *   - ``client.cosmetics.fetch()`` 
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_all`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_all`
     *   - ``client.cosmetics.fetch_br()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_br`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_br`
     *   - ``client.cosmetics.fetch_cars()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_cars`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_cars`
     *   - ``client.cosmetics.fetch_instruments()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_instruments`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_instruments`
     *   - ``client.cosmetics.fetch_lego_kits()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_lego_kits`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_lego_kits`
     *   - ``client.cosmetics.fetch_jam_tracks()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_tracks`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_tracks`
     *   - ``client.cosmetics.fetch_lego_variants()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_lego`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_lego`
     *   - ``client.cosmetics.fetch_all_new()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_new`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_new`
     *   - ``client.cosmetics.fetch_new_br()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_cosmetics_br_new`
+        - :meth:`fortnite_api.Client.fetch_cosmetics_br_new`
     *   - ``client.cosmetics.search_all``
-        - :meth:`fortnite_api.FortniteAPI.search_br_cosmetics`
+        - :meth:`fortnite_api.Client.search_br_cosmetics`
     *   - ``client.cosmetics.search_first``
-        - :meth:`fortnite_api.FortniteAPI.search_br_cosmetics`
+        - :meth:`fortnite_api.Client.search_br_cosmetics`
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and 
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
+under the :class:`fortnite_api.SyncClient` client instead.
 
 
 Playlists
@@ -363,12 +363,12 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.playlist.fetch_all()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_playlists`
+        - :meth:`fortnite_api.Client.fetch_playlists`
     *   - ``client.playlist.fetch_by_id()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_playlist`
+        - :meth:`fortnite_api.Client.fetch_playlist`
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
+under the :class:`fortnite_api.SyncClient` client instead.
 
 Shop
 ----
@@ -448,14 +448,14 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.shop.fetch_all()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_shop`
+        - :meth:`fortnite_api.Client.fetch_shop`
     *   - ``client.shop.fetch_br()``
         - Depreciated.
     *   - ``client.shop.fetch()``
         - Depreciated. ``client.shop.fetch()`` was an alias to ``fetch_br``, which has been depreciated.
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
+under the :class:`fortnite_api.SyncClient` client instead.
 
 
 Aes
@@ -507,10 +507,10 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.aes.fetch()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_aes`
+        - :meth:`fortnite_api.Client.fetch_aes`
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
+under the :class:`fortnite_api.SyncClient` client instead.
 
 News 
 ----
@@ -561,13 +561,13 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.news.fetch()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_news`
+        - :meth:`fortnite_api.Client.fetch_news`
     *   - ``client.news.fetch_by_type()``
-        - Fetching by type has been depreciated. Rather, use these two methods: :meth:`fortnite_api.FortniteAPI.fetch_news_br`, and :meth:`fortnite_api.FortniteAPI.fetch_news_stw`
+        - Fetching by type has been depreciated. Rather, use these two methods: :meth:`fortnite_api.Client.fetch_news_br`, and :meth:`fortnite_api.Client.fetch_news_stw`
 
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
+under the :class:`fortnite_api.SyncClient` client instead.
 
 Creator Code 
 ------------
@@ -613,7 +613,7 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.creator_code.fetch()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_creator_code`
+        - :meth:`fortnite_api.Client.fetch_creator_code`
     *   - ``client.creator_code.exists()``
         - Removed, try to fetch the creator code and handle not found exceptions manually.
     *   - ``client.creator_code.search_first()``
@@ -621,8 +621,8 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - ``client.creator_code.search_all()``
         - Depreciated, search creator code endpoints do not work anymore.
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
+under the :class:`fortnite_api.SyncClient` client instead.
 
 In Version 2, the ``client.creator_code.exists()`` method worked by fetching the creator code and returning ``False`` if :class:`~fortnite_api.NotFound` was raised. This method has been removed in Version 3. If you need similar functionality, you should fetch the creator code and handle the exception if it was not found. For example,
 
@@ -688,12 +688,12 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.stats.fetch_by_name()``
-        - Moved to :meth:`fortnite_api.FortniteAPI.fetch_br_stats` with a ``name`` parameter.
+        - Moved to :meth:`fortnite_api.Client.fetch_br_stats` with a ``name`` parameter.
     *   - ``client.stats.fetch_by_id()``
-        - Moved to the :meth:`fortnite_api.FortniteAPI.fetch_br_stats` with a ``account_id`` parameter.
+        - Moved to the :meth:`fortnite_api.Client.fetch_br_stats` with a ``account_id`` parameter.
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and 
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
+under the :class:`fortnite_api.SyncClient` client instead.
 
 Banners 
 -------
@@ -750,12 +750,12 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.banner.fetch()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_banners`
+        - :meth:`fortnite_api.Client.fetch_banners`
     *   - ``client.banner.fetch_colors()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_banner_colors`
+        - :meth:`fortnite_api.Client.fetch_banner_colors`
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and 
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
+under the :class:`fortnite_api.SyncClient` client instead.
 
 Map 
 ----
@@ -808,10 +808,10 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - Old Method
         - New Method
     *   - ``client.map.fetch()``
-        - :meth:`fortnite_api.FortniteAPI.fetch_map`
+        - :meth:`fortnite_api.Client.fetch_map`
 
-Of course, the same applies to the SyncFortniteAPI client. The methods are the same, but they are synchronous and 
-under the :class:`fortnite_api.SyncFortniteAPI` client instead.
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
+under the :class:`fortnite_api.SyncClient` client instead.
 
 
 .. _migrating-exceptions:
@@ -834,7 +834,7 @@ Exceptions have been refactored in Version 3. The exception hierarchy has been r
 
 - :class:`fortnite_api.Unauthorized`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the client is not authorized to access the requested resource. This will be raised when the client attempts to request to stat endpoints without an api key set. This is raised when a 401 status code is returned by the Fortnite API.
 
-- :class:`fortnite_api.BetaAccessNotEnabled`: A subclass of :class:`fortnite_api.FortniteAPIException` raised when a client attempts to call a beta method without the :attr:`~fortnite_api.FortniteAPI.beta` flag enabled on the client.
+- :class:`fortnite_api.BetaAccessNotEnabled`: A subclass of :class:`fortnite_api.FortniteAPIException` raised when a client attempts to call a beta method without the :attr:`~fortnite_api.Client.beta` flag enabled on the client.
 
 - :class:`fortnite_api.BetaUnknownException`: A special subclass of :class:`fortnite_api.FortniteAPIException` that wraps an exception that ocurred while calling or processing a beta endpoint. This will contain the original exception that was raised.
 
@@ -874,7 +874,7 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.FortniteAPIException` and all its subclasses found in :ref:`the exception hierarchy <api-exception-hierarchy>`: These are exceptions that are raised when an error occurs while fetching data from the Fortnite API. They are used across the library. For what each of them do, see the :ref:`exception hierarchy <api-exception-hierarchy>`.
 
-- :class:`fortnite_api.OptimizationFlags`: Represents options that can be toggled on or off to change behavior of the :class:`fortnite_api.FortniteAPI` and :class:`fortnite_api.SyncFortniteAPI` clients. This is used as a parameter when creating a client.
+- :class:`fortnite_api.OptimizationFlags`: Represents options that can be toggled on or off to change behavior of the :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient` clients. This is used as a parameter when creating a client.
 
 - :class:`fortnite_api.Images`: Represents images returned from the API. This is used across all cosmetics objects through the :class:`fortnite_api.CosmeticImages` object, as well as in the :class:`fortnite_api.Banner` object.
 
@@ -884,9 +884,9 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.MaterialInstanceColors`: A class that holds the background gradient color of a material instance. This is commonly used to create a preview for the material instance in the shop. This is served from the :class:`fortnite_api.MaterialInstance` object.
 
-- :class:`fortnite_api.NewCosmetics`: A class that holds the response from :meth:`~fortnite_api.FortniteAPI.fetch_cosmetics_new`. This is used when fetching new cosmetics.
+- :class:`fortnite_api.NewCosmetics`: A class that holds the response from :meth:`~fortnite_api.Client.fetch_cosmetics_new`. This is used when fetching new cosmetics.
 
-- :class:`fortnite_api.NewBrCosmetics`: A special class that holds the response from :meth:`~fortnite_api.FortniteAPI.fetch_cosmetics_br_new`. This is used specifically when fetching new Battle Royale cosmetics.
+- :class:`fortnite_api.NewBrCosmetics`: A special class that holds the response from :meth:`~fortnite_api.Client.fetch_cosmetics_br_new`. This is used specifically when fetching new Battle Royale cosmetics.
 
 - :class:`fortnite_api.NewCosmetic`: A class that holds specific metadata about new cosmetics, such as the last addition date, the hash of the new cosmetics, and the cosmetics type. This is served from :class:`fortnite_api.NewCosmetics`.
 

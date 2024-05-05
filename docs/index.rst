@@ -7,7 +7,7 @@ View Documentation
 ------------------
 The entirety of the public API is documented here. If you're looking for a specific method, class, or module, the search bar at the top right is your friend. 
 
-If you're not sure where to start, check out the :class:`fortnite_api.FortniteAPI` class for a list of all available methods you can use to interact with the API. 
+If you're not sure where to start, check out the :class:`fortnite_api.Client` class for a list of all available methods you can use to interact with the API. 
 
 .. toctree::
    :maxdepth: 3

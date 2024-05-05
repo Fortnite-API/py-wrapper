@@ -31,7 +31,7 @@ from .aes import *
 from .all import *
 from .asset import *
 from .banner import *
-from .client import FortniteAPI as FortniteAPI, SyncFortniteAPI as SyncFortniteAPI
+from .client import Client as Client, SyncClient as SyncClient
 from .cosmetics import *
 from .creator_code import *
 from .enums import *

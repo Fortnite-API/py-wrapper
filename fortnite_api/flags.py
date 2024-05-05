@@ -63,11 +63,11 @@ class OptimizationFlags(enum.IntFlag):
     -------
     .. code-block:: python3
 
-        from fortnite_api import FortniteAPI, OptimizationFlags
+        from fortnite_api import Client, OptimizationFlags
 
         FLAGS = OptimizationFlags.IGNORE_NULL
         async def main():
-            async with FortniteAPI(api_key="", optimization_flags=FLAGS) as api:
+            async with Client(api_key="", optimization_flags=FLAGS) as api:
                 ...
     """
 

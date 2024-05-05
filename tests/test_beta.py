@@ -31,29 +31,29 @@ from fortnite_api.client import beta_method
 
 
 def test_sync_cannot_call_beta_method():
-    client = fortnite_api.SyncFortniteAPI(beta=False)
+    client = fortnite_api.SyncClient(beta=False)
     with client, pytest.raises(fortnite_api.BetaAccessNotEnabled):
         client.beta_fetch_material_instances()
 
 
 @pytest.mark.asyncio
 async def test_async_cannot_call_beta_method():
-    client = fortnite_api.FortniteAPI(beta=False)
+    client = fortnite_api.Client(beta=False)
     with pytest.raises(fortnite_api.BetaAccessNotEnabled):
         async with client:
             await client.beta_fetch_material_instances()
 
 
-# A mock of the SyncFortniteAPI beta function that raises an error
-class MockSyncFortniteAPI(fortnite_api.SyncFortniteAPI):
+# A mock of the SyncClient beta function that raises an error
+class MockSyncFortniteAPI(fortnite_api.SyncClient):
 
     @beta_method
     def beta_mock_call(self):
         raise ValueError('Mock error')
 
 
-# A mock of the FortniteAPI beta function that raises an error
-class MockFortniteAPI(fortnite_api.FortniteAPI):
+# A mock of the Client beta function that raises an error
+class MockFortniteAPI(fortnite_api.Client):
 
     @beta_method
     async def beta_mock_call(self):

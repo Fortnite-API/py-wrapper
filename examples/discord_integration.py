@@ -22,13 +22,13 @@ import fortnite_api
 # Create a custom bot subclass that takes the Fortnite API client as an argument and stores it as an attribute.
 # This is so that the Fortnite API client can be accessed from the bot instance.
 class MyBot(commands.Bot):
-    def __init__(self, fortnite_client: fortnite_api.FortniteAPI) -> None:
+    def __init__(self, fortnite_client: fortnite_api.Client) -> None:
         super().__init__(
             command_prefix='!',
             intents=discord.Intents.default(),
         )
 
-        self.fortnite_client: fortnite_api.FortniteAPI = fortnite_client
+        self.fortnite_client: fortnite_api.Client = fortnite_client
 
     # When the bot is started, add the FortniteCog to the bot (defined below)
     async def setup_hook(self) -> None:
@@ -52,12 +52,12 @@ class FortniteCog(commands.Cog):
             await ctx.send(f'The AES main key is: `{main_key}`')
 
 
-# It is best for the fortnite_api.FortniteAPI client to be used with its async content manager,
+# It is best for the fortnite_api.Client client to be used with its async content manager,
 # so create a start coroutine that will handle the setup and teardown of
 # the Fortnite API client and the bot.
 async def start() -> None:
     # Define the fortnite client and bot subclass
-    fortnite_client = fortnite_api.FortniteAPI(api_key='YOUR_API_KEY')
+    fortnite_client = fortnite_api.Client(api_key='YOUR_API_KEY')
     bot = MyBot(fortnite_client=fortnite_client)
 
     # Use the respective context managers

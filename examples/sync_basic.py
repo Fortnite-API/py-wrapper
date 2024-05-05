@@ -1,6 +1,6 @@
 """
-This example introduces you to the basic usage of the FortniteAPI client in a synchronous context.
-It familiarizes you with the client and how to use it to fetch data from the Fortnite API.
+This example introduces you to the basic usage of the Client in a synchronous context.
+It familiarizes you with the SyncClient and how to use it to fetch data from the Fortnite API.
 
 Any asynchronous code in this example directory can be converted to synchronous code simply
 by changing the client definition and removing all async/await keywords. The library ensures
@@ -14,7 +14,7 @@ def main():
     # The main way you interact with the API is through the main client.
     # This client uses an requests Session for its HTTP requests, so
     # it's recommended to use the client with an async context manager.
-    with fortnite_api.SyncFortniteAPI(api_key='YOUR_API_KEY') as client:
+    with fortnite_api.SyncClient(api_key='YOUR_API_KEY') as client:
 
         # The client has many methods to get cosmetics, news,
         # and other data from the API. Every method that fetches

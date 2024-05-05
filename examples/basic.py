@@ -1,5 +1,5 @@
 """
-This example introduces you to the basic usage of the FortniteAPI client in an asynchronous context.
+This example introduces you to the basic usage of the Client client in an asynchronous context.
 It familiarizes you with the client and how to use it to fetch data from the Fortnite API.
 """
 
@@ -12,7 +12,7 @@ async def main():
     # The main way you interact with the API is through the main client.
     # This client uses an aiohttp ClientSession for its HTTP requests, so
     # it's recommended to use the client with an async context manager.
-    async with fortnite_api.FortniteAPI(api_key='YOUR_API_KEY') as client:
+    async with fortnite_api.Client(api_key='YOUR_API_KEY') as client:
 
         # The client has many methods to get cosmetics, news,
         # and other data from the API. Every method that fetches
