@@ -145,8 +145,8 @@ class CosmeticCategory(enum.Enum):
     LEGO_KITS = "legokits"
 
 
-class CosmeticBrRarity(enum.Enum):
-    """Represents a rarity of a :class:`fortnite_api.CosmeticBr` cosmetic.
+class CosmeticRarity(enum.Enum):
+    """Represents a rarity of a :class:`~fortnite_api.Cosmetic` object.
 
     Attributes
     ----------

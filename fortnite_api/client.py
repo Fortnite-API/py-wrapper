@@ -409,7 +409,7 @@ class Client:
         type: Optional[CosmeticType] = ...,
         type_display: Optional[str] = ...,
         type_backend: Optional[str] = ...,
-        rarity: Optional[CosmeticBrRarity] = ...,
+        rarity: Optional[CosmeticRarity] = ...,
         rarity_display: Optional[str] = ...,
         rarity_backend: Optional[str] = ...,
         has_series: Optional[bool] = ...,
@@ -449,7 +449,7 @@ class Client:
         type: Optional[CosmeticType] = ...,
         type_display: Optional[str] = ...,
         type_backend: Optional[str] = ...,
-        rarity: Optional[CosmeticBrRarity] = ...,
+        rarity: Optional[CosmeticRarity] = ...,
         rarity_display: Optional[str] = ...,
         rarity_backend: Optional[str] = ...,
         has_series: Optional[bool] = ...,
@@ -506,7 +506,7 @@ class Client:
             The display type of the cosmetic.
         type_backend: Optional[:class:`str`]
             The backend type of the cosmetic.
-        rarity: Optional[:class:`fortnite_api.CosmeticBrRarity`]
+        rarity: Optional[:class:`fortnite_api.CosmeticRarity`]
             The rarity of the cosmetic.
         rarity_display: Optional[:class:`str`]
             The display rarity of the cosmetic.
@@ -1098,7 +1098,7 @@ class SyncClient:
         type: Optional[CosmeticType] = ...,
         type_display: Optional[str] = ...,
         type_backend: Optional[str] = ...,
-        rarity: Optional[CosmeticBrRarity] = ...,
+        rarity: Optional[CosmeticRarity] = ...,
         rarity_display: Optional[str] = ...,
         rarity_backend: Optional[str] = ...,
         has_series: Optional[bool] = ...,
@@ -1138,7 +1138,7 @@ class SyncClient:
         type: Optional[CosmeticType] = ...,
         type_display: Optional[str] = ...,
         type_backend: Optional[str] = ...,
-        rarity: Optional[CosmeticBrRarity] = ...,
+        rarity: Optional[CosmeticRarity] = ...,
         rarity_display: Optional[str] = ...,
         rarity_backend: Optional[str] = ...,
         has_series: Optional[bool] = ...,

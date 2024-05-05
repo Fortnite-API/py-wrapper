@@ -29,7 +29,7 @@ from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
 
 from ..abc import Hashable
 from ..asset import Asset
-from ..enums import CosmeticType
+from ..enums import CosmeticRarity, CosmeticType
 from ..http import HTTPClientT
 from ..images import Images
 from ..utils import get_with_fallback, parse_time
@@ -39,7 +39,7 @@ CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
 __all__: Tuple[str, ...] = (
     'Cosmetic',
     'CosmeticTypeInfo',
-    'CosmeticRarity',
+    'CosmeticRarityInfo',
     'CosmeticSeries',
     'CosmeticImages',
     'CosmeticT',
@@ -89,7 +89,8 @@ class CosmeticTypeInfo:
     """
     .. attributetable:: fortnite_api.CosmeticTypeInfo
 
-    A class that holds cosmetic type information.
+    A class that holds cosmetic type information passed from the API for
+    a given :class:`~fortnite_api.Cosmetic`.
 
     Attributes
     ----------
@@ -109,9 +110,9 @@ class CosmeticTypeInfo:
         self.backend_value: str = data['backendValue']
 
 
-class CosmeticRarity:
+class CosmeticRarityInfo:
     """
-    .. attributetable:: fortnite_api.CosmeticRarity
+    .. attributetable:: fortnite_api.CosmeticRarityInfo
 
     Represents a cosmetic rarity.
 
@@ -128,7 +129,7 @@ class CosmeticRarity:
     __slots__: Tuple[str, ...] = ('value', 'display_value', 'backend_value')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.value: str = data['value']
+        self.value: CosmeticRarity = CosmeticRarity(data['value'])
         self.display_value: str = data['displayValue']
         self.backend_value: str = data['backendValue']
 

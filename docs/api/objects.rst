@@ -129,7 +129,7 @@ Cosmetic Objects
 .. autoclass:: fortnite_api.CosmeticTypeInfo
     :members:
 
-.. autoclass:: fortnite_api.CosmeticRarity
+.. autoclass:: fortnite_api.CosmeticRarityInfo
     :members:
 
 .. autoclass:: fortnite_api.CosmeticSeries 
@@ -203,7 +203,7 @@ Enumerations
 .. autoclass:: fortnite_api.CosmeticCategory
     :members:
 
-.. autoclass:: fortnite_api.CosmeticBrRarity
+.. autoclass:: fortnite_api.CosmeticRarity
     :members:
 
 .. autoclass:: fortnite_api.CosmeticType

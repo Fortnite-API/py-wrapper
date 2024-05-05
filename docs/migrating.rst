@@ -235,14 +235,14 @@ has been prefixed with ``CosmeticX``. A complete mapping of this change is as fo
 Additionally, many new Cosmetic related objects have been added to the library. These include:
 
 - :class:`fortnite_api.CosmeticBrIntroduction`
-- :class:`fortnite_api.CosmeticBrRarity`
+- :class:`fortnite_api.CosmeticRarity`
 - :class:`fortnite_api.CosmeticBrSet`
 - :class:`fortnite_api.CosmeticType`
 - :class:`fortnite_api.CosmeticTrackDifficulty`
 - :class:`fortnite_api.CosmeticLegoImages`
 - :class:`fortnite_api.CosmeticImages`
 - :class:`fortnite_api.CosmeticSeries`
-- :class:`fortnite_api.CosmeticRarity`
+- :class:`fortnite_api.CosmeticRarityInfo`
 - :class:`fortnite_api.CosmeticTypeInfo`
 - :class:`fortnite_api.CosmeticCompatibleMode`
 
