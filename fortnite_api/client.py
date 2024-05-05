@@ -197,7 +197,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -216,7 +216,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -238,7 +238,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -254,13 +254,13 @@ class FortniteAPI:
     async def fetch_cosmetics_instruments(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticInstrument]:
         """|coro|
 
-        Fetches all instruments available in Fortnite.
+        Fetches all instrument cosmetics available in Fortnite.
 
         Parameters
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -276,13 +276,13 @@ class FortniteAPI:
     async def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit]:
         """|coro|
 
-        Fetches all lego kits available in Fortnite.
+        Fetches all lego kit cosmetics available in Fortnite.
 
         Parameters
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -304,7 +304,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -321,13 +321,13 @@ class FortniteAPI:
     async def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack]:
         """|coro|
 
-        Fetches all audio tracks available in Fortnite.
+        Fetches all audio track cosmetics available in Fortnite.
 
         Parameters
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -352,12 +352,17 @@ class FortniteAPI:
             The ID of the cosmetic to fetch.
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
         :class:`fortnite_api.CosmeticBr`
             The cosmetic fetched.
+
+        Raises
+        ------
+        :class:`~fortnite_api.NotFound`
+            A cosmetic with that ID was not found.
         """
         data = await self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_language_value(language))
         return CosmeticBr(data=data, http=self.http)
@@ -367,7 +372,7 @@ class FortniteAPI:
     async def fetch_cosmetics_br_new(self) -> NewBrCosmetics:
         """|coro|
 
-        Fetches all new Battle Royale cosmetics recently made available to Fortnite.
+        Fetches all newly added Battle Royale cosmetics recently made available in Fortnite.
 
         Returns
         -------
@@ -380,7 +385,7 @@ class FortniteAPI:
     async def fetch_cosmetics_new(self) -> NewCosmetics:
         """|coro|
 
-        Fetches all new cosmetics recently made available to Fortnite. This encompasses all cosmetics available in the game.
+        Fetches all new cosmetics recently made available in Fortnite. This encompasses all cosmetic types available in the game.
 
         Returns
         -------
@@ -394,10 +399,10 @@ class FortniteAPI:
     async def search_br_cosmetics(
         self,
         *,
-        multiple: Literal[True],
+        multiple: Literal[True] = True,
         language: GameLanguage = GameLanguage.ENGLISH,
         search_language: GameLanguage = GameLanguage.ENGLISH,
-        match_method: Literal['full', 'contains', 'starts', 'ends'] = 'full',
+        match_method: MatchMethod = MatchMethod.FULL,
         id: Optional[str] = ...,
         name: Optional[str] = ...,
         description: Optional[str] = ...,
@@ -434,10 +439,10 @@ class FortniteAPI:
     async def search_br_cosmetics(
         self,
         *,
-        multiple: Literal[False],
+        multiple: Literal[False] = False,
         language: GameLanguage = GameLanguage.ENGLISH,
         search_language: GameLanguage = GameLanguage.ENGLISH,
-        match_method: Literal['full', 'contains', 'starts', 'ends'] = 'full',
+        match_method: MatchMethod = MatchMethod.FULL,
         id: Optional[str] = ...,
         name: Optional[str] = ...,
         description: Optional[str] = ...,
@@ -480,16 +485,15 @@ class FortniteAPI:
         ----------
         multiple: Optional[:class:`bool`]
             Denotes if multiple matches should be returned. If this is ``True`` then a
-            list of matches will be returned. If ``False``, then only the best match will be returned.
+            list of matches will be returned. If ``False``, then only the best match will be returned. Defaults to ``False``.
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The output language to display the cosmetics in. Will override the default language
-            set in the client. Defaults to the client's :attr:`default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
+            set on the client. Defaults to the client's :attr:`default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
         search_language: Optional[:class:`fortnite_api.GameLanguage`]
-            The search language to use for the search. Will override the default language set in the client. Defaults to
+            The language to use for the search. Will override the default language set on the client. Defaults to
             the client's :attr:`default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
-        match_method: Optional[:class:`str`]
-            The method to use for matching the search query. This can be one of the following:
-            ``full``, ``contains``, ``starts``, ``ends``. Defaults to ``full``.
+        match_method: Optional[:class:`fortnite_api.MatchMethod`]
+            The method to use for matching the search query. Defaults to :attr:`fortnite_api.MatchMethod.FULL`.
         id: Optional[:class:`str`]
             The ID of the cosmetic.
         name: Optional[:class:`str`]
@@ -561,6 +565,10 @@ class FortniteAPI:
         kwargs['language'] = self._resolve_language_value(kwargs.get('language'))
         kwargs['search_language'] = self._resolve_language_value(kwargs.get('search_language'))
 
+        match_method = kwargs.pop('match_method', None)
+        if match_method is not None:
+            kwargs['match_method'] = match_method.value
+
         payload = _transform_dict_for_get_request(kwargs)
         if multiple is True:
             data = await self.http.search_cosmetic_all(**payload)
@@ -602,7 +610,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the banners in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -662,7 +670,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the map in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -683,7 +691,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -702,7 +710,7 @@ class FortniteAPI:
         ----------
         language : Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -721,7 +729,7 @@ class FortniteAPI:
         ----------
         language : Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -742,7 +750,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlists in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -766,7 +774,7 @@ class FortniteAPI:
             The ID of the playlist to fetch.
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlist in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
@@ -859,7 +867,7 @@ class FortniteAPI:
         ----------
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlist in. Defaults to ``None``.
-            This will override the default language set in the client.
+            This will override the default language set on the client.
 
         Returns
         -------
