@@ -132,7 +132,7 @@ Cosmetic Objects
 .. autoclass:: fortnite_api.CosmeticRarityInfo
     :members:
 
-.. autoclass:: fortnite_api.CosmeticSeries 
+.. autoclass:: fortnite_api.CosmeticSeriesInfo 
     :members:
 
 .. autoclass:: fortnite_api.CosmeticImages

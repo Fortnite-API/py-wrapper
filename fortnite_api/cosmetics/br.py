@@ -30,7 +30,7 @@ from typing import Any, Dict, Generic, List, Optional, Tuple
 from ..asset import Asset
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time
-from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeries, CosmeticTypeInfo
+from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeriesInfo, CosmeticTypeInfo
 
 __all__: Tuple[str, ...] = (
     'CosmeticBrSet',
@@ -170,7 +170,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         The type of the cosmetic.
     rarity: Optional[:class:`fortnite_api.CosmeticRarityInfo`]
         The cosmetic's rarity.
-    series: Optional[:class:`fortnite_api.CosmeticSeries`]
+    series: Optional[:class:`fortnite_api.CosmeticSeriesInfo`]
         The series of the cosmetic, if any.
     set: Optional[:class:`fortnite_api.CosmeticBrSet`]
         The set that the cosmetic belongs to, if any.
@@ -251,7 +251,7 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         self.rarity: Optional[CosmeticRarityInfo] = rarity and CosmeticRarityInfo(data=rarity)
 
         series = data.get('series')
-        self.series: Optional[CosmeticSeries[HTTPClientT]] = series and CosmeticSeries(http=http, data=series)
+        self.series: Optional[CosmeticSeriesInfo[HTTPClientT]] = series and CosmeticSeriesInfo(http=http, data=series)
 
         _set = data.get('set')
         self.set: Optional[CosmeticBrSet] = _set and CosmeticBrSet(data=_set)

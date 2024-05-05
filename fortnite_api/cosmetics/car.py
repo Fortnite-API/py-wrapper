@@ -29,7 +29,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time
-from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeries, CosmeticTypeInfo
+from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeriesInfo, CosmeticTypeInfo
 
 __all__: Tuple[str, ...] = ('CosmeticCar',)
 
@@ -56,7 +56,7 @@ class CosmeticCar(Cosmetic[HTTPClientT]):
         The rarity of the car.
     images: Optional[:class:`fortnite_api.CosmeticImages`]
         Any car images.
-    series: Optional[:class:`fortnite_api.CosmeticSeries`]
+    series: Optional[:class:`fortnite_api.CosmeticSeriesInfo`]
         The series of the car.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the car.
@@ -99,7 +99,9 @@ class CosmeticCar(Cosmetic[HTTPClientT]):
         self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=self._http)
 
         _series = data.get('series')
-        self.series: Optional[CosmeticSeries[HTTPClientT]] = _series and CosmeticSeries(data=_series, http=self._http)
+        self.series: Optional[CosmeticSeriesInfo[HTTPClientT]] = _series and CosmeticSeriesInfo(
+            data=_series, http=self._http
+        )
 
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
         self.path: Optional[str] = data.get('path')

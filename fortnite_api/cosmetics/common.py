@@ -40,7 +40,7 @@ __all__: Tuple[str, ...] = (
     'Cosmetic',
     'CosmeticTypeInfo',
     'CosmeticRarityInfo',
-    'CosmeticSeries',
+    'CosmeticSeriesInfo',
     'CosmeticImages',
     'CosmeticT',
 )
@@ -134,11 +134,11 @@ class CosmeticRarityInfo:
         self.backend_value: str = data['backendValue']
 
 
-class CosmeticSeries(Generic[HTTPClientT]):
+class CosmeticSeriesInfo(Generic[HTTPClientT]):
     """
-    .. attributetable:: fortnite_api.CosmeticSeries
+    .. attributetable:: fortnite_api.CosmeticSeriesInfo
 
-    Represents the series of a cosmetic.
+    Represents information about the series a :class:`~fortnite_api.Cosmetic` belongs to.
 
     Attributes
     ----------
