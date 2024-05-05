@@ -206,7 +206,7 @@ Enumerations
 .. autoclass:: fortnite_api.CosmeticBrRarity
     :members:
 
-.. autoclass:: fortnite_api.CosmeticBrType
+.. autoclass:: fortnite_api.CosmeticType
     :members:
 
 .. autoclass:: fortnite_api.AccountType

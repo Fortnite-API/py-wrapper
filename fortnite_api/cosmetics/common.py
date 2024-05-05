@@ -29,7 +29,7 @@ from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
 
 from ..abc import Hashable
 from ..asset import Asset
-from ..enums import CosmeticBrType
+from ..enums import CosmeticType
 from ..http import HTTPClientT
 from ..images import Images
 from ..utils import get_with_fallback, parse_time
@@ -93,7 +93,7 @@ class CosmeticTypeInfo:
 
     Attributes
     ----------
-    value: :class:`fortnite_api.CosmeticBrType`
+    value: :class:`fortnite_api.CosmeticType`
         The value of the cosmetic type.
     display_value: :class:`str`
         The display value of the cosmetic type. This is the value that is displayed to the user.
@@ -104,7 +104,7 @@ class CosmeticTypeInfo:
     __slots__: Tuple[str, ...] = ('value', 'display_value', 'backend_value')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.value: CosmeticBrType = CosmeticBrType(data['value'])
+        self.value: CosmeticType = CosmeticType(data['value'])
         self.display_value: str = data['displayValue']
         self.backend_value: str = data['backendValue']
 

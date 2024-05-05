@@ -406,7 +406,7 @@ class Client:
         id: Optional[str] = ...,
         name: Optional[str] = ...,
         description: Optional[str] = ...,
-        type: Optional[CosmeticBrType] = ...,
+        type: Optional[CosmeticType] = ...,
         type_display: Optional[str] = ...,
         type_backend: Optional[str] = ...,
         rarity: Optional[CosmeticBrRarity] = ...,
@@ -446,7 +446,7 @@ class Client:
         id: Optional[str] = ...,
         name: Optional[str] = ...,
         description: Optional[str] = ...,
-        type: Optional[CosmeticBrType] = ...,
+        type: Optional[CosmeticType] = ...,
         type_display: Optional[str] = ...,
         type_backend: Optional[str] = ...,
         rarity: Optional[CosmeticBrRarity] = ...,
@@ -500,7 +500,7 @@ class Client:
             The name of the cosmetic.
         description: Optional[:class:`str`]
             The description of the cosmetic.
-        type: Optional[:class:`fortnite_api.CosmeticBrType`]
+        type: Optional[:class:`fortnite_api.CosmeticType`]
             The cosmetic's type.
         type_display: Optional[:class:`str`]
             The display type of the cosmetic.
@@ -1095,7 +1095,7 @@ class SyncClient:
         id: Optional[str] = ...,
         name: Optional[str] = ...,
         description: Optional[str] = ...,
-        type: Optional[CosmeticBrType] = ...,
+        type: Optional[CosmeticType] = ...,
         type_display: Optional[str] = ...,
         type_backend: Optional[str] = ...,
         rarity: Optional[CosmeticBrRarity] = ...,
@@ -1135,7 +1135,7 @@ class SyncClient:
         id: Optional[str] = ...,
         name: Optional[str] = ...,
         description: Optional[str] = ...,
-        type: Optional[CosmeticBrType] = ...,
+        type: Optional[CosmeticType] = ...,
         type_display: Optional[str] = ...,
         type_backend: Optional[str] = ...,
         rarity: Optional[CosmeticBrRarity] = ...,

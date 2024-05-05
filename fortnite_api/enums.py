@@ -188,7 +188,7 @@ class CosmeticBrRarity(enum.Enum):
     MYTHIC = 'mythic'
 
 
-class CosmeticBrType(enum.Enum):
+class CosmeticType(enum.Enum):
     """Represents a type of a :class:`fortnite_api.CosmeticBr` cosmetic.
 
     Attributes
