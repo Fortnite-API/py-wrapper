@@ -61,7 +61,7 @@ class IdComparable:
 class Hashable(IdComparable):
     """
     .. attributetable:: fortnite_api.Hashable
-    
+
     Represents a hashable object.
 
     This inherits :class:`fortnite_api.IdComparable` and adds a hash function.

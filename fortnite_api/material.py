@@ -92,7 +92,7 @@ class MaterialInstanceColors:
 class MaterialInstance(Hashable, Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.MaterialInstance
-    
+
     Material instancing is a way to create a parent Material that you can
     use as a base to make a wide variety of different looking children (Material instances).
 
