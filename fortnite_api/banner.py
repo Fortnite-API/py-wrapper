@@ -39,9 +39,8 @@ __all__: Tuple[str, ...] = (
 class Banner(Hashable, Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Banner
-    
-    A representation of a banner given to the :class:`fortnite_api.FortniteAPI` client
-    as a response. This represents a banner within the Fortnite game.
+
+    Represents a banner within the Fortnite game. This inherits from :class:`~fortnite_api.Hashable`.
 
     Attributes
     ----------
@@ -53,14 +52,17 @@ class Banner(Hashable, Generic[HTTPClientT]):
     description: :class:`str`
         The description of the banner.
     category: :class:`str`
-        The category of the banner.
+        The category the banner belongs to.
     full_usage_rights: :class:`bool`
         Denotes if the banner is full usage rights from Epic Games.
     dev_name: :class:`str`
         The developer name of the banner, this is used internally by the
         Epic Games team.
     images: :class:`fortnite_api.Images`
-        The images of the banner.
+        Preview images of the banner.
+    raw_data: :class:`dict`
+        The raw data of the banner that was used to create this object.
+        This can be used for recreating the object without re-fetching the API.
     """
 
     __slots__: Tuple[str, ...] = (
@@ -89,8 +91,8 @@ class Banner(Hashable, Generic[HTTPClientT]):
 class BannerColor(Hashable):
     """
     .. attributetable:: fortnite_api.BannerColor
-    
-    Represents a color of a :class:`fortnite_api.Banner`.
+
+    Represents a color of a :class:`fortnite_api.Banner`. This inherits from :class:`~fortnite_api.Hashable`.
 
     Attributes
     ----------
@@ -105,7 +107,8 @@ class BannerColor(Hashable):
     sub_category_group: :class:`int`
         The sub category group of the banner.
     raw_data: :class:`dict`
-        The raw data of the banner color.
+        The raw data of the banner color. This can be used for recreating the object
+        without re-fetching the API.
     """
 
     __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
