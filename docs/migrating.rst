@@ -23,9 +23,7 @@ object in this library. In Version 2, the client held all available endpoints in
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    from fortnite_api import FortniteAPI
-
-    client = FortniteAPI(api_key='', run_async=False)
+    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
 
     # All cosmetics endpoints are available under "client.cosmetics"
     client.cosmetics.fetch()
@@ -40,10 +38,8 @@ So for example, after creating an instance of the client, you simply call the me
 
 .. code-block:: python3
 
-    from fortnite_api import SyncFortniteAPI 
-
     # "with" discussed later
-    with SyncFortniteAPI() as client:
+    with fortnite_api.SyncFortniteAPI() as client:
         # Method to fetch all cosmetics
         client.fetch_cosmetics_all()
 
@@ -75,11 +71,10 @@ To create an async client, you use the :class:`fortnite_api.FortniteAPI` class. 
 
 .. code-block:: python3
 
-    from fortnite_api import FortniteAPI
     import asyncio
 
     async def main():
-        async with FortniteAPI(api_key='') as client:
+        async with fortnite_api.FortniteAPI(api_key='') as client:
             ... 
     
     asyncio.run(main())
@@ -90,20 +85,38 @@ To create a sync client, you use the :class:`fortnite_api.SyncFortniteAPI` class
 
 .. code-block:: python3
 
-    from fortnite_api import SyncFortniteAPI
-
-    with SyncFortniteAPI(api_key='') as client:
+    with fortnite_api.SyncFortniteAPI(api_key='') as client:
         ...
 
 .. _client-context-managers:
 
 Client Context Managers
 ~~~~~~~~~~~~~~~~~~~~~~~
-Both clients in Version 3 are run with context managers. Running ``async with``/``with`` ensures that the 
-HTTP session is closed properly when the context manager is exited, it's a good practice to use them.
+Both clients in Version 3 are run with context managers. This transition boasts many benefits, most notably,
 
-Although it is recommended you use the built in context managers, it is not strictly required. 
-You are completely free to use both clients without the context manager if you choose. In that case, however, 
+- Ensures that the HTTP session is closed properly when the context manager is exited, regardless of an exception being raised,
+- Makes the client more intuitive to use, and
+- Removes redundant boilerplate code.
+
+Thus, when creating and using an instance of the client, it is recommended that you use the built in context managers and include all your API requests within the context manager. This ensures that the session is closed properly when you're done with it.
+
+.. code-block:: python3
+
+    async with fortnite_api.FortniteAPI(api_key='') as client: # Session created
+        print('Client session is open for requests.')
+        ... # Some operations with the client
+        
+    print('Session is closed automatically.')
+
+.. code-block:: python3
+
+    with fortnite_api.SyncFortniteAPI(api_key='') as client: # Session created
+        print('Client session is open for requests.')
+        ... # Some operations with the client
+
+    print('Session is closed automatically.')
+
+Although it is recommended you use the built in context managers, there may be a situation in which it is not possible. Don't worry, you are free to use both clients without the context manager if you choose. In that case, however, 
 you are in the driver's seat, and must be in charge of managing the HTTP session, ie. close the session when you're done with it.
 
 Async client without context manager
@@ -114,11 +127,9 @@ When using the async client without the context manager, you must pass the sessi
 
     import asyncio
 
-    from fortnite_api import FortniteAPI
-
     async def main():
         session = aiohttp.ClientSession()
-        client = FortniteAPI(api_key='', session=session)    
+        client = fortnite_api.FortniteAPI(api_key='', session=session)    
         ...
         
         await session.close()
@@ -133,10 +144,8 @@ When using the sync client without the context manager, you must pass the sessio
 
     import requests
 
-    from fortnite_api import SyncFortniteAPI
-
     session = requests.Session()
-    client = SyncFortniteAPI(api_key='', session=session)    
+    client = fortnite_api.SyncFortniteAPI(api_key='', session=session)    
     ...
 
     session.close()
