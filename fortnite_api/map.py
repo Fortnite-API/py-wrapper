@@ -101,7 +101,7 @@ class POI(Hashable):
     """
     .. attributetable:: fortnite_api.POI
 
-    Represents a specific POI in a Fortnite map.
+    Represents a specific POI in a Fortnite map. This inherits from :class:`~fortnite_api.Hashable`.
 
     Attributes
     ----------
