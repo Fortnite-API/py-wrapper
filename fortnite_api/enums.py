@@ -119,7 +119,7 @@ class MatchMethod(enum.Enum):
 
 
 class CosmeticCategory(enum.Enum):
-    """Represents a type of a cosmetic in Fortnite.
+    """Represents the internal names for the types of a cosmetics in Fortnite.
 
     Attributes
     ----------
