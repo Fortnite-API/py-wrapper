@@ -49,8 +49,18 @@ class Asset(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Asset
 
-    Represents an asset given to the client. This can be from
-    an image on a banner to a cosmetic image.
+    Represents an asset given to the client. An asset can represent any image or video that
+    has been fetched from the API.
+
+    Examples
+    --------
+    .. code-block:: python3
+        :caption: Fetching a cosmetic and reading the icon data:
+
+        cosmetic = await client.fetch_cosmetic_br('CID_028_Athena_Commando_F')
+        images = cosmetic.images
+        if images is not None and images.icon is not None:
+            icon: bytes = await images.icon.read()
     """
 
     def __init__(self, *, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING, size: int = MISSING) -> None:
@@ -87,8 +97,7 @@ class Asset(Generic[HTTPClientT]):
 
     @property
     def can_resize(self) -> bool:
-        """Whether this asset can be resized.
-
+        """
         Returns
         --------
         :class:`bool`
@@ -98,8 +107,7 @@ class Asset(Generic[HTTPClientT]):
 
     @property
     def max_size(self) -> Optional[int]:
-        """The max size of this asset.
-
+        """
         Returns
         --------
         Optional[:class:`int`]
@@ -151,7 +159,7 @@ class Asset(Generic[HTTPClientT]):
         """|maybecoro|
 
         Retrieves the content of this asset as a :class:`bytes` object. This is only a coroutine if the client is
-        an async client.
+        an async client, otherwise it is a regular method.
 
         Returns
         --------
