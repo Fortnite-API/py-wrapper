@@ -118,8 +118,8 @@ class CosmeticRarityInfo:
 
     Attributes
     ----------
-    value: :class:`str`
-        The value of the cosmetic rarity.
+    value: :class:`fortnite_api.CosmeticRarity`
+        The rarity of the cosmetic.
     display_value: :class:`str`
         The display value of the cosmetic rarity. This is the value that is displayed to the user.
     backend_value: :class:`str`
