@@ -841,7 +841,7 @@ class FortniteAPI:
         ValueError
             You cannot pass both a ``name`` and an ``account_id`` to fetch stats at the
             same time, or, you must pass either a ``name`` or an ``account_id`` to fetch stats.
-        RateLimitExceeded
+        RateLimited
             The rate limit for this endpoint has been exceeded.
         MissingAPIKey
             The client does not have an API key set to fetch player stats.
@@ -904,8 +904,20 @@ class FortniteAPI:
 
         .. warning::
 
-            This is a beta method. At any time, the endpoint this method calls could be removed or
-            changed, and this method could break. Always be prepared for this.
+            At any time, for any reason, this method could break - either from local parsing errors or upstream API changes. Always be prepared for this. It is highly recommended
+            to wrap this method in a try/except block to catch any exceptions that may be raised.
+
+            .. code-block:: python3
+
+                try:
+                    instances = await client.beta_fetch_material_instances()
+                except fortnite_api.BetaUnknownException as exc:
+                    # Any exception raised from beta methods will be wrapped in BetaUnknownException,
+                    # get the root cause of the exception with exc.original.
+                    original = exc.original
+                    print(f"An unknown error occurred: {original}")
+                else:
+                    print(instances)
 
         Returns
         --------
