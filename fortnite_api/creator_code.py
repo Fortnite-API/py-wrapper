@@ -43,13 +43,18 @@ class CreatorCode:
     code: :class:`str`
         The creator code.
     account: :class:`fortnite_api.Account`
-        The account associated with the creator code.
+        The account associated with the creator code. Ie, the account
+        that owns the creator code.
     status: :class:`fortnite_api.CreatorCodeStatus`
-        The status of the creator code.
+        The current status of the creator code.
     verified: :class:`bool`
         Whether the creator code is verified.
+
+        .. note::
+
+            From internal testing, this seems to be always ``False``.
     raw_data: :class:`dict`
-        The raw data of the creator code.
+        The raw data of the creator code. This is the data received from the API.
     """
 
     __slots__: Tuple[str, ...] = ('code', 'account', 'verified', 'status', 'raw_data')
