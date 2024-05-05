@@ -28,7 +28,7 @@ import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple, Type
 
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
-from .enums import CosmeticType
+from .enums import CosmeticCategory
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
@@ -42,16 +42,16 @@ class NewCosmetic(Generic[CosmeticT]):
 
     Represents a response from the new cosmetics endpoint for a given cosmetic type. The types are as follows:
 
-    - :attr:`fortnite_api.CosmeticType.BR` -> List of :class:`fortnite_api.CosmeticBr`
-    - :attr:`fortnite_api.CosmeticType.TRACKS` -> List of :class:`fortnite_api.CosmeticTrack`
-    - :attr:`fortnite_api.CosmeticType.INSTRUMENTS` -> List of :class:`fortnite_api.CosmeticInstrument`
-    - :attr:`fortnite_api.CosmeticType.CARS` -> List of :class:`fortnite_api.CosmeticCar`
-    - :attr:`fortnite_api.CosmeticType.LEGO` -> List of :class:`fortnite_api.CosmeticLego`
-    - :attr:`fortnite_api.CosmeticType.LEGO_KITS` -> List of :class:`fortnite_api.CosmeticLegoKit`
+    - :attr:`fortnite_api.CosmeticCategory.BR` -> List of :class:`fortnite_api.CosmeticBr`
+    - :attr:`fortnite_api.CosmeticCategory.TRACKS` -> List of :class:`fortnite_api.CosmeticTrack`
+    - :attr:`fortnite_api.CosmeticCategory.INSTRUMENTS` -> List of :class:`fortnite_api.CosmeticInstrument`
+    - :attr:`fortnite_api.CosmeticCategory.CARS` -> List of :class:`fortnite_api.CosmeticCar`
+    - :attr:`fortnite_api.CosmeticCategory.LEGO` -> List of :class:`fortnite_api.CosmeticLego`
+    - :attr:`fortnite_api.CosmeticCategory.LEGO_KITS` -> List of :class:`fortnite_api.CosmeticLegoKit`
 
     Attributes
     ----------
-    type: :class:`fortnite_api.CosmeticType`
+    type: :class:`fortnite_api.CosmeticCategory`
         The type of new cosmetics displayed.
     hash: Optional[:class:`str`]
         The hash of the new cosmetics. Can be ``None`` if no
@@ -66,7 +66,7 @@ class NewCosmetic(Generic[CosmeticT]):
     def __init__(
         self,
         *,
-        type: CosmeticType,
+        type: CosmeticCategory,
         hash: Optional[str] = None,
         last_addition: Optional[datetime.datetime] = None,
         items: List[CosmeticT],
@@ -74,7 +74,7 @@ class NewCosmetic(Generic[CosmeticT]):
     ) -> None:
         self._http: HTTPClientT = http
 
-        self.type: CosmeticType = type
+        self.type: CosmeticCategory = type
         self.hash: Optional[str] = hash
         self.last_addition: Optional[datetime.datetime] = last_addition
         self.items: List[CosmeticT] = items
@@ -104,7 +104,7 @@ class NewBrCosmetics(NewCosmetic[CosmeticBr[HTTPClientT]]):
         items: List[CosmeticBr[HTTPClientT]] = [CosmeticBr(data=item, http=http) for item in data['items']]
 
         super().__init__(
-            type=CosmeticType.BR,
+            type=CosmeticCategory.BR,
             hash=data['hash'],
             last_addition=parse_time(data['lastAddition']),
             items=items,
@@ -161,37 +161,37 @@ class NewCosmetics(Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
         self.br: NewCosmetic[CosmeticBr[HTTPClientT]] = self._create_new_cosmetic(
-            cosmetic_type=CosmeticType.BR,
+            cosmetic_type=CosmeticCategory.BR,
             internal_key='br',
             cosmetic_class=CosmeticBr,
         )
 
         self.tracks: NewCosmetic[CosmeticTrack[HTTPClientT]] = self._create_new_cosmetic(
-            cosmetic_type=CosmeticType.TRACKS,
+            cosmetic_type=CosmeticCategory.TRACKS,
             internal_key='tracks',
             cosmetic_class=CosmeticTrack,
         )
 
         self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = self._create_new_cosmetic(
-            cosmetic_type=CosmeticType.INSTRUMENTS,
+            cosmetic_type=CosmeticCategory.INSTRUMENTS,
             internal_key='instruments',
             cosmetic_class=CosmeticInstrument,
         )
 
         self.cars: NewCosmetic[CosmeticCar[HTTPClientT]] = self._create_new_cosmetic(
-            cosmetic_type=CosmeticType.CARS,
+            cosmetic_type=CosmeticCategory.CARS,
             internal_key='cars',
             cosmetic_class=CosmeticCar,
         )
 
         self.lego: NewCosmetic[CosmeticLego[HTTPClientT]] = self._create_new_cosmetic(
-            cosmetic_type=CosmeticType.LEGO,
+            cosmetic_type=CosmeticCategory.LEGO,
             internal_key='lego',
             cosmetic_class=CosmeticLego,
         )
 
         self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = self._create_new_cosmetic(
-            cosmetic_type=CosmeticType.LEGO_KITS,
+            cosmetic_type=CosmeticCategory.LEGO_KITS,
             internal_key='legoKits',
             cosmetic_class=CosmeticLegoKit,
         )
@@ -199,7 +199,7 @@ class NewCosmetics(Generic[HTTPClientT]):
     def _create_new_cosmetic(
         self,
         *,
-        cosmetic_type: CosmeticType,
+        cosmetic_type: CosmeticCategory,
         internal_key: str,
         cosmetic_class: Type[CosmeticT],
     ) -> NewCosmetic[CosmeticT]:

@@ -50,7 +50,15 @@ class Cosmetic(Hashable, Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Cosmetic
 
-    Represents a cosmetic. Every cosmetic type inherits from this class.
+    Represents a base cosmetic. This class inherits from :class:`~fortnite_api.Hashable`. Every cosmetic type inherits from this class and adds additional attributes.
+    View documentation for the specific cosmetic type for more information.
+
+    - :class:`fortnite_api.CosmeticBr`
+    - :class:`fortnite_api.CosmeticCar`
+    - :class:`fortnite_api.CosmeticInstrument`
+    - :class:`fortnite_api.CosmeticLego`
+    - :class:`fortnite_api.CosmeticLegoKit`
+    - :class:`fortnite_api.CosmeticTrack`
 
     Attributes
     ----------
@@ -81,7 +89,7 @@ class CosmeticTypeInfo:
     """
     .. attributetable:: fortnite_api.CosmeticTypeInfo
 
-    Represents a cosmetic type.
+    A class that holds cosmetic type information.
 
     Attributes
     ----------

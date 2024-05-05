@@ -118,7 +118,7 @@ class MatchMethod(enum.Enum):
     ENDS = 'ends'
 
 
-class CosmeticType(enum.Enum):
+class CosmeticCategory(enum.Enum):
     """Represents a type of a cosmetic in Fortnite.
 
     Attributes

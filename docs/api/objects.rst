@@ -200,7 +200,7 @@ Enumerations
 .. autoclass:: fortnite_api.MatchMethod
     :members:
 
-.. autoclass:: fortnite_api.CosmeticType
+.. autoclass:: fortnite_api.CosmeticCategory
     :members:
 
 .. autoclass:: fortnite_api.CosmeticBrRarity

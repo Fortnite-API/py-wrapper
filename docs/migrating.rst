@@ -860,7 +860,7 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.MatchMethod`: An enum that denotes which kind of string matching method to use in an endpoint that performs a search operation.
 
-- :class:`fortnite_api.CosmeticType`: Represents the type of a Fortnite cosmetic. Such example would be tracks, instruments, cars, etc. This is used when fetching new cosmetics.
+- :class:`fortnite_api.CosmeticCategory`: Represents the type of a Fortnite cosmetic. Such example would be tracks, instruments, cars, etc. This is used when fetching new cosmetics.
 
 - :class:`fortnite_api.AccountType`: An enum that represents the platform of an Epic games account (e.g. PSN, XBL, etc). This is used as a parameter to narrow the search for an account when fetching BR stats by account name.
 
