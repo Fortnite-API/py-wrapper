@@ -36,14 +36,15 @@ class Images(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Images
 
-    Represents image data passed from the API.
+    Represents image data passed from the API. This class is used to represent
+    commonly provided assets for many API endpoints and object types.
 
     Attributes
     ----------
     small_icon: Optional[:class:`fortnite_api.Asset`]
-        The small icon of the image.
+        A smaller icon asset. Typically, this is a smaller version of the main image.
     icon: Optional[:class:`fortnite_api.Asset`]
-        The icon of the image.
+        An icon asset. Typically, this is the main image of the object.
     """
 
     __slots__: Tuple[str, ...] = ('small_icon', 'icon')
