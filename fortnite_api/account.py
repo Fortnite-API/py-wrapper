@@ -36,7 +36,7 @@ class Account(Hashable):
     """
     .. attributetable:: fortnite_api.Account
 
-    Represents a account.
+    Represents a Fortnite account.
 
     .. container:: operations
 
@@ -60,9 +60,9 @@ class Account(Hashable):
         The external auths of the user.
 
 
-        .. note::
+        .. warning::
 
-            This will always be empty until the Account lookup feature is enabled.
+            This will always be empty until the Account lookup feature is enabled in the API.
     """
 
     __slots__: Tuple[str, ...] = ('id', 'name', 'raw_data', 'external_auths')
