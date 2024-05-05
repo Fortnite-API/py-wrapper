@@ -95,6 +95,8 @@ To create a sync client, you use the :class:`fortnite_api.SyncFortniteAPI` class
     with SyncFortniteAPI(api_key='') as client:
         ...
 
+.. _client-context-managers:
+
 Client Context Managers
 ~~~~~~~~~~~~~~~~~~~~~~~
 Both clients in Version 3 are run with context managers. Running ``async with``/``with`` ensures that the 

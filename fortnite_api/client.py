@@ -129,25 +129,26 @@ class FortniteAPI:
 
         .. describe:: async with x:
 
-            This class is a context manager. This means you can use it with the ``async with`` statement.
-            This will automatically open and close the HTTP session for you. If you don't use the ``async with`` statement, you will have to manually close the session.
+            This class is can be used as a context manager.
+            This will automatically open and close the HTTP session for you. If you don't use the ``async with`` statement, you will have to manually close the session. See :ref:`client-context-managers` for more information.
 
     Parameters
     ----------
     api_key: Optional[:class:`str`]
-        The API key to use for the client. Defaults to ``None``.
+        The API key to use for the client. If not provided, some endpoints may not be available.
     default_language: Optional[:class:`fortnite_api.GameLanguage`]
-        The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH`.
+        The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH` if not provided.
     session: Optional[:class:`aiohttp.ClientSession`]
-        The session to use for the HTTP requests. Defaults to ``None``. If not provided, a new session will be created for you.
+        The session to use for the HTTP requests. If not provided, a new session will be created for you and you must use the class as an async context manager.
     beta: :class:`bool`
         Whether or not the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``. This is to prevent accidental usage of beta endpoints.
 
-        All beta endpoints are prefixed with ``beta_``.
+        .. note::
+
+            All beta endpoints are prefixed with ``beta_``.
     optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
         Any optimization flags to use for the client. Enabling these can speed up the client or reduce
-        the amount of bandwidth used. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information. By default, :attr:`fortnite_api.OptimizationFlags.IGNORE_NULL` is enabled. Optionally,
-        you can pass ``None`` or :meth:`fortnite_api.OptimizationFlags.none` to remove all flags.
+        the amount of bandwidth used. Defaults to :meth:`fortnite_api.OptimizationFlags.default`. Pass ``None`` or :meth:`fortnite_api.OptimizationFlags.none` to remove all flags. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information.
 
     Attributes
     ----------
@@ -156,9 +157,7 @@ class FortniteAPI:
     beta: :class:`bool`
         Denotes if the client can make requests to beta endpoints.
     optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
-        Any optimization flags set on the client. By default,
-        :attr:`fortnite_api.OptimizationFlags.IGNORE_NULL` is enabled.
-        This can be ``None`` to remove all flags.
+        Any optimization flags set on the client.
     """
 
     def __init__(
@@ -926,18 +925,20 @@ class SyncFortniteAPI:
     Parameters
     ----------
     api_key: Optional[:class:`str`]
-        The API key to use for the client. Defaults to ``None``.
+        The API key to use for the client. If not provided, some endpoints may not be available.
     default_language: :class:`fortnite_api.GameLanguage`
         The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH`.
     session: Optional[:class:`requests.Session`]
-        The session to use for the HTTP requests. Defaults to ``None``. If not provided, a new session will be created for you.
+        The session to use for the HTTP requests. If not provided, a new session will be created for you and you must use the class as an async context manager.
     beta: :class:`bool`
         Whether or not the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``.
 
-        All beta endpoints are prefixed with ``beta_``.
+        .. note::
+
+            All beta endpoints are prefixed with ``beta_``.
     optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
-        Any optimization flags to use for the client. This will speed up the client by enabling API optimizations
-        that are not enabled by default. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information.
+        Any optimization flags to use for the client. Enabling these can speed up the client or reduce
+        the amount of bandwidth used. Defaults to :meth:`fortnite_api.OptimizationFlags.default`. Pass ``None`` or :meth:`fortnite_api.OptimizationFlags.none` to remove all flags. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information.
 
     Attributes
     ----------
@@ -946,9 +947,7 @@ class SyncFortniteAPI:
     beta: :class:`bool`
         Denotes if the client can make requests to beta endpoints.
     optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
-        Any optimization flags set on the client. By default,
-        :attr:`fortnite_api.OptimizationFlags.IGNORE_NULL` is enabled.
-        This can be ``None`` to remove all flags.
+        Any optimization flags set on the client.
     """
 
     def __init__(
