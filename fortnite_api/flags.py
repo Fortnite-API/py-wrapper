@@ -33,7 +33,7 @@ __all__: Tuple[str, ...] = ('OptimizationFlags',)
 class OptimizationFlags(enum.IntFlag):
     """
     .. attributetable:: fortnite_api.OptimizationFlags
-    
+
     Represents optimization flags for a given Fortnite API client. This will allow to you
     speed up the client by enabling API optimizations that are not enabled by default.
 
@@ -43,10 +43,21 @@ class OptimizationFlags(enum.IntFlag):
 
             Returns a new OptimizationFlags object with the bits set in both x and y.
 
+        .. describe:: x & y
+
+            Returns a new OptimizationFlags object with the bits set in both x and y.
+
+        .. describe:: ~x
+
+            Returns a new OptimizationFlags object with the bits inverted from x.
+
     Attributes
     ----------
     IGNORE_NULL
         Ignores null values in the response. This can speed up the client by a good amount.
+        Library tests are written to ensure that this flag works as expected. There
+        is no reason to disable this flag unless you are manually using the raw data
+        from the API.
 
     Example
     -------
@@ -54,13 +65,13 @@ class OptimizationFlags(enum.IntFlag):
 
         from fortnite_api import FortniteAPI, OptimizationFlags
 
-        FLAGS = OptimizationFlags.IGNORE_NULL | OptimizationFlags.
+        FLAGS = OptimizationFlags.IGNORE_NULL
         async def main():
             async with FortniteAPI(api_key="", optimization_flags=FLAGS) as api:
                 ...
     """
 
-    IGNORE_NULL: int = enum.auto()
+    IGNORE_NULL = enum.auto()
 
     @classmethod
     def none(cls) -> OptimizationFlags:
