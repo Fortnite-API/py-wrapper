@@ -136,6 +136,7 @@ class Client:
     ----------
     api_key: Optional[:class:`str`]
         The API key to use for the client. If not provided, some endpoints may not be available.
+        An API key can be generated using `the FortniteAPI website <https://dash.fortnite-api.com/account>`_.
     default_language: Optional[:class:`fortnite_api.GameLanguage`]
         The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH` if not provided.
     session: Optional[:class:`aiohttp.ClientSession`]
@@ -148,7 +149,7 @@ class Client:
             All beta endpoints are prefixed with ``beta_``.
     optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
         Any optimization flags to use for the client. Enabling these can speed up the client or reduce
-        the amount of bandwidth used. Defaults to :meth:`fortnite_api.OptimizationFlags.default`. Pass ``None`` or :meth:`fortnite_api.OptimizationFlags.none` to remove all flags. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information.
+        the amount of bandwidth used. Defaults to :meth:`fortnite_api.OptimizationFlags.default`. Pass ``None`` or :meth:`~fortnite_api.OptimizationFlags.none` to remove all flags. Read the documentation for :class:`~fortnite_api.OptimizationFlags` for more information.
 
     Attributes
     ----------
@@ -958,6 +959,7 @@ class SyncClient:
     ----------
     api_key: Optional[:class:`str`]
         The API key to use for the client. If not provided, some endpoints may not be available.
+        An API key can be generated using `the FortniteAPI website <https://dash.fortnite-api.com/account>`_.
     default_language: :class:`fortnite_api.GameLanguage`
         The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH`.
     session: Optional[:class:`requests.Session`]
@@ -970,7 +972,7 @@ class SyncClient:
             All beta endpoints are prefixed with ``beta_``.
     optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
         Any optimization flags to use for the client. Enabling these can speed up the client or reduce
-        the amount of bandwidth used. Defaults to :meth:`fortnite_api.OptimizationFlags.default`. Pass ``None`` or :meth:`fortnite_api.OptimizationFlags.none` to remove all flags. Read the documentation for :class:`fortnite_api.OptimizationFlags` for more information.
+        the amount of bandwidth used. Defaults to :meth:`fortnite_api.OptimizationFlags.default`. Pass ``None`` or :meth:`~fortnite_api.OptimizationFlags.none` to remove all flags. Read the documentation for :class:`~fortnite_api.OptimizationFlags` for more information.
 
     Attributes
     ----------
