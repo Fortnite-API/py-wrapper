@@ -76,7 +76,7 @@ class BrPlayerStats(Generic[HTTPClientT]):
         _image = data.get('image')
         self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
 
-        _inputs = data.get('_inputs')
+        _inputs = data.get('stats')
         self.stats: Optional[BrInputs] = _inputs and BrInputs(data=_inputs)
 
         self.raw_data: Dict[str, Any] = data
