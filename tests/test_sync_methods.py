@@ -332,11 +332,12 @@ def test_sync_fetch_shop(api_key: str, optimization_flags: fn_api.OptimizationFl
         assert isinstance(entry.layout_id, str)
 
         layout = entry.layout
-        assert isinstance(layout, fn_api.ShopEntryLayout)
-        assert layout.id
-        assert layout.name
-        assert isinstance(layout.index, int)
-        assert layout.show_ineligible_offers
+        if layout:
+            assert isinstance(layout, fn_api.ShopEntryLayout)
+            assert layout.id
+            assert layout.name
+            assert isinstance(layout.index, int)
+            assert layout.show_ineligible_offers
 
         assert entry.dev_name
         assert entry.offer_id

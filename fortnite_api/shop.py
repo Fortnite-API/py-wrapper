@@ -263,8 +263,8 @@ class ShopEntry(Generic[HTTPClientT]):
         The sort priority of this entry.
     layout_id: :class:`str`
         The layout ID of this entry.
-    layout: :class:`fortnite_api.ShopEntryLayout`
-        The layout of this entry.
+    layout: Optional[:class:`fortnite_api.ShopEntryLayout`]
+        The layout of this entry, if any.
     dev_name: :class:`str`
         The internal dev name of this entry.
     offer_id: :class:`str`
@@ -326,7 +326,10 @@ class ShopEntry(Generic[HTTPClientT]):
         self.refundable: bool = data['refundable']
         self.sort_priority: int = data['sortPriority']
         self.layout_id: str = data['layoutId']
-        self.layout: ShopEntryLayout[HTTPClientT] = ShopEntryLayout(data=data['layout'], http=http)
+
+        _layout = data.get('layout')
+        self.layout: Optional[ShopEntryLayout[HTTPClientT]] = _layout and ShopEntryLayout(data=_layout, http=http)
+
         self.dev_name: str = data['devName']
         self.offer_id: str = data['offerId']
         self.display_asset_path: Optional[str] = data.get('displayAssetPath')
