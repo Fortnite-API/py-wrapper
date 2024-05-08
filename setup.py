@@ -62,4 +62,5 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
     ],
+    package_data={'fortnite_api': ['py.typed']},
 )
