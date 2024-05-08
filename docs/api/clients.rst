@@ -1,5 +1,7 @@
 .. currentmodule:: fortnite_api
 
+.. _clients:
+
 Clients
 =======
 

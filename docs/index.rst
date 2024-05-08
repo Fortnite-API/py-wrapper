@@ -3,6 +3,24 @@ Welcome to Fortnite-API Python Documentation
 
 Welcome! This is the official documentation for the Fortnite-API Python library. This library allows you to interact with the Fortnite API using Python. You can use this library to get information about Fortnite players, cosmetics, shops, and more.
 
+.. _installation:
+
+Installation
+------------
+To install the Fortnite-API Python library, you can use pip. Run the following command in your terminal:
+
+.. code-block:: bash
+
+   python -m pip install fortnite-api
+
+
+To install the latest development version of the library, you can use the following command:
+
+.. code-block:: bash
+   
+   python -m pip install git+https://github.com/Fortnite-API/py-wrapper
+
+
 View Documentation
 ------------------
 The entirety of the public API is documented here. If you're looking for a specific method, class, or module, the search bar at the top right is your friend. 
