@@ -1,6 +1,15 @@
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
+# Items for egg-info
+*.egg-info/
+
+# Items for pytest
+.pytest_cache/
+
+# Misc for python local development
+__pycache__/
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -44,6 +53,15 @@ cmake-build-*/
 # IntelliJ
 out/
 
+# Sphinx documentation
+docs/_build/
+
+# VS Code
+.vscode/
+dependabot.yml
+.devcontainer/
+.coverage
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
@@ -66,3 +84,7 @@ fabric.properties
 *.log
 *.log.*
 '.idea'
+
+# Development Test Files
+_.py
+.env
