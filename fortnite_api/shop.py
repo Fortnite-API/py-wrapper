@@ -344,7 +344,7 @@ class ShopEntry(Generic[HTTPClientT]):
         )
 
         self.br_items: List[CosmeticBr[HTTPClientT]] = [
-            CosmeticBr(data=item, http=http) for item in get_with_fallback(data, 'items', list)
+            CosmeticBr(data=item, http=http) for item in get_with_fallback(data, 'brItems', list)
         ]
         self.tracks: List[CosmeticTrack[HTTPClientT]] = [
             CosmeticTrack(data=item, http=http) for item in get_with_fallback(data, 'tracks', list)
