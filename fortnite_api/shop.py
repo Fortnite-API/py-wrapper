@@ -95,7 +95,10 @@ class ShopMaterialInstance:
 
     def __init__(self, data: dict):
         self.id: str = data['id']
-        self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode(data['primaryMode'])
+        try:
+            self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode(data['primaryMode'])
+        except ValueError:
+            self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode.ALL
         self.images: ShopMaterialInstanceImages = ShopMaterialInstanceImages(data['images'])
         self.colors: Optional[dict] = data['colors']
         self.scalings: Optional[dict] = data['scalings']
