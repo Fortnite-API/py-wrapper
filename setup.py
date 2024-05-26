@@ -17,7 +17,7 @@ with open('README.md') as f:
 extras_require = {
     'tests': ['pytest', 'pytest-asyncio', 'pytest-cov', 'python-dotenv', 'pytest-mock'],
     'docs': ['sphinx', 'sphinxcontrib_trio', 'sphinxcontrib-websupport', 'typing-extensions', 'furo', 'sphinx-copybutton'],
-    'dev': ['black', 'isort', 'discord.py'],
+    'dev': ['black', 'isort', 'discord.py', 'pyright'],
     'speed': [
         'orjson',
     ],
