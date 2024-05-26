@@ -84,7 +84,7 @@ class Aes:
     Attributes
     ----------
     main_key: Optional[:class:`str`]
-        The main encryption key. Can be ``None`` if Fortnite was recently updated.
+        The main encryption key. Can be ``None`` if the current versions key is not available yet.
     build: :class:`str`
         The current build where the Aes key refers to.
     version: Optional[:class:`fortnite_api.Version`]
