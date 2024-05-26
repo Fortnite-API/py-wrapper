@@ -27,7 +27,6 @@ from __future__ import annotations
 from typing import Any, Dict, Tuple
 
 from .abc import Hashable
-from .utils import get_with_fallback
 
 __all__: Tuple[str, ...] = ('Account',)
 
@@ -56,28 +55,21 @@ class Account(Hashable):
         The display name of the account.
     raw_data: :class:`dict`
         The raw data from request. Can be used for saving and re-creating the class.
-    external_auths: Dict[Any, Any]
-        The external auths of the user.
-
-
-        .. warning::
-
-            This will always be empty until the Account lookup feature is enabled in the API.
     """
 
-    __slots__: Tuple[str, ...] = ('id', 'name', 'raw_data', 'external_auths')
+    __slots__: Tuple[str, ...] = (
+        'id',
+        'name',
+        'raw_data',
+    )
 
     def __init__(self, data: Dict[str, Any]) -> None:
         self.id: str = data['id']
         self.name: str = data['name']
         self.raw_data: Dict[str, Any] = data
 
-        self.external_auths: Dict[Any, Any] = get_with_fallback(
-            data, 'external_auths', dict
-        )  # Adding when User lookup feature is enabled
-
     def __str__(self) -> str:
         return self.name
 
     def __repr__(self) -> str:
-        return '<Account id={0.id} name={0.name} external_auths={0.external_auths}>'.format(self)
+        return '<Account id={0.id} name={0.name}>'.format(self)
