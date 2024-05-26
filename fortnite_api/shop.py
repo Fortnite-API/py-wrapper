@@ -37,6 +37,7 @@ from .enums import BannerIntensity
 from .http import HTTPClientT
 from .material import MaterialInstance
 from .utils import get_with_fallback, parse_time
+from .proxies import TransformerListProxy
 
 __all__: Tuple[str, ...] = (
     'ShopEntryBundle',
@@ -343,21 +344,25 @@ class ShopEntry(Generic[HTTPClientT]):
             _new_display_asset and ShopEntryNewDisplayAsset(data=data['newDisplayAsset'], http=http)
         )
 
-        self.br_items: List[CosmeticBr[HTTPClientT]] = [
-            CosmeticBr(data=item, http=http) for item in get_with_fallback(data, 'brItems', list)
-        ]
-        self.tracks: List[CosmeticTrack[HTTPClientT]] = [
-            CosmeticTrack(data=item, http=http) for item in get_with_fallback(data, 'tracks', list)
-        ]
-        self.instruments: List[CosmeticInstrument[HTTPClientT]] = [
-            CosmeticInstrument(data=item, http=http) for item in get_with_fallback(data, 'instruments', list)
-        ]
-        self.cars: List[CosmeticCar[HTTPClientT]] = [
-            CosmeticCar(data=item, http=http) for item in get_with_fallback(data, 'cars', list)
-        ]
-        self.lego_kits: List[CosmeticLegoKit[HTTPClientT]] = [
-            CosmeticLegoKit(data=item, http=http) for item in get_with_fallback(data, 'legoKits', list)
-        ]
+        self.br_items: List[CosmeticBr[HTTPClientT]] = TransformerListProxy(
+            get_with_fallback(data, 'brItems', list), transform_data=lambda d: CosmeticBr(data=d, http=http)
+        )
+
+        self.tracks: List[CosmeticTrack[HTTPClientT]] = TransformerListProxy(
+            get_with_fallback(data, 'tracks', list), transform_data=lambda d: CosmeticTrack(data=d, http=http)
+        )
+
+        self.instruments: List[CosmeticInstrument[HTTPClientT]] = TransformerListProxy(
+            get_with_fallback(data, 'instruments', list), transform_data=lambda d: CosmeticInstrument(data=d, http=http)
+        )
+
+        self.cars: List[CosmeticCar[HTTPClientT]] = TransformerListProxy(
+            get_with_fallback(data, 'cars', list), transform_data=lambda d: CosmeticCar(data=d, http=http)
+        )
+
+        self.lego_kits: List[CosmeticLegoKit[HTTPClientT]] = TransformerListProxy(
+            get_with_fallback(data, 'legoKits', list), transform_data=lambda d: CosmeticLegoKit(data=d, http=http)
+        )
 
 
 class Shop(Generic[HTTPClientT]):
