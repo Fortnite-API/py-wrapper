@@ -23,7 +23,7 @@ object in this library. In Version 2, the client held all available endpoints in
 .. outdated-code-block:: python3
     :since: v2.6.6
 
-    client = fortnite_api.Client(api_key='', run_async=False)
+    client = fortnite_api.FortniteAPI(api_key='', run_async=False)
 
     # All cosmetics endpoints are available under "client.cosmetics"
     client.cosmetics.fetch()
