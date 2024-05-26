@@ -309,6 +309,13 @@ def test_sync_fetch_shop(api_key: str, optimization_flags: fn_api.OptimizationFl
         return
 
     for entry in shop.entries:
+        # Ensure len(entry) works
+        assert isinstance(len(entry), int)
+
+        # Ensure you can iterate over the entry
+        for cosmetic in entry:
+            assert cosmetic.id
+
         assert isinstance(entry, fn_api.ShopEntry)
         assert isinstance(entry.regular_price, int)
         assert isinstance(entry.final_price, int)
@@ -351,7 +358,7 @@ def test_sync_fetch_shop(api_key: str, optimization_flags: fn_api.OptimizationFl
             for material_instance in new_display_asset.material_instances:
                 assert isinstance(material_instance, fn_api.MaterialInstance)
 
-        for cosmetic in entry.br_items + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:
+        for cosmetic in entry.br + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:
             assert isinstance(cosmetic, fn_api.Cosmetic)
 
 
