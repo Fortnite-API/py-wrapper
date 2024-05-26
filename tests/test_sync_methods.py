@@ -234,10 +234,6 @@ def test_sync_map(api_key: str, optimization_flags: fn_api.OptimizationFlags):
 
     assert map.pois
 
-    first_poi = map.pois[0]
-    assert isinstance(first_poi, fn_api.POI)
-    assert map.get_poi(first_poi.id) == first_poi
-
     for poi in map.pois:
         assert isinstance(poi, fn_api.POI)
         assert poi.id

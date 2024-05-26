@@ -258,10 +258,6 @@ async def test_async_map(api_key: str, optimization_flags: fn_api.OptimizationFl
 
     assert map.pois
 
-    first_poi = map.pois[0]
-    assert isinstance(first_poi, fn_api.POI)
-    assert map.get_poi(first_poi.id) == first_poi
-
     for poi in map.pois:
         assert isinstance(poi, fn_api.POI)
         assert poi.id
@@ -396,7 +392,7 @@ async def test_async_fetch_shop(api_key: str, optimization_flags: fn_api.Optimiz
 
         # Ensure you can iterate over the entry
         for cosmetic in entry:
-            assert cosmetic.id    
+            assert cosmetic.id
 
         assert isinstance(entry, fn_api.ShopEntry)
         assert isinstance(entry.regular_price, int)

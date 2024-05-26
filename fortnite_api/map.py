@@ -24,11 +24,12 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, List, Mapping, Optional, Tuple
+from typing import Any, Dict, Generic, List, Tuple
 
 from .abc import Hashable
 from .asset import Asset
 from .http import HTTPClientT
+from .proxies import TransformerListProxy
 
 __all__: Tuple[str, ...] = ('Map', 'MapImages', 'POI', 'POILocation')
 
@@ -64,37 +65,23 @@ class Map(Generic[HTTPClientT]):
     ----------
     images: :class:`fortnite_api.MapImages`
         The images of the map.
+    pois: List[:class:`fortnite_api.POI`]
+        The list of POIs in the map.
     raw_data: :class:`dict`
         The raw data of the map.
     """
 
-    __slots__: Tuple[str, ...] = ('images', '_pois', 'raw_data')
+    __slots__: Tuple[str, ...] = ('images', 'pois', 'raw_data')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.images: MapImages[HTTPClientT] = MapImages(data=data['images'], http=http)
 
-        self._pois: Mapping[str, POI] = {poi['id']: POI(data=poi) for poi in data['pois']}
+        self.pois: List[POI] = TransformerListProxy(
+            data['pois'],
+            transform_data=lambda poi: POI(data=poi),
+        )
+
         self.raw_data: Dict[str, Any] = data
-
-    @property
-    def pois(self) -> List[POI]:
-        """List[:class:`fortnite_api.POI`]: The list of POIs in the map."""
-        return list(self._pois.values())
-
-    def get_poi(self, /, id: str) -> Optional[POI]:
-        """Get a POI by its ID.
-
-        Parameters
-        ----------
-        id: :class:`str`
-            The ID of the POI.
-
-        Returns
-        -------
-        Optional[:class:`fortnite_api.POI`]
-            The POI if found, else ``None``.
-        """
-        return self._pois.get(id)
 
 
 class POI(Hashable):
