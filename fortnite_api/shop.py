@@ -246,6 +246,33 @@ class ShopEntry(Generic[HTTPClientT]):
     Represents an item shop entry. Each entry in the shop contains
     related cosmetics that are available in the shop.
 
+    .. container:: operations
+
+        .. describe:: len(x)
+
+            Returns the total amount of cosmetics in this entry.
+
+            .. code-block:: python3
+
+                shop = await client.fetch_shop()
+                for entry in shop.entries:
+                    print(f'Entry has {len(entry)} cosmetics.')
+
+        .. describe:: iter(x)
+
+            Returns an iterator of the cosmetics, working through one unique cosmetic type before
+            continuing onto the next. Works in the following
+            order: :class:`~fortnite_api.CosmeticBr`, :class:`~fortnite_api.CosmeticTrack`,
+            :class:`~fortnite_api.CosmeticInstrument`, :class:`~fortnite_api.CosmeticCar`,
+            :class:`~fortnite_api.CosmeticLegoKit`.
+
+            .. code-block:: python3
+
+                shop = await client.fetch_shop()
+                for entry in shop.entries:
+                    for cosmetic in entry:
+                        print(cosmetic.id, cosmetic.type)
+
     Attributes
     ----------
     regular_price: :class:`int`
@@ -278,7 +305,7 @@ class ShopEntry(Generic[HTTPClientT]):
         The new display asset path of this entry.
     new_display_asset: :class:`fortnite_api.ShopEntryNewDisplayAsset`
         The new display asset of this entry.
-    br_items: List[:class:`fortnite_api.CosmeticBr`]
+    br: List[:class:`fortnite_api.CosmeticBr`]
         The Battle Royale cosmetics in this entry.
     tracks: List[:class:`fortnite_api.CosmeticTrack`]
         The tracks in this entry.
@@ -306,7 +333,7 @@ class ShopEntry(Generic[HTTPClientT]):
         'tile_size',
         'new_display_asset_path',
         'new_display_asset',
-        'br_items',
+        'br',
         'tracks',
         'instruments',
         'cars',
@@ -344,7 +371,7 @@ class ShopEntry(Generic[HTTPClientT]):
             _new_display_asset and ShopEntryNewDisplayAsset(data=data['newDisplayAsset'], http=http)
         )
 
-        self.br_items: List[CosmeticBr[HTTPClientT]] = TransformerListProxy(
+        self.br: List[CosmeticBr[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, 'brItems', list), transform_data=lambda d: CosmeticBr(data=d, http=http)
         )
 
@@ -363,6 +390,25 @@ class ShopEntry(Generic[HTTPClientT]):
         self.lego_kits: List[CosmeticLegoKit[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, 'legoKits', list), transform_data=lambda d: CosmeticLegoKit(data=d, http=http)
         )
+
+    def __iter__(self):
+        for br in self.br:
+            yield br
+
+        for track in self.tracks:
+            yield track
+
+        for instrument in self.instruments:
+            yield instrument
+
+        for car in self.cars:
+            yield car
+
+        for lego in self.lego_kits:
+            yield lego
+
+    def __len__(self):
+        return len(self.br) + len(self.tracks) + len(self.instruments) + len(self.cars) + len(self.lego_kits)
 
 
 class Shop(Generic[HTTPClientT]):
