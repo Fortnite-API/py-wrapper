@@ -115,7 +115,7 @@ class CosmeticInstrument(Cosmetic[HTTPClientT]):
         ]
 
     @property
-    def showcase_video(self) -> Optional[str]:
+    def showcase_video_url(self) -> Optional[str]:
         """Optional[:class:`str`]: The URL of the Youtube showcase video of the cosmetic, if any."""
         id = self.showcase_video_id
         if not id:
