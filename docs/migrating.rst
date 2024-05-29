@@ -660,7 +660,7 @@ The objects for BR stats remain the same in Version 3 as they were in Version 2.
     *   - ``BrInputs``
         - :class:`fortnite_api.BrInputs`
     *   - ``BrInputStats``
-        - :class:`fortnite_api.BrInputStats`
+        - :class:`fortnite_api.BrInputStats`. Note that ``trios`` stats have been depreciated.
     *   - ``BrGameModeStats``
         - :class:`fortnite_api.BrGameModeStats`
 
