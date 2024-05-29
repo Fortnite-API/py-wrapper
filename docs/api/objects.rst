@@ -170,10 +170,6 @@ Cosmetic Objects
     :members:
     :inherited-members:
 
-.. autoclass:: fortnite_api.CosmeticLegoImages
-    :members:
-    :inherited-members:
-
 .. autoclass:: fortnite_api.CosmeticTrackDifficulty
     :members:
 

@@ -239,7 +239,6 @@ Additionally, many new Cosmetic related objects have been added to the library. 
 - :class:`fortnite_api.CosmeticBrSet`
 - :class:`fortnite_api.CosmeticType`
 - :class:`fortnite_api.CosmeticTrackDifficulty`
-- :class:`fortnite_api.CosmeticLegoImages`
 - :class:`fortnite_api.CosmeticImages`
 - :class:`fortnite_api.CosmeticSeriesInfo`
 - :class:`fortnite_api.CosmeticRarityInfo`

@@ -26,7 +26,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Tuple, Union, overload
 
-from ..asset import Asset
 from ..enums import GameLanguage
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, simple_repr
@@ -36,35 +35,7 @@ from .common import Cosmetic, CosmeticImages
 if TYPE_CHECKING:
     from ..http import HTTPClient, SyncHTTPClient
 
-__all__: Tuple[str, ...] = ('CosmeticLego', 'CosmeticLegoImages')
-
-
-@simple_repr
-class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
-    """
-    .. attributetable:: fortnite_api.CosmeticLegoImages
-
-    A class representing the images of a lego cosmetic.
-
-    This class inherits from :class:`fortnite_api.CosmeticImages`.
-
-    .. container:: operations
-
-        .. describe:: repr(x)
-
-            Returns a representation of the account in the form of a string.
-
-    Attributes
-    ----------
-    wide: Optional[:class:`fortnite_api.Asset`]
-        The wide image of the lego cosmetic.
-    """
-
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        super().__init__(data=data, http=http)
-
-        _wide = data.get('wide')
-        self.wide: Optional[Asset[HTTPClientT]] = _wide and Asset(http=http, url=_wide)
+__all__: Tuple[str, ...] = ('CosmeticLego',)
 
 
 @simple_repr
@@ -88,7 +59,7 @@ class CosmeticLego(Cosmetic[HTTPClientT]):
         The ID of the cosmetic that this lego cosmetic is based on.
     sound_library_tags: List[:class:`str`]
         The sound library tags of the lego cosmetic.
-    images: Optional[:class:`fortnite_api.CosmeticLegoImages`]
+    images: Optional[:class:`fortnite_api.CosmeticImages`]
         The images of the lego cosmetic.
     path: Optional[:class:`str`]
         The path of the lego cosmetic.
@@ -103,7 +74,7 @@ class CosmeticLego(Cosmetic[HTTPClientT]):
         self.sound_library_tags: List[str] = get_with_fallback(data, 'soundLibraryTags', list)
 
         _images = data.get('images')
-        self.images: Optional[CosmeticLegoImages[HTTPClientT]] = _images and CosmeticLegoImages(data=_images, http=http)
+        self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=http)
         self.path: Optional[str] = data.get('path')
 
     @overload
