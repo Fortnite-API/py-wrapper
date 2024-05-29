@@ -89,7 +89,7 @@ class Banner(Hashable, Generic[HTTPClientT]):
         self.id: str = data['id']
         self.name: str = data['name']
         self.dev_name: str = data['devName']
-        self.description: str = data['category']
+        self.description: str = data['description']
         self.category: str = data['category']
         self.full_usage_rights: bool = data['fullUsageRights']
 
