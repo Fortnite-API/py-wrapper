@@ -259,8 +259,8 @@ the client itself. This means that to fetch cosmetics, you no longer do:
     :since: v2.6.6
 
     cosmetics = await client.cosmetics.fetch()
-    reveal_type(cosmetics)
-    >>> List[fortnite_api.Cosmetic]
+    print(cosmetics)
+    >>> [<fortnite_api.Cosmetic ...>, ...]
 
 But rather, you do:
 
@@ -268,8 +268,8 @@ But rather, you do:
     :name: version-3-fetching-cosmetics
 
     cosmetics = await client.fetch_cosmetics_all()
-    reveal_type(cosmetics)
-    >>> fortnite_api.CosmeticsAll
+    print(cosmetics)
+    >>> <fortnite_api.CosmeticsAll ...>
 
 This change has been made to ensure a consistent naming convention between all types of endpoints,
 and to make the library more intuitive to use. 
@@ -341,8 +341,8 @@ Previously, you could fetch the playlists using,
     :since: v2.6.6
 
     playlists = await client.playlist.fetch_all()
-    reveal_type(playlists)
-    >>> List[fortnite_api.Playlist]
+    print(playlists)
+    >>> [<fortnite_api.Playlist ...>, ...]
 
 This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client.
 
@@ -350,8 +350,8 @@ This approach, however, is no longer valid in Version 3. Instead, you should use
     :name: version-3-fetching-playlists
 
     playlists = await client.fetch_playlists()
-    reveal_type(playlists)
-    >>> List[fortnite_api.Playlist]
+    print(playlists)
+    >>> [<fortnite_api.Playlist ...>, ...]
 
 Playlist method changes
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -427,16 +427,16 @@ In Version 3, the shop data is longer fetched using the ``client.shop`` namespac
     :since: v2.6.6
 
     shop = await client.shop.fetch_all()
-    reveal_type(shop)
-    >>> fortnite_api.Shop
+    print(shop)
+    >>> <fortnite_api.Shop ...>
 
 This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client. 
 
 .. code-block:: python3
 
     shop = await client.fetch_shop()
-    reveal_type(shop)
-    >>> fortnite_api.Shop
+    print(shop)
+    >>> <fortnite_api.Shop ...>
 
 Shop method changes
 ^^^^^^^^^^^^^^^^^^^
@@ -486,16 +486,16 @@ In Version 3, the AES data is no longer fetched using the ``client.aes`` namespa
     :since: v2.6.6
 
     aes = await client.aes.fetch()
-    reveal_type(aes)
-    >>> fortnite_api.AES
+    print(aes)
+    >>> <fortnite_api.AES ...>
 
 This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client.
 
 .. code-block:: python3
 
     aes = await client.fetch_aes()
-    reveal_type(aes)
-    >>> fortnite_api.Aes
+    print(aes)
+    >>> <fortnite_api.Aes ...>
 
 AES method changes
 ^^^^^^^^^^^^^^^^^^
@@ -540,16 +540,16 @@ In Version 2, the news data was fetched using the ``client.news`` namespace. Pre
     :since: v2.6.6
 
     news = await client.news.fetch()
-    reveal_type(news)
-    >>> fortnite_api.News
+    print(news)
+    >>> <fortnite_api.News ...>
 
 However, this approach is no longer valid in Version 3. Instead, you should use direct methods on the client.
 
 .. code-block:: python3
 
     news = await client.fetch_news()
-    reveal_type(news)
-    >>> fortnite_api.News
+    print(news)
+    >>> <fortnite_api.News ...>
 
 News method changes
 ^^^^^^^^^^^^^^^^^^^
@@ -592,16 +592,16 @@ In Version 2, the creator code data was fetched using the ``client.creator_code`
     :since: v2.6.6
 
     creator_code = await client.creator_code.fetch('username')
-    reveal_type(creator_code)
-    >>> fortnite_api.CreatorCode
+    print(creator_code)
+    >>> <fortnite_api.CreatorCode ...>
 
 However, this approach is no longer valid in Version 3. Instead, you should use direct methods on the client.
 
 .. code-block:: python3
 
     creator_code = await client.fetch_creator_code(name='username')
-    reveal_type(creator_code)
-    >>> fortnite_api.CreatorCode
+    print(creator_code)
+    >>> <fortnite_api.CreatorCode ...>
 
 Creator Code Method Changes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -667,16 +667,16 @@ In Version 2, the BR stats data was fetched using the ``client.stats`` namespace
     :since: v2.6.6
 
     stats = await client.stats.fetch_by_name('username')
-    reveal_type(stats)
-    >>> fortnite_api.BrPlayerStats
+    print(stats)
+    >>> <fortnite_api.BrPlayerStats ...>
 
 However, this approach is no longer valid in Version 3. Instead, you should use direct methods on the client.
 
 .. code-block:: python3
 
     stats = await client.fetch_br_stats('username')
-    reveal_type(stats)
-    >>> fortnite_api.BrPlayerStats
+    print(stats)
+    >>> <fortnite_api.BrPlayerStats ...>
 
 BR Stats method changes
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -721,24 +721,24 @@ Previously in Version 2, the banners were fetched using the ``client.banner`` na
     :since: v2.6.6
 
     banners = await client.banner.fetch()
-    reveal_type(banners)
-    >>> List[fortnite_api.Banner]
+    print(banners)
+    >>> [<fortnite_api.Banner ...>, ...]
 
     colors = await client.banner.fetch_colors()
-    reveal_type(colors)
-    >>> List[fortnite_api.BannerColor]
+    print(colors)
+    >>> [<fortnite_api.BannerColor ...>, ...]
 
 However, this approach is no longer valid in Version 3. Instead, you should use direct methods on the client.
 
 .. code-block:: python3
 
     banners = await client.fetch_banners()
-    reveal_type(banners)
-    >>> List[fortnite_api.Banner]
+    print(banners)
+    >>> [<fortnite_api.Banner ...>, ...]
 
     colors = await client.fetch_banner_colors()
-    reveal_type(colors)
-    >>> List[fortnite_api.BannerColor]
+    print(colors)
+    >>> [<fortnite_api.BannerColor ...>, ...]
 
 Banner method changes
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -787,16 +787,16 @@ In Version 2, the maps were fetched using the ``client.map`` namespace. For exam
     :since: v2.6.6
 
     fortnite_map = await client.map.fetch()
-    reveal_type(fortnite_map)
-    >>> fortnite_api.Map
+    print(fortnite_map)
+    >>> <fortnite_api.Map ...>
 
 In Version 3, this approach is no longer valid. Instead, you should use direct methods on the client.
 
 .. code-block:: python3
 
     fortnite_map = await client.fetch_map()
-    reveal_type(fortnite_map)
-    >>> fortnite_api.Map
+    print(fortnite_map)
+    >>> <fortnite_api.Map ...>
 
 Map method changes
 ^^^^^^^^^^^^^^^^^^
