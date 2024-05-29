@@ -153,13 +153,10 @@ When using the sync client without the context manager, you must pass the sessio
 Client Parameters
 ~~~~~~~~~~~~~~~~~
 In Version 3, the parameters that can be passed to a client have been given a refresh. Let's walk through the changes
-that have been made for both the async and sync clients, what they mean, and how they affect you.
+that have been made for both the async and sync clients, what they mean, and how they affect you. Note that all the 
+parameters, except for the ``session`` parameter, are the same on both clients. We'll discuss the ``session`` parameter
+separately for both clients.
 
-Although all these parameters are documented on their respective client classes, we're going to reiterate 
-and elaborate on them here to help you understand the important changes that have been made.
-
-Async client
-^^^^^^^^^^^^
 .. list-table::
     :header-rows: 1
 
@@ -176,25 +173,34 @@ Async client
     *   - ``optimization_flags``
         - This is a new parameter that allows you to toggle certain optimizations on or off. This parameter is not required, and defaults to :meth:`~fortnite_api.OptimizationFlags.default` if not given. 
 
-See the documentation for these parameters in :class:`fortnite_api.Client`.
+See the documentation for these parameters in :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient`.
 
-Sync client
-^^^^^^^^^^^
+Async client
+^^^^^^^^^^^^
+Denotes the only parameter difference between the async and sync clients.
+
 .. list-table::
     :header-rows: 1
 
     *   - Parameter
         - Description
-    *   - ``api_key``
-        - The API key to use for requests to the Fortnite API. This is not a required parameter for most endpoints however, it is required to use any stats endpoints. This is the same as in Version 2. 
-    *   - ``default_language``
-        - The client now boasts a default language parameter. For many endpoints in the Fortnite API, you can specify a language parameter to denote the language you want the response to be in. This parameter allows you to set a default language for all requests made by the client, for endpoints that support it, so that you don't have to specify it every time you make a request. The default language is :attr:`~fortnite_api.GameLanguage.ENGLISH` (``en``). 
+
+    *   - ``session``
+        - The session parameter is a new parameter that allows you to pass a :class:`aiohttp.ClientSession` to the client. By default this is an optional parameter. This parameter comes in useful if you want to manage a session yourself. In that case, it is a required parameter.
+
+See the documentation for these parameters in :class:`fortnite_api.Client`.
+
+Sync client
+^^^^^^^^^^^
+Denotes the only parameter difference between the async and sync clients.
+
+.. list-table::
+    :header-rows: 1
+
+    *   - Parameter
+        - Description
     *   - ``session``
         - The session parameter is a new parameter that allows you to pass a :class:`requests.Session` to the client. By default this is an optional parameter. This parameter comes in useful if you want to manage a session yourself. In that case, it is a required parameter.
-    *   - ``beta``
-        - Denotes if the client has the permissions to access beta endpoints (always prefixed with ``beta_fetch_x``). This is a new parameter that is set to ``False`` by default. If you want to access beta endpoints, you must set this parameter to ``True``.
-    *   - ``optimization_flags``
-        - This is a new parameter that allows you to toggle certain optimizations on or off. This parameter is not required, and defaults to :meth:`~fortnite_api.OptimizationFlags.default` if not given. 
 
 See the documentation for these parameters in :class:`fortnite_api.SyncClient`.
 
