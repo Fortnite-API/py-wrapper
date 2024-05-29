@@ -208,15 +208,29 @@ class CosmeticImages(Images[HTTPClientT]):
 
     Attributes
     ----------
+    small_icon: Optional[:class:`fortnite_api.Asset`]
+        The small icon of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
+    icon: Optional[:class:`fortnite_api.Asset`]
+        The icon of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
     featured: Optional[:class:`fortnite_api.Asset`]
-        The featured image of the cosmetic, if available.
+        The featured image of the cosmetic, if available. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
     lego: Optional[:class:`fortnite_api.Asset`]
-        The LEGO image of the cosmetic, if available.
+        The LEGO image of the cosmetic, if available. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
     other: Dict[:class:`str`, :class:`fortnite_api.Asset`]
-        A mapping other images to their respective asset.
+        A mapping other images to their respective asset. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
+    small: Optional[:class:`fortnite_api.Asset`]
+        The small image of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticInstrument`,
+        :class:`fortnite_api.CosmeticCar`, :class:`fortnite_api.CosmeticLegoKit`,
+        and :class:`fortnite_api.CosmeticLego` objects.
+    large: Optional[:class:`fortnite_api.Asset`]
+        The large image of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticInstrument`,
+        :class:`fortnite_api.CosmeticCar`, :class:`fortnite_api.CosmeticLegoKit`,
+        and :class:`fortnite_api.CosmeticLego` objects.
+    wide: Optional[:class:`fortnite_api.Asset`]
+        The wide image of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticLego` objects.
     """
 
-    __slots__: Tuple[str, ...] = ('featured', 'lego', '_other', '_http')
+    __slots__: Tuple[str, ...] = ('featured', 'lego', 'icon', 'small_icon', '_other', '_http', 'small', 'large', 'wide')
 
     def __init__(
         self,
@@ -231,6 +245,21 @@ class CosmeticImages(Images[HTTPClientT]):
 
         lego = data.get('lego')
         self.lego: Optional[Asset[HTTPClientT]] = lego and Asset(http=http, url=lego)
+
+        _icon = data.get('icon')
+        self.icon: Optional[Asset[HTTPClientT]] = _icon and Asset(http=http, url=_icon)
+
+        small_icon = data.get('smallIcon')
+        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
+
+        small = data.get('small')
+        self.small: Optional[Asset[HTTPClientT]] = small and Asset(http=http, url=small)
+
+        large = data.get('large')
+        self.large: Optional[Asset[HTTPClientT]] = large and Asset(http=http, url=large)
+
+        wide = data.get('wide')
+        self.wide: Optional[Asset[HTTPClientT]] = wide and Asset(http=http, url=wide)
 
         self._other: Dict[str, str] = get_with_fallback(data, 'other', dict)
         self._http: HTTPClientT = http
