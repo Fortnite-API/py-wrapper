@@ -231,7 +231,7 @@ class BrGameModeStats:
     players_outlived: :class:`int`
         The total number of players outlived in this specific game mode.
     last_modified: :class:`datetime.datetime`
-        The date when this data was last modified.
+        The date when this stat data was last updated within the Epic Games API.
     """
 
     __slots__: Tuple[str, ...] = (
