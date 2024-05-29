@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, List, Tuple
+from typing import Any, Dict, Generic, List, Tuple, Optional
 
 from .utils import simple_repr
 
@@ -126,8 +126,8 @@ class POI(Hashable):
     __slots__: Tuple[str, ...] = ('id', 'name', 'location')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.id = data['id']
-        self.name = data['name']
+        self.id: str = data['id']
+        self.name: Optional[str] = data.get('name')
         self.location = POILocation(data=data['location'])
 
 
