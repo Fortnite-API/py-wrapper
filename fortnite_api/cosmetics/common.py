@@ -216,7 +216,7 @@ class CosmeticImages(Images[HTTPClientT]):
         A mapping other images to their respective asset.
     """
 
-    __slots__: Tuple[str, ...] = ('featured', 'lego', 'other')
+    __slots__: Tuple[str, ...] = ('featured', 'lego', '_other', '_http')
 
     def __init__(
         self,
@@ -232,6 +232,38 @@ class CosmeticImages(Images[HTTPClientT]):
         lego = data.get('lego')
         self.lego: Optional[Asset[HTTPClientT]] = lego and Asset(http=http, url=lego)
 
-        # Mapping of str to Asset. In testing all I have found is "background" in this mapping.
-        other: Dict[str, str] = get_with_fallback(data, 'other', dict)
-        self.other: Dict[str, Asset[HTTPClientT]] = {key: Asset(http=http, url=value) for key, value in other.items()}
+        self._other: Dict[str, str] = get_with_fallback(data, 'other', dict)
+        self._http: HTTPClientT = http
+
+    @property
+    def background(self) -> Optional[Asset[HTTPClientT]]:
+        """
+        Optional[:class:`~fortnite_api.Asset`]: The background image of the cosmetic, if available.
+        """
+        url = self._other.get('background')
+        if not url:
+            return
+
+        return Asset(http=self._http, url=url)
+
+    @property
+    def coverart(self) -> Optional[Asset[HTTPClientT]]:
+        """
+        Optional[:class:`~fortnite_api.Asset`]: The cover art image of the cosmetic, if available.
+        """
+        url = self._other.get('coverart')
+        if not url:
+            return
+
+        return Asset(http=self._http, url=url)
+
+    @property
+    def decal(self) -> Optional[Asset[HTTPClientT]]:
+        """
+        Optional[:class:`~fortnite_api.Asset`]: The decal image of the cosmetic, if available.
+        """
+        url = self._other.get('decal')
+        if not url:
+            return
+
+        return Asset(http=self._http, url=url)
