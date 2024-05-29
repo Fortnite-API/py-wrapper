@@ -41,6 +41,12 @@ class CreatorCode:
 
     Represents a Creator Code.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     -----------
     code: :class:`str`

@@ -62,6 +62,10 @@ class CosmeticsAll(Generic[HTTPClientT]):
                 for cosmetic in all_cosmetics:
                     print(cosmetic.id, cosmetic.type)
 
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     br: List[:class:`fortnite_api.CosmeticBr`]

@@ -42,6 +42,12 @@ class CosmeticTrackDifficulty:
 
     Represents the difficulty of a track cosmetic in Fortnite.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     vocals: :class:`int`
@@ -77,6 +83,12 @@ class CosmeticTrack(Cosmetic[HTTPClientT]):
     Represents a track cosmetic in Fortnite.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------

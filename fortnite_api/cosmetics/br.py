@@ -48,6 +48,12 @@ class CosmeticBrSet:
 
     Represents a set that a given cosmetic belongs to.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     value: Optional[:class:`str`]
@@ -72,6 +78,12 @@ class CosmeticBrIntroduction:
     .. attributetable:: fortnite_api.CosmeticBrIntroduction
 
     Holds some metadata about when a cosmetic was introduced.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
@@ -101,6 +113,12 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
 
     Represents a variant option for a cosmetic.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     tag: :class:`str`
@@ -128,6 +146,12 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
     .. attributetable:: fortnite_api.CosmeticBrVariant
 
     Represents a variant for a cosmetic.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
@@ -158,6 +182,12 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
     Represents a Battle Royale cosmetic.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------

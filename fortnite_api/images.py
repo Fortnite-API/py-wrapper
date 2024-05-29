@@ -42,6 +42,12 @@ class Images(Generic[HTTPClientT]):
     Represents image data passed from the API. This class is used to represent
     commonly provided assets for many API endpoints and object types.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     small_icon: Optional[:class:`fortnite_api.Asset`]

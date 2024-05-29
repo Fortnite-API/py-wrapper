@@ -45,6 +45,12 @@ class Banner(Hashable, Generic[HTTPClientT]):
 
     Represents a banner within the Fortnite game. This inherits from :class:`~fortnite_api.Hashable`.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     id: :class:`str`
@@ -97,6 +103,12 @@ class BannerColor(Hashable):
     .. attributetable:: fortnite_api.BannerColor
 
     Represents a color of a :class:`fortnite_api.Banner`. This inherits from :class:`~fortnite_api.Hashable`.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------

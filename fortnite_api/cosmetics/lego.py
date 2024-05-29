@@ -48,6 +48,12 @@ class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
 
     This class inherits from :class:`fortnite_api.CosmeticImages`.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     wide: Optional[:class:`fortnite_api.Asset`]
@@ -69,6 +75,12 @@ class CosmeticLego(Cosmetic[HTTPClientT]):
     Represents a Lego cosmetic.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------

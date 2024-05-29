@@ -46,7 +46,6 @@ __all__: Tuple[str, ...] = (
 )
 
 
-@simple_repr
 class Cosmetic(Hashable, Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Cosmetic
@@ -94,6 +93,13 @@ class CosmeticTypeInfo:
     A class that holds cosmetic type information passed from the API for
     a given :class:`~fortnite_api.Cosmetic`.
 
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     value: :class:`fortnite_api.CosmeticType`
@@ -119,6 +125,12 @@ class CosmeticRarityInfo:
 
     Represents a cosmetic rarity.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     value: :class:`fortnite_api.CosmeticRarity`
@@ -143,6 +155,12 @@ class CosmeticSeriesInfo(Generic[HTTPClientT]):
     .. attributetable:: fortnite_api.CosmeticSeriesInfo
 
     Represents information about the series a :class:`~fortnite_api.Cosmetic` belongs to.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
@@ -181,6 +199,12 @@ class CosmeticImages(Images[HTTPClientT]):
     Represents the images of a cosmetic.
 
     This inherits from :class:`fortnite_api.Images`.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------

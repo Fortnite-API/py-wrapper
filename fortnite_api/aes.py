@@ -46,6 +46,12 @@ class Version:
 
     Represents a version of a build of Fortnite.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     major: :class:`int`
@@ -159,6 +165,10 @@ class DynamicKey:
         .. describe:: hash(x)
 
             Returns the dynamic key's hash.
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------

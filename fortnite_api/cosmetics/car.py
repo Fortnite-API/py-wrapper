@@ -43,6 +43,12 @@ class CosmeticCar(Cosmetic[HTTPClientT]):
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
 
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
     Attributes
     ----------
     vehicle_id: :class:`str`
