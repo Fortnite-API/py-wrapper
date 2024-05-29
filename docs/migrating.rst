@@ -844,6 +844,15 @@ Exceptions have been refactored in Version 3. The exception hierarchy has been r
 - :class:`fortnite_api.BetaUnknownException`: A special subclass of :class:`fortnite_api.FortniteAPIException` that wraps an exception that ocurred while calling or processing a beta endpoint. This will contain the original exception that was raised.
 
 
+Datetime Objects
+----------------
+All datetime objects in the library have been refactored to be timezone aware to UTC. This means that all datetime objects returned by the library will be timezone aware to UTC. This is a breaking change from Version 2, where datetime objects were naive. This change was made to ensure that all datetime objects are consistent and timezone aware.
+
+.. code-block:: python3
+
+    cosmetics = await client.fetch_cosmetics_br()
+    assert cosmetics[0].added_at.tzinfo == datetime.timezone.utc
+
 .. _migrating-additional-objects:
 
 Additional Objects
