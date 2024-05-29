@@ -38,8 +38,7 @@ __all__: Tuple[str, ...] = ('Aes', 'DynamicKey', 'Version')
 VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})')
 
 
-@simple_repr
-@dataclasses.dataclass(init=True, eq=True, order=False, slots=True)
+@dataclasses.dataclass(init=True, eq=True, order=False)
 class Version:
     """
     .. attributetable:: fortnite_api.Version
@@ -52,6 +51,10 @@ class Version:
 
             Returns a representation of the account in the form of a string.
 
+        .. describe:: str(x)
+
+            Returns the version in the form of a string. ":attr:`major`.:attr:`minor`"
+
     Attributes
     ----------
     major: :class:`int`
@@ -62,6 +65,12 @@ class Version:
 
     major: int
     minor: int
+
+    def __repr__(self) -> str:
+        return f'<Version {self.major}.{self.minor}>'
+
+    def __str__(self) -> str:
+        return f'{self.major}.{self.minor}'
 
 
 @simple_repr
