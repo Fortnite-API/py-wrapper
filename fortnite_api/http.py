@@ -165,15 +165,6 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_br_new(self, language: Optional[str] = None):
-        r: Route = Route('GET', '/v2/cosmetics/br/new')
-        params: Dict[str, str] = {}
-
-        if language:
-            params['language'] = language
-
-        return self.request(r, params=params)
-
     def get_cosmetics_new(self, language: Optional[str] = None):
         r: Route = Route('GET', '/v2/cosmetics/new')
         params: Dict[str, str] = {}

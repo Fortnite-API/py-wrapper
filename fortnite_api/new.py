@@ -33,7 +33,7 @@ from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
-__all__: Tuple[str, ...] = ('NewCosmetic', 'NewBrCosmetics', 'NewCosmetics')
+__all__: Tuple[str, ...] = ('NewCosmetic', 'NewCosmetics')
 
 
 class NewCosmetic(Generic[CosmeticT]):
@@ -78,44 +78,6 @@ class NewCosmetic(Generic[CosmeticT]):
         self.hash: Optional[str] = hash
         self.last_addition: Optional[datetime.datetime] = last_addition
         self.items: List[CosmeticT] = items
-
-
-class NewBrCosmetics(NewCosmetic[CosmeticBr[HTTPClientT]]):
-    """
-    .. attributetable:: fortnite_api.NewBrCosmetics
-
-    Represents a returned response from the new BR cosmetics endpoint.
-
-    This inherits from :class:`fortnite_api.NewCosmetic`.
-
-    Attributes
-    ----------
-    build: :class:`str`
-        The build of Fortnite that these cosmetics were added in.
-    previous_build: :class:`str`
-        The previous build of Fortnite.
-    date: :class:`datetime.datetime`
-        The date of the new cosmetics.
-    raw_data: :class:`dict`
-        The raw data of the new cosmetics.
-    """
-
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        items: List[CosmeticBr[HTTPClientT]] = [CosmeticBr(data=item, http=http) for item in data['items']]
-
-        super().__init__(
-            type=CosmeticCategory.BR,
-            hash=data['hash'],
-            last_addition=parse_time(data['lastAddition']),
-            items=items,
-            http=http,
-        )
-
-        # Extend this for the endpoint specific data
-        self.build: str = data['build']
-        self.previous_build: str = data['previousBuild']
-        self.date: datetime.datetime = parse_time(data['date'])
-        self.raw_data: Dict[str, Any] = data
 
 
 class NewCosmetics(Generic[HTTPClientT]):

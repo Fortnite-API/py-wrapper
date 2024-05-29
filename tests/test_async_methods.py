@@ -192,18 +192,6 @@ async def test_async_fetch_cosmetic_br(api_key: str, optimization_flags: fn_api.
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_br_new(api_key: str, optimization_flags: fn_api.OptimizationFlags):
-    async with fn_api.Client(api_key=api_key, optimization_flags=optimization_flags) as client:
-        new_cosmetics_br = await client.fetch_cosmetics_br_new()
-
-    assert isinstance(new_cosmetics_br, fn_api.NewBrCosmetics)
-
-    assert isinstance(new_cosmetics_br.date, datetime.datetime)
-    assert new_cosmetics_br.build
-    assert new_cosmetics_br.previous_build
-
-
-@pytest.mark.asyncio
 async def test_async_fetch_cosmetics_new(api_key: str, optimization_flags: fn_api.OptimizationFlags):
     async with fn_api.Client(api_key=api_key, optimization_flags=optimization_flags) as client:
         new_cosmetics = await client.fetch_cosmetics_new()

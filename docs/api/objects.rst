@@ -59,9 +59,6 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 .. autoclass:: fortnite_api.NewCosmetic
     :members:
 
-.. autoclass:: fortnite_api.NewBrCosmetics
-    :members:
-
 .. autoclass:: fortnite_api.NewCosmetics 
     :members:
 

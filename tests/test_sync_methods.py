@@ -171,17 +171,6 @@ def test_sync_fetch_cosmetic_br(api_key: str, optimization_flags: fn_api.Optimiz
     assert cosmetic_br.id == TEST_COSMETIC_ID
 
 
-def test_sync_fetch_cosmetics_br_new(api_key: str, optimization_flags: fn_api.OptimizationFlags):
-    with fn_api.SyncClient(api_key=api_key, optimization_flags=optimization_flags) as client:
-        new_cosmetics_br = client.fetch_cosmetics_br_new()
-
-    assert isinstance(new_cosmetics_br, fn_api.NewBrCosmetics)
-
-    assert isinstance(new_cosmetics_br.date, datetime.datetime)
-    assert new_cosmetics_br.build
-    assert new_cosmetics_br.previous_build
-
-
 def test_sync_fetch_cosmetics_new(api_key: str, optimization_flags: fn_api.OptimizationFlags):
     with fn_api.SyncClient(api_key=api_key, optimization_flags=optimization_flags) as client:
         new_cosmetics = client.fetch_cosmetics_new()

@@ -44,7 +44,7 @@ from .flags import OptimizationFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
 from .material import MaterialInstance
-from .new import NewBrCosmetics, NewCosmetics
+from .new import NewCosmetics
 from .news import GameModeNews, News
 from .playlist import Playlist
 from .proxies import TransformerListProxy
@@ -369,19 +369,6 @@ class Client:
         return CosmeticBr(data=data, http=self.http)
 
     # NEW COSMETICS
-
-    async def fetch_cosmetics_br_new(self) -> NewBrCosmetics:
-        """|coro|
-
-        Fetches all newly added Battle Royale cosmetics recently made available in Fortnite.
-
-        Returns
-        -------
-        :class:`fortnite_api.NewBrCosmetics`
-            The fetched new Battle Royale cosmetics.
-        """
-        data = await self.http.get_cosmetics_br_new()
-        return NewBrCosmetics(data=data, http=self.http)
 
     async def fetch_cosmetics_new(self) -> NewCosmetics:
         """|coro|
@@ -1075,11 +1062,6 @@ class SyncClient:
         return CosmeticsAll(data=data, http=self.http)
 
     # NEW COSMETICS
-
-    @copy_doc(Client.fetch_cosmetics_br_new)
-    def fetch_cosmetics_br_new(self) -> NewBrCosmetics[SyncHTTPClient]:
-        data = self.http.get_cosmetics_br_new()
-        return NewBrCosmetics(data=data, http=self.http)
 
     @copy_doc(Client.fetch_cosmetics_new)
     def fetch_cosmetics_new(self) -> NewCosmetics[SyncHTTPClient]:

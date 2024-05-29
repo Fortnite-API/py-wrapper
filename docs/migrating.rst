@@ -306,7 +306,7 @@ are as follows:
     *   - ``client.cosmetics.fetch_all_new()``
         - :meth:`fortnite_api.Client.fetch_cosmetics_new`
     *   - ``client.cosmetics.fetch_new_br()``
-        - :meth:`fortnite_api.Client.fetch_cosmetics_br_new`
+        - This method has been depreciated. Use :meth:`fortnite_api.Client.fetch_cosmetics_new` instead.
     *   - ``client.cosmetics.search_all()``
         - :meth:`fortnite_api.Client.search_br_cosmetics`
     *   - ``client.cosmetics.search_first()````
@@ -568,7 +568,7 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - ``client.news.fetch()``
         - :meth:`fortnite_api.Client.fetch_news`
     *   - ``client.news.fetch_by_type()``
-        - Fetching by type has been depreciated. Rather, use these two methods: :meth:`fortnite_api.Client.fetch_news_br`, and :meth:`fortnite_api.Client.fetch_news_stw`
+        - Fetching by type has been depreciated. Rather, use these two methods: :meth:`fortnite_api.Client.fetch_news_br`, and :meth:`fortnite_api.Client.fetch_news_stw`. Note that fetching creative news has been depreciated.
 
 
 Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
@@ -899,8 +899,6 @@ work with the library and upgrade from Version 2. Every object not already menti
 - :class:`fortnite_api.MaterialInstanceColors`: A class that holds the background gradient color of a material instance. This is commonly used to create a preview for the material instance in the shop. This is served from the :class:`fortnite_api.MaterialInstance` object.
 
 - :class:`fortnite_api.NewCosmetics`: A class that holds the response from :meth:`~fortnite_api.Client.fetch_cosmetics_new`. This is used when fetching new cosmetics.
-
-- :class:`fortnite_api.NewBrCosmetics`: A special class that holds the response from :meth:`~fortnite_api.Client.fetch_cosmetics_br_new`. This is used specifically when fetching new Battle Royale cosmetics.
 
 - :class:`fortnite_api.NewCosmetic`: A class that holds specific metadata about new cosmetics, such as the last addition date, the hash of the new cosmetics, and the cosmetics type. This is served from :class:`fortnite_api.NewCosmetics`.
 
