@@ -301,9 +301,9 @@ are as follows:
         - :meth:`fortnite_api.Client.fetch_cosmetics_new`
     *   - ``client.cosmetics.fetch_new_br()``
         - :meth:`fortnite_api.Client.fetch_cosmetics_br_new`
-    *   - ``client.cosmetics.search_all``
+    *   - ``client.cosmetics.search_all()``
         - :meth:`fortnite_api.Client.search_br_cosmetics`
-    *   - ``client.cosmetics.search_first``
+    *   - ``client.cosmetics.search_first()````
         - :meth:`fortnite_api.Client.search_br_cosmetics`
 
 Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
