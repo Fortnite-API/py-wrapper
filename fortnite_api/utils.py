@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, Dict, Hashable, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Hashable, Tuple, Type, TypeVar, Union, List
 
 try:
     import orjson  # type: ignore
@@ -149,6 +149,32 @@ def remove_prefix(text: str) -> Callable[[T], T]:
         return funco
 
     return wrapped
+
+
+def simple_repr(cls: Type[T]) -> Type[T]:
+    # If this cls does not have __slots__, return it as is
+    try:
+        slots: List[str] = list(getattr(cls, '__slots__'))
+    except AttributeError:
+        return cls
+
+    # Walk through all parents, if they gave slots as well, append them to the slots
+    for parent in cls.__bases__:
+        try:
+            slots.extend(getattr(parent, '__slots__'))
+        except AttributeError:
+            pass
+
+    # If the cls has __slots__, append the __repr__ method to it using the slots as what to show
+    def __repr__(self: T) -> str:
+        attrs = ', '.join(
+            f'{attr}={getattr(self, attr)!r}' for attr in slots if not attr.startswith('_') and attr != 'raw_data'
+        )
+        return f'<{cls.__name__} {attrs}>'
+
+    setattr(cls, '__repr__', __repr__)
+
+    return cls
 
 
 def get_with_fallback(dict: Dict[K_co, V_co], key: K_co, default_factory: Callable[[], V_co]) -> V_co:

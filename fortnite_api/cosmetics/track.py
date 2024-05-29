@@ -29,12 +29,13 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..asset import Asset
 from ..http import HTTPClientT
-from ..utils import get_with_fallback, parse_time
+from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic
 
 __all__: Tuple[str, ...] = ('CosmeticTrackDifficulty', 'CosmeticTrack')
 
 
+@simple_repr
 class CosmeticTrackDifficulty:
     """
     .. attributetable:: fortnite_api.CosmeticTrackDifficulty
@@ -68,6 +69,7 @@ class CosmeticTrackDifficulty:
         self.plastic_drums: int = data['plasticDrums']
 
 
+@simple_repr
 class CosmeticTrack(Cosmetic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticTrack

@@ -63,6 +63,8 @@ class Asset(Generic[HTTPClientT]):
             icon: bytes = await images.icon.read()
     """
 
+    __slots__: Tuple[str, ...] = ('_http', '_url', '_max_size', '_size')
+
     def __init__(self, *, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING, size: int = MISSING) -> None:
         self._http: HTTPClientT = http
         self._url: str = url
@@ -85,6 +87,9 @@ class Asset(Generic[HTTPClientT]):
 
     def __hash__(self) -> int:
         return hash(self.url)
+
+    def __repr__(self) -> str:
+        return '<Asset url={0.url!r}>'.format(self)
 
     @property
     def url(self) -> str:

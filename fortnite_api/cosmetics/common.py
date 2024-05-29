@@ -32,7 +32,7 @@ from ..asset import Asset
 from ..enums import CosmeticRarity, CosmeticType
 from ..http import HTTPClientT
 from ..images import Images
-from ..utils import get_with_fallback, parse_time
+from ..utils import get_with_fallback, parse_time, simple_repr
 
 CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
 
@@ -46,6 +46,7 @@ __all__: Tuple[str, ...] = (
 )
 
 
+@simple_repr
 class Cosmetic(Hashable, Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Cosmetic
@@ -85,6 +86,7 @@ class Cosmetic(Hashable, Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
 
+@simple_repr
 class CosmeticTypeInfo:
     """
     .. attributetable:: fortnite_api.CosmeticTypeInfo
@@ -110,6 +112,7 @@ class CosmeticTypeInfo:
         self.backend_value: str = data['backendValue']
 
 
+@simple_repr
 class CosmeticRarityInfo:
     """
     .. attributetable:: fortnite_api.CosmeticRarityInfo
@@ -134,6 +137,7 @@ class CosmeticRarityInfo:
         self.backend_value: str = data['backendValue']
 
 
+@simple_repr
 class CosmeticSeriesInfo(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticSeriesInfo
@@ -169,6 +173,7 @@ class CosmeticSeriesInfo(Generic[HTTPClientT]):
         self.colors: List[str] = get_with_fallback(data, 'colors', list)
 
 
+@simple_repr
 class CosmeticImages(Images[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticImages

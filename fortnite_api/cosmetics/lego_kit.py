@@ -27,12 +27,13 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple
 
 from ..http import HTTPClientT
-from ..utils import get_with_fallback, parse_time
+from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic, CosmeticImages, CosmeticTypeInfo
 
 __all__: Tuple[str, ...] = ('CosmeticLegoKit',)
 
 
+@simple_repr
 class CosmeticLegoKit(Cosmetic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticLegoKit

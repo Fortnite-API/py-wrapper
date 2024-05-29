@@ -29,7 +29,7 @@ from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Tuple, U
 from ..asset import Asset
 from ..enums import GameLanguage
 from ..http import HTTPClientT
-from ..utils import get_with_fallback
+from ..utils import get_with_fallback, simple_repr
 from .br import CosmeticBr
 from .common import Cosmetic, CosmeticImages
 
@@ -39,6 +39,7 @@ if TYPE_CHECKING:
 __all__: Tuple[str, ...] = ('CosmeticLego', 'CosmeticLegoImages')
 
 
+@simple_repr
 class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticLegoImages
@@ -60,6 +61,7 @@ class CosmeticLegoImages(CosmeticImages[HTTPClientT]):
         self.wide: Optional[Asset[HTTPClientT]] = _wide and Asset(http=http, url=_wide)
 
 
+@simple_repr
 class CosmeticLego(Cosmetic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticLego

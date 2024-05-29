@@ -29,7 +29,7 @@ from typing import Any, Dict, Generic, List, Optional, Tuple
 
 from ..asset import Asset
 from ..http import HTTPClientT
-from ..utils import get_with_fallback, parse_time
+from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeriesInfo, CosmeticTypeInfo
 
 __all__: Tuple[str, ...] = (
@@ -41,6 +41,7 @@ __all__: Tuple[str, ...] = (
 )
 
 
+@simple_repr
 class CosmeticBrSet:
     """
     .. attributetable:: fortnite_api.CosmeticBrSet
@@ -65,6 +66,7 @@ class CosmeticBrSet:
         self.backend_value: str = data['backendValue']
 
 
+@simple_repr
 class CosmeticBrIntroduction:
     """
     .. attributetable:: fortnite_api.CosmeticBrIntroduction
@@ -92,6 +94,7 @@ class CosmeticBrIntroduction:
         self.backend_value: int = data['backendValue']
 
 
+@simple_repr
 class CosmeticBrVariantOption(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrVariantOption
@@ -119,6 +122,7 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
 
 
+@simple_repr
 class CosmeticBrVariant(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrVariant
@@ -146,6 +150,7 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
         ]
 
 
+@simple_repr
 class CosmeticBr(Cosmetic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBr

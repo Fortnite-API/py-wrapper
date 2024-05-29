@@ -28,7 +28,7 @@ import dataclasses
 import re
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
-from .utils import parse_time
+from .utils import parse_time, simple_repr
 
 if TYPE_CHECKING:
     import datetime
@@ -38,7 +38,8 @@ __all__: Tuple[str, ...] = ('Aes', 'DynamicKey', 'Version')
 VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})')
 
 
-@dataclasses.dataclass(init=True, repr=True, eq=True, order=False, unsafe_hash=True, frozen=True)
+@simple_repr
+@dataclasses.dataclass(init=True, eq=True, order=False, slots=True)
 class Version:
     """
     .. attributetable:: fortnite_api.Version
@@ -57,6 +58,7 @@ class Version:
     minor: int
 
 
+@simple_repr
 class Aes:
     """
     .. attributetable:: fortnite_api.Aes
@@ -132,12 +134,8 @@ class Aes:
     def __hash__(self) -> int:
         return hash((self.build, self.main_key))
 
-    def __repr__(self) -> str:
-        return '<Aes main_key={0.main_key} build={0.build} version={0.version} updated={0.updated!r} dynamic_keys={0.dynamic_keys!r}>'.format(
-            self
-        )
 
-
+@simple_repr
 class DynamicKey:
     """
     .. attributetable:: fortnite_api.DynamicKey

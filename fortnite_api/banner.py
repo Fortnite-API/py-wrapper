@@ -26,6 +26,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Generic, Tuple
 
+from .utils import simple_repr
+
 from .abc import Hashable
 from .http import HTTPClientT
 from .images import Images
@@ -36,6 +38,7 @@ __all__: Tuple[str, ...] = (
 )
 
 
+@simple_repr
 class Banner(Hashable, Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Banner
@@ -88,6 +91,7 @@ class Banner(Hashable, Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
 
+@simple_repr
 class BannerColor(Hashable):
     """
     .. attributetable:: fortnite_api.BannerColor

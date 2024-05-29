@@ -28,12 +28,13 @@ import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 from ..http import HTTPClientT
-from ..utils import get_with_fallback, parse_time
+from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeriesInfo, CosmeticTypeInfo
 
 __all__: Tuple[str, ...] = ('CosmeticInstrument',)
 
 
+@simple_repr
 class CosmeticInstrument(Cosmetic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticInstrument

@@ -26,11 +26,14 @@ from __future__ import annotations
 
 from typing import Any, Dict, Tuple
 
+from .utils import simple_repr
+
 from .abc import Hashable
 
 __all__: Tuple[str, ...] = ('Account',)
 
 
+@simple_repr
 class Account(Hashable):
     """
     .. attributetable:: fortnite_api.Account
@@ -70,6 +73,3 @@ class Account(Hashable):
 
     def __str__(self) -> str:
         return self.name
-
-    def __repr__(self) -> str:
-        return '<Account id={0.id} name={0.name}>'.format(self)

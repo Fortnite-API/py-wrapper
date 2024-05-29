@@ -26,12 +26,15 @@ from __future__ import annotations
 
 from typing import Any, Dict, Tuple
 
+from .utils import simple_repr
+
 from .account import Account
 from .enums import CreatorCodeStatus
 
 __all__: Tuple[str, ...] = ('CreatorCode',)
 
 
+@simple_repr
 class CreatorCode:
     """
     .. attributetable:: fortnite_api.CreatorCode

@@ -30,11 +30,12 @@ from .cosmetics.lego import CosmeticLego
 from .cosmetics.lego_kit import CosmeticLegoKit
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
-from .utils import get_with_fallback
+from .utils import get_with_fallback, simple_repr
 
 __all__: Tuple[str, ...] = ('CosmeticsAll',)
 
 
+@simple_repr
 class CosmeticsAll(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticsAll
@@ -79,6 +80,17 @@ class CosmeticsAll(Generic[HTTPClientT]):
         The raw data of the request. Can be used to recreate the object without
         fetching the data again.
     """
+
+    __slots__: Tuple[str, ...] = (
+        '_http',
+        'br',
+        'tracks',
+        'instruments',
+        'cars',
+        'lego',
+        'lego_kits',
+        'raw_data',
+    )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self._http: HTTPClientT = http
