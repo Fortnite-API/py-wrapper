@@ -26,9 +26,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Tuple
 
-from .utils import simple_repr
-
 from .abc import Hashable
+from .utils import simple_repr
 
 __all__: Tuple[str, ...] = ('Account',)
 

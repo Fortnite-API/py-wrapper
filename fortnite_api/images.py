@@ -26,10 +26,9 @@ from __future__ import annotations
 
 from typing import Any, Dict, Generic, Optional, Tuple
 
-from .utils import simple_repr
-
 from .asset import Asset
 from .http import HTTPClientT
+from .utils import simple_repr
 
 __all__: Tuple[str, ...] = ('Images',)
 

@@ -24,14 +24,13 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, List, Tuple, Optional
-
-from .utils import simple_repr
+from typing import Any, Dict, Generic, List, Optional, Tuple
 
 from .abc import Hashable
 from .asset import Asset
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
+from .utils import simple_repr
 
 __all__: Tuple[str, ...] = ('Map', 'MapImages', 'POI', 'POILocation')
 

@@ -1,4 +1,5 @@
 from typing import Tuple
+
 from fortnite_api.utils import simple_repr
 
 
