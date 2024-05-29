@@ -29,7 +29,7 @@ from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple
 from .abc import Hashable
 from .asset import Asset
 from .http import HTTPClientT
-from .utils import get_with_fallback, parse_time
+from .utils import get_with_fallback, parse_time, simple_repr
 
 if TYPE_CHECKING:
     import datetime
@@ -37,11 +37,18 @@ if TYPE_CHECKING:
 __all__: Tuple[str, ...] = ('News', 'GameModeNews', 'NewsMotd', 'NewsMessage')
 
 
+@simple_repr
 class News(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.News
 
     Represents Game News.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     -----------
@@ -65,11 +72,18 @@ class News(Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
 
+@simple_repr
 class GameModeNews(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.GameModeNews
 
     Represents News of a specific game mode.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+                Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
@@ -105,11 +119,18 @@ class GameModeNews(Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
 
+@simple_repr
 class NewsMotd(Hashable, Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMotd
 
     Represents News of a specific game mode.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     -----------
@@ -158,11 +179,18 @@ class NewsMotd(Hashable, Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
 
+@simple_repr
 class NewsMessage(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMessage
 
     Represents News of a specific game mode.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------

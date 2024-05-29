@@ -26,6 +26,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Generic, List, Tuple
 
+from .utils import simple_repr
+
 from .abc import Hashable
 from .asset import Asset
 from .http import HTTPClientT
@@ -34,11 +36,18 @@ from .proxies import TransformerListProxy
 __all__: Tuple[str, ...] = ('Map', 'MapImages', 'POI', 'POILocation')
 
 
+@simple_repr
 class MapImages(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.MapImages
 
     Represents the images of a given POI map.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
@@ -55,11 +64,18 @@ class MapImages(Generic[HTTPClientT]):
         self.pois: Asset[HTTPClientT] = Asset(http=http, url=data['pois'])
 
 
+@simple_repr
 class Map(Generic[HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Map
 
     Represents a Fortnite map.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
@@ -84,11 +100,18 @@ class Map(Generic[HTTPClientT]):
         self.raw_data: Dict[str, Any] = data
 
 
+@simple_repr
 class POI(Hashable):
     """
     .. attributetable:: fortnite_api.POI
 
     Represents a specific POI in a Fortnite map. This inherits from :class:`~fortnite_api.Hashable`.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
 
     Attributes
     ----------
@@ -108,11 +131,22 @@ class POI(Hashable):
         self.location = POILocation(data=data['location'])
 
 
+@simple_repr
 class POILocation:
     """
     .. attributetable:: fortnite_api.POILocation
 
     Holds the x, y, z coordinates of a POI in a Fortnite map.
+
+    .. container:: operations
+
+        .. describe:: repr(x)
+
+            Returns a representation of the account in the form of a string.
+
+        .. describe:: iter(x)
+
+            Returns a iter of the x, y, z coordinates.
 
     Attributes
     ----------
@@ -130,3 +164,6 @@ class POILocation:
         self.x: float = data['x']
         self.y: float = data['y']
         self.z: float = data['z']
+
+    def __iter__(self) -> Tuple[float, float, float]:
+        return self.x, self.y, self.z
