@@ -184,6 +184,7 @@ class CosmeticRarity(enum.Enum):
     RARE = 'rare'
     UNCOMMON = 'uncommon'
     COMMON = 'common'
+    MYTHIC = 'mythic'
 
 
 class CosmeticType(enum.Enum):
