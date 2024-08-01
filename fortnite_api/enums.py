@@ -385,3 +385,20 @@ class BannerIntensity(enum.Enum):
 
     LOW = 'Low'
     HIGH = 'High'
+
+
+class CustomGender(enum.Enum):
+    """Denotes the gender of a character in Fortnite.
+
+    At the moment, this is only used on the :class:`fortnite_api.VariantBean` class.
+
+    Attributes
+    ----------
+    FEMALE
+        A female character.
+    MALE
+        A male character.
+    """
+
+    FEMALE = 'EFortCustomGender::Female'
+    MALE = 'EFortCustomGender::Male'

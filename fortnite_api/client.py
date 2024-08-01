@@ -36,7 +36,7 @@ from typing_extensions import Concatenate, Coroutine, ParamSpec, Self
 from .aes import Aes
 from .all import CosmeticsAll
 from .banner import Banner, BannerColor
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantLego
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantBean, VariantLego
 from .creator_code import CreatorCode
 from .enums import *
 from .errors import BetaAccessNotEnabled, BetaUnknownException, MissingAPIKey
@@ -288,10 +288,10 @@ class Client:
             lambda x: CosmeticLegoKit(data=x, http=self.http),
         )
 
-    async def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[VariantLego]:
+    async def fetch_variants_lego(self, *, language: Optional[GameLanguage] = None) -> List[VariantLego]:
         """|coro|
 
-        Fetches all lego cosmetics available in Fortnite.
+        Fetches all lego cosmetic variants available in Fortnite.
 
         Parameters
         ----------
@@ -302,13 +302,37 @@ class Client:
         Returns
         -------
         List[:class:`fortnite_api.VariantLego`]
-            The fetched lego cosmetics.
+            The fetched lego cosmetic variants.
         """
         data = await self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
 
         return TransformerListProxy(
             data,
             lambda x: VariantLego(data=x, http=self.http),
+        )
+
+    async def fetch_variants_beans(self, *, language: Optional[GameLanguage] = None) -> List[VariantBean]:
+        """|coro|
+
+        Fetches all bean cosmetic variants available in Fortnite. For more information
+        on what a bean is, see :class:`fortnite_api.VariantBean`.
+
+        Parameters
+        ----------
+        language: Optional[:class:`fortnite_api.GameLanguage`]
+            The language to display the cosmetics in. Defaults to ``None``.
+            This will override the default language set on the client.
+
+        Returns
+        -------
+        List[:class:`fortnite_api.VariantBean`]
+            The fetched bean cosmetic variants.
+        """
+        data = await self.http.get_cosmetics_beans(language=self._resolve_language_value(language))
+
+        return TransformerListProxy(
+            data,
+            lambda x: VariantBean(data=x, http=self.http),
         )
 
     async def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack]:
@@ -1034,12 +1058,20 @@ class SyncClient:
         data = self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_language_value(language))
         return CosmeticBr(data=data, http=self.http)
 
-    @copy_doc(Client.fetch_cosmetics_lego)
-    def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[VariantLego[SyncHTTPClient]]:
+    @copy_doc(Client.fetch_variants_lego)
+    def fetch_variants_lego(self, *, language: Optional[GameLanguage] = None) -> List[VariantLego[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: VariantLego(data=x, http=self.http),
+        )
+
+    @copy_doc(Client.fetch_variants_beans)
+    def fetch_variants_beans(self, *, language: Optional[GameLanguage] = None) -> List[VariantBean[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_beans(language=self._resolve_language_value(language))
+        return TransformerListProxy(
+            data,
+            lambda x: VariantBean(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_cosmetics_all)

@@ -107,7 +107,7 @@ class NewCosmetics(Generic[HTTPClientT]):
     cars: :class:`fortnite_api.NewCosmetic`
         The new car cosmetics.
     lego: :class:`fortnite_api.NewCosmetic`
-        The new lego cosmetics.
+        The new lego cosmetic variants.
     lego_kits: :class:`fortnite_api.NewCosmetic`
         The new lego kit cosmetics.
     """

@@ -23,3 +23,82 @@ SOFTWARE.
 """
 
 from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Union, overload
+
+from ...enums import CustomGender, GameLanguage
+from ...http import HTTPClientT
+from ...utils import get_with_fallback
+from ..br import CosmeticBr
+from ..common import Cosmetic, CosmeticImages
+
+if TYPE_CHECKING:
+    from ...http import HTTPClient, SyncHTTPClient
+
+
+class VariantBean(Cosmetic[HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.VariantBean
+
+    This class represents the Bean variant of a cosmetic item. This stems from
+    the Fortnite x Fall Guys collaboration, where Fortnite cosmetics were
+    transformed into Fall Guys beans.
+
+    This class inherits from :class:`fortnite_api.Cosmetic`.
+
+    Attributes
+    ----------
+    cosmetic_id: :class:`str`
+        The ID of the cosmetic that this bean represents.
+    name: :class:`str`
+        The name of this bean.
+    gender: :class:`fortnite_api.CustomGender`
+        Denotes the gender of this bean.
+    gameplay_tags: List[:class:`str`]
+        The gameplay tags associated with this bean.
+    images: Optional[:class:`fortnite_api.CosmeticImages`]
+        Any display images of this bean in the game. Will be ``None``
+        if there are no images.
+    path: Optional[:class:`str`]
+        The game path of this bean. Will be ``None`` if there is no path
+        in the API response.
+    """
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.cosmetic_id: str = data['cosmetic_id']
+        self.name: str = data['name']
+        self.gender: CustomGender = CustomGender(data['gender'])
+        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplay_tags', list)
+
+        _images = data.get('images')
+        self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=http)
+        self.path: Optional[str] = data.get('path')
+
+    @overload
+    def fetch_cosmetic_br(
+        self: VariantBean[HTTPClient], *, language: Optional[GameLanguage] = None
+    ) -> Coroutine[Any, Any, CosmeticBr]: ...
+
+    @overload
+    def fetch_cosmetic_br(self: VariantBean[SyncHTTPClient], *, language: Optional[GameLanguage] = None) -> CosmeticBr: ...
+
+    def fetch_cosmetic_br(
+        self, *, language: Optional[GameLanguage] = None
+    ) -> Union[Coroutine[Any, Any, CosmeticBr], CosmeticBr]:
+        """|coro|
+
+        Fetches the Battle Royale cosmetic that this bean variant is based on.
+
+        Parameters
+        ----------
+        language: Optional[:class:`fortnite_api.GameLanguage`]
+            The language to fetch the cosmetic in.
+
+        Returns
+        -------
+        :class:`fortnite_api.CosmeticBr`
+            The Battle Royale cosmetic that this bean variant is based on.
+        """
+        return self._http.get_cosmetic_br(self.cosmetic_id, language=language and language.value)

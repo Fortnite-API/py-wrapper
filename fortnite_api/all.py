@@ -24,7 +24,7 @@ SOFTWARE.
 
 from typing import Any, Dict, Generic, Tuple
 
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantLego
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantLego, VariantBean
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, simple_repr
@@ -74,7 +74,7 @@ class CosmeticsAll(Generic[HTTPClientT]):
     cars: List[:class:`fortnite_api.CosmeticCar`]
         A list of all car cosmetics.
     lego: List[:class:`fortnite_api.VariantLego`]
-        A list of all lego cosmetics.
+        A list of all lego cosmetic variants.
     lego_kits: List[:class:`fortnite_api.CosmeticLegoKit`]
         A list of all lego kit cosmetics.
     raw_data: :class:`dict`
@@ -90,6 +90,7 @@ class CosmeticsAll(Generic[HTTPClientT]):
         'cars',
         'lego',
         'lego_kits',
+        'beans',
         'raw_data',
     )
 
@@ -130,6 +131,12 @@ class CosmeticsAll(Generic[HTTPClientT]):
         self.lego_kits: TransformerListProxy[CosmeticLegoKit[HTTPClientT]] = TransformerListProxy(
             _lego_kits,
             lambda x: CosmeticLegoKit(data=x, http=self._http),
+        )
+
+        _beans = get_with_fallback(data, 'beans', list)
+        self.beans: TransformerListProxy[VariantBean[HTTPClientT]] = TransformerListProxy(
+            _beans,
+            lambda x: VariantBean(data=x, http=self._http),
         )
 
         self.raw_data: Dict[str, Any] = data

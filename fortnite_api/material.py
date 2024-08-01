@@ -104,7 +104,7 @@ class MaterialInstance(Hashable, Generic[HTTPClientT]):
 
     Fortnite takes advantage of this concept for its cosmetics. This allows developers to create a single
     cosmetic and then create many different versions of it using Material instances. This is used
-    across not just skins but also extended onto lego cosmetics as well.
+    across not just skins but also extended onto lego cosmetic variants as well.
 
     This class represents a Material instance, which is said to be a child of a bigger parent Material.
 

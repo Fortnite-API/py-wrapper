@@ -56,13 +56,14 @@ class VariantLego(Cosmetic[HTTPClientT]):
     Attributes
     ----------
     cosmetic_id: :class:`str`
-        The ID of the cosmetic that this lego cosmetic is based on.
+        The ID of the cosmetic that this lego cosmetic variant is based on.
     sound_library_tags: List[:class:`str`]
-        The sound library tags of the lego cosmetic.
+        The sound library tags of the lego cosmetic variant.
     images: Optional[:class:`fortnite_api.CosmeticImages`]
-        The images of the lego cosmetic.
+        The images of the lego cosmetic variant.
     path: Optional[:class:`str`]
-        The path of the lego cosmetic.
+        The path of the lego cosmetic variant. Will be ``None`` if
+        the API response does not contain a path.
     """
 
     __slots__: Tuple[str, ...] = ('cosmetic_id', 'sound_library_tags', 'images', 'path')
@@ -90,7 +91,7 @@ class VariantLego(Cosmetic[HTTPClientT]):
     ) -> Union[Coroutine[Any, Any, CosmeticBr], CosmeticBr]:
         """|coro|
 
-        Fetches the Battle Royale cosmetic that this lego cosmetic is based on.
+        Fetches the Battle Royale cosmetic that this lego cosmetic variant is based on.
 
         Parameters
         ----------
@@ -100,6 +101,6 @@ class VariantLego(Cosmetic[HTTPClientT]):
         Returns
         -------
         :class:`fortnite_api.CosmeticBr`
-            The Battle Royale cosmetic that this lego cosmetic is based on.
+            The Battle Royale cosmetic that this lego cosmetic variant is based on.
         """
         return self._http.get_cosmetic_br(self.cosmetic_id, language=language and language.value)
