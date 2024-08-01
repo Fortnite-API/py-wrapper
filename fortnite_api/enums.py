@@ -135,9 +135,11 @@ class CosmeticCategory(enum.Enum):
     CARS
         Type of a :class:`fortnite_api.CosmeticCar` cosmetic.
     LEGO
-        Type of a :class:`fortnite_api.VariantLego` cosmetic.
+        Type of a :class:`fortnite_api.VariantLego` cosmetic variant.
     LEGO_KITS
         Type of a :class:`fortnite_api.CosmeticLegoKit` cosmetic.
+    BEANS
+        Type of a :class:`fortnite_api.VariantBean` cosmetic variant.
     """
 
     BR = "br"
@@ -146,6 +148,7 @@ class CosmeticCategory(enum.Enum):
     CARS = "cars"
     LEGO = "lego"
     LEGO_KITS = "legokits"
+    BEANS = "beans"
 
 
 class CosmeticRarity(enum.Enum):

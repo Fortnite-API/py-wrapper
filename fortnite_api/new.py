@@ -27,7 +27,16 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple, Type
 
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticT, CosmeticTrack, VariantLego
+from .cosmetics import (
+    CosmeticBr,
+    CosmeticCar,
+    CosmeticInstrument,
+    CosmeticLegoKit,
+    CosmeticT,
+    CosmeticTrack,
+    VariantBean,
+    VariantLego,
+)
 from .enums import CosmeticCategory
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
@@ -110,6 +119,8 @@ class NewCosmetics(Generic[HTTPClientT]):
         The new lego cosmetic variants.
     lego_kits: :class:`fortnite_api.NewCosmetic`
         The new lego kit cosmetics.
+    beans: :class:`fortnite_api.NewCosmetic`
+        The new bean cosmetic variants.
     """
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
@@ -156,6 +167,12 @@ class NewCosmetics(Generic[HTTPClientT]):
             cosmetic_type=CosmeticCategory.LEGO_KITS,
             internal_key='legoKits',
             cosmetic_class=CosmeticLegoKit,
+        )
+
+        self.beans: NewCosmetic[VariantBean[HTTPClientT]] = self._create_new_cosmetic(
+            cosmetic_type=CosmeticCategory.BEANS,
+            internal_key='beans',
+            cosmetic_class=VariantBean,
         )
 
     def _create_new_cosmetic(
