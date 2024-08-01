@@ -29,7 +29,6 @@ from typing import Final
 
 import pytest
 
-from fortnite_api import OptimizationFlags
 
 # Constants for general testing
 TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"
@@ -45,16 +44,6 @@ TEST_DEFAULT_PLAYLIST: Final[str] = "Playlist_NoBuildBR_Duo"
 # Constants for fetching stats
 TEST_STAT_ACCOUNT_NAME = "Luc1412"
 TEST_STAT_ACCOUNT_ID = '369644c6224d4845aa2b00e63b60241d'
-
-
-@pytest.fixture(
-    params=[
-        (OptimizationFlags.none()),
-        (OptimizationFlags.IGNORE_NULL),
-    ]
-)
-def optimization_flags(request: pytest.FixtureRequest):
-    yield
 
 
 @pytest.fixture(scope='session')

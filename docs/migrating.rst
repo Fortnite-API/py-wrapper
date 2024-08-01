@@ -170,8 +170,6 @@ separately for both clients.
         - The session parameter is a new parameter that allows you to pass a :class:`aiohttp.ClientSession` to the client. By default this is an optional parameter. This parameter comes in useful if you want to manage a session yourself. In that case, it is a required parameter.
     *   - ``beta``
         - Denotes if the client has the permissions to access beta endpoints (always prefixed with ``beta_fetch_x``). This is a new parameter that is set to ``False`` by default. If you want to access beta endpoints, you must set this parameter to ``True``.
-    *   - ``optimization_flags``
-        - This is a new parameter that allows you to toggle certain optimizations on or off. This parameter is not required, and defaults to :meth:`~fortnite_api.OptimizationFlags.default` if not given. 
 
 See the documentation for these parameters in :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient`.
 
@@ -887,8 +885,6 @@ work with the library and upgrade from Version 2. Every object not already menti
 - :class:`fortnite_api.BannerIntensity`: An enum that represents the intensity of a banner color. This is used in the :class:`fortnite_api.ShopEntryBanner` class to represent the intensity of a banner color.
 
 - :class:`fortnite_api.FortniteAPIException` and all its subclasses found in :ref:`the exception hierarchy <api-exception-hierarchy>`: These are exceptions that are raised when an error occurs while fetching data from the Fortnite API. They are used across the library. For what each of them do, see the :ref:`exception hierarchy <api-exception-hierarchy>`.
-
-- :class:`fortnite_api.OptimizationFlags`: Represents options that can be toggled on or off to change behavior of the :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient` clients. This is used as a parameter when creating a client.
 
 - :class:`fortnite_api.Images`: Represents images returned from the API. This is used across all cosmetics objects through the :class:`fortnite_api.CosmeticImages` object, as well as in the :class:`fortnite_api.Banner` object.
 

@@ -175,12 +175,6 @@ Cosmetic Objects
     :inherited-members:
 
 
-Flags
------
-.. autoclass:: fortnite_api.OptimizationFlags
-    :members:
-
-
 Enumerations
 ------------
 

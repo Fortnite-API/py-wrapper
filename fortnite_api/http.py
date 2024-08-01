@@ -29,7 +29,7 @@ import asyncio
 import logging
 import sys
 import time
-from typing import TYPE_CHECKING, Any, ClassVar, Coroutine, Dict, Literal, Optional, Union
+from typing import Any, ClassVar, Coroutine, Dict, Literal, Optional, Union
 from urllib.parse import quote as _uriquote
 
 import aiohttp
@@ -44,9 +44,6 @@ T = TypeVar('T', bound='Any')
 AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
 
 HTTPClientT = TypeVar('HTTPClientT', bound='Union[HTTPClient, SyncHTTPClient]', default='HTTPClient')
-
-if TYPE_CHECKING:
-    from .flags import OptimizationFlags
 
 _log = logging.getLogger(__name__)
 
@@ -92,9 +89,8 @@ class Route:
 
 class HTTPMixin(abc.ABC):
 
-    def __init__(self, *, token: Optional[str] = None, optimization_flags: Optional[OptimizationFlags] = None) -> None:
+    def __init__(self, *, token: Optional[str] = None) -> None:
         self.token: Optional[str] = token
-        self.optimization_flags: Optional[OptimizationFlags] = optimization_flags
 
         self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {0}) Python/{1[0]}.{1[1]}'.format(
             __version__, sys.version_info
@@ -103,10 +99,6 @@ class HTTPMixin(abc.ABC):
         self.headers: Dict[str, Any] = {'User-Agent': self.user_agent}
         if self.token is not None:
             self.headers['Authorization'] = self.token
-
-        self.params: Dict[str, Any] = {}
-        if self.optimization_flags is not None:
-            self.params['responseOptions'] = str(self.optimization_flags)
 
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any: ...
@@ -349,9 +341,6 @@ class HTTPClient(HTTPMixin):
                 'aiohttp.ClientSession is not set. Must either pass session to Client constructor or use the async context manager.'
             )
 
-        # Update the params with the optimization flags
-        kwargs.setdefault('params', {}).update(self.params)
-
         response: Optional[aiohttp.ClientResponse] = None
         data = None
         error = None
@@ -443,9 +432,6 @@ class SyncHTTPClient(HTTPMixin):
             raise RuntimeError(
                 'requests.Session is not set. Must either pass session to Client constructor or use the context manager.'
             )
-
-        # Update the params with the optimization flags
-        kwargs.setdefault('params', {}).update(self.params)
 
         response: Optional[requests.Response] = None
         data = None

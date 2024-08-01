@@ -74,8 +74,8 @@ def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_br_stats_by_name(api_key: str, optimization_flags: fortnite_api.OptimizationFlags):
-    async with fortnite_api.Client(api_key=api_key, optimization_flags=optimization_flags) as client:
+async def test_async_fetch_br_stats_by_name(api_key: str):
+    async with fortnite_api.Client(api_key=api_key) as client:
         stats = await client.fetch_br_stats(name=TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
@@ -83,24 +83,24 @@ async def test_async_fetch_br_stats_by_name(api_key: str, optimization_flags: fo
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_br_stats_by_account_id(api_key: str, optimization_flags: fortnite_api.OptimizationFlags):
-    async with fortnite_api.Client(api_key=api_key, optimization_flags=optimization_flags) as client:
+async def test_async_fetch_br_stats_by_account_id(api_key: str):
+    async with fortnite_api.Client(api_key=api_key) as client:
         stats = await client.fetch_br_stats(account_id=TEST_STAT_ACCOUNT_ID, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
     _test_stats(stats)
 
 
-def test_sync_fetch_br_stats_by_name(api_key: str, optimization_flags: fortnite_api.OptimizationFlags):
-    with fortnite_api.SyncClient(api_key=api_key, optimization_flags=optimization_flags) as client:
+def test_sync_fetch_br_stats_by_name(api_key: str):
+    with fortnite_api.SyncClient(api_key=api_key) as client:
         stats = client.fetch_br_stats(name=TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
     _test_stats(stats)
 
 
-def test_sync_fetch_br_stats_by_account_id(api_key: str, optimization_flags: fortnite_api.OptimizationFlags):
-    with fortnite_api.SyncClient(api_key=api_key, optimization_flags=optimization_flags) as client:
+def test_sync_fetch_br_stats_by_account_id(api_key: str):
+    with fortnite_api.SyncClient(api_key=api_key) as client:
         stats = client.fetch_br_stats(account_id=TEST_STAT_ACCOUNT_ID, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None

@@ -40,7 +40,6 @@ from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego
 from .creator_code import CreatorCode
 from .enums import *
 from .errors import BetaAccessNotEnabled, BetaUnknownException, MissingAPIKey
-from .flags import OptimizationFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
 from .material import MaterialInstance
@@ -147,9 +146,6 @@ class Client:
         .. note::
 
             All beta endpoints are prefixed with ``beta_``.
-    optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
-        Any optimization flags to use for the client. Enabling these can speed up the client or reduce
-        the amount of bandwidth used. Defaults to :meth:`fortnite_api.OptimizationFlags.default`. Pass ``None`` or :meth:`~fortnite_api.OptimizationFlags.none` to remove all flags. Read the documentation for :class:`~fortnite_api.OptimizationFlags` for more information.
 
     Attributes
     ----------
@@ -157,8 +153,6 @@ class Client:
         The default language, if any, passed to the client.
     beta: :class:`bool`
         Denotes if the client can make requests to beta endpoints.
-    optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
-        Any optimization flags set on the client.
     """
 
     def __init__(
@@ -168,12 +162,10 @@ class Client:
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[aiohttp.ClientSession] = None,
         beta: bool = False,
-        optimization_flags: OptimizationFlags = OptimizationFlags.default(),
     ) -> None:
-        self.http: HTTPClient = HTTPClient(session=session, token=api_key, optimization_flags=optimization_flags)
+        self.http: HTTPClient = HTTPClient(session=session, token=api_key)
         self.default_language: Optional[GameLanguage] = default_language
         self.beta: bool = beta
-        self.optimization_flags: Optional[OptimizationFlags] = optimization_flags
 
     async def __aenter__(self) -> Self:
         if self.http.session is None:
@@ -957,9 +949,6 @@ class SyncClient:
         .. note::
 
             All beta endpoints are prefixed with ``beta_``.
-    optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
-        Any optimization flags to use for the client. Enabling these can speed up the client or reduce
-        the amount of bandwidth used. Defaults to :meth:`fortnite_api.OptimizationFlags.default`. Pass ``None`` or :meth:`~fortnite_api.OptimizationFlags.none` to remove all flags. Read the documentation for :class:`~fortnite_api.OptimizationFlags` for more information.
 
     Attributes
     ----------
@@ -967,8 +956,6 @@ class SyncClient:
         The default language, if any, passed to the client.
     beta: :class:`bool`
         Denotes if the client can make requests to beta endpoints.
-    optimization_flags: Optional[:class:`fortnite_api.OptimizationFlags`]
-        Any optimization flags set on the client.
     """
 
     def __init__(
@@ -978,9 +965,8 @@ class SyncClient:
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[requests.Session] = None,
         beta: bool = False,
-        optimization_flags: OptimizationFlags = OptimizationFlags.default(),
     ) -> None:
-        self.http: SyncHTTPClient = SyncHTTPClient(session=session, token=api_key, optimization_flags=optimization_flags)
+        self.http: SyncHTTPClient = SyncHTTPClient(session=session, token=api_key)
         self.default_language: Optional[GameLanguage] = default_language
         self.beta: bool = beta
 
