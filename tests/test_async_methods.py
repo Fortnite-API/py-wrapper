@@ -35,12 +35,8 @@ from .conftest import TEST_ACCOUNT_ID, TEST_ACCOUNT_NAME, TEST_COSMETIC_ID, TEST
 
 
 @pytest.mark.asyncio
-async def test_async_aes(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_aes(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         aes = await client.fetch_aes()
 
         # Ensure that the AES can be fetched with BASE64
@@ -65,12 +61,8 @@ async def test_async_aes(
 
 
 @pytest.mark.asyncio
-async def test_async_banners(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_banners(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         banners = await client.fetch_banners()
 
     for banner in banners:
@@ -86,12 +78,8 @@ async def test_async_banners(
 
 
 @pytest.mark.asyncio
-async def test_async_banner_colors(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_banner_colors(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         banner_colors = await client.fetch_banner_colors()
 
     for color in banner_colors:
@@ -111,12 +99,8 @@ async def test_async_banner_colors(
 
 
 @pytest.mark.asyncio
-async def test_async_creator_code(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_creator_code(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         creator_code = await client.fetch_creator_code(name=TEST_CREATOR_CODE)
 
     assert isinstance(creator_code, fn_api.CreatorCode)
@@ -131,12 +115,8 @@ async def test_async_creator_code(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlist(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_playlist(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         playlists = await client.fetch_playlists()
 
     assert len(playlists), "Playlists should not be empty"
@@ -149,12 +129,8 @@ async def test_async_fetch_playlist(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_br(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetics_br(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         cosmetics_br = await client.fetch_cosmetics_br()
 
     for cosmetic in cosmetics_br:
@@ -162,12 +138,8 @@ async def test_async_fetch_cosmetics_br(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_cars(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetics_cars(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         cosmetics_cars = await client.fetch_cosmetics_cars()
 
     for cosmetic in cosmetics_cars:
@@ -175,12 +147,8 @@ async def test_async_fetch_cosmetics_cars(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_instruments(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetics_instruments(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         cosmetics_instruments = await client.fetch_cosmetics_instruments()
 
     for cosmetic in cosmetics_instruments:
@@ -188,12 +156,8 @@ async def test_async_fetch_cosmetics_instruments(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_lego_kits(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetics_lego_kits(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         lego_kits = await client.fetch_cosmetics_lego_kits()
 
     for kit in lego_kits:
@@ -201,12 +165,8 @@ async def test_async_fetch_cosmetics_lego_kits(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_lego(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetics_lego(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         lego = await client.fetch_cosmetics_lego()
 
     for lego in lego:
@@ -214,12 +174,8 @@ async def test_async_fetch_cosmetics_lego(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_tracks(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetics_tracks(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         cosmetics_tracks = await client.fetch_cosmetics_tracks()
 
     for cosmetic in cosmetics_tracks:
@@ -227,12 +183,8 @@ async def test_async_fetch_cosmetics_tracks(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetic_br(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetic_br(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         cosmetic_br = await client.fetch_cosmetic_br(TEST_COSMETIC_ID)
 
     assert isinstance(cosmetic_br, fn_api.CosmeticBr)
@@ -240,12 +192,8 @@ async def test_async_fetch_cosmetic_br(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_new(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetics_new(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         new_cosmetics = await client.fetch_cosmetics_new()
 
     assert isinstance(new_cosmetics, fn_api.NewCosmetics)
@@ -265,12 +213,8 @@ async def test_async_fetch_cosmetics_new(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_all(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_cosmetics_all(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         cosmetics_all = await client.fetch_cosmetics_all()
 
     assert isinstance(cosmetics_all, fn_api.CosmeticsAll)
@@ -290,12 +234,8 @@ async def test_async_fetch_cosmetics_all(
 
 
 @pytest.mark.asyncio
-async def test_async_map(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_map(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         map = await client.fetch_map()
 
     assert isinstance(map, fn_api.Map)
@@ -313,12 +253,8 @@ async def test_async_map(
 
 
 @pytest.mark.asyncio
-async def test_fetch_news(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_fetch_news(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         news = await client.fetch_news()
 
     assert isinstance(news, fn_api.News)
@@ -356,12 +292,8 @@ def _test_game_mode_news(news: fn_api.GameModeNews[Any]):
 
 
 @pytest.mark.asyncio
-async def test_fetch_news_methods(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_fetch_news_methods(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         news_br = await client.fetch_news_br()
         news_stw = await client.fetch_news_stw()
 
@@ -394,12 +326,8 @@ def _test_playlist(playlist: fn_api.Playlist[Any]):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlists(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_playlists(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         playlists = await client.fetch_playlists()
 
     for playlist in playlists:
@@ -407,12 +335,8 @@ async def test_async_fetch_playlists(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlist_by_id(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_playlist_by_id(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         playlist = await client.fetch_playlist(TEST_DEFAULT_PLAYLIST)
 
     assert playlist.id == TEST_DEFAULT_PLAYLIST
@@ -420,9 +344,7 @@ async def test_async_fetch_playlist_by_id(
 
 
 @pytest.mark.asyncio
-async def test_async_beta_fetch_material_instances(
-    api_key: str,
-):
+async def test_async_beta_fetch_material_instances(api_key: str):
 
     # Ensure you cannot call this without beta=True
     with pytest.raises(fn_api.BetaAccessNotEnabled):
@@ -442,12 +364,8 @@ async def test_async_beta_fetch_material_instances(
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_shop(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_fetch_shop(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         shop = await client.fetch_shop()
 
     assert isinstance(shop, fn_api.Shop)
@@ -510,12 +428,8 @@ async def test_async_fetch_shop(
 
 
 @pytest.mark.asyncio
-async def test_async_search_cosmetics(
-    api_key: str,
-):
-    async with fn_api.Client(
-        api_key=api_key,
-    ) as client:
+async def test_async_search_cosmetics(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
         cosmetics_multiple_set = await client.search_br_cosmetics(multiple=True, has_set=True)
 
         cosmetic_single_set = await client.search_br_cosmetics(multiple=False, has_set=True)
