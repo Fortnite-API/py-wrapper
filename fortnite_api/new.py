@@ -27,7 +27,7 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple, Type
 
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, VariantLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticT, CosmeticTrack, VariantLego
 from .enums import CosmeticCategory
 from .http import HTTPClientT
 from .proxies import TransformerListProxy

@@ -24,7 +24,7 @@ SOFTWARE.
 
 from typing import Any, Dict, Generic, Tuple
 
-from .cosmetics import CosmeticBr, CosmeticInstrument, CosmeticTrack, CosmeticCar, CosmeticLegoKit, VariantLego
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantLego
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, simple_repr

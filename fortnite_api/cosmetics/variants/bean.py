@@ -23,6 +23,3 @@ SOFTWARE.
 """
 
 from __future__ import annotations
-
-from .bean import *
-from .lego import *
