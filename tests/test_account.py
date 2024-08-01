@@ -56,4 +56,4 @@ def test_account_str(sample_account_data: Dict[str, Any]):
 def test_account_repr(sample_account_data: Dict[str, Any]):
     account = Account(sample_account_data)
 
-    assert repr(account) == "<Account id=123 name=Test Account>"
+    assert repr(account) == "<Account id='123', name='Test Account'>"
