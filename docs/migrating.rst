@@ -301,7 +301,7 @@ are as follows:
     *   - ``client.cosmetics.fetch_jam_tracks()``
         - :meth:`fortnite_api.Client.fetch_cosmetics_tracks`
     *   - ``client.cosmetics.fetch_lego_variants()``
-        - :meth:`fortnite_api.Client.fetch_cosmetics_lego`
+        - :meth:`fortnite_api.Client.fetch_variants_lego`
     *   - ``client.cosmetics.fetch_all_new()``
         - :meth:`fortnite_api.Client.fetch_cosmetics_new`
     *   - ``client.cosmetics.fetch_new_br()``

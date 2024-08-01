@@ -155,6 +155,22 @@ def test_sync_fetch_cosmetics_lego_kits(api_key: str):
         assert isinstance(kit, fn_api.CosmeticLegoKit)
 
 
+def test_sync_fetch_variants_lego(api_key: str):
+    with fn_api.SyncClient(api_key=api_key) as client:
+        variants_lego = client.fetch_variants_lego()
+
+    for variant in variants_lego:
+        assert isinstance(variant, fn_api.VariantLego)
+
+
+def test_sync_fetch_variants_beans(api_key: str):
+    with fn_api.SyncClient(api_key=api_key) as client:
+        variants_beans = client.fetch_variants_beans()
+
+    for variant in variants_beans:
+        assert isinstance(variant, fn_api.VariantBean)
+
+
 def test_sync_fetch_cosmetics_tracks(api_key: str):
     with fn_api.SyncClient(api_key=api_key) as client:
         cosmetics_tracks = client.fetch_cosmetics_tracks()

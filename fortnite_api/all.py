@@ -157,6 +157,9 @@ class CosmeticsAll(Generic[HTTPClientT]):
         for lego in self.lego:
             yield lego
 
+        for bean in self.beans:
+            yield bean
+
         for lego_kit in self.lego_kits:
             yield lego_kit
 

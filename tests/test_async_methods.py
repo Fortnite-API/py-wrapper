@@ -171,11 +171,11 @@ async def test_async_fetch_cosmetics_lego_kits(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_lego(api_key: str):
+async def test_async_fetch_variants_lego(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
-        lego = await client.fetch_cosmetics_lego()
+        lego_variants = await client.fetch_variants_lego()
 
-    for lego in lego:
+    for lego in lego_variants:
         assert isinstance(lego, fn_api.VariantLego)
 
 
@@ -231,6 +231,7 @@ async def test_async_fetch_cosmetics_all(api_key: str):
     assert cosmetics_all.cars
     assert cosmetics_all.lego
     assert cosmetics_all.lego_kits
+    assert cosmetics_all.beans
     assert cosmetics_all.raw_data
 
     # Ensure that you can iter over the cosmetics
@@ -452,3 +453,15 @@ async def test_async_search_cosmetics(api_key: str):
 
     assert isinstance(cosmetic_single_set, fn_api.CosmeticBr)
     assert cosmetic_single_set.set is not None
+
+
+@pytest.mark.asyncio
+async def test_async_fetch_variants_beans(api_key: str):
+    async with fn_api.Client(api_key=api_key) as client:
+        beans_variants = await client.fetch_variants_beans()
+
+    for bean in beans_variants:
+        assert isinstance(bean, fn_api.VariantBean)
+
+        assert bean.name
+        assert bean.gender

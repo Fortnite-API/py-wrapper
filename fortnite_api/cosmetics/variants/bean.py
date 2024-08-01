@@ -48,8 +48,8 @@ class VariantBean(Cosmetic[HTTPClientT]):
 
     Attributes
     ----------
-    cosmetic_id: :class:`str`
-        The ID of the cosmetic that this bean represents.
+    cosmetic_id: Optional[:class:`str`]
+        The ID of the cosmetic that this bean represents, if any.
     name: :class:`str`
         The name of this bean.
     gender: :class:`fortnite_api.CustomGender`
@@ -67,7 +67,7 @@ class VariantBean(Cosmetic[HTTPClientT]):
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.cosmetic_id: str = data['cosmetic_id']
+        self.cosmetic_id: Optional[str] = data.get('cosmetic_id')
         self.name: str = data['name']
         self.gender: CustomGender = CustomGender(data['gender'])
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplay_tags', list)
@@ -100,5 +100,15 @@ class VariantBean(Cosmetic[HTTPClientT]):
         -------
         :class:`fortnite_api.CosmeticBr`
             The Battle Royale cosmetic that this bean variant is based on.
+
+        Raises
+        ------
+        ValueError
+            The bean variant does not have a corresponding Battle Royale cosmetic.
+            Ie. :attr`cosmetic_id` is ``None``.
         """
-        return self._http.get_cosmetic_br(self.cosmetic_id, language=language and language.value)
+        cosmetic_id = self.cosmetic_id
+        if cosmetic_id is None:
+            raise ValueError('This bean variant does not have a corresponding Battle Royale cosmetic.')
+
+        return self._http.get_cosmetic_br(cosmetic_id, language=language and language.value)
