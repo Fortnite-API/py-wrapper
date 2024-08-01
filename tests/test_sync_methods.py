@@ -311,6 +311,8 @@ def test_sync_fetch_shop(api_key: str):
         assert isinstance(entry, fn_api.ShopEntry)
         assert isinstance(entry.regular_price, int)
         assert isinstance(entry.final_price, int)
+        assert entry.in_date
+        assert entry.out_date
 
         bundle = entry.bundle
         if bundle:
