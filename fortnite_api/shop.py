@@ -32,7 +32,13 @@ from typing_extensions import Self
 
 from .abc import Hashable
 from .asset import Asset
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
+from .cosmetics import (
+    CosmeticBr,
+    CosmeticCar,
+    CosmeticInstrument,
+    CosmeticLegoKit,
+    CosmeticTrack,
+)
 from .enums import BannerIntensity
 from .http import HTTPClientT
 from .material import MaterialInstance
@@ -40,26 +46,26 @@ from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
 __all__: Tuple[str, ...] = (
-    'ShopEntryBundle',
-    'ShopEntryBanner',
-    'ShopEntryLayout',
-    'ShopEntryNewDisplayAsset',
-    'ShopEntry',
-    'Shop',
-    'TileSize',
+    "ShopEntryBundle",
+    "ShopEntryBanner",
+    "ShopEntryLayout",
+    "ShopEntryNewDisplayAsset",
+    "ShopEntry",
+    "Shop",
+    "TileSize",
 )
 
 # Matches a tile size: size_<int>_x_<int>
-_TILE_SIZE_REGEX = re.compile(r'size_(?P<width>\d+)_x_(?P<height>\d+)', re.IGNORECASE)
+_TILE_SIZE_REGEX = re.compile(r"size_(?P<width>\d+)_x_(?P<height>\d+)", re.IGNORECASE)
 
 _BACKUP_TILE_MAPPING: Mapping[str, Tuple[int, int]] = {
-    'mini': (1, 1),
-    'small': (1, 1),
-    'normal': (1, 2),
-    'doublewide': (2, 2),
-    'triplewide': (3, 2),
-    'quadwide': (4, 2),
-    'pentawide': (5, 2),
+    "mini": (1, 1),
+    "small": (1, 1),
+    "normal": (1, 2),
+    "doublewide": (2, 2),
+    "triplewide": (3, 2),
+    "quadwide": (4, 2),
+    "pentawide": (5, 2),
 }
 
 
@@ -91,7 +97,7 @@ class TileSize:
         which is one of the following: ``mini``, ``small``, ``normal``, ``doublewide``, ``triplewide``.
     """
 
-    __slots__: Tuple[str, ...] = ('width', 'height', 'internal')
+    __slots__: Tuple[str, ...] = ("width", "height", "internal")
 
     def __init__(self, *, width: int, height: int, internal: str) -> None:
         self.width: int = width
@@ -99,7 +105,7 @@ class TileSize:
         self.internal: str = internal
 
     def __repr__(self) -> str:
-        return f'<TileSize width={self.width} height={self.height}>'
+        return f"<TileSize width={self.width} height={self.height}>"
 
     def __eq__(self, value: object) -> bool:
         if not isinstance(value, TileSize):
@@ -130,7 +136,11 @@ class TileSize:
             # the Epic API uses.
             return cls._from_fallback(value)
 
-        return cls(width=int(match.group('width')), height=int(match.group('height')), internal=value)
+        return cls(
+            width=int(match.group("width")),
+            height=int(match.group("height")),
+            internal=value,
+        )
 
 
 class ShopEntryBundle(Generic[HTTPClientT]):
@@ -149,12 +159,12 @@ class ShopEntryBundle(Generic[HTTPClientT]):
         The image of the bundle.
     """
 
-    __slots__: Tuple[str, ...] = ('name', 'info', 'image')
+    __slots__: Tuple[str, ...] = ("name", "info", "image")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self.name: str = data['name']
-        self.info: str = data['info']
-        self.image: Asset[HTTPClientT] = Asset(url=data['image'], http=http)
+        self.name: str = data["name"]
+        self.info: str = data["info"]
+        self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
 
 
 class ShopEntryBanner:
@@ -173,12 +183,12 @@ class ShopEntryBanner:
         The backend value of the banner.
     """
 
-    __slots__: Tuple[str, ...] = ('value', 'intensity', 'backend_value')
+    __slots__: Tuple[str, ...] = ("value", "intensity", "backend_value")
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.value: str = data['value']
-        self.intensity: BannerIntensity = BannerIntensity(data['intensity'])
-        self.backend_value: str = data['backendValue']
+        self.value: str = data["value"]
+        self.intensity: BannerIntensity = BannerIntensity(data["intensity"])
+        self.backend_value: str = data["backendValue"]
 
 
 class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
@@ -204,14 +214,16 @@ class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
     """
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self.id: str = data['id']
-        self.name: str = data['name']
-        self.category: Optional[str] = data.get('category')
-        self.index: int = data['index']
-        self.show_ineligible_offers: str = data['showIneligibleOffers']
+        self.id: str = data["id"]
+        self.name: str = data["name"]
+        self.category: Optional[str] = data.get("category")
+        self.index: int = data["index"]
+        self.show_ineligible_offers: str = data["showIneligibleOffers"]
 
-        _background = data.get('background')
-        self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
+        _background = data.get("background")
+        self.background: Optional[Asset[HTTPClientT]] = _background and Asset(
+            url=_background, http=http
+        )
 
 
 class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
@@ -232,10 +244,11 @@ class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
     """
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self.id: str = data['id']
-        self.cosmetic_id: Optional[str] = data.get('cosmeticId')
+        self.id: str = data["id"]
+        self.cosmetic_id: Optional[str] = data.get("cosmeticId")
         self.material_instances: List[MaterialInstance[HTTPClientT]] = [
-            MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, 'materialInstances', list)
+            MaterialInstance(data=instance, http=http)
+            for instance in get_with_fallback(data, "materialInstances", list)
         ]
 
 
@@ -279,6 +292,10 @@ class ShopEntry(Generic[HTTPClientT]):
         The regular price of the entry.
     final_price: :class:`int`
         The final price of the entry. This is in case it is on sale.
+    in_date: :class:`datetime.datetime`
+        The date when this entry was added to the shop.
+    out_date: :class:`datetime.datetime`
+        The date when this entry will be removed from the shop.
     bundle: Optional[:class:`fortnite_api.ShopEntryBundle`]
         The bundle that this entry belongs to, if any.
     banner: Optional[:class:`fortnite_api.ShopEntryBanner`]
@@ -318,77 +335,94 @@ class ShopEntry(Generic[HTTPClientT]):
     """
 
     __slots__: Tuple[str, ...] = (
-        'regular_price',
-        'final_price',
-        'bundle',
-        'banner',
-        'giftable',
-        'refundable',
-        'sort_priority',
-        'layout_id',
-        'layout',
-        'dev_name',
-        'offer_id',
-        'display_asset_path',
-        'tile_size',
-        'new_display_asset_path',
-        'new_display_asset',
-        'br',
-        'tracks',
-        'instruments',
-        'cars',
-        'lego_kits',
+        "regular_price",
+        "final_price",
+        "in_date",
+        "out_date",
+        "bundle",
+        "banner",
+        "giftable",
+        "refundable",
+        "sort_priority",
+        "layout_id",
+        "layout",
+        "dev_name",
+        "offer_id",
+        "display_asset_path",
+        "tile_size",
+        "new_display_asset_path",
+        "new_display_asset",
+        "br",
+        "tracks",
+        "instruments",
+        "cars",
+        "lego_kits",
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self.regular_price: int = data['regularPrice']
-        self.final_price: int = data['finalPrice']
+        self.regular_price: int = data["regularPrice"]
+        self.final_price: int = data["finalPrice"]
 
-        _bundle = data.get('bundle')
-        self.bundle: Optional[ShopEntryBundle[HTTPClientT]] = _bundle and ShopEntryBundle(data=_bundle, http=http)
+        self.in_date: datetime.datetime = parse_time(data["inDate"])
+        self.out_date: datetime.datetime = parse_time(data["outDate"])
 
-        _banner = data.get('banner')
-        self.banner: Optional[ShopEntryBanner] = _banner and ShopEntryBanner(data=_banner)
+        _bundle = data.get("bundle")
+        self.bundle: Optional[ShopEntryBundle[HTTPClientT]] = (
+            _bundle and ShopEntryBundle(data=_bundle, http=http)
+        )
 
-        self.giftable: bool = data['giftable']
-        self.refundable: bool = data['refundable']
-        self.sort_priority: int = data['sortPriority']
-        self.layout_id: str = data['layoutId']
+        _banner = data.get("banner")
+        self.banner: Optional[ShopEntryBanner] = _banner and ShopEntryBanner(
+            data=_banner
+        )
 
-        _layout = data.get('layout')
-        self.layout: Optional[ShopEntryLayout[HTTPClientT]] = _layout and ShopEntryLayout(data=_layout, http=http)
+        self.giftable: bool = data["giftable"]
+        self.refundable: bool = data["refundable"]
+        self.sort_priority: int = data["sortPriority"]
+        self.layout_id: str = data["layoutId"]
 
-        self.dev_name: str = data['devName']
-        self.offer_id: str = data['offerId']
-        self.display_asset_path: Optional[str] = data.get('displayAssetPath')
+        _layout = data.get("layout")
+        self.layout: Optional[ShopEntryLayout[HTTPClientT]] = (
+            _layout and ShopEntryLayout(data=_layout, http=http)
+        )
 
-        self.tile_size: TileSize = TileSize.from_value(data['tileSize'])
+        self.dev_name: str = data["devName"]
+        self.offer_id: str = data["offerId"]
+        self.display_asset_path: Optional[str] = data.get("displayAssetPath")
 
-        self.new_display_asset_path: Optional[str] = data.get('newDisplayAssetPath')
+        self.tile_size: TileSize = TileSize.from_value(data["tileSize"])
 
-        _new_display_asset = data.get('newDisplayAsset')
+        self.new_display_asset_path: Optional[str] = data.get("newDisplayAssetPath")
+
+        _new_display_asset = data.get("newDisplayAsset")
         self.new_display_asset: Optional[ShopEntryNewDisplayAsset[HTTPClientT]] = (
-            _new_display_asset and ShopEntryNewDisplayAsset(data=data['newDisplayAsset'], http=http)
+            _new_display_asset
+            and ShopEntryNewDisplayAsset(data=data["newDisplayAsset"], http=http)
         )
 
         self.br: List[CosmeticBr[HTTPClientT]] = TransformerListProxy(
-            get_with_fallback(data, 'brItems', list), transform_data=lambda d: CosmeticBr(data=d, http=http)
+            get_with_fallback(data, "brItems", list),
+            transform_data=lambda d: CosmeticBr(data=d, http=http),
         )
 
         self.tracks: List[CosmeticTrack[HTTPClientT]] = TransformerListProxy(
-            get_with_fallback(data, 'tracks', list), transform_data=lambda d: CosmeticTrack(data=d, http=http)
+            get_with_fallback(data, "tracks", list),
+            transform_data=lambda d: CosmeticTrack(data=d, http=http),
         )
 
         self.instruments: List[CosmeticInstrument[HTTPClientT]] = TransformerListProxy(
-            get_with_fallback(data, 'instruments', list), transform_data=lambda d: CosmeticInstrument(data=d, http=http)
+            get_with_fallback(data, "instruments", list),
+            transform_data=lambda d: CosmeticInstrument(data=d, http=http),
         )
 
         self.cars: List[CosmeticCar[HTTPClientT]] = TransformerListProxy(
-            get_with_fallback(data, 'cars', list), transform_data=lambda d: CosmeticCar(data=d, http=http)
+            get_with_fallback(data, "cars", list),
+            transform_data=lambda d: CosmeticCar(data=d, http=http),
         )
 
         self.lego_kits: List[CosmeticLegoKit[HTTPClientT]] = TransformerListProxy(
-            get_with_fallback(data, 'legoKits', list), transform_data=lambda d: CosmeticLegoKit(data=d, http=http)
+            get_with_fallback(data, "legoKits", list),
+            transform_data=lambda d: CosmeticLegoKit(data=d, http=http),
         )
 
     def __iter__(self):
@@ -408,7 +442,13 @@ class ShopEntry(Generic[HTTPClientT]):
             yield lego
 
     def __len__(self):
-        return len(self.br) + len(self.tracks) + len(self.instruments) + len(self.cars) + len(self.lego_kits)
+        return (
+            len(self.br)
+            + len(self.tracks)
+            + len(self.instruments)
+            + len(self.cars)
+            + len(self.lego_kits)
+        )
 
 
 class Shop(Generic[HTTPClientT]):
@@ -431,15 +471,17 @@ class Shop(Generic[HTTPClientT]):
         The raw data of the shop.
     """
 
-    __slots__: Tuple[str, ...] = ('hash', 'date', 'vbuck_icon', 'entries', 'raw_data')
+    __slots__: Tuple[str, ...] = ("hash", "date", "vbuck_icon", "entries", "raw_data")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self.hash: str = data['hash']
-        self.date: datetime.datetime = parse_time(data['date'])
+        self.hash: str = data["hash"]
+        self.date: datetime.datetime = parse_time(data["date"])
 
-        self.vbuck_icon: Asset[HTTPClientT] = Asset(url=data['vbuckIcon'], http=http)
+        self.vbuck_icon: Asset[HTTPClientT] = Asset(url=data["vbuckIcon"], http=http)
 
-        _entries = get_with_fallback(data, 'entries', list)
-        self.entries: List[ShopEntry[HTTPClientT]] = [ShopEntry(data=item, http=http) for item in _entries]
+        _entries = get_with_fallback(data, "entries", list)
+        self.entries: List[ShopEntry[HTTPClientT]] = [
+            ShopEntry(data=item, http=http) for item in _entries
+        ]
 
         self.raw_data: Dict[str, Any] = data
