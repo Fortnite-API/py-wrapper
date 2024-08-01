@@ -26,24 +26,24 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Tuple, Union, overload
 
-from ..enums import GameLanguage
-from ..http import HTTPClientT
-from ..utils import get_with_fallback, simple_repr
-from .br import CosmeticBr
-from .common import Cosmetic, CosmeticImages
+from ...enums import GameLanguage
+from ...http import HTTPClientT
+from ...utils import get_with_fallback, simple_repr
+from ..br import CosmeticBr
+from ..common import Cosmetic, CosmeticImages
 
 if TYPE_CHECKING:
-    from ..http import HTTPClient, SyncHTTPClient
+    from ...http import HTTPClient, SyncHTTPClient
 
-__all__: Tuple[str, ...] = ('CosmeticLego',)
+__all__: Tuple[str, ...] = ('VariantLego',)
 
 
 @simple_repr
-class CosmeticLego(Cosmetic[HTTPClientT]):
+class VariantLego(Cosmetic[HTTPClientT]):
     """
-    .. attributetable:: fortnite_api.CosmeticLego
+    .. attributetable:: fortnite_api.VariantLego
 
-    Represents a Lego cosmetic.
+    Represents a Lego cosmetic variant.
 
     This class inherits from :class:`fortnite_api.Cosmetic`.
 
@@ -79,11 +79,11 @@ class CosmeticLego(Cosmetic[HTTPClientT]):
 
     @overload
     def fetch_cosmetic_br(
-        self: CosmeticLego[HTTPClient], *, language: Optional[GameLanguage] = None
+        self: VariantLego[HTTPClient], *, language: Optional[GameLanguage] = None
     ) -> Coroutine[Any, Any, CosmeticBr]: ...
 
     @overload
-    def fetch_cosmetic_br(self: CosmeticLego[SyncHTTPClient], *, language: Optional[GameLanguage] = None) -> CosmeticBr: ...
+    def fetch_cosmetic_br(self: VariantLego[SyncHTTPClient], *, language: Optional[GameLanguage] = None) -> CosmeticBr: ...
 
     def fetch_cosmetic_br(
         self, *, language: Optional[GameLanguage] = None

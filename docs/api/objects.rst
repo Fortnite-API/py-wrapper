@@ -163,7 +163,7 @@ Cosmetic Objects
     :members:
     :inherited-members:
 
-.. autoclass:: fortnite_api.CosmeticLego
+.. autoclass:: fortnite_api.VariantLego
     :members:
     :inherited-members:
 

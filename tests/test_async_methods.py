@@ -176,7 +176,7 @@ async def test_async_fetch_cosmetics_lego(api_key: str):
         lego = await client.fetch_cosmetics_lego()
 
     for lego in lego:
-        assert isinstance(lego, fn_api.CosmeticLego)
+        assert isinstance(lego, fn_api.VariantLego)
 
 
 @pytest.mark.asyncio

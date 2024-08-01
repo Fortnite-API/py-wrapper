@@ -36,7 +36,7 @@ from typing_extensions import Concatenate, Coroutine, ParamSpec, Self
 from .aes import Aes
 from .all import CosmeticsAll
 from .banner import Banner, BannerColor
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticTrack
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantLego
 from .creator_code import CreatorCode
 from .enums import *
 from .errors import BetaAccessNotEnabled, BetaUnknownException, MissingAPIKey
@@ -288,7 +288,7 @@ class Client:
             lambda x: CosmeticLegoKit(data=x, http=self.http),
         )
 
-    async def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLego]:
+    async def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[VariantLego]:
         """|coro|
 
         Fetches all lego cosmetics available in Fortnite.
@@ -301,14 +301,14 @@ class Client:
 
         Returns
         -------
-        List[:class:`fortnite_api.CosmeticLego`]
+        List[:class:`fortnite_api.VariantLego`]
             The fetched lego cosmetics.
         """
         data = await self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
 
         return TransformerListProxy(
             data,
-            lambda x: CosmeticLego(data=x, http=self.http),
+            lambda x: VariantLego(data=x, http=self.http),
         )
 
     async def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack]:
@@ -1035,11 +1035,11 @@ class SyncClient:
         return CosmeticBr(data=data, http=self.http)
 
     @copy_doc(Client.fetch_cosmetics_lego)
-    def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLego[SyncHTTPClient]]:
+    def fetch_cosmetics_lego(self, *, language: Optional[GameLanguage] = None) -> List[VariantLego[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
         return TransformerListProxy(
             data,
-            lambda x: CosmeticLego(data=x, http=self.http),
+            lambda x: VariantLego(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_cosmetics_all)

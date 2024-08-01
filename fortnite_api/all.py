@@ -24,10 +24,7 @@ SOFTWARE.
 
 from typing import Any, Dict, Generic, Tuple
 
-from .cosmetics import CosmeticBr, CosmeticInstrument, CosmeticTrack
-from .cosmetics.car import CosmeticCar
-from .cosmetics.lego import CosmeticLego
-from .cosmetics.lego_kit import CosmeticLegoKit
+from .cosmetics import CosmeticBr, CosmeticInstrument, CosmeticTrack, CosmeticCar, CosmeticLegoKit, VariantLego
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, simple_repr
@@ -54,7 +51,7 @@ class CosmeticsAll(Generic[HTTPClientT]):
             continuing onto the next. Works in the following
             order: :class:`~fortnite_api.CosmeticBr`, :class:`~fortnite_api.CosmeticTrack`,
             :class:`~fortnite_api.CosmeticInstrument`, :class:`~fortnite_api.CosmeticCar`,
-            :class:`~fortnite_api.CosmeticLego`, :class:`~fortnite_api.CosmeticLegoKit`.
+            :class:`~fortnite_api.VariantLego`, :class:`~fortnite_api.CosmeticLegoKit`.
 
             .. code-block:: python3
 
@@ -76,7 +73,7 @@ class CosmeticsAll(Generic[HTTPClientT]):
         A list of all instrument cosmetics.
     cars: List[:class:`fortnite_api.CosmeticCar`]
         A list of all car cosmetics.
-    lego: List[:class:`fortnite_api.CosmeticLego`]
+    lego: List[:class:`fortnite_api.VariantLego`]
         A list of all lego cosmetics.
     lego_kits: List[:class:`fortnite_api.CosmeticLegoKit`]
         A list of all lego kit cosmetics.
@@ -124,9 +121,9 @@ class CosmeticsAll(Generic[HTTPClientT]):
         )
 
         _lego = get_with_fallback(data, 'lego', list)
-        self.lego: TransformerListProxy[CosmeticLego[HTTPClientT]] = TransformerListProxy(
+        self.lego: TransformerListProxy[VariantLego[HTTPClientT]] = TransformerListProxy(
             _lego,
-            lambda x: CosmeticLego(data=x, http=self._http),
+            lambda x: VariantLego(data=x, http=self._http),
         )
 
         _lego_kits = get_with_fallback(data, 'legoKits', list)

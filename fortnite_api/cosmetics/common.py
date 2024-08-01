@@ -56,7 +56,7 @@ class Cosmetic(Hashable, Generic[HTTPClientT]):
     - :class:`fortnite_api.CosmeticBr`
     - :class:`fortnite_api.CosmeticCar`
     - :class:`fortnite_api.CosmeticInstrument`
-    - :class:`fortnite_api.CosmeticLego`
+    - :class:`fortnite_api.VariantLego`
     - :class:`fortnite_api.CosmeticLegoKit`
     - :class:`fortnite_api.CosmeticTrack`
 
@@ -226,13 +226,13 @@ class CosmeticImages(Images[HTTPClientT]):
     small: Optional[:class:`fortnite_api.Asset`]
         The small image of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticInstrument`,
         :class:`fortnite_api.CosmeticCar`, :class:`fortnite_api.CosmeticLegoKit`,
-        and :class:`fortnite_api.CosmeticLego` objects.
+        and :class:`fortnite_api.VariantLego` objects.
     large: Optional[:class:`fortnite_api.Asset`]
         The large image of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticInstrument`,
         :class:`fortnite_api.CosmeticCar`, :class:`fortnite_api.CosmeticLegoKit`,
-        and :class:`fortnite_api.CosmeticLego` objects.
+        and :class:`fortnite_api.VariantLego` objects.
     wide: Optional[:class:`fortnite_api.Asset`]
-        The wide image of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticLego` objects.
+        The wide image of the cosmetic. Typically available off of :class:`fortnite_api.VariantLego` objects.
     """
 
     __slots__: Tuple[str, ...] = ('featured', 'lego', 'icon', 'small_icon', '_other', '_http', 'small', 'large', 'wide')

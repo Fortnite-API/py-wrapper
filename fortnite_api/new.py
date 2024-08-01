@@ -27,7 +27,7 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple, Type
 
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, VariantLego, CosmeticLegoKit, CosmeticT, CosmeticTrack
 from .enums import CosmeticCategory
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
@@ -46,7 +46,7 @@ class NewCosmetic(Generic[CosmeticT]):
     - :attr:`fortnite_api.CosmeticCategory.TRACKS` -> List of :class:`fortnite_api.CosmeticTrack`
     - :attr:`fortnite_api.CosmeticCategory.INSTRUMENTS` -> List of :class:`fortnite_api.CosmeticInstrument`
     - :attr:`fortnite_api.CosmeticCategory.CARS` -> List of :class:`fortnite_api.CosmeticCar`
-    - :attr:`fortnite_api.CosmeticCategory.LEGO` -> List of :class:`fortnite_api.CosmeticLego`
+    - :attr:`fortnite_api.CosmeticCategory.LEGO` -> List of :class:`fortnite_api.VariantLego`
     - :attr:`fortnite_api.CosmeticCategory.LEGO_KITS` -> List of :class:`fortnite_api.CosmeticLegoKit`
 
     Attributes
@@ -146,10 +146,10 @@ class NewCosmetics(Generic[HTTPClientT]):
             cosmetic_class=CosmeticCar,
         )
 
-        self.lego: NewCosmetic[CosmeticLego[HTTPClientT]] = self._create_new_cosmetic(
+        self.lego: NewCosmetic[VariantLego[HTTPClientT]] = self._create_new_cosmetic(
             cosmetic_type=CosmeticCategory.LEGO,
             internal_key='lego',
-            cosmetic_class=CosmeticLego,
+            cosmetic_class=VariantLego,
         )
 
         self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = self._create_new_cosmetic(

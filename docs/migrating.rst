@@ -230,7 +230,7 @@ has been prefixed with ``CosmeticX``. A complete mapping of this change is as fo
     *   - ``LegoKitCosmetic``
         - :class:`fortnite_api.CosmeticLegoKit`
     *   - ``LegoCosmeticVariant``
-        - :class:`fortnite_api.CosmeticLego`
+        - :class:`fortnite_api.VariantLego`
     *   - ``JamTrack``
         - :class:`fortnite_api.CosmeticTrack`
     *   - ``CosmeticImage``

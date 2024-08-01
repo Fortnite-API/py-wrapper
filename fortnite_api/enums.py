@@ -135,7 +135,7 @@ class CosmeticCategory(enum.Enum):
     CARS
         Type of a :class:`fortnite_api.CosmeticCar` cosmetic.
     LEGO
-        Type of a :class:`fortnite_api.CosmeticLego` cosmetic.
+        Type of a :class:`fortnite_api.VariantLego` cosmetic.
     LEGO_KITS
         Type of a :class:`fortnite_api.CosmeticLegoKit` cosmetic.
     """
