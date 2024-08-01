@@ -35,18 +35,21 @@ from .utils import get_with_fallback
 __all__: Tuple[str, ...] = ('MaterialInstanceImages', 'MaterialInstanceColors', 'MaterialInstance')
 
 
-class MaterialInstanceImages(Generic[HTTPClientT]):
+class MaterialInstanceImages(Generic[HTTPClientT], Dict[str, Asset[HTTPClientT]]):
     """
     .. attributetable:: fortnite_api.MaterialInstanceImages
 
-    Represents some images of a Material instance, as they are rendered in game.
+    Represents some images of a Material instance, as they are rendered in game. Although this class
+    has concrete attributes, the API generates the keys dynamically. The most common keys are exposed as attributes, and all
+    other keys are available through dictionary operations.
+
+    This class inherits from :class:`dict`, and thus, supports all the operations that a normal
+    dictionary does, such as indexing, iteration, etc.
 
     Attributes
     ----------
     offer_image: :class:`fortnite_api.Asset`
         The offer image of the Material instance. This is the image that is shown in the item shop.
-    texture: Optional[:class:`fortnite_api.Asset`]
-        The texture of the Material instance. This is the texture of the material instance.
     background: :class:`fortnite_api.Asset`
         The background of the Material instance. This is the background gradient of the material instance.
     """
@@ -54,22 +57,23 @@ class MaterialInstanceImages(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('offer_image', 'background', 'texture')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self.offer_image: Asset[HTTPClientT] = Asset(url=data['OfferImage'], http=http)
+        # Pop off the keys as we set concrete attributes
+        self.offer_image: Asset[HTTPClientT] = Asset(url=data.pop('OfferImage'), http=http)
 
-        _texture = data.get('Texture')
-        self.texture: Optional[Asset[HTTPClientT]] = _texture and Asset(url=_texture, http=http)
-
-        _background = data.get('Background')
+        _background = data.pop('Background', None)
         self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
 
+        # Transform all remaining keys into assets, and pass this along to the dict constructor
+        super().__init__({key: Asset(url=value, http=http) for key, value in data.items()})
 
-class MaterialInstanceColors:
+
+class MaterialInstanceColors(Dict[str, str]):
     """
     .. attributetable:: fortnite_api.MaterialInstanceColors
 
-    Represents some metadata about the colors of a Material instance. Every material instance image
-    has a background gradient, made up of a background color A and background color B that falls off to a
-    specific color. This class represents that information.
+    Represents some metadata about the colors of a Material instance. Although the keys are dynamically generated in the API, the most common keys are exposed as attributes.
+
+    This class inherits from :class:`dict`, and thus, supports all the operations that a normal dictionary does, such as indexing, iteration, etc.
 
     Attributes
     ----------
@@ -81,12 +85,14 @@ class MaterialInstanceColors:
         The fall off color of the Material instance, if any.
     """
 
-    __slots__: Tuple[str, ...] = ('background_color_a', 'background_color_b', 'fall_off_color')
+    __slots__: Tuple[str, ...] = ('background_color_a', 'background_color_b', 'fall_off_color', '_raw_data')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.background_color_a: Optional[str] = data.get('Background_Color_A')
         self.background_color_b: Optional[str] = data.get('Background_Color_B')
         self.fall_off_color: Optional[str] = data.get('FallOff_Color')
+        self._raw_data: Dict[str, str] = data
+        super().__init__(data)
 
 
 class MaterialInstance(Hashable, Generic[HTTPClientT]):
