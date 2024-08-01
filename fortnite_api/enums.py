@@ -363,12 +363,9 @@ class BannerIntensity(enum.Enum):
     ----------
     LOW
         Low intensity.
-    MEDIUM
-        Medium intensity.
     HIGH
         High intensity.
     """
 
     LOW = 'Low'
-    MEDIUM = 'Medium'
     HIGH = 'High'
