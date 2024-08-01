@@ -72,9 +72,15 @@ async def test_async_banners(api_key: str):
         assert banner.name
         assert banner.dev_name
         assert banner.description
-        assert banner.category
         assert banner.full_usage_rights is not None
-        # TODO: Banner images tests (not added because of pending Images class implementation)
+
+        small = banner.images.small_icon
+        if small is not None:
+            assert small.url == banner.raw_data['images']['smallIcon']
+
+        icon = banner.images.icon
+        if icon is not None:
+            assert icon.url == banner.raw_data['images']['icon']
 
 
 @pytest.mark.asyncio

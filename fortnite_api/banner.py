@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, Tuple
+from typing import Any, Dict, Generic, Tuple, Optional
 
 from .abc import Hashable
 from .http import HTTPClientT
@@ -59,8 +59,9 @@ class Banner(Hashable, Generic[HTTPClientT]):
         no information is provided by the API.
     description: :class:`str`
         The description of the banner.
-    category: :class:`str`
-        The category the banner belongs to.
+    category: Optional[:class:`str`]
+        The category the banner belongs to. Can be ``None`` if this banner
+        does not belong to any category.
     full_usage_rights: :class:`bool`
         Denotes if the banner is full usage rights from Epic Games.
     dev_name: :class:`str`
@@ -89,7 +90,7 @@ class Banner(Hashable, Generic[HTTPClientT]):
         self.name: str = data['name']
         self.dev_name: str = data['devName']
         self.description: str = data['description']
-        self.category: str = data['category']
+        self.category: Optional[str] = data.get('category')
         self.full_usage_rights: bool = data['fullUsageRights']
 
         self.images: Images[HTTPClientT] = Images(data=data, http=http)
