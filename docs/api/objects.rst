@@ -221,6 +221,9 @@ Enumerations
 .. autoclass:: fortnite_api.BannerIntensity
     :members:
 
+.. autoclass:: fortnite_api.CustomGender
+    :members:
+
 
 Helper Utilities
 ----------------
