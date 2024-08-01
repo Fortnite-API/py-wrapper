@@ -163,14 +163,21 @@ Cosmetic Objects
     :members:
     :inherited-members:
 
-.. autoclass:: fortnite_api.VariantLego
-    :members:
-    :inherited-members:
-
 .. autoclass:: fortnite_api.CosmeticTrackDifficulty
     :members:
 
 .. autoclass:: fortnite_api.CosmeticTrack
+    :members:
+    :inherited-members:
+
+Cosmetic Variants
+-----------------
+
+.. autoclass:: fortnite_api.VariantLego
+    :members:
+    :inherited-members:
+
+.. autoclass:: fortnite_api.VariantBean
     :members:
     :inherited-members:
 

@@ -229,7 +229,7 @@ has been prefixed with ``CosmeticX``. A complete mapping of this change is as fo
         - :class:`fortnite_api.CosmeticInstrument`
     *   - ``LegoKitCosmetic``
         - :class:`fortnite_api.CosmeticLegoKit`
-    *   - ``LegoCosmeticVariant``
+    *   - ``LegoCosmetic``
         - :class:`fortnite_api.VariantLego`
     *   - ``JamTrack``
         - :class:`fortnite_api.CosmeticTrack`
@@ -248,6 +248,7 @@ Additionally, many new Cosmetic related objects have been added to the library. 
 - :class:`fortnite_api.CosmeticRarityInfo`
 - :class:`fortnite_api.CosmeticTypeInfo`
 - :class:`fortnite_api.CosmeticCompatibleMode`
+- :class:`fortnite_api.VariantBean`
 
 As the amount of Fortnite cosmetics grows overtime, this ensures a consistent naming 
 convention between all cosmetic objects.
