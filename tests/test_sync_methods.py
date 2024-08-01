@@ -314,6 +314,10 @@ def test_sync_fetch_shop(api_key: str):
         assert entry.in_date
         assert entry.out_date
 
+        tile_size = entry.tile_size
+        assert isinstance(tile_size, fn_api.TileSize)
+        assert tile_size.internal == f'Size_{tile_size.width}_x_{tile_size.height}'
+
         bundle = entry.bundle
         if bundle:
             assert isinstance(entry.bundle, fn_api.ShopEntryBundle)
