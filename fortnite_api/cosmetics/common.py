@@ -93,7 +93,6 @@ class CosmeticTypeInfo:
     A class that holds cosmetic type information passed from the API for
     a given :class:`~fortnite_api.Cosmetic`.
 
-
     .. container:: operations
 
         .. describe:: repr(x)
@@ -104,16 +103,22 @@ class CosmeticTypeInfo:
     ----------
     value: :class:`fortnite_api.CosmeticType`
         The value of the cosmetic type.
+    raw_value: :class:`str`
+        The raw value of the cosmetic type. This value is used to construct the
+        :attr:`value` attribute, but, is exposed through this attribute due to how
+        commonly it is used.
     display_value: :class:`str`
         The display value of the cosmetic type. This is the value that is displayed to the user.
     backend_value: :class:`str`
         The internal marker of the cosmetic type.
     """
 
-    __slots__: Tuple[str, ...] = ('value', 'display_value', 'backend_value')
+    __slots__: Tuple[str, ...] = ('value', 'raw_value', 'display_value', 'backend_value')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.value: CosmeticType = CosmeticType(data['value'])
+        self.raw_value: str = data['value']
+
         self.display_value: str = data['displayValue']
         self.backend_value: str = data['backendValue']
 
