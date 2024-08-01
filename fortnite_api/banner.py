@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, Tuple, Optional
+from typing import Any, Dict, Generic, Optional, Tuple
 
 from .abc import Hashable
 from .http import HTTPClientT

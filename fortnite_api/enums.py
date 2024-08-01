@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import enum
 from typing import Type
+
 from typing_extensions import Self
 
 

@@ -32,13 +32,7 @@ from typing_extensions import Self
 
 from .abc import Hashable
 from .asset import Asset
-from .cosmetics import (
-    CosmeticBr,
-    CosmeticCar,
-    CosmeticInstrument,
-    CosmeticLegoKit,
-    CosmeticTrack,
-)
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
 from .enums import BannerIntensity
 from .http import HTTPClientT
 from .material import MaterialInstance
@@ -221,9 +215,7 @@ class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
         self.show_ineligible_offers: str = data["showIneligibleOffers"]
 
         _background = data.get("background")
-        self.background: Optional[Asset[HTTPClientT]] = _background and Asset(
-            url=_background, http=http
-        )
+        self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
 
 
 class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
@@ -247,8 +239,7 @@ class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
         self.id: str = data["id"]
         self.cosmetic_id: Optional[str] = data.get("cosmeticId")
         self.material_instances: List[MaterialInstance[HTTPClientT]] = [
-            MaterialInstance(data=instance, http=http)
-            for instance in get_with_fallback(data, "materialInstances", list)
+            MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, "materialInstances", list)
         ]
 
 
@@ -367,14 +358,10 @@ class ShopEntry(Generic[HTTPClientT]):
         self.out_date: datetime.datetime = parse_time(data["outDate"])
 
         _bundle = data.get("bundle")
-        self.bundle: Optional[ShopEntryBundle[HTTPClientT]] = (
-            _bundle and ShopEntryBundle(data=_bundle, http=http)
-        )
+        self.bundle: Optional[ShopEntryBundle[HTTPClientT]] = _bundle and ShopEntryBundle(data=_bundle, http=http)
 
         _banner = data.get("banner")
-        self.banner: Optional[ShopEntryBanner] = _banner and ShopEntryBanner(
-            data=_banner
-        )
+        self.banner: Optional[ShopEntryBanner] = _banner and ShopEntryBanner(data=_banner)
 
         self.giftable: bool = data["giftable"]
         self.refundable: bool = data["refundable"]
@@ -382,9 +369,7 @@ class ShopEntry(Generic[HTTPClientT]):
         self.layout_id: str = data["layoutId"]
 
         _layout = data.get("layout")
-        self.layout: Optional[ShopEntryLayout[HTTPClientT]] = (
-            _layout and ShopEntryLayout(data=_layout, http=http)
-        )
+        self.layout: Optional[ShopEntryLayout[HTTPClientT]] = _layout and ShopEntryLayout(data=_layout, http=http)
 
         self.dev_name: str = data["devName"]
         self.offer_id: str = data["offerId"]
@@ -396,8 +381,7 @@ class ShopEntry(Generic[HTTPClientT]):
 
         _new_display_asset = data.get("newDisplayAsset")
         self.new_display_asset: Optional[ShopEntryNewDisplayAsset[HTTPClientT]] = (
-            _new_display_asset
-            and ShopEntryNewDisplayAsset(data=data["newDisplayAsset"], http=http)
+            _new_display_asset and ShopEntryNewDisplayAsset(data=data["newDisplayAsset"], http=http)
         )
 
         self.br: List[CosmeticBr[HTTPClientT]] = TransformerListProxy(
@@ -442,13 +426,7 @@ class ShopEntry(Generic[HTTPClientT]):
             yield lego
 
     def __len__(self):
-        return (
-            len(self.br)
-            + len(self.tracks)
-            + len(self.instruments)
-            + len(self.cars)
-            + len(self.lego_kits)
-        )
+        return len(self.br) + len(self.tracks) + len(self.instruments) + len(self.cars) + len(self.lego_kits)
 
 
 class Shop(Generic[HTTPClientT]):
@@ -480,8 +458,6 @@ class Shop(Generic[HTTPClientT]):
         self.vbuck_icon: Asset[HTTPClientT] = Asset(url=data["vbuckIcon"], http=http)
 
         _entries = get_with_fallback(data, "entries", list)
-        self.entries: List[ShopEntry[HTTPClientT]] = [
-            ShopEntry(data=item, http=http) for item in _entries
-        ]
+        self.entries: List[ShopEntry[HTTPClientT]] = [ShopEntry(data=item, http=http) for item in _entries]
 
         self.raw_data: Dict[str, Any] = data

@@ -29,7 +29,6 @@ from typing import Final
 
 import pytest
 
-
 # Constants for general testing
 TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"
 TEST_ACCOUNT_NAME: Final[str] = "Ninja"
