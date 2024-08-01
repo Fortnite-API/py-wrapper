@@ -137,7 +137,7 @@ class Client:
         The API key to use for the client. If not provided, some endpoints may not be available.
         An API key can be generated using `the FortniteAPI website <https://dash.fortnite-api.com/account>`_.
     default_language: Optional[:class:`fortnite_api.GameLanguage`]
-        The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH` if not provided.
+        The default language to display the data in. Defaults to :attr:`~fortnite_api.GameLanguage.ENGLISH` if not provided.
     session: Optional[:class:`aiohttp.ClientSession`]
         The session to use for the HTTP requests. If not provided, a new session will be created for you and you must use the class as an async context manager.
     beta: :class:`bool`
@@ -473,7 +473,7 @@ class Client:
             The language to use for the search. Will override the default language set on the client. Defaults to
             the client's :attr:`default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
         match_method: Optional[:class:`fortnite_api.MatchMethod`]
-            The method to use for matching the search query. Defaults to :attr:`fortnite_api.MatchMethod.FULL`.
+            The method to use for matching the search query. Defaults to :attr:`~fortnite_api.MatchMethod.FULL`.
         id: Optional[:class:`str`]
             The ID of the cosmetic.
         name: Optional[:class:`str`]
@@ -570,7 +570,7 @@ class Client:
         Parameters
         ----------
         key_format: :class:`fortnite_api.KeyFormat`
-            The format to return the key in. Defaults to :attr:`fortnite_api.KeyFormat.HEX`.
+            The format to return the key in. Defaults to :attr:`~fortnite_api.KeyFormat.HEX`.
 
         Returns
         -------
@@ -804,9 +804,9 @@ class Client:
             fetching account stats by name. It will not do anything when fetching by ``account_id``.
             Defaults to :attr:`fortnite_api.AccountType.EPIC`.
         time_window: Optional[:class:`fortnite_api.TimeWindow`]
-            The time window to search statistics for. Defaults to :attr:`fortnite_api.TimeWindow.LIFETIME`.
+            The time window to search statistics for. Defaults to :attr:`~fortnite_api.TimeWindow.LIFETIME`.
         image: Optional[:class:`fortnite_api.StatsImageType`]
-            The type of image to display in the statistics. Defaults to :attr:`fortnite_api.StatsImageType.NONE`. If this
+            The type of image to display in the statistics. Defaults to :attr:`~fortnite_api.StatsImageType.NONE`. If this
             is set to :attr:`fortnite_api.StatsImageType.NONE`, there will be no image in the response.
 
         Returns
@@ -940,7 +940,7 @@ class SyncClient:
         The API key to use for the client. If not provided, some endpoints may not be available.
         An API key can be generated using `the FortniteAPI website <https://dash.fortnite-api.com/account>`_.
     default_language: :class:`fortnite_api.GameLanguage`
-        The default language to display the data in. Defaults to :attr:`fortnite_api.GameLanguage.ENGLISH`.
+        The default language to display the data in. Defaults to :attr:`~fortnite_api.GameLanguage.ENGLISH`.
     session: Optional[:class:`requests.Session`]
         The session to use for the HTTP requests. If not provided, a new session will be created for you and you must use the class as an async context manager.
     beta: :class:`bool`
