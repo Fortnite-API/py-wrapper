@@ -25,6 +25,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
+from typing import Type
+from typing_extensions import Self
 
 
 class KeyFormat(enum.Enum):
@@ -349,12 +351,24 @@ class CosmeticCompatibleMode(enum.Enum):
         The material instance is compatible with Rocket Racing.
     FESTIVAL
         The material instance is compatible with Festival.
+    ALL
+        The material instance is compatible with all modes.
     """
 
-    BATTLE_ROYALE = 'ECosmeticCompatibleMode::BattleRoyale'
-    LEGO = 'ECosmeticCompatibleMode::Juno'
-    ROCKET_RACING = 'ECosmeticCompatibleMode::DelMar'
-    FESTIVAL = 'ECosmeticCompatibleMode::Sparks'
+    BATTLE_ROYALE = 'battleroyale'
+    LEGO = 'juno'
+    ROCKET_RACING = 'delmar'
+    FESTIVAL = 'sparks'
+    ALL = 'max'
+
+    @classmethod
+    def _from_str(cls: Type[Self], string: str) -> Self:
+        # The Epic Games API uses both "CosmeticCompatibleMode" and "CosmeticCompatibleModeLegacy" enums
+        # with the same values, so we need to handle both.
+        # To easily handle this, we'll remove the "ECosmeticCompatibleMode::" or "ECosmeticCompatibleModeLegacy::" prefix.
+        # and then convert it to the enum.
+        trimmed = string.split('::')[-1]
+        return cls(trimmed.lower())
 
 
 class BannerIntensity(enum.Enum):

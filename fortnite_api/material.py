@@ -135,7 +135,7 @@ class MaterialInstance(Hashable, Generic[HTTPClientT]):
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         self.id: str = data['id']
-        self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode(data['primaryMode'])
+        self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode._from_str(data['primaryMode'])
 
         self.images: MaterialInstanceImages[HTTPClientT] = MaterialInstanceImages(data=data['images'], http=http)
 
