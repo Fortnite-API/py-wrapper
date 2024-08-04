@@ -30,7 +30,7 @@ from typing import Any, Dict, Generic, List, Optional, Tuple, Type
 
 from typing_extensions import Self
 
-from .abc import Hashable
+from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
 from .enums import BannerIntensity
@@ -142,11 +142,11 @@ class TileSize:
         )
 
 
-class ShopEntryBundle(Generic[HTTPClientT]):
+class ShopEntryBundle(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryBundle
 
-    Represents a shop entry bundle.
+    Represents a shop entry bundle. This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ----------
@@ -161,16 +161,19 @@ class ShopEntryBundle(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ("name", "info", "image")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.name: str = data["name"]
         self.info: str = data["info"]
         self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
 
 
-class ShopEntryBanner:
+class ShopEntryBanner(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryBanner
 
-    A class to represent a shop entry banner.
+    A class to represent a shop entry banner. This class inherits
+    from :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ----------
@@ -184,17 +187,20 @@ class ShopEntryBanner:
 
     __slots__: Tuple[str, ...] = ("value", "intensity", "backend_value")
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.value: str = data["value"]
         self.intensity: BannerIntensity = BannerIntensity(data["intensity"])
         self.backend_value: str = data["backendValue"]
 
 
-class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
+class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryLayout
 
-    Represents the layout of a shop entry.
+    Represents the layout of a shop entry. This class
+    inherits from :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ----------
@@ -210,9 +216,25 @@ class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
         Whether ineligible offers are displayed in the layout or not.
     background: Optional[:class:`fortnite_api.Asset`]
         The background asset of the layout, if any.
+    use_wide_preview: :class:`bool`
+        Whether the layout uses a wide preview or not.
+    display_type: Optional[:class:`str`]
+        The display type of the layout, if any specified.
     """
 
+    __slots__: Tuple[str, ...] = (
+        "id",
+        "name",
+        "category",
+        "index",
+        "show_ineligible_offers",
+        "background",
+        'use_wide_preview',
+    )
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.id: str = data["id"]
         self.name: str = data["name"]
         self.category: Optional[str] = data.get("category")
@@ -222,13 +244,17 @@ class ShopEntryLayout(Hashable, Generic[HTTPClientT]):
         _background = data.get("background")
         self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
 
+        self.use_wide_preview: bool = data.get('useWidePreview', False)
+        self.display_type: Optional[str] = data.get('displayType')
 
-class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
+
+class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryNewDisplayAsset
 
     Represents a new display asset for a shop entry. A display asset is an asset that is
-    used to visually represent a cosmetic item in the shop.
+    used to visually represent a cosmetic item in the shop. This class inherits
+    from :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ----------
@@ -240,7 +266,11 @@ class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
         A list of material instances used by the display asset.
     """
 
+    __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances")
+
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.id: str = data["id"]
         self.cosmetic_id: Optional[str] = data.get("cosmeticId")
         self.material_instances: List[MaterialInstance[HTTPClientT]] = [
@@ -248,12 +278,13 @@ class ShopEntryNewDisplayAsset(Hashable, Generic[HTTPClientT]):
         ]
 
 
-class ShopEntry(Generic[HTTPClientT]):
+class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntry
 
     Represents an item shop entry. Each entry in the shop contains
-    related cosmetics that are available in the shop.
+    related cosmetics that are available in the shop. This class
+    inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -356,6 +387,8 @@ class ShopEntry(Generic[HTTPClientT]):
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.regular_price: int = data["regularPrice"]
         self.final_price: int = data["finalPrice"]
 
@@ -366,7 +399,7 @@ class ShopEntry(Generic[HTTPClientT]):
         self.bundle: Optional[ShopEntryBundle[HTTPClientT]] = _bundle and ShopEntryBundle(data=_bundle, http=http)
 
         _banner = data.get("banner")
-        self.banner: Optional[ShopEntryBanner] = _banner and ShopEntryBanner(data=_banner)
+        self.banner: Optional[ShopEntryBanner[HTTPClientT]] = _banner and ShopEntryBanner(data=_banner, http=http)
 
         self.giftable: bool = data["giftable"]
         self.refundable: bool = data["refundable"]
