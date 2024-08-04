@@ -27,6 +27,8 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple, Type
 
+from .abc import ReconstructAble
+
 from .cosmetics import (
     CosmeticBr,
     CosmeticCar,
@@ -79,21 +81,20 @@ class NewCosmetic(Generic[CosmeticT]):
         hash: Optional[str] = None,
         last_addition: Optional[datetime.datetime] = None,
         items: List[CosmeticT],
-        http: HTTPClientT,
     ) -> None:
-        self._http: HTTPClientT = http
-
         self.type: CosmeticCategory = type
         self.hash: Optional[str] = hash
         self.last_addition: Optional[datetime.datetime] = last_addition
         self.items: List[CosmeticT] = items
 
 
-class NewCosmetics(Generic[HTTPClientT]):
+class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewCosmetics
 
     Represents a response from the new cosmetics endpoint.
+
+    This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ----------
@@ -124,67 +125,66 @@ class NewCosmetics(Generic[HTTPClientT]):
     """
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self._http: HTTPClientT = http
+        super().__init__(data=data, http=http)
 
         self.build: str = data['build']
         self.previous_build: str = data['previousBuild']
         self.date: datetime.datetime = parse_time(data['date'])
         self.global_hash: str = data['hashes']['all']
         self.global_last_addition: datetime.datetime = parse_time(data['lastAdditions']['all'])
-        self.raw_data: Dict[str, Any] = data
 
-        self.br: NewCosmetic[CosmeticBr[HTTPClientT]] = self._create_new_cosmetic(
+        self.br: NewCosmetic[CosmeticBr[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.BR,
             internal_key='br',
             cosmetic_class=CosmeticBr,
         )
 
-        self.tracks: NewCosmetic[CosmeticTrack[HTTPClientT]] = self._create_new_cosmetic(
+        self.tracks: NewCosmetic[CosmeticTrack[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.TRACKS,
             internal_key='tracks',
             cosmetic_class=CosmeticTrack,
         )
 
-        self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = self._create_new_cosmetic(
+        self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.INSTRUMENTS,
             internal_key='instruments',
             cosmetic_class=CosmeticInstrument,
         )
 
-        self.cars: NewCosmetic[CosmeticCar[HTTPClientT]] = self._create_new_cosmetic(
+        self.cars: NewCosmetic[CosmeticCar[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.CARS,
             internal_key='cars',
             cosmetic_class=CosmeticCar,
         )
 
-        self.lego: NewCosmetic[VariantLego[HTTPClientT]] = self._create_new_cosmetic(
+        self.lego: NewCosmetic[VariantLego[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.LEGO,
             internal_key='lego',
             cosmetic_class=VariantLego,
         )
 
-        self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = self._create_new_cosmetic(
+        self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.LEGO_KITS,
             internal_key='legoKits',
             cosmetic_class=CosmeticLegoKit,
         )
 
-        self.beans: NewCosmetic[VariantBean[HTTPClientT]] = self._create_new_cosmetic(
+        self.beans: NewCosmetic[VariantBean[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.BEANS,
             internal_key='beans',
             cosmetic_class=VariantBean,
         )
 
-    def _create_new_cosmetic(
+    def _parse_new_cosmetic(
         self,
         *,
         cosmetic_type: CosmeticCategory,
         internal_key: str,
         cosmetic_class: Type[CosmeticT],
     ) -> NewCosmetic[CosmeticT]:
-        hashes = self.raw_data['hashes']
-        last_additions = self.raw_data['lastAdditions']
-        items = self.raw_data['items']
+        hashes = self.__raw_data['hashes']
+        last_additions = self.__raw_data['lastAdditions']
+        items = self.__raw_data['items']
 
         cosmetic_items: List[Dict[str, Any]] = get_with_fallback(items, internal_key, list)
 
@@ -199,5 +199,4 @@ class NewCosmetics(Generic[HTTPClientT]):
                 cosmetic_items,
                 lambda x: cosmetic_class(data=x, http=self._http),
             ),
-            http=self._http,
         )

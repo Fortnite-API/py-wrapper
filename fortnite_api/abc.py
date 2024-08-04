@@ -24,7 +24,16 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Tuple
+import copy
+from typing import TYPE_CHECKING, Generic, Tuple, Type, TypeVar, Union, Mapping
+from typing_extensions import Self
+
+from .http import HTTPClientT, SyncHTTPClient, HTTPClient
+
+DictT = TypeVar('DictT', bound='Mapping')  # pyright: ignore[reportMissingTypeArgument]
+
+if TYPE_CHECKING:
+    from .client import Client, SyncClient
 
 __all__: Tuple[str, ...] = ('IdComparable', 'Hashable')
 
@@ -77,3 +86,67 @@ class Hashable(IdComparable):
 
     def __hash__(self) -> int:
         return hash(self.id)
+
+
+class ReconstructAble(Generic[DictT, HTTPClientT]):
+    """
+    Denotes a class that can be reconstructed from a raw data dictionary, such as
+    one returned from any API endpoint.
+    """
+
+    # Denotes an internal method that is used to store the instance raw api data,
+    # and is used to serve this data back to the user when the to_dict method is called.
+    __raw_data: DictT
+
+    # The internal http client that is used to make requests.
+    _http: HTTPClientT
+
+    # Denotes that any subclass should have both the data and http params passed to its init.
+    # The library has been built with this in mind, and
+    # by default any class that inherits from this protocol will have this __init__ method.
+    def __init__(self, *, data: DictT, http: HTTPClientT) -> None:
+        self.__raw_data: DictT = data
+        self._http: HTTPClientT = http
+
+    # The from_dict method is a class method that allows the user to create an instance
+    # of this class from the underlying raw dictionary type returned from the API. This
+    # method is overloaded to allow for both the async and sync clients to be passed, whilst
+    # still keeping the correct HTTPClient type.
+
+    @classmethod
+    def from_dict(cls: Type[Self], data: DictT, *, client: Union[Client, SyncClient]) -> Self:
+        """Reconstructs this class from a raw dictionary object. This is useful for when you
+        store the raw data and want to reconstruct the object later on.
+
+        Parameters
+        ----------
+        data: Dict[Any, Any]
+            The raw data to reconstruct the object from.
+        client: Union[:class:`fortnite_api.Client`, :class:`fortnite_api.SyncClient`]
+            The currently used client to reconstruct the object with. Can either be a sync or async client.
+        """
+        if isinstance(client, SyncClient):
+            # Whenever the client is a SyncClient, we can safely assume that the http
+            # attribute is a SyncHTTPClient, as this is the only HTTPClientT possible.
+            sync_http: SyncHTTPClient = client.http
+            return cls(data=data, http=sync_http)
+        else:
+            # Whenever the client is a Client, we can safely assume that the http
+            # attribute is a HTTPClient, as this is the only HTTPClientT possible.
+            http: HTTPClient = client.http
+            return cls(data=data, http=http)
+
+    def to_dict(self) -> DictT:
+        """Turns this object into a raw dictionary object. This is useful for when you
+        want to store the raw data and reconstruct the object later on.
+
+        Returns
+        -------
+        Dict[Any, Any]
+            The raw data of this object. Note that this is a deep copy of the raw data,
+            and not a reference to the underlying raw data this object was constructed with.
+        """
+        # NOTE: copy.deepcopy is used to prevent the user from modifying the raw data
+        # and causing unexpected behavior. The module itself is being used because
+        # we want to allow Mapping[K, V] types to be used as the raw data (for typed dicts)
+        return copy.deepcopy(self.__raw_data)

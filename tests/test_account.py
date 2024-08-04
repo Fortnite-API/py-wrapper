@@ -29,6 +29,7 @@ from typing import Any, Dict
 import pytest
 
 from fortnite_api import Account
+from fortnite_api.http import HTTPClient
 
 
 @pytest.fixture
@@ -40,20 +41,20 @@ def sample_account_data() -> Dict[str, Any]:
 
 
 def test_account_initialization(sample_account_data: Dict[str, Any]):
-    account = Account(sample_account_data)
+    account = Account(data=sample_account_data, http=HTTPClient())
 
     assert account.id == '123'
     assert account.name == 'Test Account'
-    assert account.raw_data == sample_account_data
+    assert account.to_dict() == sample_account_data
 
 
 def test_account_str(sample_account_data: Dict[str, Any]):
-    account = Account(sample_account_data)
+    account = Account(data=sample_account_data, http=HTTPClient())
 
     assert str(account) == 'Test Account'
 
 
 def test_account_repr(sample_account_data: Dict[str, Any]):
-    account = Account(sample_account_data)
+    account = Account(data=sample_account_data, http=HTTPClient())
 
     assert repr(account) == "<Account id='123', name='Test Account'>"

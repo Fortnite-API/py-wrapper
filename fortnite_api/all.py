@@ -22,7 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import Any, Dict, Generic, Tuple
+from typing import Any, Dict, Tuple
+
+from .abc import ReconstructAble
 
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantBean, VariantLego
 from .http import HTTPClientT
@@ -33,11 +35,12 @@ __all__: Tuple[str, ...] = ('CosmeticsAll',)
 
 
 @simple_repr
-class CosmeticsAll(Generic[HTTPClientT]):
+class CosmeticsAll(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticsAll
 
-    A class that represents a request to fetch all cosmetics available in Fortnite.
+    A class that represents a request to fetch all cosmetics available in Fortnite. This
+    inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -77,13 +80,9 @@ class CosmeticsAll(Generic[HTTPClientT]):
         A list of all lego cosmetic variants.
     lego_kits: List[:class:`fortnite_api.CosmeticLegoKit`]
         A list of all lego kit cosmetics.
-    raw_data: :class:`dict`
-        The raw data of the request. Can be used to recreate the object without
-        fetching the data again.
     """
 
     __slots__: Tuple[str, ...] = (
-        '_http',
         'br',
         'tracks',
         'instruments',
@@ -91,11 +90,10 @@ class CosmeticsAll(Generic[HTTPClientT]):
         'lego',
         'lego_kits',
         'beans',
-        'raw_data',
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        self._http: HTTPClientT = http
+        super().__init__(data=data, http=http)
 
         _br = get_with_fallback(data, 'br', list)
         self.br: TransformerListProxy[CosmeticBr[HTTPClientT]] = TransformerListProxy(
@@ -138,8 +136,6 @@ class CosmeticsAll(Generic[HTTPClientT]):
             _beans,
             lambda x: VariantBean(data=x, http=self._http),
         )
-
-        self.raw_data: Dict[str, Any] = data
 
     def __iter__(self):
         for br in self.br:

@@ -26,6 +26,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, Tuple
 
+from .http import HTTPClientT
+
+from .abc import ReconstructAble
+
 from .account import Account
 from .enums import CreatorCodeStatus
 from .utils import simple_repr
@@ -34,11 +38,11 @@ __all__: Tuple[str, ...] = ('CreatorCode',)
 
 
 @simple_repr
-class CreatorCode:
+class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CreatorCode
 
-    Represents a Creator Code.
+    Represents a Creator Code. This inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -61,18 +65,17 @@ class CreatorCode:
         .. note::
 
             From internal testing, this seems to be always ``False``.
-    raw_data: :class:`dict`
-        The raw data of the creator code. This is the data received from the API.
     """
 
-    __slots__: Tuple[str, ...] = ('code', 'account', 'verified', 'status', 'raw_data')
+    __slots__: Tuple[str, ...] = ('code', 'account', 'verified', 'status')
 
-    def __init__(self, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.code: str = data['code']
-        self.account: Account = Account(data['account'])
+        self.account: Account[HTTPClientT] = Account(data=data['account'], http=http)
         self.verified: bool = data['verified']
         self.status: CreatorCodeStatus = CreatorCodeStatus(data['status'].lower())
-        self.raw_data = data
 
     @property
     def disabled(self) -> bool:

@@ -602,7 +602,7 @@ class Client:
             The fetched AES key.
         """
         data = await self.http.get_aes(key_format.value)
-        return Aes(data=data)
+        return Aes(data=data, http=self.http)
 
     # BANNERS
     async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner]:
@@ -640,7 +640,7 @@ class Client:
         data = await self.http.get_banner_colors()
         return TransformerListProxy(
             data,
-            lambda x: BannerColor(data=x),
+            lambda x: BannerColor(data=x, http=self.http),
         )
 
     # CREATOR CODES
@@ -666,7 +666,7 @@ class Client:
             A creator code with that name was not found.
         """
         data = await self.http.get_creator_code(name)
-        return CreatorCode(data=data)
+        return CreatorCode(data=data, http=self.http)
 
     # MAPS
 
@@ -1187,9 +1187,9 @@ class SyncClient:
     # AES
 
     @copy_doc(Client.fetch_aes)
-    def fetch_aes(self, *, key_format: KeyFormat = KeyFormat.HEX) -> Aes:
+    def fetch_aes(self, *, key_format: KeyFormat = KeyFormat.HEX) -> Aes[SyncHTTPClient]:
         data = self.http.get_aes(key_format.value)
-        return Aes(data=data)
+        return Aes(data=data, http=self.http)
 
     # BANNERS
     @copy_doc(Client.fetch_banners)
@@ -1201,19 +1201,19 @@ class SyncClient:
         )
 
     @copy_doc(Client.fetch_banner_colors)
-    def fetch_banner_colors(self) -> List[BannerColor]:
+    def fetch_banner_colors(self) -> List[BannerColor[SyncHTTPClient]]:
         data = self.http.get_banner_colors()
         return TransformerListProxy(
             data,
-            lambda x: BannerColor(data=x),
+            lambda x: BannerColor(data=x, http=self.http),
         )
 
     # CREATOR CODES
 
     @copy_doc(Client.fetch_creator_code)
-    def fetch_creator_code(self, /, *, name: str) -> CreatorCode:
+    def fetch_creator_code(self, /, *, name: str) -> CreatorCode[SyncHTTPClient]:
         data = self.http.get_creator_code(name)
-        return CreatorCode(data=data)
+        return CreatorCode(data=data, http=self.http)
 
     # MAPS
 

@@ -24,7 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple
+
+from .abc import ReconstructAble
 
 from .account import Account
 from .asset import Asset
@@ -43,50 +45,12 @@ __all__: Tuple[str, ...] = (
 )
 
 
-class BrPlayerStats(Generic[HTTPClientT]):
-    """
-    .. attributetable:: fortnite_api.BrPlayerStats
-
-    Represents a Fortnite Battle Royale player's stats.
-
-    Attributes
-    ----------
-    user: :class:`fortnite_api.Account`
-        The account of the player who's stats are being represented.
-    battle_pass: Optional[:class:`fortnite_api.BrBattlePass`]
-        The player's battle pass level and progress, if available.
-    image: Optional[:class:`fortnite_api.Asset`]
-        The requested statistics image, if requested.
-    stats: Optional[:class:`fortnite_api.BrInputs`]
-        The player's stats for all input types. This is ``None`` if the player has no stats.
-    raw_data: :class:`dict`
-        The raw data received from the API.
-    """
-
-    __slots__: Tuple[str, ...] = ('user', 'battle_pass', 'image', 'stats', 'raw_data')
-
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-
-        _user = data['account']
-        self.user: Account = Account(data=_user)
-
-        _battle_pass = data.get('battlePass')
-        self.battle_pass: Optional[BrBattlePass] = _battle_pass and BrBattlePass(data=_battle_pass)
-
-        _image = data.get('image')
-        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
-
-        _inputs = data.get('stats')
-        self.stats: Optional[BrInputs] = _inputs and BrInputs(data=_inputs)
-
-        self.raw_data: Dict[str, Any] = data
-
-
-class BrBattlePass:
+class BrBattlePass(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BrBattlePass
 
     Represents a Fortnite Battle Royale player's battle pass level and progress.
+    This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ----------
@@ -98,85 +62,20 @@ class BrBattlePass:
 
     __slots__: Tuple[str, ...] = ('level', 'progress')
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.level: int = data['level']
         self.progress: Optional[int] = data['progress']
 
 
-class BrInputs:
-    """
-    .. attributetable:: fortnite_api.BrInputs
-
-    Represents a Fortnite player's stats for all input types.
-
-    Attributes
-    ----------
-    all: Optional[:class:`BrInputStats`]
-        The player's stats for all input types. This is ``None`` if the player has no stats.
-    keyboard_mouse: Optional[:class:`BrInputStats`]
-        The player's stats for keyboard and mouse input. This is ``None`` if the player has no stats.
-    gamepad: Optional[:class:`BrInputStats`]
-        The player's stats for gamepad input. This is ``None`` if the player has no stats.
-    touch: Optional[:class:`BrInputStats`]
-        The player's stats for touch input. This is ``None`` if the player has no stats.
-    """
-
-    __slots__: Tuple[str, ...] = ('all', 'keyboard_mouse', 'gamepad', 'touch')
-
-    def __init__(self, *, data: Dict[str, Any]):
-
-        _all = data.get('all')
-        self.all: Optional[BrInputStats] = _all and BrInputStats(data=_all)
-
-        _keyboard_mouse = data.get('keyboardMouse')
-        self.keyboard_mouse: Optional[BrInputStats] = _keyboard_mouse and BrInputStats(data=_keyboard_mouse)
-
-        _gamepad = data.get('gamepad')
-        self.gamepad: Optional[BrInputStats] = _gamepad and BrInputStats(data=_gamepad)
-
-        _touch = data.get('touch')
-        self.touch: Optional[BrInputStats] = _touch and BrInputStats(data=_touch)
-
-
-class BrInputStats:
-    """
-    .. attributetable:: fortnite_api.BrInputStats
-
-    Represents a specific Fortnite player's stats for a specific input type.
-
-    Attributes
-    ----------
-    overall: Optional[:class:`BrGameModeStats`]
-        The overall stats for the player. This is ``None`` if the overall stats are not available.
-    solo: Optional[:class:`BrGameModeStats`]
-        The player's stats for solo game modes. This is ``None`` if the player has no stats for solo game modes.
-    duo: Optional[:class:`BrGameModeStats`]
-        The player's stats for duo game modes. This is ``None`` if the player has no stats for duo game modes.
-    squad: Optional[:class:`BrGameModeStats`]
-        The player's stats for squad game modes. This is ``None`` if the player has no stats for squad game modes.
-    """
-
-    __slots__: Tuple[str, ...] = ('overall', 'solo', 'duo', 'squad', 'raw_data')
-
-    def __init__(self, *, data: Dict[str, Any]) -> None:
-        _overall = data.get('overall')
-        self.overall: Optional[BrGameModeStats] = _overall and BrGameModeStats(data=_overall)
-
-        _solo = data.get('solo')
-        self.solo: Optional[BrGameModeStats] = _solo and BrGameModeStats(data=_solo)
-
-        _duo = data.get('duo')
-        self.duo: Optional[BrGameModeStats] = _duo and BrGameModeStats(data=_duo)
-
-        _squad = data.get('squad')
-        self.squad: Optional[BrGameModeStats] = _squad and BrGameModeStats(data=_squad)
-
-
-class BrGameModeStats:
+class BrGameModeStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BrGameModeStats
 
-    Represents the specific stats for a Fortnite player in a specific game mode on a specific input type.
+    Represents the specific stats for a Fortnite player in a
+    specific game mode on a specific input type. This class inherits
+    from :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ----------
@@ -255,10 +154,11 @@ class BrGameModeStats:
         'minutes_played',
         'players_outlived',
         'last_modified',
-        'raw_data',
     )
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.score: int = data['score']
         self.score_per_min: float = data['scorePerMin']
         self.score_per_match: float = data['scorePerMatch']
@@ -282,3 +182,116 @@ class BrGameModeStats:
         self.minutes_played: int = data['minutesPlayed']
         self.players_outlived: int = data['playersOutlived']
         self.last_modified: datetime.datetime = parse_time(data['lastModified'])
+
+
+class BrInputStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.BrInputStats
+
+    Represents a specific Fortnite player's stats for a specific input type.
+    This class inherits from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    overall: Optional[:class:`BrGameModeStats`]
+        The overall stats for the player. This is ``None`` if the overall stats are not available.
+    solo: Optional[:class:`BrGameModeStats`]
+        The player's stats for solo game modes. This is ``None`` if the player has no stats for solo game modes.
+    duo: Optional[:class:`BrGameModeStats`]
+        The player's stats for duo game modes. This is ``None`` if the player has no stats for duo game modes.
+    squad: Optional[:class:`BrGameModeStats`]
+        The player's stats for squad game modes. This is ``None`` if the player has no stats for squad game modes.
+    """
+
+    __slots__: Tuple[str, ...] = ('overall', 'solo', 'duo', 'squad')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        _overall = data.get('overall')
+        self.overall: Optional[BrGameModeStats[HTTPClientT]] = _overall and BrGameModeStats(data=_overall, http=http)
+
+        _solo = data.get('solo')
+        self.solo: Optional[BrGameModeStats[HTTPClientT]] = _solo and BrGameModeStats(data=_solo, http=http)
+
+        _duo = data.get('duo')
+        self.duo: Optional[BrGameModeStats[HTTPClientT]] = _duo and BrGameModeStats(data=_duo, http=http)
+
+        _squad = data.get('squad')
+        self.squad: Optional[BrGameModeStats[HTTPClientT]] = _squad and BrGameModeStats(data=_squad, http=http)
+
+
+class BrInputs(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.BrInputs
+
+    Represents a Fortnite player's stats for all input types. This class inherits
+    from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    all: Optional[:class:`BrInputStats`]
+        The player's stats for all input types. This is ``None`` if the player has no stats.
+    keyboard_mouse: Optional[:class:`BrInputStats`]
+        The player's stats for keyboard and mouse input. This is ``None`` if the player has no stats.
+    gamepad: Optional[:class:`BrInputStats`]
+        The player's stats for gamepad input. This is ``None`` if the player has no stats.
+    touch: Optional[:class:`BrInputStats`]
+        The player's stats for touch input. This is ``None`` if the player has no stats.
+    """
+
+    __slots__: Tuple[str, ...] = ('all', 'keyboard_mouse', 'gamepad', 'touch')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        _all = data.get('all')
+        self.all: Optional[BrInputStats[HTTPClientT]] = _all and BrInputStats(data=_all, http=http)
+
+        _keyboard_mouse = data.get('keyboardMouse')
+        self.keyboard_mouse: Optional[BrInputStats[HTTPClientT]] = _keyboard_mouse and BrInputStats(
+            data=_keyboard_mouse, http=http
+        )
+
+        _gamepad = data.get('gamepad')
+        self.gamepad: Optional[BrInputStats[HTTPClientT]] = _gamepad and BrInputStats(data=_gamepad, http=http)
+
+        _touch = data.get('touch')
+        self.touch: Optional[BrInputStats[HTTPClientT]] = _touch and BrInputStats(data=_touch, http=http)
+
+
+class BrPlayerStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.BrPlayerStats
+
+    Represents a Fortnite Battle Royale player's stats. This class
+    inherits from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    user: :class:`fortnite_api.Account`
+        The account of the player who's stats are being represented.
+    battle_pass: Optional[:class:`fortnite_api.BrBattlePass`]
+        The player's battle pass level and progress, if available.
+    image: Optional[:class:`fortnite_api.Asset`]
+        The requested statistics image, if requested.
+    stats: Optional[:class:`fortnite_api.BrInputs`]
+        The player's stats for all input types. This is ``None`` if the player has no stats.
+    """
+
+    __slots__: Tuple[str, ...] = ('user', 'battle_pass', 'image', 'stats')
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        _user = data['account']
+        self.user: Account[HTTPClientT] = Account(data=_user, http=http)
+
+        _battle_pass = data.get('battlePass')
+        self.battle_pass: Optional[BrBattlePass[HTTPClientT]] = _battle_pass and BrBattlePass(data=_battle_pass, http=http)
+
+        _image = data.get('image')
+        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
+
+        _inputs = data.get('stats')
+        self.stats: Optional[BrInputs[HTTPClientT]] = _inputs and BrInputs(data=_inputs, http=http)

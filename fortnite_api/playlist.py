@@ -24,9 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
-from .abc import Hashable
+from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .http import HTTPClientT
 from .utils import get_with_fallback, parse_time
@@ -38,11 +38,12 @@ if TYPE_CHECKING:
 __all__: Tuple[str, ...] = ('PlaylistImages', 'Playlist')
 
 
-class PlaylistImages(Generic[HTTPClientT]):
+class PlaylistImages(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.PlaylistImages
 
-    Represents images that are associated with a Fortnite Playlist.
+    Represents images that are associated with a Fortnite Playlist. This
+    class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ------------
@@ -55,6 +56,8 @@ class PlaylistImages(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('showcase', 'mission_icon')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         _showcase = data.get('showcase')
         self.showcase: Optional[Asset[HTTPClientT]] = _showcase and Asset(url=_showcase, http=http)
 
@@ -62,11 +65,11 @@ class PlaylistImages(Generic[HTTPClientT]):
         self.mission_icon: Optional[Asset[HTTPClientT]] = _mission_icon and Asset(url=_mission_icon, http=http)
 
 
-class Playlist(Hashable, Generic[HTTPClientT]):
+class Playlist(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Playlist
 
-    Represents a Fortnite Playlist.
+    Represents a Fortnite Playlist. This class inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     -----------
@@ -112,8 +115,6 @@ class Playlist(Hashable, Generic[HTTPClientT]):
         The path of the playlist.
     added: :class:`datetime.datetime`
         The time the playlist was added.
-    raw_data: :class:`dict`
-        The raw data received from the API.
     """
 
     __slots__: Tuple[str, ...] = (
@@ -137,10 +138,10 @@ class Playlist(Hashable, Generic[HTTPClientT]):
         'gameplay_tags',
         'path',
         'added',
-        'raw_data',
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
         self.id: str = data['id']
         self.name: str = data['name']
         self.sub_name: Optional[str] = data.get('subName')
@@ -169,4 +170,3 @@ class Playlist(Hashable, Generic[HTTPClientT]):
         self.path: str = data['path']
 
         self.added: datetime.datetime = parse_time(data['added'])
-        self.raw_data: Dict[str, Any] = data

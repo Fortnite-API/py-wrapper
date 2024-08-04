@@ -24,9 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
-from .abc import Hashable
+from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .enums import CosmeticCompatibleMode
 from .http import HTTPClientT
@@ -35,7 +35,7 @@ from .utils import get_with_fallback
 __all__: Tuple[str, ...] = ('MaterialInstanceImages', 'MaterialInstanceColors', 'MaterialInstance')
 
 
-class MaterialInstanceImages(Generic[HTTPClientT], Dict[str, Asset[HTTPClientT]]):
+class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
     """
     .. attributetable:: fortnite_api.MaterialInstanceImages
 
@@ -95,7 +95,7 @@ class MaterialInstanceColors(Dict[str, str]):
         super().__init__(data)
 
 
-class MaterialInstance(Hashable, Generic[HTTPClientT]):
+class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.MaterialInstance
 
@@ -107,6 +107,8 @@ class MaterialInstance(Hashable, Generic[HTTPClientT]):
     across not just skins but also extended onto lego cosmetic variants as well.
 
     This class represents a Material instance, which is said to be a child of a bigger parent Material.
+
+    This class inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
 
     Attributes
     ----------
@@ -134,6 +136,8 @@ class MaterialInstance(Hashable, Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('id', 'primary_mode', 'images', 'colors', 'scalings', 'flags')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.id: str = data['id']
         self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode._from_str(data['primaryMode'])
 

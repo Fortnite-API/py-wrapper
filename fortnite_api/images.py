@@ -24,7 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
+
+from .abc import ReconstructAble
 
 from .asset import Asset
 from .http import HTTPClientT
@@ -34,12 +36,14 @@ __all__: Tuple[str, ...] = ('Images',)
 
 
 @simple_repr
-class Images(Generic[HTTPClientT]):
+class Images(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Images
 
     Represents image data passed from the API. This class is used to represent
     commonly provided assets for many API endpoints and object types.
+
+    This inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -58,6 +62,8 @@ class Images(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('small_icon', 'icon')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         small_icon = data.get('smallIcon')
         self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
 

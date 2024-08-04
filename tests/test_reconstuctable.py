@@ -24,52 +24,22 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Tuple
+from typing import TypedDict
 
-from .http import HTTPClientT
-
-from .abc import Hashable, ReconstructAble
-from .utils import simple_repr
-
-__all__: Tuple[str, ...] = ('Account',)
+from fortnite_api.client import Client
+from fortnite_api.abc import ReconstructAble
+from fortnite_api.http import HTTPClient
 
 
-@simple_repr
-class Account(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
-    """
-    .. attributetable:: fortnite_api.Account
+class ReconstructAbleFooData(TypedDict):
+    foo: str
+    bar: int
 
-    Represents a Fortnite account. This inherits from :class:`~fortnite_api.Hashable`
-    and :class:`~fortnite_api.ReconstructAble`.
 
-    .. container:: operations
-
-        .. describe:: str(x)
-
-            Returns the account's name.
-
-        .. describe:: repr(x)
-
-            Returns a representation of the account in the form of a string.
-
-    Attributes
-    ----------
-    id: :class:`str`
-        The id of the account.
-    name: :class:`str`
-        The display name of the account.
-    """
-
-    __slots__: Tuple[str, ...] = (
-        'id',
-        'name',
-    )
-
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+class ReconstructAbleFoo(ReconstructAble[ReconstructAbleFooData, HTTPClient]):
+    def __init__(self, foo: str, data: ReconstructAbleFooData, http: HTTPClient) -> None:
         super().__init__(data=data, http=http)
 
-        self.id: str = data['id']
-        self.name: str = data['name']
 
-    def __str__(self) -> str:
-        return self.name
+data: ReconstructAbleFooData = {"foo": "foo", "bar": 1}
+reveal_type(ReconstructAbleFoo.from_dict(data, client=Client()))

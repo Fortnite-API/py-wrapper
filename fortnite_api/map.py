@@ -24,9 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
-from .abc import Hashable
+from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
@@ -36,11 +36,12 @@ __all__: Tuple[str, ...] = ('Map', 'MapImages', 'POI', 'POILocation')
 
 
 @simple_repr
-class MapImages(Generic[HTTPClientT]):
+class MapImages(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.MapImages
 
-    Represents the images of a given POI map.
+    Represents the images of a given POI map. This inherits
+    from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -59,16 +60,18 @@ class MapImages(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('blank', 'pois')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.blank: Asset[HTTPClientT] = Asset(http=http, url=data['blank'])
         self.pois: Asset[HTTPClientT] = Asset(http=http, url=data['pois'])
 
 
 @simple_repr
-class Map(Generic[HTTPClientT]):
+class Map(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Map
 
-    Represents a Fortnite map.
+    Represents a Fortnite map. This inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -89,22 +92,25 @@ class Map(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('images', 'pois', 'raw_data')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.images: MapImages[HTTPClientT] = MapImages(data=data['images'], http=http)
 
-        self.pois: List[POI] = TransformerListProxy(
+        self.pois: List[POI[HTTPClientT]] = TransformerListProxy(
             data['pois'],
-            transform_data=lambda poi: POI(data=poi),
+            transform_data=lambda poi: POI(data=poi, http=http),
         )
 
         self.raw_data: Dict[str, Any] = data
 
 
 @simple_repr
-class POI(Hashable):
+class POI(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.POI
 
-    Represents a specific POI in a Fortnite map. This inherits from :class:`~fortnite_api.Hashable`.
+    Represents a specific POI in a Fortnite map. This inherits from :class:`~fortnite_api.Hashable`
+    and :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -124,18 +130,21 @@ class POI(Hashable):
 
     __slots__: Tuple[str, ...] = ('id', 'name', 'location')
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.id: str = data['id']
         self.name: Optional[str] = data.get('name')
-        self.location = POILocation(data=data['location'])
+        self.location: POILocation[HTTPClientT] = POILocation(data=data['location'], http=http)
 
 
 @simple_repr
-class POILocation:
+class POILocation(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.POILocation
 
-    Holds the x, y, z coordinates of a POI in a Fortnite map.
+    Holds the x, y, z coordinates of a POI in a Fortnite map. This inherits
+    from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -159,7 +168,9 @@ class POILocation:
 
     __slots__: Tuple[str, ...] = ('x', 'y', 'z')
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.x: float = data['x']
         self.y: float = data['y']
         self.z: float = data['z']

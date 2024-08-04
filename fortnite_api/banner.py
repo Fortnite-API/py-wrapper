@@ -24,9 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Generic, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
-from .abc import Hashable
+from .abc import Hashable, ReconstructAble
 from .http import HTTPClientT
 from .images import Images
 from .utils import simple_repr
@@ -38,11 +38,12 @@ __all__: Tuple[str, ...] = (
 
 
 @simple_repr
-class Banner(Hashable, Generic[HTTPClientT]):
+class Banner(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Banner
 
-    Represents a banner within the Fortnite game. This inherits from :class:`~fortnite_api.Hashable`.
+    Represents a banner within the Fortnite game. This inherits from :class:`~fortnite_api.Hashable`
+    and :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -69,9 +70,6 @@ class Banner(Hashable, Generic[HTTPClientT]):
         Epic Games team.
     images: :class:`fortnite_api.Images`
         Preview images of the banner.
-    raw_data: :class:`dict`
-        The raw data of the banner that was used to create this object.
-        This can be used for recreating the object without re-fetching the API.
     """
 
     __slots__: Tuple[str, ...] = (
@@ -82,10 +80,11 @@ class Banner(Hashable, Generic[HTTPClientT]):
         'full_usage_rights',
         'dev_name',
         'images',
-        'raw_data',
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.id: str = data['id']
         self.name: str = data['name']
         self.dev_name: str = data['devName']
@@ -94,15 +93,14 @@ class Banner(Hashable, Generic[HTTPClientT]):
         self.full_usage_rights: bool = data['fullUsageRights']
 
         self.images: Images[HTTPClientT] = Images(data=data, http=http)
-        self.raw_data: Dict[str, Any] = data
 
 
 @simple_repr
-class BannerColor(Hashable):
+class BannerColor(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BannerColor
 
-    Represents a color of a :class:`fortnite_api.Banner`. This inherits from :class:`~fortnite_api.Hashable`.
+    Represents a color of a :class:`fortnite_api.Banner`. This inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -122,14 +120,12 @@ class BannerColor(Hashable):
         The category of the banner.
     sub_category_group: :class:`int`
         The sub category group of the banner.
-    raw_data: :class:`dict`
-        The raw data of the banner color. This can be used for recreating the object
-        without re-fetching the API.
     """
 
-    __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group', 'raw_data')
+    __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group')
 
-    def __init__(self, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
         self.id: str = data['id']
 
         self.color: str = data['color']

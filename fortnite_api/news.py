@@ -24,9 +24,9 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
-from .abc import Hashable
+from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .http import HTTPClientT
 from .utils import get_with_fallback, parse_time, simple_repr
@@ -38,11 +38,11 @@ __all__: Tuple[str, ...] = ('News', 'GameModeNews', 'NewsMotd', 'NewsMessage')
 
 
 @simple_repr
-class News(Generic[HTTPClientT]):
+class News(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.News
 
-    Represents Game News.
+    Represents Game News. This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -56,28 +56,29 @@ class News(Generic[HTTPClientT]):
         A list of Battle Royale news.
     stw: List[:class:`fortnite_api.GameModeNews`]
         A list of Save the World news.
-    raw_data: :class:`dict`
-        The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    __slots__: Tuple[str, ...] = ('br', 'stw', 'raw_data')
+    __slots__: Tuple[str, ...] = (
+        'br',
+        'stw',
+    )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         _br = data.get('br')
         self.br: Optional[GameModeNews[HTTPClientT]] = _br and GameModeNews(data=_br, http=http)
 
         _stw = data.get('stw')
         self.stw: Optional[GameModeNews[HTTPClientT]] = _stw and GameModeNews(data=_stw, http=http)
 
-        self.raw_data: Dict[str, Any] = data
-
 
 @simple_repr
-class GameModeNews(Generic[HTTPClientT]):
+class GameModeNews(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.GameModeNews
 
-    Represents News of a specific game mode.
+    Represents News of a specific game mode. This inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -97,13 +98,13 @@ class GameModeNews(Generic[HTTPClientT]):
         A list of Message of the Day (MOTD) for the game mode.
     messages: List[:class:`fortnite_api.NewsMessage`]
         A list of messages for the game mode.
-    raw_data: :class:`dict`
-        The raw data from request. Can be used for saving and re-creating the class.
     """
 
-    __slots__: Tuple[str, ...] = ('hash', 'date', 'image', 'motds', 'messages', 'raw_data')
+    __slots__: Tuple[str, ...] = ('hash', 'date', 'image', 'motds', 'messages')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.hash: str = data['hash']
         self.date: datetime.datetime = parse_time(data['date'])
 
@@ -116,11 +117,9 @@ class GameModeNews(Generic[HTTPClientT]):
         _messages = get_with_fallback(data, 'messages', list)
         self.messages: List[NewsMessage[HTTPClientT]] = [NewsMessage(data=message, http=http) for message in _messages]
 
-        self.raw_data: Dict[str, Any] = data
-
 
 @simple_repr
-class NewsMotd(Hashable, Generic[HTTPClientT]):
+class NewsMotd(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMotd
 
@@ -148,8 +147,6 @@ class NewsMotd(Hashable, Generic[HTTPClientT]):
         The asset of the title image that represents this news.
     hidden: :class:`bool`
         Whether the motd is hidden or not.
-    raw_data: :class:`dict`
-        The raw data from request. Can be used for saving and re-creating the class.
     """
 
     __slots__: Tuple[str, ...] = (
@@ -161,10 +158,11 @@ class NewsMotd(Hashable, Generic[HTTPClientT]):
         'tile_image',
         'sorting_priority',
         'hidden',
-        'raw_data',
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.id: str = data['id']
         self.title: str = data['title']
         self.tab_title: str = data['tabTitle']
@@ -176,15 +174,13 @@ class NewsMotd(Hashable, Generic[HTTPClientT]):
         self.sorting_priority: int = data['sortingPriority']
         self.hidden: bool = data['hidden']
 
-        self.raw_data: Dict[str, Any] = data
-
 
 @simple_repr
-class NewsMessage(Generic[HTTPClientT]):
+class NewsMessage(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMessage
 
-    Represents News of a specific game mode.
+    Represents News of a specific game mode. This inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -204,9 +200,11 @@ class NewsMessage(Generic[HTTPClientT]):
         The adspace of the message.
     """
 
-    __slots__: Tuple[str, ...] = ('title', 'body', 'image', 'adspace', 'raw_data')
+    __slots__: Tuple[str, ...] = ('title', 'body', 'image', 'adspace')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.title: str = data['title']
         self.body: str = data['body']
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
