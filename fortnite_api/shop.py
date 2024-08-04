@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import Any, Dict, Generic, List, Mapping, Optional, Tuple, Type
+from typing import Any, Dict, Generic, List, Optional, Tuple, Type
 
 from typing_extensions import Self
 
@@ -51,16 +51,6 @@ __all__: Tuple[str, ...] = (
 
 # Matches a tile size: size_<int>_x_<int>
 _TILE_SIZE_REGEX = re.compile(r"size_(?P<width>\d+)_x_(?P<height>\d+)", re.IGNORECASE)
-
-_BACKUP_TILE_MAPPING: Mapping[str, Tuple[int, int]] = {
-    "mini": (1, 1),
-    "small": (1, 1),
-    "normal": (1, 2),
-    "doublewide": (2, 2),
-    "triplewide": (3, 2),
-    "quadwide": (4, 2),
-    "pentawide": (5, 2),
-}
 
 
 class TileSize:
@@ -108,27 +98,13 @@ class TileSize:
         return value.width == self.width and value.height == self.height
 
     @classmethod
-    def _from_fallback(cls: Type[Self], value: str, /) -> Self:
-        value = value.lower()
-
-        # Check for known API backups
-        backup = _BACKUP_TILE_MAPPING.get(value)
-        if backup is not None:
-            width, height = backup
-            return cls(width=width, height=height, internal=value)
-
-        # This is some sort of unknown default fallback from the API, and should
-        # never realistically happen. We'll default to a normal tile size.
-        return cls(width=1, height=2, internal=value)
-
-    @classmethod
     def from_value(cls: Type[Self], value: str, /) -> Self:
         # Try and match the regex
         match = _TILE_SIZE_REGEX.match(value)
         if not match:
-            # This did not match conventional tile sizes, so we'll fallback to that
-            # the Epic API uses.
-            return cls._from_fallback(value)
+            # Epic only uses the tile sizing on the regex. If there isn't a match
+            # we can safely assume an exception must be raised
+            raise ValueError(f"Invalid tile size: {value!r}")
 
         return cls(
             width=int(match.group("width")),
