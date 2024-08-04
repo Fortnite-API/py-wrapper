@@ -35,7 +35,7 @@ __all__: Tuple[str, ...] = ('CosmeticCar',)
 
 
 @simple_repr
-class CosmeticCar(Cosmetic[HTTPClientT]):
+class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticCar
 
@@ -97,10 +97,10 @@ class CosmeticCar(Cosmetic[HTTPClientT]):
         self.description: str = data['description']
 
         _type = data.get('type')
-        self.type: Optional[CosmeticTypeInfo] = _type and CosmeticTypeInfo(data=_type)
+        self.type: Optional[CosmeticTypeInfo[HTTPClientT]] = _type and CosmeticTypeInfo(data=_type, http=http)
 
         _rarity = data.get('rarity')
-        self.rarity: Optional[CosmeticRarityInfo] = _rarity and CosmeticRarityInfo(data=_rarity)
+        self.rarity: Optional[CosmeticRarityInfo[HTTPClientT]] = _rarity and CosmeticRarityInfo(data=_rarity, http=http)
 
         _images = data.get('images')
         self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=self._http)
