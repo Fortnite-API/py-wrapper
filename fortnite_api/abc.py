@@ -25,12 +25,12 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Generic, Tuple, Type, TypeVar, Union, Mapping
+from typing import TYPE_CHECKING, Generic, Tuple, Type, TypeVar, Union, Mapping, Any
 from typing_extensions import Self
 
 from .http import HTTPClientT, SyncHTTPClient, HTTPClient
 
-DictT = TypeVar('DictT', bound='Mapping')  # pyright: ignore[reportMissingTypeArgument]
+DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 
 if TYPE_CHECKING:
     from .client import Client, SyncClient
