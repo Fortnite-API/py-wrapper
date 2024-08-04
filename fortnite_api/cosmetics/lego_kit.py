@@ -34,7 +34,7 @@ __all__: Tuple[str, ...] = ('CosmeticLegoKit',)
 
 
 @simple_repr
-class CosmeticLegoKit(Cosmetic[HTTPClientT]):
+class CosmeticLegoKit(Cosmetic[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticLegoKit
 
@@ -72,7 +72,7 @@ class CosmeticLegoKit(Cosmetic[HTTPClientT]):
         self.name: str = data['name']
 
         _type = data.get('type')
-        self.type: Optional[CosmeticTypeInfo] = _type and CosmeticTypeInfo(data=_type)
+        self.type: Optional[CosmeticTypeInfo[HTTPClientT]] = _type and CosmeticTypeInfo(data=_type, http=http)
 
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
 

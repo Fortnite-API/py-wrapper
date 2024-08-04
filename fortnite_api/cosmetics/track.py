@@ -27,6 +27,8 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
+from ..abc import ReconstructAble
+
 from ..asset import Asset
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time, simple_repr
@@ -36,11 +38,12 @@ __all__: Tuple[str, ...] = ('CosmeticTrackDifficulty', 'CosmeticTrack')
 
 
 @simple_repr
-class CosmeticTrackDifficulty:
+class CosmeticTrackDifficulty(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticTrackDifficulty
 
-    Represents the difficulty of a track cosmetic in Fortnite.
+    Represents the difficulty of a track cosmetic in Fortnite. This
+    class inherits from :class:`fortnite_api.abc.ReconstructAble`.
 
     .. container:: operations
 
@@ -66,7 +69,9 @@ class CosmeticTrackDifficulty:
 
     __slots__: Tuple[str, ...] = ('vocals', 'guitar', 'bass', 'plastic_bass', 'drums', 'plastic_drums')
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.vocals: int = data['vocals']
         self.guitar: int = data['guitar']
         self.bass: int = data['bass']
@@ -76,7 +81,7 @@ class CosmeticTrackDifficulty:
 
 
 @simple_repr
-class CosmeticTrack(Cosmetic[HTTPClientT]):
+class CosmeticTrack(Cosmetic[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticTrack
 
@@ -144,7 +149,7 @@ class CosmeticTrack(Cosmetic[HTTPClientT]):
         self.bpm: int = data['bpm']
         self.duration: int = data['duration']
 
-        self.difficulty: CosmeticTrackDifficulty = CosmeticTrackDifficulty(data=data['difficulty'])
+        self.difficulty: CosmeticTrackDifficulty[HTTPClientT] = CosmeticTrackDifficulty(data=data['difficulty'], http=http)
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
         self.genres: List[str] = get_with_fallback(data, 'genres', list)
         self.album_art: Asset[HTTPClientT] = Asset(http=http, url=data['albumArt'])
