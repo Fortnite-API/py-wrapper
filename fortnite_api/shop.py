@@ -69,6 +69,16 @@ class TileSize:
 
             Checks if two tile sizes are not equal.
 
+    Parameters
+    ----------
+    width: :class:`int`
+        The width of the tile.
+    height: :class:`int`
+        The height of the tile.
+    internal: :class:`str`
+        The internal representation of the tile size. This can be the default Epic API value
+        in the format ``Size_<width>_x_<height>``.
+
     Attributes
     ----------
     width: :class:`int`
@@ -77,8 +87,7 @@ class TileSize:
         The height of the tile.
     internal: :class:`str`
         The internal representation of the tile size. This can be the default Epic API value
-        in the format ``Size_<width>_x_<height>``, or a default Epic games fallback value,
-        which is one of the following: ``mini``, ``small``, ``normal``, ``doublewide``, ``triplewide``.
+        in the format ``Size_<width>_x_<height>``.
     """
 
     __slots__: Tuple[str, ...] = ("width", "height", "internal")
@@ -99,6 +108,26 @@ class TileSize:
 
     @classmethod
     def from_value(cls: Type[Self], value: str, /) -> Self:
+        """Constructs a tile size from the value provided by the API. This method
+        parses the passed value and ensures that it is in the correct format,
+        ``Size_<width>_x_<height>``. It has been exposed in the case that
+        the user wants to construct a tile size from a custom value.
+
+        Parameters
+        ----------
+        value: :class:`str`
+            The value to parse.
+
+        Returns
+        -------
+        :class:`TileSize`
+            The constructed tile size.
+
+        Raises
+        ------
+        ValueError
+            If the value is not in the correct format.
+        """
         # Try and match the regex
         match = _TILE_SIZE_REGEX.match(value)
         if not match:
