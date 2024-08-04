@@ -27,7 +27,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
 
-from ..abc import Hashable
+from ..abc import DictT, Hashable, ReconstructAble
 from ..asset import Asset
 from ..enums import CosmeticRarity, CosmeticType
 from ..http import HTTPClientT
@@ -46,12 +46,14 @@ __all__: Tuple[str, ...] = (
 )
 
 
-class Cosmetic(Hashable, Generic[HTTPClientT]):
+class Cosmetic(Generic[DictT, HTTPClientT], Hashable, ReconstructAble[DictT, HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Cosmetic
 
     Represents a base cosmetic. This class inherits from :class:`~fortnite_api.Hashable`. Every cosmetic type inherits from this class and adds additional attributes.
     View documentation for the specific cosmetic type for more information.
+
+    This class inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
 
     - :class:`fortnite_api.CosmeticBr`
     - :class:`fortnite_api.CosmeticCar`
@@ -66,32 +68,31 @@ class Cosmetic(Hashable, Generic[HTTPClientT]):
         The ID of the cosmetic.
     added: :class:`datetime.datetime`
         When the cosmetic was added.
-    raw_data: :class:`dict`
-        The raw data of the cosmetic.
     """
 
-    __slots__: Tuple[str, ...] = ('id', 'added', 'raw_data')
+    __slots__: Tuple[str, ...] = ('id', 'added')
 
     def __init__(
         self,
         *,
-        data: Dict[str, Any],
+        data: DictT,
         http: HTTPClientT,
     ) -> None:
-        self._http: HTTPClientT = http
+        super().__init__(data=data, http=http)
 
         self.id: str = data['id']
         self.added: datetime = parse_time(data['added'])
-        self.raw_data: Dict[str, Any] = data
 
 
 @simple_repr
-class CosmeticTypeInfo:
+class CosmeticTypeInfo(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticTypeInfo
 
     A class that holds cosmetic type information passed from the API for
     a given :class:`~fortnite_api.Cosmetic`.
+
+    This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -115,7 +116,9 @@ class CosmeticTypeInfo:
 
     __slots__: Tuple[str, ...] = ('value', 'raw_value', 'display_value', 'backend_value')
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.value: CosmeticType = CosmeticType(data['value'])
         self.raw_value: str = data['value']
 
@@ -124,11 +127,13 @@ class CosmeticTypeInfo:
 
 
 @simple_repr
-class CosmeticRarityInfo:
+class CosmeticRarityInfo(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticRarityInfo
 
-    Represents a cosmetic rarity.
+    Represents a cosmetic rarity. This class is used to hold information about the rarity of a cosmetic.
+
+    This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -148,18 +153,21 @@ class CosmeticRarityInfo:
 
     __slots__: Tuple[str, ...] = ('value', 'display_value', 'backend_value')
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.value: CosmeticRarity = CosmeticRarity(data['value'])
         self.display_value: str = data['displayValue']
         self.backend_value: str = data['backendValue']
 
 
 @simple_repr
-class CosmeticSeriesInfo(Generic[HTTPClientT]):
+class CosmeticSeriesInfo(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticSeriesInfo
 
     Represents information about the series a :class:`~fortnite_api.Cosmetic` belongs to.
+    This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -187,6 +195,8 @@ class CosmeticSeriesInfo(Generic[HTTPClientT]):
         data: Dict[str, Any],
         http: HTTPClientT,
     ) -> None:
+        super().__init__(data=data, http=http)
+
         self.value: str = data['value']
         self.backend_value: str = data['backendValue']
 
