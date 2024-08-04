@@ -25,8 +25,9 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, Generic, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
+from ..abc import ReconstructAble
 from ..asset import Asset
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time, simple_repr
@@ -42,11 +43,12 @@ __all__: Tuple[str, ...] = (
 
 
 @simple_repr
-class CosmeticBrSet:
+class CosmeticBrSet(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrSet
 
-    Represents a set that a given cosmetic belongs to.
+    Represents a set that a given cosmetic belongs to. This
+    class inherits from :class:`fortnite_api.abc.ReconstructAble`.
 
     .. container:: operations
 
@@ -66,18 +68,21 @@ class CosmeticBrSet:
 
     __slots__: Tuple[str, ...] = ('value', 'text', 'backend_value')
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.value: Optional[str] = data.get('value')
         self.text: str = data['text']
         self.backend_value: str = data['backendValue']
 
 
 @simple_repr
-class CosmeticBrIntroduction:
+class CosmeticBrIntroduction(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrIntroduction
 
-    Holds some metadata about when a cosmetic was introduced.
+    Holds some metadata about when a cosmetic was introduced. This
+    class inherits from :class:`fortnite_api.abc.ReconstructAble`.
 
     .. container:: operations
 
@@ -99,7 +104,8 @@ class CosmeticBrIntroduction:
 
     __slots__: Tuple[str, ...] = ('chapter', 'season', 'text', 'backend_value')
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
         self.chapter: int = int(data['chapter'])
         self.season: str = data['season']
         self.text: str = data['text']
@@ -107,11 +113,12 @@ class CosmeticBrIntroduction:
 
 
 @simple_repr
-class CosmeticBrVariantOption(Generic[HTTPClientT]):
+class CosmeticBrVariantOption(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrVariantOption
 
-    Represents a variant option for a cosmetic.
+    Represents a variant option for a cosmetic. This class inherits
+    from :class:`fortnite_api.abc.ReconstructAble`.
 
     .. container:: operations
 
@@ -134,6 +141,8 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('tag', 'name', 'unlock_requirements', 'image')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.tag: str = data['tag']
         self.name: Optional[str] = data.get('name')
         self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
@@ -141,11 +150,12 @@ class CosmeticBrVariantOption(Generic[HTTPClientT]):
 
 
 @simple_repr
-class CosmeticBrVariant(Generic[HTTPClientT]):
+class CosmeticBrVariant(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrVariant
 
-    Represents a variant for a cosmetic.
+    Represents a variant for a cosmetic. This class
+    inherits from :class:`fortnite_api.abc.ReconstructAble`.
 
     .. container:: operations
 
@@ -166,8 +176,10 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
     __slots__: Tuple[str, ...] = ('channel', 'type', 'options')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.channel: str = data['channel']
-        self.type: Optional[str] = data.get('type')  # TODO: Move to enum eventually.
+        self.type: Optional[str] = data.get('type')
 
         self.options: List[CosmeticBrVariantOption[HTTPClientT]] = [
             CosmeticBrVariantOption(data=option, http=http) for option in data['options']
@@ -175,7 +187,7 @@ class CosmeticBrVariant(Generic[HTTPClientT]):
 
 
 @simple_repr
-class CosmeticBr(Cosmetic[HTTPClientT]):
+class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBr
 
@@ -280,19 +292,21 @@ class CosmeticBr(Cosmetic[HTTPClientT]):
         self.custom_exclusive_callout: Optional[str] = data.get('customExclusiveCallout')
 
         _type = data.get('type')
-        self.type: Optional[CosmeticTypeInfo] = _type and CosmeticTypeInfo(data=_type)
+        self.type: Optional[CosmeticTypeInfo[HTTPClientT]] = _type and CosmeticTypeInfo(data=_type, http=http)
 
         rarity = data.get('rarity')
-        self.rarity: Optional[CosmeticRarityInfo] = rarity and CosmeticRarityInfo(data=rarity)
+        self.rarity: Optional[CosmeticRarityInfo[HTTPClientT]] = rarity and CosmeticRarityInfo(data=rarity, http=http)
 
         series = data.get('series')
         self.series: Optional[CosmeticSeriesInfo[HTTPClientT]] = series and CosmeticSeriesInfo(http=http, data=series)
 
         _set = data.get('set')
-        self.set: Optional[CosmeticBrSet] = _set and CosmeticBrSet(data=_set)
+        self.set: Optional[CosmeticBrSet[HTTPClientT]] = _set and CosmeticBrSet(data=_set, http=http)
 
         introduction = data.get('introduction')
-        self.introduction: Optional[CosmeticBrIntroduction] = introduction and CosmeticBrIntroduction(data=introduction)
+        self.introduction: Optional[CosmeticBrIntroduction[HTTPClientT]] = introduction and CosmeticBrIntroduction(
+            data=introduction, http=http
+        )
 
         images = data.get('images')
         self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages(http=http, data=images)
