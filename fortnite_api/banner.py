@@ -52,6 +52,30 @@ class Banner(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
             Returns a representation of the account in the form of a string.
 
+    Examples
+    --------
+    .. code-block:: python3
+        :caption: Fetch all banners in Fortnite.
+
+        # (1) Fetch all the banners using the client
+        banners = await client.fetch_banners()
+
+        # (2) Walk through each banner
+        for banner in banners:
+            # (3) Print out their metadata
+            print(banner.id, banner.name, banner.description)
+
+    .. code-block:: python3
+        :caption: Fetch the images of all the banners in Fortnite.
+
+        # (1) Fetch all the banners using the client
+        banners = await client.fetch_banners()
+
+        # (2) Walk through each banner
+        for banner in banners:
+            # (3) Print out the image URL of the banner
+            print(banner.images.icon.url)
+
     Attributes
     ----------
     id: :class:`str`

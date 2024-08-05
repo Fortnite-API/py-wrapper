@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import dataclasses
 import re
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple, Union
 
 from .abc import ReconstructAble
 from .http import HTTPClientT
@@ -35,9 +35,9 @@ from .utils import parse_time, simple_repr
 if TYPE_CHECKING:
     import datetime
 
-__all__: Tuple[str, ...] = ('Aes', 'DynamicKey', 'Version')
+__all__: Tuple[str, ...] = ("Aes", "DynamicKey", "Version")
 
-VERSION_REGEX: re.Pattern[str] = re.compile(r'(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})')
+VERSION_REGEX: re.Pattern[str] = re.compile(r"(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})")
 
 
 @dataclasses.dataclass(init=True, eq=True, order=False)
@@ -57,6 +57,14 @@ class Version:
 
             Returns the version in the form of a string. ":attr:`major`.:attr:`minor`"
 
+        .. describe:: iter(x)
+
+            Returns an iterator of the version. This will yield the major version and then the minor version.
+
+            .. code-block:: python3
+
+                major, minor = version
+
     Attributes
     ----------
     major: :class:`int`
@@ -69,10 +77,14 @@ class Version:
     minor: int
 
     def __repr__(self) -> str:
-        return f'<Version {self.major}.{self.minor}>'
+        return f"<Version {self.major}.{self.minor}>"
 
     def __str__(self) -> str:
-        return f'{self.major}.{self.minor}'
+        return f"{self.major}.{self.minor}"
+
+    def __iter__(self) -> Generator[int, None, None]:
+        yield self.major
+        yield self.minor
 
 
 @simple_repr
@@ -101,6 +113,22 @@ class Aes(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
             Returns a representation of the Aes object in the form of a string.
 
+    Examples
+    --------
+    .. code-block:: python3
+        :caption: Fetching the current AES main key and build.
+
+        aes = await client.fetch_aes()
+        print(aes.main_key, aes.build)
+
+    .. code-block:: python3
+        :caption: Fetching the current version of Fortnite.
+
+        aes = await client.fetch_aes()
+        major, minor = aes.version
+        print(f'Fortnite on version {major}.{minor}')
+
+
     Attributes
     ----------
     main_key: Optional[:class:`str`]
@@ -115,13 +143,19 @@ class Aes(ReconstructAble[Dict[str, Any], HTTPClientT]):
         All current dynamic keys
     """
 
-    __slots__: Tuple[str, ...] = ('main_key', 'build', 'version', 'updated', 'dynamic_keys')
+    __slots__: Tuple[str, ...] = (
+        "main_key",
+        "build",
+        "version",
+        "updated",
+        "dynamic_keys",
+    )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT):
         super().__init__(data=data, http=http)
 
-        self.main_key: Optional[str] = data.get('mainKey')
-        self.build: str = data['build']
+        self.main_key: Optional[str] = data.get("mainKey")
+        self.build: str = data["build"]
 
         # In the case that the API gives us an invalid version, we will set it to None
         self.version: Optional[Version] = None
@@ -131,9 +165,9 @@ class Aes(ReconstructAble[Dict[str, Any], HTTPClientT]):
             self.version = Version(major=int(major), minor=int(minor))
 
         self.dynamic_keys: List[DynamicKey[HTTPClientT]] = [
-            DynamicKey(data=entry, http=http) for entry in data.get('dynamicKeys', [])
+            DynamicKey(data=entry, http=http) for entry in data.get("dynamicKeys", [])
         ]
-        self.updated: datetime.datetime = parse_time(data['updated'])
+        self.updated: datetime.datetime = parse_time(data["updated"])
 
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, self.__class__):
@@ -193,14 +227,14 @@ class DynamicKey(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The key.
     """
 
-    __slots__: Tuple[str, ...] = ('pak_filename', 'pak_guid', 'key')
+    __slots__: Tuple[str, ...] = ("pak_filename", "pak_guid", "key")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT):
         super().__init__(data=data, http=http)
 
-        self.pak_filename: str = data['pakFilename']
-        self.pak_guid: str = data['pakGuid']
-        self.key: str = data['key']
+        self.pak_filename: str = data["pakFilename"]
+        self.pak_guid: str = data["pakGuid"]
+        self.key: str = data["key"]
 
     def __hash__(self) -> int:
         return hash((self.pak_filename, self.pak_guid, self.key))

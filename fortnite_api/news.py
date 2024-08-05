@@ -42,7 +42,10 @@ class News(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.News
 
-    Represents Game News. This class inherits from :class:`~fortnite_api.ReconstructAble`.
+    Represents Game News. This class contains information on both Battle Royale and Save
+    the World news.
+
+    This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -78,7 +81,8 @@ class GameModeNews(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.GameModeNews
 
-    Represents News of a specific game mode.
+    Represents News of a specific game mode. This class is handed out
+    from the :class:`~fortnite_api.News` class.
 
     This inherits from :class:`~fortnite_api.ReconstructAble`.
 
@@ -125,7 +129,11 @@ class NewsMotd(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMotd
 
-    Represents News of a specific game mode.
+    An object that represents a Message of The Day in a specific game mode.
+    This class gets handed out from the :class:`~fortnite_api.GameModeNews`.
+
+    This class inherits from :class:`~fortnite_api.Hashable` and
+    :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -182,7 +190,8 @@ class NewsMessage(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMessage
 
-    Represents News of a specific game mode.
+    Represents a message in the news in a specific game mode. This class gets
+    handed out by :class:`~fortnite_api.GameModeNews`.
 
     This inherits from :class:`~fortnite_api.ReconstructAble`.
 

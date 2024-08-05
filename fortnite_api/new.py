@@ -43,7 +43,7 @@ from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
-__all__: Tuple[str, ...] = ('NewCosmetic', 'NewCosmetics')
+__all__: Tuple[str, ...] = ("NewCosmetic", "NewCosmetics")
 
 
 class NewCosmetic(Generic[CosmeticT]):
@@ -95,6 +95,16 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
     This class inherits from :class:`~fortnite_api.ReconstructAble`.
 
+    Examples
+    -------
+    .. code-block:: python3
+        :caption: Obtain all the new Battle Royale cosmetics.
+
+        new_cosmetics = await client.fetch_cosmetics_new()
+        new_br_cosmetics = new_cosmetics.br
+        for cosmetic in new_br_cosmetics.items:
+            print(cosmetic.name)
+
     Attributes
     ----------
     build: :class:`str`
@@ -126,55 +136,55 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.build: str = data['build']
-        self.previous_build: str = data['previousBuild']
-        self.date: datetime.datetime = parse_time(data['date'])
-        self.global_hash: str = data['hashes']['all']
-        self.global_last_addition: datetime.datetime = parse_time(data['lastAdditions']['all'])
+        self.build: str = data["build"]
+        self.previous_build: str = data["previousBuild"]
+        self.date: datetime.datetime = parse_time(data["date"])
+        self.global_hash: str = data["hashes"]["all"]
+        self.global_last_addition: datetime.datetime = parse_time(data["lastAdditions"]["all"])
 
-        self._hashes = data['hashes']
-        self._items = data['items']
-        self._last_additions = data['lastAdditions']
+        self._hashes = data["hashes"]
+        self._items = data["items"]
+        self._last_additions = data["lastAdditions"]
 
         self.br: NewCosmetic[CosmeticBr[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.BR,
-            internal_key='br',
+            internal_key="br",
             cosmetic_class=CosmeticBr,
         )
 
         self.tracks: NewCosmetic[CosmeticTrack[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.TRACKS,
-            internal_key='tracks',
+            internal_key="tracks",
             cosmetic_class=CosmeticTrack,
         )
 
         self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.INSTRUMENTS,
-            internal_key='instruments',
+            internal_key="instruments",
             cosmetic_class=CosmeticInstrument,
         )
 
         self.cars: NewCosmetic[CosmeticCar[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.CARS,
-            internal_key='cars',
+            internal_key="cars",
             cosmetic_class=CosmeticCar,
         )
 
         self.lego: NewCosmetic[VariantLego[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.LEGO,
-            internal_key='lego',
+            internal_key="lego",
             cosmetic_class=VariantLego,
         )
 
         self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.LEGO_KITS,
-            internal_key='legoKits',
+            internal_key="legoKits",
             cosmetic_class=CosmeticLegoKit,
         )
 
         self.beans: NewCosmetic[VariantBean[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.BEANS,
-            internal_key='beans',
+            internal_key="beans",
             cosmetic_class=VariantBean,
         )
 

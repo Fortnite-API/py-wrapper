@@ -41,7 +41,7 @@ def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
         assert player_stats.battle_pass.level
         assert player_stats.battle_pass.progress
 
-    stats = player_stats.stats
+    stats = player_stats.inputs
     overall_stats = stats and stats.all and stats.all.overall
     if not overall_stats:
         # Nothing we should be testing

@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Generator, List, Optional, Tuple
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
@@ -79,6 +79,16 @@ class Map(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
             Returns a representation of the account in the form of a string.
 
+    Examples
+    --------
+    .. code-block:: python3
+        :caption: Getting the images of the Fortnite map.
+
+        map = await client.fetch_map()
+        print(map.images.pois.url)
+        print(map.images.blank.url)
+
+
     Attributes
     ----------
     images: :class:`fortnite_api.MapImages`
@@ -114,6 +124,20 @@ class POI(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         .. describe:: repr(x)
 
             Returns a representation of the account in the form of a string.
+
+    Examples
+    --------
+    .. code-block:: python3
+        :caption: Getting all POIs in the Fortnite map.
+
+        # (1) Fetch the map
+        map = await client.fetch_map()
+
+        # (2) walk through all the POIs
+        for poi in map.pois:
+            # (3) print the name & (x, y, z) coordinates
+            print(poi.name, tuple(poi.location))
+
 
     Attributes
     ----------
@@ -153,6 +177,16 @@ class POILocation(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
             Returns a iter of the x, y, z coordinates.
 
+    Examples
+    --------
+    .. code-block:: python3
+        :caption: Unpacking a POI location.
+
+        map = await client.fetch_map()
+        poi = map.pois[0]
+        x, y, z = poi.location
+        print(x, y, z)
+
     Attributes
     ----------
     x: :class:`float`
@@ -172,5 +206,9 @@ class POILocation(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.y: float = data["y"]
         self.z: float = data["z"]
 
-    def __iter__(self) -> Tuple[float, float, float]:
-        return self.x, self.y, self.z
+    # __iter__ method to allow for easy unpacking of the coordinates
+    # and to allow tuple(loc) to work
+    def __iter__(self) -> Generator[float, None, None]:
+        yield self.x
+        yield self.y
+        yield self.z
