@@ -133,6 +133,10 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.global_hash: str = data['hashes']['all']
         self.global_last_addition: datetime.datetime = parse_time(data['lastAdditions']['all'])
 
+        self._hashes = data['hashes']
+        self._items = data['items']
+        self._last_additions = data['lastAdditions']
+
         self.br: NewCosmetic[CosmeticBr[HTTPClientT]] = self._parse_new_cosmetic(
             cosmetic_type=CosmeticCategory.BR,
             internal_key='br',
@@ -182,18 +186,14 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
         internal_key: str,
         cosmetic_class: Type[CosmeticT],
     ) -> NewCosmetic[CosmeticT]:
-        hashes = self.__raw_data['hashes']
-        last_additions = self.__raw_data['lastAdditions']
-        items = self.__raw_data['items']
+        cosmetic_items: List[Dict[str, Any]] = get_with_fallback(self._items, internal_key, list)
 
-        cosmetic_items: List[Dict[str, Any]] = get_with_fallback(items, internal_key, list)
-
-        last_addition_str = last_additions[internal_key]
-        last_addition: Optional[datetime.datetime] = parse_time(last_addition_str) if last_addition_str else None
+        last_addition_str = self._last_additions[internal_key]
+        last_addition: Optional[datetime.datetime] = last_addition_str and parse_time(last_addition_str)
 
         return NewCosmetic(
             type=cosmetic_type,
-            hash=hashes[internal_key],
+            hash=self._hashes[internal_key],
             last_addition=last_addition,
             items=TransformerListProxy(
                 cosmetic_items,
