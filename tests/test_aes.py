@@ -30,6 +30,7 @@ from typing import Any, Dict
 import pytest
 
 from fortnite_api.aes import Aes, Version
+from fortnite_api.http import SyncHTTPClient
 
 
 @pytest.fixture
@@ -48,8 +49,9 @@ def sample_aes_data() -> Dict[str, Any]:
     }
 
 
-def test_aes_initialization(sample_aes_data: Dict[str, Any]):
-    aes = Aes(sample_aes_data)
+
+def test_aes_initialization(sample_aes_data: Dict[str, Any], mock_sync_http: SyncHTTPClient):
+    aes = Aes(data=sample_aes_data, http=mock_sync_http)
 
     assert aes.main_key == 'test_main_key'
     assert aes.build == '++Fortnite+Release-29.10-CL-32567225-Windows'
@@ -59,19 +61,14 @@ def test_aes_initialization(sample_aes_data: Dict[str, Any]):
     assert aes.dynamic_keys[0].pak_filename == 'pak1'
     assert aes.dynamic_keys[0].pak_guid == 'guid1'
     assert aes.dynamic_keys[0].key == 'key1'
-    assert aes.raw_data == sample_aes_data
+    assert aes.to_dict() == sample_aes_data
 
 
-def test_aes_equality(sample_aes_data: Dict[str, Any]):
-    aes1 = Aes(sample_aes_data)
-    aes2 = Aes(sample_aes_data)
+def test_aes_equality(sample_aes_data: Dict[str, Any], mock_sync_http: SyncHTTPClient):
+    aes1 = Aes(data=sample_aes_data, http=mock_sync_http)
+    aes2 = Aes(data=sample_aes_data, http=mock_sync_http)
 
     assert aes1 == aes2
 
-
-def test_aes_inequality(sample_aes_data: Dict[str, Any]):
-    aes1 = Aes(sample_aes_data)
-    aes2 = Aes(sample_aes_data)
-    aes2.main_key = 'different_main_key'
-
+    aes1.main_key = 'different_main_key'
     assert aes1 != aes2

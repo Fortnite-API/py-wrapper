@@ -23,23 +23,3 @@ SOFTWARE.
 """
 
 from __future__ import annotations
-
-from typing import TypedDict
-
-from fortnite_api.client import Client
-from fortnite_api.abc import ReconstructAble
-from fortnite_api.http import HTTPClient
-
-
-class ReconstructAbleFooData(TypedDict):
-    foo: str
-    bar: int
-
-
-class ReconstructAbleFoo(ReconstructAble[ReconstructAbleFooData, HTTPClient]):
-    def __init__(self, foo: str, data: ReconstructAbleFooData, http: HTTPClient) -> None:
-        super().__init__(data=data, http=http)
-
-
-data: ReconstructAbleFooData = {"foo": "foo", "bar": 1}
-reveal_type(ReconstructAbleFoo.from_dict(data, client=Client()))

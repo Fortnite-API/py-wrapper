@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import os
 from typing import Final
+from fortnite_api.http import SyncHTTPClient, HTTPClient
 
 import pytest
 
@@ -60,3 +61,13 @@ def api_key():
 
     load_dotenv()
     return os.environ['TEST_API_KEY']
+
+
+@pytest.fixture(scope='session')
+def mock_sync_http() -> SyncHTTPClient:
+    return SyncHTTPClient()
+
+
+@pytest.fixture(scope='session')
+def mock_async_http() -> HTTPClient:
+    return HTTPClient()

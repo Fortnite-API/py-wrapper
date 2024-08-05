@@ -29,6 +29,7 @@ import datetime
 import pytest
 
 import fortnite_api as fn_api
+from fortnite_api.http import SyncHTTPClient
 
 from .conftest import TEST_ACCOUNT_ID, TEST_ACCOUNT_NAME, TEST_COSMETIC_ID, TEST_CREATOR_CODE, TEST_DEFAULT_PLAYLIST
 from .test_async_methods import _test_game_mode_news, _test_playlist
@@ -76,11 +77,11 @@ def test_sync_banners(api_key: str):
 
         small = banner.images.small_icon
         if small is not None:
-            assert small.url == banner.raw_data['images']['smallIcon']
+            assert small.url == banner.to_dict()['images']['smallIcon']
 
         icon = banner.images.icon
         if icon is not None:
-            assert icon.url == banner.raw_data['images']['icon']
+            assert icon.url == banner.to_dict()['images']['icon']
 
 
 def test_sync_banner_colors(api_key: str):
@@ -111,7 +112,7 @@ def test_sync_creator_code(api_key: str):
     assert creator_code.code == TEST_CREATOR_CODE
 
     mock_account_payload = dict(id=TEST_ACCOUNT_ID, name=TEST_ACCOUNT_NAME)
-    assert creator_code.account == fn_api.Account(mock_account_payload)
+    assert creator_code.account == fn_api.Account(data=mock_account_payload, http=SyncHTTPClient())
 
     assert creator_code.status is fn_api.CreatorCodeStatus.ACTIVE
     assert creator_code.disabled is False
@@ -227,7 +228,7 @@ def test_sync_fetch_cosmetics_all(api_key: str):
     assert cosmetics_all.cars
     assert cosmetics_all.lego
     assert cosmetics_all.lego_kits
-    assert cosmetics_all.raw_data
+    assert cosmetics_all.to_dict()
 
     # Ensure that you can iter over the cosmetics
     assert len(cosmetics_all) != 0
@@ -258,7 +259,7 @@ def test_fetch_news(api_key: str):
         news = client.fetch_news()
 
     assert isinstance(news, fn_api.News)
-    assert news.raw_data
+    assert news.to_dict()
 
 
 def test_fetch_news_methods(api_key: str):
