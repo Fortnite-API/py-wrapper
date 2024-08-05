@@ -50,14 +50,27 @@ class NewCosmetic(Generic[CosmeticT]):
     """
     .. attributetable:: fortnite_api.NewCosmetic
 
-    Represents a response from the new cosmetics endpoint for a given cosmetic type. The types are as follows:
+    Represents a response from the new cosmetics endpoint for a given cosmetic type. You can use the
+    :attr:`type` to help you determine what :attr:`items` will be. The :attr:`items` will be a list of
+    the corresponding cosmetic type:
 
-    - :attr:`fortnite_api.CosmeticCategory.BR` -> List of :class:`fortnite_api.CosmeticBr`
-    - :attr:`fortnite_api.CosmeticCategory.TRACKS` -> List of :class:`fortnite_api.CosmeticTrack`
-    - :attr:`fortnite_api.CosmeticCategory.INSTRUMENTS` -> List of :class:`fortnite_api.CosmeticInstrument`
-    - :attr:`fortnite_api.CosmeticCategory.CARS` -> List of :class:`fortnite_api.CosmeticCar`
-    - :attr:`fortnite_api.CosmeticCategory.LEGO` -> List of :class:`fortnite_api.VariantLego`
-    - :attr:`fortnite_api.CosmeticCategory.LEGO_KITS` -> List of :class:`fortnite_api.CosmeticLegoKit`
+    .. list-table::
+        :header-rows: 1
+
+        *   - :attr:`type`
+            - Corresponding :attr:`items`
+        *   - :attr:`fortnite_api.CosmeticCategory.BR`
+            - List of :class:`~fortnite_api.CosmeticBr`
+        *   - :attr:`fortnite_api.CosmeticCategory.TRACKS`
+            - List of :class:`~fortnite_api.CosmeticTrack`
+        *   - :attr:`fortnite_api.CosmeticCategory.INSTRUMENTS`
+            - List of :class:`~fortnite_api.CosmeticInstrument`
+        *   - :attr:`fortnite_api.CosmeticCategory.CARS`
+            - List of :class:`~fortnite_api.CosmeticCar`
+        *   - :attr:`fortnite_api.CosmeticCategory.LEGO`
+            - List of :class:`~fortnite_api.VariantLego`
+        *   - :attr:`fortnite_api.CosmeticCategory.LEGO_KITS`
+            - List of :class:`~fortnite_api.CosmeticLegoKit`
 
     Attributes
     ----------
@@ -68,7 +81,7 @@ class NewCosmetic(Generic[CosmeticT]):
         new cosmetics have been given for the cosmetic type.
     last_addition: :class:`datetime.datetime`
         The last addition of new cosmetics.
-    items: List[:class:`fortnite_api.CosmeticBr`]
+    items: List[:class:`fortnite_api.Cosmetic`]
         The new cosmetics. This corresponds to the type of new cosmetics.
         Can be empty if no new cosmetics have been given.
     """
@@ -140,7 +153,9 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.previous_build: str = data["previousBuild"]
         self.date: datetime.datetime = parse_time(data["date"])
         self.global_hash: str = data["hashes"]["all"]
-        self.global_last_addition: datetime.datetime = parse_time(data["lastAdditions"]["all"])
+        self.global_last_addition: datetime.datetime = parse_time(
+            data["lastAdditions"]["all"]
+        )
 
         self._hashes = data["hashes"]
         self._items = data["items"]
@@ -158,10 +173,12 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
             cosmetic_class=CosmeticTrack,
         )
 
-        self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = self._parse_new_cosmetic(
-            cosmetic_type=CosmeticCategory.INSTRUMENTS,
-            internal_key="instruments",
-            cosmetic_class=CosmeticInstrument,
+        self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = (
+            self._parse_new_cosmetic(
+                cosmetic_type=CosmeticCategory.INSTRUMENTS,
+                internal_key="instruments",
+                cosmetic_class=CosmeticInstrument,
+            )
         )
 
         self.cars: NewCosmetic[CosmeticCar[HTTPClientT]] = self._parse_new_cosmetic(
@@ -176,10 +193,12 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
             cosmetic_class=VariantLego,
         )
 
-        self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = self._parse_new_cosmetic(
-            cosmetic_type=CosmeticCategory.LEGO_KITS,
-            internal_key="legoKits",
-            cosmetic_class=CosmeticLegoKit,
+        self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = (
+            self._parse_new_cosmetic(
+                cosmetic_type=CosmeticCategory.LEGO_KITS,
+                internal_key="legoKits",
+                cosmetic_class=CosmeticLegoKit,
+            )
         )
 
         self.beans: NewCosmetic[VariantBean[HTTPClientT]] = self._parse_new_cosmetic(
@@ -195,10 +214,14 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
         internal_key: str,
         cosmetic_class: Type[CosmeticT],
     ) -> NewCosmetic[CosmeticT]:
-        cosmetic_items: List[Dict[str, Any]] = get_with_fallback(self._items, internal_key, list)
+        cosmetic_items: List[Dict[str, Any]] = get_with_fallback(
+            self._items, internal_key, list
+        )
 
         last_addition_str = self._last_additions[internal_key]
-        last_addition: Optional[datetime.datetime] = last_addition_str and parse_time(last_addition_str)
+        last_addition: Optional[datetime.datetime] = last_addition_str and parse_time(
+            last_addition_str
+        )
 
         return NewCosmetic(
             type=cosmetic_type,
