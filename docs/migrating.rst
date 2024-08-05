@@ -155,9 +155,9 @@ Client Parameters
 In Version 3, the parameters that can be passed to a client have been given a refresh. Let's walk through the changes
 that have been made for both the async and sync clients, what they mean, and how they affect you. Note that all the 
 parameters, except for the ``session`` parameter, are the same on both clients. We'll discuss the ``session`` parameter
-separately for both clients.
+separately for both clients in the next section.
 
-.. list-table::
+.. list-table:::
     :header-rows: 1
 
     *   - Parameter
@@ -167,14 +167,14 @@ separately for both clients.
     *   - ``default_language``
         - The client now boasts a default language parameter. For many endpoints in the Fortnite API, you can specify a language parameter to denote the language you want the response to be in. This parameter allows you to set a default language for all requests made by the client, for endpoints that support it, so that you don't have to specify it every time you make a request. The default language is :attr:`~fortnite_api.GameLanguage.ENGLISH` (``en``). 
     *   - ``session``
-        - The session parameter is a new parameter that allows you to pass a :class:`aiohttp.ClientSession` to the client. By default this is an optional parameter. This parameter comes in useful if you want to manage a session yourself. In that case, it is a required parameter.
+        - The session parameter accepts an HTTP session into the client. By default this is an optional parameter. This parameter comes in useful if you want to manage a session yourself. In that case, it is a required parameter. This is different in the :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient` - so what is the difference? Below will discuss the differences between the two clients' initialization parameters.
     *   - ``beta``
         - Denotes if the client has the permissions to access beta endpoints (always prefixed with ``beta_fetch_x``). This is a new parameter that is set to ``False`` by default. If you want to access beta endpoints, you must set this parameter to ``True``.
 
 See the documentation for these parameters in :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient`.
 
-Async client
-^^^^^^^^^^^^
+Async client specific initialization parameter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Denotes the only parameter difference between the async and sync clients.
 
 .. list-table::
@@ -188,9 +188,9 @@ Denotes the only parameter difference between the async and sync clients.
 
 See the documentation for these parameters in :class:`fortnite_api.Client`.
 
-Sync client
-^^^^^^^^^^^
-Denotes the only parameter difference between the async and sync clients.
+Sync client specific initialization parameter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Denotes the only parameter difference between the sync and async clients.
 
 .. list-table::
     :header-rows: 1
@@ -202,8 +202,16 @@ Denotes the only parameter difference between the async and sync clients.
 
 See the documentation for these parameters in :class:`fortnite_api.SyncClient`.
 
+End of Client Introduction
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Welcome to the end of the introduction to the new Version 3 changes. You now have a solid understanding of the changes that have been made to the client, and how to create and use the client. The next sections will dive into the specifics of the changes that have been made to the library. Below is more of the "nitty gritty" of the changes that have been made, and choose to focus more on method renaming, object renaming, new objects, and any other small details that differ from Version 2 of the library.  
+
+It is recommended to read through the entire document to get a full understanding of the changes that have been made. However, if you are looking for a specific section, you can use the table of contents below to navigate to that section.
+
 Cosmetics
 ---------
+One of the biggest elements of the library, Fortnite Cosmetics. These endpoints, classes, and 
+methods have been refactored to be more consistent, more intuitive, and more powerful. Let's dive into the specifics of the changes that have been made.
 
 Cosmetic Objects
 ~~~~~~~~~~~~~~~~
@@ -250,8 +258,7 @@ Additionally, many new Cosmetic related objects have been added to the library. 
 - :class:`fortnite_api.CosmeticCompatibleMode`
 - :class:`fortnite_api.VariantBean`
 
-As the amount of Fortnite cosmetics grows overtime, this ensures a consistent naming 
-convention between all cosmetic objects.
+This may seem like a lot, but don't worry, the documentation has got you covered! As you get working with methods to fetch this data, a lot of these objects will be second hand to you.
 
 Fetching Cosmetics
 ~~~~~~~~~~~~~~~~~~~
@@ -863,6 +870,8 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.Hashable`: A mixin class that inherits from :class:`fortnite_api.IdComparable` and allows objects to be hashed by their ID. This is used across many objects in the library. This implements the ``__hash__`` method.
 
+- :class:`fortnite_api.ReconstructAble`: A class that marks an object as being able to be reconstructed from a dictionary. This is used across many objects in the library. This implements the :meth:`~fortnite_api.ReconstructAble.from_dict` and :meth:`~fortnite_api.ReconstructAble.to_dict` methods, and allow you to store an object as a dictionary and reconstruct it later. Not every class inherits this, but a majority of them do. If a class does, you will see a note on the documentation for that class.
+
 - :class:`fortnite_api.CosmeticsAll`: A special class returned when fetching all cosmetics in Fortnite. This is used when fetching all cosmetics.
 
 - :class:`fortnite_api.Asset`: Represents any link-like object from the API. This wraps the URL and allows you to fetch the contents of the asset. This is used across many objects in the library.
@@ -881,23 +890,23 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.StatsImageType`: An enum that represents which type of battle royale statistics image type should be returned from the API when fetching BR stats. This is used as a parameter when fetching BR stats. 
 
-- :class:`fortnite_api.CreatorCodeStatus`: An enum that represents if a creator code is active or not. This is used in a :class:`fortnite_api.CreatorCode` object.
+- :class:`fortnite_api.CreatorCodeStatus`: An enum that represents if a creator code is active or not. This is used in a :class:`~fortnite_api.CreatorCode` object.
 
-- :class:`fortnite_api.BannerIntensity`: An enum that represents the intensity of a banner color. This is used in the :class:`fortnite_api.ShopEntryBanner` class to represent the intensity of a banner color.
+- :class:`fortnite_api.BannerIntensity`: An enum that represents the intensity of a banner color. This is used in the :class:`~fortnite_api.ShopEntryBanner` class to represent the intensity of a banner color.
 
 - :class:`fortnite_api.FortniteAPIException` and all its subclasses found in :ref:`the exception hierarchy <api-exception-hierarchy>`: These are exceptions that are raised when an error occurs while fetching data from the Fortnite API. They are used across the library. For what each of them do, see the :ref:`exception hierarchy <api-exception-hierarchy>`.
 
 - :class:`fortnite_api.Images`: Represents images returned from the API. This is used across all cosmetics objects through the :class:`fortnite_api.CosmeticImages` object, as well as in the :class:`fortnite_api.Banner` object.
 
-- :class:`fortnite_api.MaterialInstance`: Represents a material instance in Fortnite. If you do not know what a material instance is, check the documentation for the object in the library. This is used when fetching material instances manually, or sometimes given in the :class:`fortnite_api.ShopEntryNewDisplayAsset` object from the shop.
+- :class:`fortnite_api.MaterialInstance`: Represents a material instance in Fortnite. If you do not know what a material instance is, check the documentation for the object in the library. This is used when fetching material instances manually, or sometimes given in the :class:`~fortnite_api.ShopEntryNewDisplayAsset` object from the shop.
 
-- :class:`fortnite_api.MaterialInstanceImages`: A special class that represents the images of a material instance. It is given from the :class:`fortnite_api.MaterialInstance` class. 
+- :class:`fortnite_api.MaterialInstanceImages`: A special class that represents the images of a material instance. It is given from the :class:`~fortnite_api.MaterialInstance` class. 
 
-- :class:`fortnite_api.MaterialInstanceColors`: A class that holds the background gradient color of a material instance. This is commonly used to create a preview for the material instance in the shop. This is served from the :class:`fortnite_api.MaterialInstance` object.
+- :class:`fortnite_api.MaterialInstanceColors`: A class that holds the background gradient color of a material instance. This is commonly used to create a preview for the material instance in the shop. This is served from the :class:`~fortnite_api.MaterialInstance` object.
 
 - :class:`fortnite_api.NewCosmetics`: A class that holds the response from :meth:`~fortnite_api.Client.fetch_cosmetics_new`. This is used when fetching new cosmetics.
 
-- :class:`fortnite_api.NewCosmetic`: A class that holds specific metadata about new cosmetics, such as the last addition date, the hash of the new cosmetics, and the cosmetics type. This is served from :class:`fortnite_api.NewCosmetics`.
+- :class:`fortnite_api.NewCosmetic`: A class that holds specific metadata about new cosmetics, such as the last addition date, the hash of the new cosmetics, and the cosmetics type. This is served from :class:`~fortnite_api.NewCosmetics`.
 
 - :class:`fortnite_api.proxies.TransformerListProxy`: An internal class that is used to transform a list of objects into a list of another type of object. This is used internally in the library as an optimization so that objects are only created when they are needed.
 
