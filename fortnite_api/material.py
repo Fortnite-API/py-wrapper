@@ -32,7 +32,11 @@ from .enums import CosmeticCompatibleMode
 from .http import HTTPClientT
 from .utils import get_with_fallback
 
-__all__: Tuple[str, ...] = ('MaterialInstanceImages', 'MaterialInstanceColors', 'MaterialInstance')
+__all__: Tuple[str, ...] = (
+    "MaterialInstanceImages",
+    "MaterialInstanceColors",
+    "MaterialInstance",
+)
 
 
 class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
@@ -54,13 +58,13 @@ class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
         The background of the Material instance. This is the background gradient of the material instance.
     """
 
-    __slots__: Tuple[str, ...] = ('offer_image', 'background', 'texture')
+    __slots__: Tuple[str, ...] = ("offer_image", "background", "texture")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         # Pop off the keys as we set concrete attributes
-        self.offer_image: Asset[HTTPClientT] = Asset(url=data.pop('OfferImage'), http=http)
+        self.offer_image: Asset[HTTPClientT] = Asset(url=data["OfferImage"], http=http)
 
-        _background = data.pop('Background', None)
+        _background = data.get("Background", None)
         self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
 
         # Transform all remaining keys into assets, and pass this along to the dict constructor
@@ -85,12 +89,16 @@ class MaterialInstanceColors(Dict[str, str]):
         The fall off color of the Material instance, if any.
     """
 
-    __slots__: Tuple[str, ...] = ('background_color_a', 'background_color_b', 'fall_off_color')
+    __slots__: Tuple[str, ...] = (
+        "background_color_a",
+        "background_color_b",
+        "fall_off_color",
+    )
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.background_color_a: Optional[str] = data.get('Background_Color_A')
-        self.background_color_b: Optional[str] = data.get('Background_Color_B')
-        self.fall_off_color: Optional[str] = data.get('FallOff_Color')
+        self.background_color_a: Optional[str] = data.get("Background_Color_A")
+        self.background_color_b: Optional[str] = data.get("Background_Color_B")
+        self.fall_off_color: Optional[str] = data.get("FallOff_Color")
         super().__init__(data)
 
 
@@ -132,18 +140,25 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
             This is always an empty dict, as there are no flags used at this time.
     """
 
-    __slots__: Tuple[str, ...] = ('id', 'primary_mode', 'images', 'colors', 'scalings', 'flags')
+    __slots__: Tuple[str, ...] = (
+        "id",
+        "primary_mode",
+        "images",
+        "colors",
+        "scalings",
+        "flags",
+    )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.id: str = data['id']
-        self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode._from_str(data['primaryMode'])
+        self.id: str = data["id"]
+        self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode._from_str(data["primaryMode"])
 
-        self.images: MaterialInstanceImages[HTTPClientT] = MaterialInstanceImages(data=data['images'], http=http)
+        self.images: MaterialInstanceImages[HTTPClientT] = MaterialInstanceImages(data=data["images"], http=http)
 
-        _colors = data.get('colors')
+        _colors = data.get("colors")
         self.colors: Optional[MaterialInstanceColors] = _colors and MaterialInstanceColors(data=_colors)
-        self.scalings: Dict[str, Any] = get_with_fallback(data, 'scalings', dict)
+        self.scalings: Dict[str, Any] = get_with_fallback(data, "scalings", dict)
 
-        self.flags: Dict[str, Any] = get_with_fallback(data, 'flags', dict)  # This is always None at this time.
+        self.flags: Dict[str, Any] = get_with_fallback(data, "flags", dict)  # This is always None at this time.
