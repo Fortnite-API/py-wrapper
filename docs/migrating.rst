@@ -157,7 +157,7 @@ that have been made for both the async and sync clients, what they mean, and how
 parameters, except for the ``session`` parameter, are the same on both clients. We'll discuss the ``session`` parameter
 separately for both clients in the next section.
 
-.. list-table:::
+.. list-table::
     :header-rows: 1
 
     *   - Parameter
