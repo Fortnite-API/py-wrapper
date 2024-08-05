@@ -167,9 +167,7 @@ def simple_repr(cls: Type[T]) -> Type[T]:
 
     # If the cls has __slots__, append the __repr__ method to it using the slots as what to show
     def __repr__(self: T) -> str:
-        attrs = ', '.join(
-            f'{attr}={getattr(self, attr)!r}' for attr in slots if not attr.startswith('_') and attr != 'raw_data'
-        )
+        attrs = ', '.join(f'{attr}={getattr(self, attr)!r}' for attr in slots if not attr.startswith('_'))
         return f'<{cls.__name__} {attrs}>'
 
     setattr(cls, '__repr__', __repr__)
