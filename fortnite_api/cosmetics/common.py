@@ -34,7 +34,7 @@ from ..http import HTTPClientT
 from ..images import Images
 from ..utils import get_with_fallback, parse_time, simple_repr
 
-CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any]')
+CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any, Any]')
 
 __all__: Tuple[str, ...] = (
     'Cosmetic',
