@@ -32,7 +32,7 @@ from .enums import CreatorCodeStatus
 from .http import HTTPClientT
 from .utils import simple_repr
 
-__all__: Tuple[str, ...] = ('CreatorCode',)
+__all__: Tuple[str, ...] = ("CreatorCode",)
 
 
 @simple_repr
@@ -40,7 +40,9 @@ class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CreatorCode
 
-    Represents a Creator Code. This inherits from :class:`~fortnite_api.ReconstructAble`.
+    Represents a Creator Code.
+
+    This inherits from :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -65,15 +67,15 @@ class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
             From internal testing, this seems to be always ``False``.
     """
 
-    __slots__: Tuple[str, ...] = ('code', 'account', 'verified', 'status')
+    __slots__: Tuple[str, ...] = ("code", "account", "verified", "status")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.code: str = data['code']
-        self.account: Account[HTTPClientT] = Account(data=data['account'], http=http)
-        self.verified: bool = data['verified']
-        self.status: CreatorCodeStatus = CreatorCodeStatus(data['status'].lower())
+        self.code: str = data["code"]
+        self.account: Account[HTTPClientT] = Account(data=data["account"], http=http)
+        self.verified: bool = data["verified"]
+        self.status: CreatorCodeStatus = CreatorCodeStatus(data["status"].lower())
 
     @property
     def disabled(self) -> bool:

@@ -34,23 +34,25 @@ from ..http import HTTPClientT
 from ..images import Images
 from ..utils import get_with_fallback, parse_time, simple_repr
 
-CosmeticT = TypeVar('CosmeticT', bound='Cosmetic[Any, Any]')
+CosmeticT = TypeVar("CosmeticT", bound="Cosmetic[Any, Any]")
 
 __all__: Tuple[str, ...] = (
-    'Cosmetic',
-    'CosmeticTypeInfo',
-    'CosmeticRarityInfo',
-    'CosmeticSeriesInfo',
-    'CosmeticImages',
-    'CosmeticT',
+    "Cosmetic",
+    "CosmeticTypeInfo",
+    "CosmeticRarityInfo",
+    "CosmeticSeriesInfo",
+    "CosmeticImages",
+    "CosmeticT",
 )
 
 
-class Cosmetic(Generic[DictT, HTTPClientT], Hashable, ReconstructAble[DictT, HTTPClientT]):
+class Cosmetic(
+    Generic[DictT, HTTPClientT], Hashable, ReconstructAble[DictT, HTTPClientT]
+):
     """
     .. attributetable:: fortnite_api.Cosmetic
 
-    Represents a base cosmetic. This class inherits from :class:`~fortnite_api.Hashable`. Every cosmetic type inherits from this class and adds additional attributes.
+    Represents a base cosmetic. Every cosmetic type inherits from this class and adds additional attributes.
     View documentation for the specific cosmetic type for more information.
 
     This class inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
@@ -58,9 +60,10 @@ class Cosmetic(Generic[DictT, HTTPClientT], Hashable, ReconstructAble[DictT, HTT
     - :class:`fortnite_api.CosmeticBr`
     - :class:`fortnite_api.CosmeticCar`
     - :class:`fortnite_api.CosmeticInstrument`
-    - :class:`fortnite_api.VariantLego`
     - :class:`fortnite_api.CosmeticLegoKit`
     - :class:`fortnite_api.CosmeticTrack`
+    - :class:`fortnite_api.VariantLego`
+    - :class:`fortnite_api.VariantBean`
 
     Attributes
     ----------
@@ -70,7 +73,7 @@ class Cosmetic(Generic[DictT, HTTPClientT], Hashable, ReconstructAble[DictT, HTT
         When the cosmetic was added.
     """
 
-    __slots__: Tuple[str, ...] = ('id', 'added')
+    __slots__: Tuple[str, ...] = ("id", "added")
 
     def __init__(
         self,
@@ -80,8 +83,8 @@ class Cosmetic(Generic[DictT, HTTPClientT], Hashable, ReconstructAble[DictT, HTT
     ) -> None:
         super().__init__(data=data, http=http)
 
-        self.id: str = data['id']
-        self.added: datetime = parse_time(data['added'])
+        self.id: str = data["id"]
+        self.added: datetime = parse_time(data["added"])
 
 
 @simple_repr
@@ -114,16 +117,21 @@ class CosmeticTypeInfo(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The internal marker of the cosmetic type.
     """
 
-    __slots__: Tuple[str, ...] = ('value', 'raw_value', 'display_value', 'backend_value')
+    __slots__: Tuple[str, ...] = (
+        "value",
+        "raw_value",
+        "display_value",
+        "backend_value",
+    )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.value: CosmeticType = CosmeticType(data['value'])
-        self.raw_value: str = data['value']
+        self.value: CosmeticType = CosmeticType(data["value"])
+        self.raw_value: str = data["value"]
 
-        self.display_value: str = data['displayValue']
-        self.backend_value: str = data['backendValue']
+        self.display_value: str = data["displayValue"]
+        self.backend_value: str = data["backendValue"]
 
 
 @simple_repr
@@ -151,14 +159,14 @@ class CosmeticRarityInfo(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The internal marker of the cosmetic rarity.
     """
 
-    __slots__: Tuple[str, ...] = ('value', 'display_value', 'backend_value')
+    __slots__: Tuple[str, ...] = ("value", "display_value", "backend_value")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.value: CosmeticRarity = CosmeticRarity(data['value'])
-        self.display_value: str = data['displayValue']
-        self.backend_value: str = data['backendValue']
+        self.value: CosmeticRarity = CosmeticRarity(data["value"])
+        self.display_value: str = data["displayValue"]
+        self.backend_value: str = data["backendValue"]
 
 
 @simple_repr
@@ -187,7 +195,7 @@ class CosmeticSeriesInfo(ReconstructAble[Dict[str, Any], HTTPClientT]):
         A list of colors that are associated with the cosmetic series.
     """
 
-    __slots__: Tuple[str, ...] = ('value', 'backend_value', 'image', 'colors')
+    __slots__: Tuple[str, ...] = ("value", "backend_value", "image", "colors")
 
     def __init__(
         self,
@@ -197,13 +205,13 @@ class CosmeticSeriesInfo(ReconstructAble[Dict[str, Any], HTTPClientT]):
     ) -> None:
         super().__init__(data=data, http=http)
 
-        self.value: str = data['value']
-        self.backend_value: str = data['backendValue']
+        self.value: str = data["value"]
+        self.backend_value: str = data["backendValue"]
 
-        image = data.get('image')
+        image = data.get("image")
         self.image: Optional[Asset[HTTPClientT]] = image and Asset(http=http, url=image)
 
-        self.colors: List[str] = get_with_fallback(data, 'colors', list)
+        self.colors: List[str] = get_with_fallback(data, "colors", list)
 
 
 @simple_repr
@@ -245,7 +253,17 @@ class CosmeticImages(Images[HTTPClientT]):
         The wide image of the cosmetic. Typically available off of :class:`fortnite_api.VariantLego` objects.
     """
 
-    __slots__: Tuple[str, ...] = ('featured', 'lego', 'icon', 'small_icon', '_other', '_http', 'small', 'large', 'wide')
+    __slots__: Tuple[str, ...] = (
+        "featured",
+        "lego",
+        "icon",
+        "small_icon",
+        "_other",
+        "_http",
+        "small",
+        "large",
+        "wide",
+    )
 
     def __init__(
         self,
@@ -255,28 +273,32 @@ class CosmeticImages(Images[HTTPClientT]):
     ) -> None:
         super().__init__(data=data, http=http)
 
-        featured = data.get('featured')
-        self.featured: Optional[Asset[HTTPClientT]] = featured and Asset(http=http, url=featured)
+        featured = data.get("featured")
+        self.featured: Optional[Asset[HTTPClientT]] = featured and Asset(
+            http=http, url=featured
+        )
 
-        lego = data.get('lego')
+        lego = data.get("lego")
         self.lego: Optional[Asset[HTTPClientT]] = lego and Asset(http=http, url=lego)
 
-        _icon = data.get('icon')
+        _icon = data.get("icon")
         self.icon: Optional[Asset[HTTPClientT]] = _icon and Asset(http=http, url=_icon)
 
-        small_icon = data.get('smallIcon')
-        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
+        small_icon = data.get("smallIcon")
+        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(
+            http=http, url=small_icon
+        )
 
-        small = data.get('small')
+        small = data.get("small")
         self.small: Optional[Asset[HTTPClientT]] = small and Asset(http=http, url=small)
 
-        large = data.get('large')
+        large = data.get("large")
         self.large: Optional[Asset[HTTPClientT]] = large and Asset(http=http, url=large)
 
-        wide = data.get('wide')
+        wide = data.get("wide")
         self.wide: Optional[Asset[HTTPClientT]] = wide and Asset(http=http, url=wide)
 
-        self._other: Dict[str, str] = get_with_fallback(data, 'other', dict)
+        self._other: Dict[str, str] = get_with_fallback(data, "other", dict)
         self._http: HTTPClientT = http
 
     @property
@@ -284,7 +306,7 @@ class CosmeticImages(Images[HTTPClientT]):
         """
         Optional[:class:`~fortnite_api.Asset`]: The background image of the cosmetic, if available.
         """
-        url = self._other.get('background')
+        url = self._other.get("background")
         if not url:
             return
 
@@ -295,7 +317,7 @@ class CosmeticImages(Images[HTTPClientT]):
         """
         Optional[:class:`~fortnite_api.Asset`]: The cover art image of the cosmetic, if available.
         """
-        url = self._other.get('coverart')
+        url = self._other.get("coverart")
         if not url:
             return
 
@@ -306,7 +328,7 @@ class CosmeticImages(Images[HTTPClientT]):
         """
         Optional[:class:`~fortnite_api.Asset`]: The decal image of the cosmetic, if available.
         """
-        url = self._other.get('decal')
+        url = self._other.get("decal")
         if not url:
             return
 

@@ -32,8 +32,8 @@ from .images import Images
 from .utils import simple_repr
 
 __all__: Tuple[str, ...] = (
-    'Banner',
-    'BannerColor',
+    "Banner",
+    "BannerColor",
 )
 
 
@@ -42,8 +42,9 @@ class Banner(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Banner
 
-    Represents a banner within the Fortnite game. This inherits from :class:`~fortnite_api.Hashable`
-    and :class:`~fortnite_api.ReconstructAble`.
+    Represents a banner within the Fortnite game.
+
+    This inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -73,24 +74,24 @@ class Banner(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
 
     __slots__: Tuple[str, ...] = (
-        'id',
-        'name',
-        'description',
-        'category',
-        'full_usage_rights',
-        'dev_name',
-        'images',
+        "id",
+        "name",
+        "description",
+        "category",
+        "full_usage_rights",
+        "dev_name",
+        "images",
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.id: str = data['id']
-        self.name: str = data['name']
-        self.dev_name: str = data['devName']
-        self.description: str = data['description']
-        self.category: Optional[str] = data.get('category')
-        self.full_usage_rights: bool = data['fullUsageRights']
+        self.id: str = data["id"]
+        self.name: str = data["name"]
+        self.dev_name: str = data["devName"]
+        self.description: str = data["description"]
+        self.category: Optional[str] = data.get("category")
+        self.full_usage_rights: bool = data["fullUsageRights"]
 
         self.images: Images[HTTPClientT] = Images(data=data, http=http)
 
@@ -100,7 +101,9 @@ class BannerColor(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BannerColor
 
-    Represents a color of a :class:`fortnite_api.Banner`. This inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
+    Represents a color of a :class:`fortnite_api.Banner`.
+
+    This inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -122,14 +125,16 @@ class BannerColor(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The sub category group of the banner.
     """
 
-    __slots__: Tuple[str, ...] = ('id', 'color', 'category', 'sub_category_group')
+    __slots__: Tuple[str, ...] = ("id", "color", "category", "sub_category_group")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
-        self.id: str = data['id']
+        self.id: str = data["id"]
 
-        self.color: str = data['color']
+        self.color: str = data["color"]
         self.colour = self.color
 
-        self.category: str = data['category']
-        self.sub_category_group: int = data['subCategoryGroup']  # TODO: Convert this to enum?
+        self.category: str = data["category"]
+        self.sub_category_group: int = data[
+            "subCategoryGroup"
+        ]  # TODO: Convert this to enum?

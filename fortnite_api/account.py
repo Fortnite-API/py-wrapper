@@ -30,7 +30,7 @@ from .abc import Hashable, ReconstructAble
 from .http import HTTPClientT
 from .utils import simple_repr
 
-__all__: Tuple[str, ...] = ('Account',)
+__all__: Tuple[str, ...] = ("Account",)
 
 
 @simple_repr
@@ -38,8 +38,9 @@ class Account(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Account
 
-    Represents a Fortnite account. This inherits from :class:`~fortnite_api.Hashable`
-    and :class:`~fortnite_api.ReconstructAble`.
+    Represents a Fortnite account.
+
+    This inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -60,15 +61,15 @@ class Account(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
 
     __slots__: Tuple[str, ...] = (
-        'id',
-        'name',
+        "id",
+        "name",
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.id: str = data['id']
-        self.name: str = data['name']
+        self.id: str = data["id"]
+        self.name: str = data["name"]
 
     def __str__(self) -> str:
         return self.name
