@@ -46,9 +46,7 @@ __all__: Tuple[str, ...] = (
 )
 
 
-class Cosmetic(
-    Generic[DictT, HTTPClientT], Hashable, ReconstructAble[DictT, HTTPClientT]
-):
+class Cosmetic(Generic[DictT, HTTPClientT], Hashable, ReconstructAble[DictT, HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Cosmetic
 
@@ -274,9 +272,7 @@ class CosmeticImages(Images[HTTPClientT]):
         super().__init__(data=data, http=http)
 
         featured = data.get("featured")
-        self.featured: Optional[Asset[HTTPClientT]] = featured and Asset(
-            http=http, url=featured
-        )
+        self.featured: Optional[Asset[HTTPClientT]] = featured and Asset(http=http, url=featured)
 
         lego = data.get("lego")
         self.lego: Optional[Asset[HTTPClientT]] = lego and Asset(http=http, url=lego)
@@ -285,9 +281,7 @@ class CosmeticImages(Images[HTTPClientT]):
         self.icon: Optional[Asset[HTTPClientT]] = _icon and Asset(http=http, url=_icon)
 
         small_icon = data.get("smallIcon")
-        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(
-            http=http, url=small_icon
-        )
+        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
 
         small = data.get("small")
         self.small: Optional[Asset[HTTPClientT]] = small and Asset(http=http, url=small)

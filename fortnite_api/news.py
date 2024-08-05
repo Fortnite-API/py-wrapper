@@ -67,14 +67,10 @@ class News(ReconstructAble[Dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         _br = data.get("br")
-        self.br: Optional[GameModeNews[HTTPClientT]] = _br and GameModeNews(
-            data=_br, http=http
-        )
+        self.br: Optional[GameModeNews[HTTPClientT]] = _br and GameModeNews(data=_br, http=http)
 
         _stw = data.get("stw")
-        self.stw: Optional[GameModeNews[HTTPClientT]] = _stw and GameModeNews(
-            data=_stw, http=http
-        )
+        self.stw: Optional[GameModeNews[HTTPClientT]] = _stw and GameModeNews(data=_stw, http=http)
 
 
 @simple_repr
@@ -115,19 +111,13 @@ class GameModeNews(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.date: datetime.datetime = parse_time(data["date"])
 
         _image = data.get("image")
-        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(
-            http=http, url=_image
-        )
+        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
 
         _motds = get_with_fallback(data, "motds", list)
-        self.motds: List[NewsMotd[HTTPClientT]] = [
-            NewsMotd(data=motd, http=http) for motd in _motds
-        ]
+        self.motds: List[NewsMotd[HTTPClientT]] = [NewsMotd(data=motd, http=http) for motd in _motds]
 
         _messages = get_with_fallback(data, "messages", list)
-        self.messages: List[NewsMessage[HTTPClientT]] = [
-            NewsMessage(data=message, http=http) for message in _messages
-        ]
+        self.messages: List[NewsMessage[HTTPClientT]] = [NewsMessage(data=message, http=http) for message in _messages]
 
 
 @simple_repr

@@ -132,9 +132,7 @@ class POI(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         self.id: str = data["id"]
         self.name: Optional[str] = data.get("name")
-        self.location: POILocation[HTTPClientT] = POILocation(
-            data=data["location"], http=http
-        )
+        self.location: POILocation[HTTPClientT] = POILocation(data=data["location"], http=http)
 
 
 @simple_repr
