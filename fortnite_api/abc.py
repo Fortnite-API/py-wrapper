@@ -125,7 +125,7 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
         client: Union[:class:`fortnite_api.Client`, :class:`fortnite_api.SyncClient`]
             The currently used client to reconstruct the object with. Can either be a sync or async client.
         """
-        if isinstance(client, SyncClient):
+        if isinstance(client.http, SyncHTTPClient):
             # Whenever the client is a SyncClient, we can safely assume that the http
             # attribute is a SyncHTTPClient, as this is the only HTTPClientT possible.
             sync_http: SyncHTTPClient = client.http
