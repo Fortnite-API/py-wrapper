@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from ...http import HTTPClient, SyncHTTPClient
 
 
-class VariantBean(Cosmetic[HTTPClientT]):
+class VariantBean(Cosmetic[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.VariantBean
 

@@ -39,7 +39,7 @@ __all__: Tuple[str, ...] = ('VariantLego',)
 
 
 @simple_repr
-class VariantLego(Cosmetic[HTTPClientT]):
+class VariantLego(Cosmetic[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.VariantLego
 
