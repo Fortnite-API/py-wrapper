@@ -153,9 +153,7 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.previous_build: str = data["previousBuild"]
         self.date: datetime.datetime = parse_time(data["date"])
         self.global_hash: str = data["hashes"]["all"]
-        self.global_last_addition: datetime.datetime = parse_time(
-            data["lastAdditions"]["all"]
-        )
+        self.global_last_addition: datetime.datetime = parse_time(data["lastAdditions"]["all"])
 
         self._hashes = data["hashes"]
         self._items = data["items"]
@@ -173,12 +171,10 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
             cosmetic_class=CosmeticTrack,
         )
 
-        self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = (
-            self._parse_new_cosmetic(
-                cosmetic_type=CosmeticCategory.INSTRUMENTS,
-                internal_key="instruments",
-                cosmetic_class=CosmeticInstrument,
-            )
+        self.instruments: NewCosmetic[CosmeticInstrument[HTTPClientT]] = self._parse_new_cosmetic(
+            cosmetic_type=CosmeticCategory.INSTRUMENTS,
+            internal_key="instruments",
+            cosmetic_class=CosmeticInstrument,
         )
 
         self.cars: NewCosmetic[CosmeticCar[HTTPClientT]] = self._parse_new_cosmetic(
@@ -193,12 +189,10 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
             cosmetic_class=VariantLego,
         )
 
-        self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = (
-            self._parse_new_cosmetic(
-                cosmetic_type=CosmeticCategory.LEGO_KITS,
-                internal_key="legoKits",
-                cosmetic_class=CosmeticLegoKit,
-            )
+        self.lego_kits: NewCosmetic[CosmeticLegoKit[HTTPClientT]] = self._parse_new_cosmetic(
+            cosmetic_type=CosmeticCategory.LEGO_KITS,
+            internal_key="legoKits",
+            cosmetic_class=CosmeticLegoKit,
         )
 
         self.beans: NewCosmetic[VariantBean[HTTPClientT]] = self._parse_new_cosmetic(
@@ -214,14 +208,10 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
         internal_key: str,
         cosmetic_class: Type[CosmeticT],
     ) -> NewCosmetic[CosmeticT]:
-        cosmetic_items: List[Dict[str, Any]] = get_with_fallback(
-            self._items, internal_key, list
-        )
+        cosmetic_items: List[Dict[str, Any]] = get_with_fallback(self._items, internal_key, list)
 
         last_addition_str = self._last_additions[internal_key]
-        last_addition: Optional[datetime.datetime] = last_addition_str and parse_time(
-            last_addition_str
-        )
+        last_addition: Optional[datetime.datetime] = last_addition_str and parse_time(last_addition_str)
 
         return NewCosmetic(
             type=cosmetic_type,
