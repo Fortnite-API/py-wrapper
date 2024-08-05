@@ -26,9 +26,10 @@ from __future__ import annotations
 
 import os
 from typing import Final
-from fortnite_api.http import SyncHTTPClient, HTTPClient
 
 import pytest
+
+from fortnite_api.http import HTTPClient, SyncHTTPClient
 
 # Constants for general testing
 TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"

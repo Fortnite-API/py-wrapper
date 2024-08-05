@@ -27,7 +27,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple
 
 from .abc import ReconstructAble
-
 from .account import Account
 from .asset import Asset
 from .http import HTTPClientT

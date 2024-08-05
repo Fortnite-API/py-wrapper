@@ -49,7 +49,6 @@ def sample_aes_data() -> Dict[str, Any]:
     }
 
 
-
 def test_aes_initialization(sample_aes_data: Dict[str, Any], mock_sync_http: SyncHTTPClient):
     aes = Aes(data=sample_aes_data, http=mock_sync_http)
 

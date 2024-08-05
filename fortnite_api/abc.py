@@ -25,10 +25,11 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Generic, Tuple, Type, TypeVar, Union, Mapping, Any
+from typing import TYPE_CHECKING, Any, Generic, Mapping, Tuple, Type, TypeVar, Union
+
 from typing_extensions import Self
 
-from .http import HTTPClientT, SyncHTTPClient, HTTPClient
+from .http import HTTPClient, HTTPClientT, SyncHTTPClient
 
 DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 
