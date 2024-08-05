@@ -48,7 +48,7 @@ class CosmeticBrSet(ReconstructAble[Dict[str, Any], HTTPClientT]):
     .. attributetable:: fortnite_api.CosmeticBrSet
 
     Represents a set that a given cosmetic belongs to. This
-    class inherits from :class:`fortnite_api.abc.ReconstructAble`.
+    class inherits from :class:`fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -82,7 +82,7 @@ class CosmeticBrIntroduction(ReconstructAble[Dict[str, Any], HTTPClientT]):
     .. attributetable:: fortnite_api.CosmeticBrIntroduction
 
     Holds some metadata about when a cosmetic was introduced. This
-    class inherits from :class:`fortnite_api.abc.ReconstructAble`.
+    class inherits from :class:`fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -118,7 +118,7 @@ class CosmeticBrVariantOption(ReconstructAble[Dict[str, Any], HTTPClientT]):
     .. attributetable:: fortnite_api.CosmeticBrVariantOption
 
     Represents a variant option for a cosmetic. This class inherits
-    from :class:`fortnite_api.abc.ReconstructAble`.
+    from :class:`fortnite_api.ReconstructAble`.
 
     .. container:: operations
 
@@ -155,7 +155,7 @@ class CosmeticBrVariant(ReconstructAble[Dict[str, Any], HTTPClientT]):
     .. attributetable:: fortnite_api.CosmeticBrVariant
 
     Represents a variant for a cosmetic. This class
-    inherits from :class:`fortnite_api.abc.ReconstructAble`.
+    inherits from :class:`fortnite_api.ReconstructAble`.
 
     .. container:: operations
 

@@ -42,7 +42,7 @@ class CosmeticTrackDifficulty(ReconstructAble[Dict[str, Any], HTTPClientT]):
     .. attributetable:: fortnite_api.CosmeticTrackDifficulty
 
     Represents the difficulty of a track cosmetic in Fortnite. This
-    class inherits from :class:`fortnite_api.abc.ReconstructAble`.
+    class inherits from :class:`fortnite_api.ReconstructAble`.
 
     .. container:: operations
 

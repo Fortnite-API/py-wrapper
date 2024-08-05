@@ -10,3 +10,6 @@ The API is built around a few base classes that are used to represent the data r
 
 .. autoclass:: fortnite_api.Hashable
     :members:
+
+.. autoclass:: fortnite_api.ReconstructAble
+    :members:

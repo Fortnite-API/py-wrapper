@@ -36,7 +36,7 @@ DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 if TYPE_CHECKING:
     from .client import Client, SyncClient
 
-__all__: Tuple[str, ...] = ('IdComparable', 'Hashable')
+__all__: Tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')
 
 
 class IdComparable:
