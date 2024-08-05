@@ -297,9 +297,11 @@ class BrPlayerStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         # Fetch the player's stats.
         stats = await fortnite_api_client.fetch_br_stats(name="<username>")
+
         # Compute the total wins.
         total_wins = get_total_wins(stats)
 
+        # And print out the result.
         print(f'{stats.user.name} has {total_wins} total wins in the solo game mode across all platforms.')
 
     Attributes
