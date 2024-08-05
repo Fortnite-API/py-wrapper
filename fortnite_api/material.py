@@ -85,13 +85,12 @@ class MaterialInstanceColors(Dict[str, str]):
         The fall off color of the Material instance, if any.
     """
 
-    __slots__: Tuple[str, ...] = ('background_color_a', 'background_color_b', 'fall_off_color', '_raw_data')
+    __slots__: Tuple[str, ...] = ('background_color_a', 'background_color_b', 'fall_off_color')
 
     def __init__(self, *, data: Dict[str, Any]) -> None:
         self.background_color_a: Optional[str] = data.get('Background_Color_A')
         self.background_color_b: Optional[str] = data.get('Background_Color_B')
         self.fall_off_color: Optional[str] = data.get('FallOff_Color')
-        self._raw_data: Dict[str, str] = data
         super().__init__(data)
 
 

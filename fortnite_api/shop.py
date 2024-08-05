@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import Any, Dict, Generic, List, Optional, Tuple, Type
+from typing import Any, Dict, List, Optional, Tuple, Type
 
 from typing_extensions import Self
 
@@ -467,7 +467,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         return len(self.br) + len(self.tracks) + len(self.instruments) + len(self.cars) + len(self.lego_kits)
 
 
-class Shop(Generic[HTTPClientT]):
+class Shop(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Shop
 
@@ -483,13 +483,18 @@ class Shop(Generic[HTTPClientT]):
         An asset of the V-buck icon.
     entries: List[:class:`fortnite_api.ShopEntry`]
         A list of shop entries. Each entry contains cosmetics that are available in the shop.
-    raw_data: :class:`dict`
-        The raw data of the shop.
     """
 
-    __slots__: Tuple[str, ...] = ("hash", "date", "vbuck_icon", "entries", "raw_data")
+    __slots__: Tuple[str, ...] = (
+        "hash",
+        "date",
+        "vbuck_icon",
+        "entries",
+    )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
         self.hash: str = data["hash"]
         self.date: datetime.datetime = parse_time(data["date"])
 
@@ -497,5 +502,3 @@ class Shop(Generic[HTTPClientT]):
 
         _entries = get_with_fallback(data, "entries", list)
         self.entries: List[ShopEntry[HTTPClientT]] = [ShopEntry(data=item, http=http) for item in _entries]
-
-        self.raw_data: Dict[str, Any] = data

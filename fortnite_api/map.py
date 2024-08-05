@@ -85,11 +85,9 @@ class Map(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The images of the map.
     pois: List[:class:`fortnite_api.POI`]
         The list of POIs in the map.
-    raw_data: :class:`dict`
-        The raw data of the map.
     """
 
-    __slots__: Tuple[str, ...] = ('images', 'pois', 'raw_data')
+    __slots__: Tuple[str, ...] = ('images', 'pois')
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
@@ -100,8 +98,6 @@ class Map(ReconstructAble[Dict[str, Any], HTTPClientT]):
             data['pois'],
             transform_data=lambda poi: POI(data=poi, http=http),
         )
-
-        self.raw_data: Dict[str, Any] = data
 
 
 @simple_repr

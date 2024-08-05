@@ -133,4 +133,3 @@ class BannerColor(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         self.category: str = data['category']
         self.sub_category_group: int = data['subCategoryGroup']  # TODO: Convert this to enum?
-        self.raw_data = data
