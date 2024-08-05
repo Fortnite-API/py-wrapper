@@ -5,7 +5,11 @@ build-backend = "setuptools.build_meta"
 # Load setuptools info and dynamic version
 
 [tool.setuptools]
-packages = ["fortnite_api"]
+packages = [
+    "fortnite_api",
+    "fortnite_api.cosmetics",
+    "fortnite_api.cosmetics.variants",
+]
 
 [tool.setuptools.dynamic]
 version = { attr = "fortnite_api.__version__" }
