@@ -1,11 +1,14 @@
 """
+Discord Integration Example
+---------------------------
 This example demonstrates how to integrate the Fortnite API with a Discord bot using discord.py.
+It walks you through the best practices to follow and how to structure your code to make the
+most out of both libraries.
 
-The example creates a custom bot subclass that takes the Fortnite API client as an argument
-and stores it as an attribute. Then, a cog is created that holds some Fortnite-related commands.
-The cog uses the Fortnite API client to fetch the current main AES key.
-
-Do not use the synchronous Fortnite API client with discord.py, as it will block the event loop.
+NOTE::
+-------
+Do NOT use the synchronous Fortnite API client with discord.py. It will block the event loop,
+causing your Discord bot to become unresponsive. Always use the asynchronous client.
 """
 
 from __future__ import annotations
