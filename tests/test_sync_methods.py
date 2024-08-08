@@ -304,7 +304,11 @@ def test_sync_beta_fetch_material_instances(api_key: str):
         assert instance.id
         assert instance.primary_mode
 
-        assert instance.images.offer_image
+        # Walk through all the images and ensure they are assets
+        for name, asset in instance.images.items():
+            assert isinstance(name, str)
+            assert isinstance(asset, fn_api.Asset)
+
         assert instance == instance
 
 

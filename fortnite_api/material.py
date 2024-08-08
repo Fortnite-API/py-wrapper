@@ -52,17 +52,20 @@ class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
 
     Attributes
     ----------
-    offer_image: :class:`fortnite_api.Asset`
+    offer_image: Optional[:class:`fortnite_api.Asset`]
         The offer image of the Material instance. This is the image that is shown in the item shop.
-    background: :class:`fortnite_api.Asset`
-        The background of the Material instance. This is the background gradient of the material instance.
+        Can be ``None`` if there is no offer image for the Material instance.
+    background: Optional[:class:`fortnite_api.Asset`]
+        The background of the Material instance. This is the background gradient
+        of the material instance. Can be ``None`` if there is no background
+        for the Material instance.
     """
 
-    __slots__: Tuple[str, ...] = ("offer_image", "background", "texture")
+    __slots__: Tuple[str, ...] = ("offer_image", "background")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        # Pop off the keys as we set concrete attributes
-        self.offer_image: Asset[HTTPClientT] = Asset(url=data["OfferImage"], http=http)
+        _offer_image = data.get("OfferImage")
+        self.offer_image: Optional[Asset[HTTPClientT]] = _offer_image and Asset(url=_offer_image, http=http)
 
         _background = data.get("Background", None)
         self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
