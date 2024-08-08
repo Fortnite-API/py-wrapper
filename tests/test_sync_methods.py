@@ -295,7 +295,7 @@ def test_sync_beta_fetch_material_instances(api_key: str):
     with pytest.raises(fn_api.BetaAccessNotEnabled):
         fn_api.SyncClient().beta_fetch_material_instances()
 
-    with fn_api.SyncClient(beta=True) as client:
+    with fn_api.SyncClient(beta=True, api_key=api_key) as client:
         material_instances = client.beta_fetch_material_instances()
 
     for instance in material_instances:
