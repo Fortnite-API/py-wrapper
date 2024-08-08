@@ -109,7 +109,7 @@ class ShopMaterialInstance:
 class ShopMaterialInstanceImages:
 
     def __init__(self, data: dict):
-        self.offer_image_url: str = data['OfferImage']
+        self.offer_image_url: Optional[str] = data.get('OfferImage')
         self.fnm_texture_url: Optional[str] = data.get('FNMTexture')
         self.image_background_url: Optional[str] = data.get('ImageBackground')
         self.background_url: Optional[str] = data.get('Background')
