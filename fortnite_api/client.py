@@ -40,6 +40,7 @@ from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLego
 from .creator_code import CreatorCode
 from .enums import *
 from .errors import BetaAccessNotEnabled, BetaUnknownException, MissingAPIKey
+from .flags import ResponseFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
 from .material import MaterialInstance
@@ -49,7 +50,7 @@ from .playlist import Playlist
 from .proxies import TransformerListProxy
 from .shop import Shop
 from .stats import BrPlayerStats
-from .utils import _transform_dict_for_get_request, copy_doc, remove_prefix
+from .utils import MISSING, _transform_dict_for_get_request, copy_doc, remove_prefix
 
 T = TypeVar('T')
 TC = TypeVar('TC')
@@ -146,6 +147,9 @@ class Client:
         .. note::
 
             All beta endpoints are prefixed with ``beta_``.
+    response_flags: :class:`~fortnite_api.ResponseFlags.`
+        Denotes the standard response flags to use for all requests that support them.
+        Defaults to :attr:`~fortnite_api.ResponseFlags.INCLUDE_NOTHING`.
 
     Attributes
     ----------
@@ -153,6 +157,8 @@ class Client:
         The default language, if any, passed to the client.
     beta: :class:`bool`
         Denotes if the client can make requests to beta endpoints.
+    response_flags: :class:`~fortnite_api.ResponseFlags`
+        The standard response flags to use for all requests that support them.
     """
 
     def __init__(
@@ -162,10 +168,12 @@ class Client:
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[aiohttp.ClientSession] = None,
         beta: bool = False,
+        response_flags: ResponseFlags = ResponseFlags.INCLUDE_NOTHING,
     ) -> None:
         self.http: HTTPClient = HTTPClient(session=session, token=api_key)
         self.default_language: Optional[GameLanguage] = default_language
         self.beta: bool = beta
+        self.response_flags: ResponseFlags = response_flags
 
     async def __aenter__(self) -> Self:
         if self.http.session is None:
@@ -176,12 +184,28 @@ class Client:
     async def __aexit__(self, *args: Any) -> None:
         await self.http.close()
 
-    def _resolve_language_value(self, language: Optional[GameLanguage]) -> str:
-        lang = language or self.default_language or GameLanguage.ENGLISH
-        return lang.value
+    def _resolve_default_language_value(self, language: Optional[GameLanguage] = MISSING) -> Optional[str]:
+        if language is None:
+            # This user has specifically passed None, so they want to omit
+            # a language parameter completely.
+            return None
+
+        lang = self.default_language if language is MISSING else language
+        return lang and lang.value
+
+    def _resolve_response_flags_value(self, flags: Optional[ResponseFlags] = MISSING) -> Optional[int]:
+        if flags is None:
+            # This user has specifically passed None, so they want to omit
+            # a response flags parameter completely.
+            return None
+
+        flag = self.response_flags if flags is MISSING else flags
+        return flag and flag.value
 
     # COSMETICS
-    async def fetch_cosmetics_all(self, *, language: Optional[GameLanguage] = None) -> CosmeticsAll:
+    async def fetch_cosmetics_all(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> CosmeticsAll:
         """|coro|
 
         Fetches all cosmetics available in Fortnite.
@@ -191,16 +215,28 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         :class:`fortnite_api.CosmeticsAll`
             The fetched cosmetics.
         """
-        data = await self.http.get_cosmetics_all(language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetics_all(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return CosmeticsAll(data=data, http=self.http)
 
-    async def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr]:
+    async def fetch_cosmetics_br(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[CosmeticBr]:
         """|coro|
 
         Fetches all Battle Royale cosmetics available in Fortnite.
@@ -210,19 +246,31 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         List[:class:`fortnite_api.CosmeticBr`]
             The fetched Battle Royale cosmetics.
         """
-        data = await self.http.get_cosmetics_br(language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetics_br(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: CosmeticBr(data=x, http=self.http),
         )
 
-    async def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar]:
+    async def fetch_cosmetics_cars(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[CosmeticCar]:
         """|coro|
 
         Fetches all Car cosmetics available in Fortnite.
@@ -232,19 +280,31 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         List[:class:`fortnite_api.CosmeticCar`]
             The fetched car cosmetics.
         """
-        data = await self.http.get_cosmetics_cars(language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetics_cars(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: CosmeticCar(data=x, http=self.http),
         )
 
-    async def fetch_cosmetics_instruments(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticInstrument]:
+    async def fetch_cosmetics_instruments(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[CosmeticInstrument]:
         """|coro|
 
         Fetches all instrument cosmetics available in Fortnite.
@@ -254,19 +314,31 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         List[:class:`fortnite_api.CosmeticInstrument`]
             The fetched instruments.
         """
-        data = await self.http.get_cosmetics_instruments(language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetics_instruments(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: CosmeticInstrument(data=x, http=self.http),
         )
 
-    async def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit]:
+    async def fetch_cosmetics_lego_kits(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[CosmeticLegoKit]:
         """|coro|
 
         Fetches all lego kit cosmetics available in Fortnite.
@@ -276,19 +348,31 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         List[:class:`fortnite_api.CosmeticLegoKit`]
             The fetched lego kits.
         """
-        data = await self.http.get_cosmetics_lego_kits(language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetics_lego_kits(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: CosmeticLegoKit(data=x, http=self.http),
         )
 
-    async def fetch_variants_lego(self, *, language: Optional[GameLanguage] = None) -> List[VariantLego]:
+    async def fetch_variants_lego(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[VariantLego]:
         """|coro|
 
         Fetches all lego cosmetic variants available in Fortnite.
@@ -298,20 +382,32 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         List[:class:`fortnite_api.VariantLego`]
             The fetched lego cosmetic variants.
         """
-        data = await self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetics_lego(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
 
         return TransformerListProxy(
             data,
             lambda x: VariantLego(data=x, http=self.http),
         )
 
-    async def fetch_variants_beans(self, *, language: Optional[GameLanguage] = None) -> List[VariantBean]:
+    async def fetch_variants_beans(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[VariantBean]:
         """|coro|
 
         Fetches all bean cosmetic variants available in Fortnite. For more information
@@ -322,20 +418,32 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         List[:class:`fortnite_api.VariantBean`]
             The fetched bean cosmetic variants.
         """
-        data = await self.http.get_cosmetics_beans(language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetics_beans(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
 
         return TransformerListProxy(
             data,
             lambda x: VariantBean(data=x, http=self.http),
         )
 
-    async def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack]:
+    async def fetch_cosmetics_tracks(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[CosmeticTrack]:
         """|coro|
 
         Fetches all audio track cosmetics available in Fortnite.
@@ -345,20 +453,37 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         List[:class:`fortnite_api.CosmeticTrack`]
             The fetched audio tracks.
         """
-        data = await self.http.get_cosmetics_tracks(language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetics_tracks(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
 
         return TransformerListProxy(
             data,
             lambda x: CosmeticTrack(data=x, http=self.http),
         )
 
-    async def fetch_cosmetic_br(self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None) -> CosmeticBr:
+    async def fetch_cosmetic_br(
+        self,
+        /,
+        cosmetic_id: str,
+        *,
+        language: Optional[GameLanguage] = MISSING,
+        response_flags: Optional[ResponseFlags] = MISSING,
+    ) -> CosmeticBr:
         """|coro|
 
         Fetch a specific Battle Royale cosmetic by its ID.
@@ -370,6 +495,13 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the cosmetics in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
@@ -381,22 +513,44 @@ class Client:
         :class:`~fortnite_api.NotFound`
             A cosmetic with that ID was not found.
         """
-        data = await self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_language_value(language))
+        data = await self.http.get_cosmetic_br(
+            cosmetic_id,
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return CosmeticBr(data=data, http=self.http)
 
     # NEW COSMETICS
 
-    async def fetch_cosmetics_new(self) -> NewCosmetics:
+    async def fetch_cosmetics_new(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> NewCosmetics:
         """|coro|
 
         Fetches all new cosmetics recently made available in Fortnite. This encompasses all cosmetic types available in the game.
+
+        Parameters
+        ----------
+        language: Optional[:class:`fortnite_api.GameLanguage`]
+            The language to display the cosmetics in. Defaults to ``None``.
+            This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         :class:`fortnite_api.NewCosmetics`
             The fetched new cosmetics.
         """
-        data = await self.http.get_cosmetics_new()
+        data = await self.http.get_cosmetics_new(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return NewCosmetics(data=data, http=self.http)
 
     @overload
@@ -404,7 +558,8 @@ class Client:
         self,
         *,
         multiple: Literal[True] = True,
-        language: GameLanguage = GameLanguage.ENGLISH,
+        language: Optional[GameLanguage] = MISSING,
+        response_flags: Optional[ResponseFlags] = MISSING,
         search_language: GameLanguage = GameLanguage.ENGLISH,
         match_method: MatchMethod = MatchMethod.FULL,
         id: Optional[str] = ...,
@@ -444,8 +599,9 @@ class Client:
         self,
         *,
         multiple: Literal[False] = False,
-        language: GameLanguage = GameLanguage.ENGLISH,
-        search_language: GameLanguage = GameLanguage.ENGLISH,
+        language: Optional[GameLanguage] = MISSING,
+        response_flags: Optional[ResponseFlags] = MISSING,
+        search_language: Optional[GameLanguage] = MISSING,
         match_method: MatchMethod = MatchMethod.FULL,
         id: Optional[str] = ...,
         name: Optional[str] = ...,
@@ -491,8 +647,15 @@ class Client:
             Denotes if multiple matches should be returned. If this is ``True`` then a
             list of matches will be returned. If ``False``, then only the best match will be returned. Defaults to ``False``.
         language: Optional[:class:`fortnite_api.GameLanguage`]
-            The output language to display the cosmetics in. Will override the default language
-            set on the client. Defaults to the client's :attr:`default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
+            The language to display the cosmetics in. Defaults to ``None``.
+            This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
         search_language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to use for the search. Will override the default language set on the client. Defaults to
             the client's :attr:`default_language` or :attr:`fortnite_api.GameLanguage.ENGLISH`.
@@ -566,12 +729,13 @@ class Client:
         """
         multiple = kwargs.pop('multiple')
 
-        kwargs['language'] = self._resolve_language_value(kwargs.get('language'))
-        kwargs['search_language'] = self._resolve_language_value(kwargs.get('search_language'))
+        kwargs['language'] = self._resolve_default_language_value(kwargs.get('language'))
+        kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.get('search_language'))
+        kwargs['responseFlags'] = self._resolve_response_flags_value(kwargs.get('response_flags'))
 
         match_method = kwargs.pop('match_method', None)
         if match_method is not None:
-            kwargs['match_method'] = match_method.value
+            kwargs['matchMethod'] = match_method.value
 
         payload = _transform_dict_for_get_request(kwargs)
         if multiple is True:
@@ -605,7 +769,7 @@ class Client:
         return Aes(data=data, http=self.http)
 
     # BANNERS
-    async def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner]:
+    async def fetch_banners(self, *, language: Optional[GameLanguage] = MISSING) -> List[Banner]:
         """|coro|
 
         Fetch all banners available in Fortnite.
@@ -615,13 +779,15 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the banners in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
 
         Returns
         -------
         List[:class:`fortnite_api.Banner`]
             The fetched banners.
         """
-        data = await self.http.get_banners(language=self._resolve_language_value(language))
+        data = await self.http.get_banners(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: Banner(data=x, http=self.http),
@@ -670,7 +836,7 @@ class Client:
 
     # MAPS
 
-    async def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map:
+    async def fetch_map(self, *, language: Optional[GameLanguage] = MISSING) -> Map:
         """|coro|
 
         Fetches the current map of Fortnite.
@@ -680,18 +846,20 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the map in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
 
         Returns
         -------
         :class:`fortnite_api.Map`
             The fetched map.
         """
-        data = await self.http.get_map(language=self._resolve_language_value(language))
+        data = await self.http.get_map(language=self._resolve_default_language_value(language))
         return Map(data=data, http=self.http)
 
     # NEWS
 
-    async def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News:
+    async def fetch_news(self, *, language: Optional[GameLanguage] = MISSING) -> News:
         """|coro|
 
         Fetch the news for Fortnite. This includes all news for all game modes.
@@ -701,16 +869,18 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
 
         Returns
         -------
         :class:`fortnite_api.News`
             The fetched news.
         """
-        data = await self.http.get_news(language=self._resolve_language_value(language))
+        data = await self.http.get_news(language=self._resolve_default_language_value(language))
         return News(data=data, http=self.http)
 
-    async def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+    async def fetch_news_br(self, *, language: Optional[GameLanguage] = MISSING) -> GameModeNews:
         """|coro|
 
         Fetches the current Battle Royale news.
@@ -720,16 +890,18 @@ class Client:
         language : Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
 
         Returns
         -------
         :class:`fortnite_api.GameModeNews`
             The Battle Royale news.
         """
-        data = await self.http.get_news_br(language=self._resolve_language_value(language))
+        data = await self.http.get_news_br(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
-    async def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews:
+    async def fetch_news_stw(self, *, language: Optional[GameLanguage] = MISSING) -> GameModeNews:
         """|coro|
 
         Fetches the current Save the World news.
@@ -739,18 +911,20 @@ class Client:
         language : Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the news in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
 
         Returns
         -------
         :class:`fortnite_api.GameModeNews`
             The Save the World news.
         """
-        data = await self.http.get_news_stw(language=self._resolve_language_value(language))
+        data = await self.http.get_news_stw(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     # PLAYLISTS
 
-    async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist]:
+    async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = MISSING) -> List[Playlist]:
         """|coro|
 
         Fetches a list of current playlists available in Fortnite.
@@ -760,19 +934,21 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlists in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
 
         Returns
         -------
         List[:class:`fortnite_api.Playlist`]
             The fetched current playlists available in Fortnite.
         """
-        data = await self.http.get_playlists(language=self._resolve_language_value(language))
+        data = await self.http.get_playlists(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: Playlist(data=x, http=self.http),
         )
 
-    async def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist:
+    async def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = MISSING) -> Playlist:
         """|coro|
 
         Fetch a specific playlist by its ID.
@@ -784,6 +960,8 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlist in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
 
         Returns
         -------
@@ -795,7 +973,7 @@ class Client:
         NotFound
             A playlist with that ID was not found.
         """
-        data = await self.http.get_playlist(id, language=self._resolve_language_value(language))
+        data = await self.http.get_playlist(id, language=self._resolve_default_language_value(language))
         return Playlist(data=data, http=self.http)
 
     # PLAYER STATS
@@ -874,7 +1052,7 @@ class Client:
         raise ValueError("You must pass either a name or an account_id to fetch stats.")
 
     # SHOP
-    async def fetch_shop(self, /, *, language: Optional[GameLanguage] = None) -> Shop:
+    async def fetch_shop(self, /, *, language: Optional[GameLanguage] = MISSING) -> Shop:
         """|coro|
 
         Fetches the current Fortnite item shop.
@@ -884,13 +1062,15 @@ class Client:
         language: Optional[:class:`fortnite_api.GameLanguage`]
             The language to display the playlist in. Defaults to ``None``.
             This will override the default language set on the client.
+            Passing ``None`` specifically omits any flags being passed
+            to the API.
 
         Returns
         -------
         :class:`fortnite_api.Shop`
             The fetched item shop.
         """
-        data = await self.http.get_shop(language=self._resolve_language_value(language))
+        data = await self.http.get_shop(language=self._resolve_default_language_value(language))
         return Shop(data=data, http=self.http)
 
     # BETA METHODS
@@ -1004,14 +1184,14 @@ class SyncClient:
     def __exit__(self, *args: Any) -> None:
         self.http.close()
 
-    def _resolve_language_value(self, language: Optional[GameLanguage]) -> str:
+    def _resolve_default_language_value(self, language: Optional[GameLanguage]) -> str:
         lang = language or self.default_language or GameLanguage.ENGLISH
         return lang.value
 
     # COSMETICS
     @copy_doc(Client.fetch_cosmetics_cars)
-    def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticCar[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_cars(language=self._resolve_language_value(language))
+    def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = MISSING) -> List[CosmeticCar[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_cars(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: CosmeticCar(data=x, http=self.http),
@@ -1019,33 +1199,35 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_instruments)
     def fetch_cosmetics_instruments(
-        self, *, language: Optional[GameLanguage] = None
+        self, *, language: Optional[GameLanguage] = MISSING
     ) -> List[CosmeticInstrument[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_instruments(language=self._resolve_language_value(language))
+        data = self.http.get_cosmetics_instruments(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: CosmeticInstrument(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_cosmetics_lego_kits)
-    def fetch_cosmetics_lego_kits(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticLegoKit[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_lego_kits(language=self._resolve_language_value(language))
+    def fetch_cosmetics_lego_kits(
+        self, *, language: Optional[GameLanguage] = MISSING
+    ) -> List[CosmeticLegoKit[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_lego_kits(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: CosmeticLegoKit(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_cosmetics_tracks)
-    def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticTrack[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_tracks(language=self._resolve_language_value(language))
+    def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = MISSING) -> List[CosmeticTrack[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_tracks(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: CosmeticTrack(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_cosmetics_br)
-    def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = None) -> List[CosmeticBr[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_br(language=self._resolve_language_value(language))
+    def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = MISSING) -> List[CosmeticBr[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_br(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: CosmeticBr(data=x, http=self.http),
@@ -1053,30 +1235,30 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetic_br)
     def fetch_cosmetic_br(
-        self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = None
+        self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = MISSING
     ) -> CosmeticBr[SyncHTTPClient]:
-        data = self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_language_value(language))
+        data = self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_default_language_value(language))
         return CosmeticBr(data=data, http=self.http)
 
     @copy_doc(Client.fetch_variants_lego)
-    def fetch_variants_lego(self, *, language: Optional[GameLanguage] = None) -> List[VariantLego[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_lego(language=self._resolve_language_value(language))
+    def fetch_variants_lego(self, *, language: Optional[GameLanguage] = MISSING) -> List[VariantLego[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_lego(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: VariantLego(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_variants_beans)
-    def fetch_variants_beans(self, *, language: Optional[GameLanguage] = None) -> List[VariantBean[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_beans(language=self._resolve_language_value(language))
+    def fetch_variants_beans(self, *, language: Optional[GameLanguage] = MISSING) -> List[VariantBean[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_beans(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: VariantBean(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_cosmetics_all)
-    def fetch_cosmetics_all(self, *, language: Optional[GameLanguage] = None) -> CosmeticsAll[SyncHTTPClient]:
-        data = self.http.get_cosmetics_all(language=self._resolve_language_value(language))
+    def fetch_cosmetics_all(self, *, language: Optional[GameLanguage] = MISSING) -> CosmeticsAll[SyncHTTPClient]:
+        data = self.http.get_cosmetics_all(language=self._resolve_default_language_value(language))
         return CosmeticsAll(data=data, http=self.http)
 
     # NEW COSMETICS
@@ -1170,8 +1352,8 @@ class SyncClient:
     def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr[SyncHTTPClient], List[CosmeticBr[SyncHTTPClient]]]:
         multiple = kwargs.pop('multiple')
 
-        kwargs['language'] = self._resolve_language_value(kwargs.get('language'))
-        kwargs['search_language'] = self._resolve_language_value(kwargs.get('search_language'))
+        kwargs['language'] = self._resolve_default_language_value(kwargs.get('language'))
+        kwargs['search_language'] = self._resolve_default_language_value(kwargs.get('search_language'))
 
         payload = _transform_dict_for_get_request(kwargs)
         if multiple is True:
@@ -1193,8 +1375,8 @@ class SyncClient:
 
     # BANNERS
     @copy_doc(Client.fetch_banners)
-    def fetch_banners(self, *, language: Optional[GameLanguage] = None) -> List[Banner[SyncHTTPClient]]:
-        data = self.http.get_banners(language=self._resolve_language_value(language))
+    def fetch_banners(self, *, language: Optional[GameLanguage] = MISSING) -> List[Banner[SyncHTTPClient]]:
+        data = self.http.get_banners(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: Banner(data=x, http=self.http),
@@ -1218,40 +1400,40 @@ class SyncClient:
     # MAPS
 
     @copy_doc(Client.fetch_map)
-    def fetch_map(self, *, language: Optional[GameLanguage] = None) -> Map[SyncHTTPClient]:
-        data = self.http.get_map(language=self._resolve_language_value(language))
+    def fetch_map(self, *, language: Optional[GameLanguage] = MISSING) -> Map[SyncHTTPClient]:
+        data = self.http.get_map(language=self._resolve_default_language_value(language))
         return Map(data=data, http=self.http)
 
     # NEWS
 
     @copy_doc(Client.fetch_news)
-    def fetch_news(self, *, language: Optional[GameLanguage] = None) -> News[SyncHTTPClient]:
-        data = self.http.get_news(language=self._resolve_language_value(language))
+    def fetch_news(self, *, language: Optional[GameLanguage] = MISSING) -> News[SyncHTTPClient]:
+        data = self.http.get_news(language=self._resolve_default_language_value(language))
         return News(data=data, http=self.http)
 
     @copy_doc(Client.fetch_news_br)
-    def fetch_news_br(self, *, language: Optional[GameLanguage] = None) -> GameModeNews[SyncHTTPClient]:
-        data = self.http.get_news_br(language=self._resolve_language_value(language))
+    def fetch_news_br(self, *, language: Optional[GameLanguage] = MISSING) -> GameModeNews[SyncHTTPClient]:
+        data = self.http.get_news_br(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     @copy_doc(Client.fetch_news_stw)
-    def fetch_news_stw(self, *, language: Optional[GameLanguage] = None) -> GameModeNews[SyncHTTPClient]:
-        data = self.http.get_news_stw(language=self._resolve_language_value(language))
+    def fetch_news_stw(self, *, language: Optional[GameLanguage] = MISSING) -> GameModeNews[SyncHTTPClient]:
+        data = self.http.get_news_stw(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     # PLAYLISTS
 
     @copy_doc(Client.fetch_playlists)
-    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = None) -> List[Playlist[SyncHTTPClient]]:
-        data = self.http.get_playlists(language=self._resolve_language_value(language))
+    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = MISSING) -> List[Playlist[SyncHTTPClient]]:
+        data = self.http.get_playlists(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
             lambda x: Playlist(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_playlist)
-    def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = None) -> Playlist[SyncHTTPClient]:
-        data = self.http.get_playlist(id, language=self._resolve_language_value(language))
+    def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = MISSING) -> Playlist[SyncHTTPClient]:
+        data = self.http.get_playlist(id, language=self._resolve_default_language_value(language))
         return Playlist(data=data, http=self.http)
 
     # PLAYER STATS
@@ -1297,6 +1479,6 @@ class SyncClient:
         )
 
     @copy_doc(Client.fetch_shop)
-    def fetch_shop(self, /, *, language: Optional[GameLanguage] = None) -> Shop[SyncHTTPClient]:
-        data = self.http.get_shop(language=self._resolve_language_value(language))
+    def fetch_shop(self, /, *, language: Optional[GameLanguage] = MISSING) -> Shop[SyncHTTPClient]:
+        data = self.http.get_shop(language=self._resolve_default_language_value(language))
         return Shop(data=data, http=self.http)
