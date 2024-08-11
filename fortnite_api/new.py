@@ -215,7 +215,7 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         return NewCosmetic(
             type=cosmetic_type,
-            hash=self._hashes[internal_key],
+            hash=self._hashes.get(internal_key),
             last_addition=last_addition,
             items=TransformerListProxy(
                 cosmetic_items,
