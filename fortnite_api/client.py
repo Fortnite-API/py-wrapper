@@ -153,8 +153,8 @@ class Client:
 
     Attributes
     ----------
-    default_language: Optional[:class:`fortnite_api.GameLanguage`]
-        The default language, if any, passed to the client.
+    default_language: :class:`fortnite_api.GameLanguage`
+        The default language set for the client.
     beta: :class:`bool`
         Denotes if the client can make requests to beta endpoints.
     response_flags: :class:`~fortnite_api.ResponseFlags`
@@ -171,7 +171,7 @@ class Client:
         response_flags: ResponseFlags = ResponseFlags.INCLUDE_NOTHING,
     ) -> None:
         self.http: HTTPClient = HTTPClient(session=session, token=api_key)
-        self.default_language: Optional[GameLanguage] = default_language
+        self.default_language: GameLanguage = default_language
         self.beta: bool = beta
         self.response_flags: ResponseFlags = response_flags
 
@@ -191,7 +191,7 @@ class Client:
             return None
 
         lang = self.default_language if language is MISSING else language
-        return lang and lang.value
+        return lang.value
 
     def _resolve_response_flags_value(self, flags: Optional[ResponseFlags] = MISSING) -> Optional[int]:
         if flags is None:
@@ -200,7 +200,7 @@ class Client:
             return None
 
         flag = self.response_flags if flags is MISSING else flags
-        return flag and flag.value
+        return int(flag)
 
     # COSMETICS
     async def fetch_cosmetics_all(
@@ -1159,8 +1159,8 @@ class SyncClient:
 
     Attributes
     ----------
-    default_language: Optional[:class:`fortnite_api.GameLanguage`]
-        The default language, if any, passed to the client.
+    default_language: :class:`fortnite_api.GameLanguage`
+        The default language set on the client.
     beta: :class:`bool`
         Denotes if the client can make requests to beta endpoints.
     response_flags: :class:`~fortnite_api.ResponseFlags`
@@ -1177,7 +1177,7 @@ class SyncClient:
         response_flags: ResponseFlags = ResponseFlags.INCLUDE_NOTHING,
     ) -> None:
         self.http: SyncHTTPClient = SyncHTTPClient(session=session, token=api_key)
-        self.default_language: Optional[GameLanguage] = default_language
+        self.default_language: GameLanguage = default_language
         self.beta: bool = beta
         self.response_flags: ResponseFlags = response_flags
 
@@ -1198,7 +1198,7 @@ class SyncClient:
             return None
 
         lang = self.default_language if language is MISSING else language
-        return lang and lang.value
+        return lang.value
 
     def _resolve_response_flags_value(self, flags: Optional[ResponseFlags] = MISSING) -> Optional[int]:
         if flags is None:
@@ -1207,7 +1207,7 @@ class SyncClient:
             return None
 
         flag = self.response_flags if flags is MISSING else flags
-        return flag and flag.value
+        return int(flag)
 
     # COSMETICS
     @copy_doc(Client.fetch_cosmetics_all)

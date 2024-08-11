@@ -381,8 +381,8 @@ def test_sync_fetch_shop(api_key: str):
             assert isinstance(cosmetic, fn_api.Cosmetic)
 
 
-def test_sync_search_cosmetics(api_key: str):
-    with fn_api.SyncClient(api_key=api_key) as client:
+def test_sync_search_cosmetics(api_key: str, response_flags: fn_api.ResponseFlags):
+    with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_multiple_set = client.search_br_cosmetics(multiple=True, has_set=True)
         cosmetic_single_set = client.search_br_cosmetics(multiple=False, has_set=True)
 
