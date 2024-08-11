@@ -181,6 +181,11 @@ Cosmetic Variants
     :members:
     :inherited-members:
 
+Flags
+-----
+
+.. autoclass:: fortnite_api.ResponseFlags
+    :members:
 
 Enumerations
 ------------
