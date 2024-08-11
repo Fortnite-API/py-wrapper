@@ -147,7 +147,7 @@ class Client:
         .. note::
 
             All beta endpoints are prefixed with ``beta_``.
-    response_flags: :class:`~fortnite_api.ResponseFlags.`
+    response_flags: :class:`~fortnite_api.ResponseFlags`
         Denotes the standard response flags to use for all requests that support them.
         Defaults to :attr:`~fortnite_api.ResponseFlags.INCLUDE_NOTHING`.
 
@@ -1153,7 +1153,7 @@ class SyncClient:
         .. note::
 
             All beta endpoints are prefixed with ``beta_``.
-    response_flags: :class:`~fortnite_api.ResponseFlags.`
+    response_flags: :class:`~fortnite_api.ResponseFlags`
         Denotes the standard response flags to use for all requests that support them.
         Defaults to :attr:`~fortnite_api.ResponseFlags.INCLUDE_NOTHING`.
 
