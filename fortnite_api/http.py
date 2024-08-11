@@ -103,93 +103,123 @@ class HTTPMixin(abc.ABC):
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any: ...
 
-    def get_cosmetics_br(self, language: Optional[str] = None):
+    def get_cosmetics_br(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/br')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
 
+        if response_flags:
+            params['responseFlags'] = response_flags
+
         return self.request(r, params=params)
 
-    def get_cosmetics_cars(self, language: Optional[str] = None):
+    def get_cosmetics_cars(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/cars')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
 
+        if response_flags:
+            params['responseFlags'] = response_flags
+
         return self.request(r, params=params)
 
-    def get_cosmetics_instruments(self, language: Optional[str] = None):
+    def get_cosmetics_instruments(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/instruments')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
 
+        if response_flags:
+            params['responseFlags'] = response_flags
+
         return self.request(r, params=params)
 
-    def get_cosmetics_lego_kits(self, language: Optional[str] = None):
+    def get_cosmetics_lego_kits(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/lego/kits')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
 
+        if response_flags:
+            params['responseFlags'] = response_flags
+
         return self.request(r, params=params)
 
-    def get_cosmetics_tracks(self, language: Optional[str] = None):
+    def get_cosmetics_tracks(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/tracks')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
 
+        if response_flags:
+            params['responseFlags'] = response_flags
+
         return self.request(r, params=params)
 
-    def get_cosmetics_lego(self, language: Optional[str] = None):
+    def get_cosmetics_lego(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/lego')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
 
+        if response_flags:
+            params['responseFlags'] = response_flags
+
         return self.request(r, params=params)
 
-    def get_cosmetics_beans(self, language: Optional[str] = None):
+    def get_cosmetics_beans(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/beans')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
 
+        if response_flags:
+            params['responseFlags'] = response_flags
+
         return self.request(r, params=params)
 
-    def get_cosmetics_new(self, language: Optional[str] = None):
+    def get_cosmetics_new(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/new')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
 
+        if response_flags:
+            params['responseFlags'] = response_flags
+
         return self.request(r, params=params)
 
-    def get_cosmetic_br(self, id: str, language: Optional[str] = None):
+    def get_cosmetic_br(self, id: str, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics/br/{id}', id=id)
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
+
+        if response_flags:
+            params['responseFlags'] = response_flags
 
         return self.request(r, params=params)
 
-    def get_cosmetics_all(self, language: Optional[str] = None):
+    def get_cosmetics_all(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/cosmetics')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
+
+        if response_flags:
+            params['responseFlags'] = response_flags
 
         return self.request(r, params=params)
 
