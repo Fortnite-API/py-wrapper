@@ -29,8 +29,8 @@ from typing import Final
 
 import pytest
 
-from fortnite_api.http import HTTPClient, SyncHTTPClient
 from fortnite_api.flags import ResponseFlags
+from fortnite_api.http import HTTPClient, SyncHTTPClient
 
 # Constants for general testing
 TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"

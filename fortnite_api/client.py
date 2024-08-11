@@ -729,9 +729,9 @@ class Client:
         """
         multiple = kwargs.pop('multiple')
 
-        kwargs['language'] = self._resolve_default_language_value(kwargs.get('language'))
-        kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.get('search_language'))
-        kwargs['responseFlags'] = self._resolve_response_flags_value(kwargs.get('response_flags'))
+        kwargs['language'] = self._resolve_default_language_value(kwargs.pop('language', MISSING))
+        kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.pop('search_language', MISSING))
+        kwargs['responseFlags'] = self._resolve_response_flags_value(kwargs.pop('response_flags', MISSING))
 
         match_method = kwargs.pop('match_method', None)
         if match_method is not None:
@@ -1425,9 +1425,9 @@ class SyncClient:
     def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr[SyncHTTPClient], List[CosmeticBr[SyncHTTPClient]]]:
         multiple = kwargs.pop('multiple')
 
-        kwargs['language'] = self._resolve_default_language_value(kwargs.get('language'))
-        kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.get('search_language'))
-        kwargs['responseFlags'] = self._resolve_response_flags_value(kwargs.get('response_flags'))
+        kwargs['language'] = self._resolve_default_language_value(kwargs.pop('language', MISSING))
+        kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.pop('search_language', MISSING))
+        kwargs['responseFlags'] = self._resolve_response_flags_value(kwargs.pop('response_flags', MISSING))
 
         match_method = kwargs.pop('match_method', None)
         if match_method is not None:
