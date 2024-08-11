@@ -25,7 +25,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
-from typing import Tuple
+from typing import Tuple, Type
+from typing_extensions import Self
 
 __all__: Tuple[str, ...] = ('ResponseFlags',)
 
@@ -59,3 +60,14 @@ class ResponseFlags(enum.IntFlag):
     INCLUDE_PATHS = 1 << 0
     INCLUDE_GAMEPLAY_TAGS = 1 << 1
     INCLUDE_SHOP_HISTORY = 1 << 2
+
+    @classmethod
+    def all(cls: Type[Self]) -> Self:
+        """:class:`ResponseFlags`: Returns a flag that includes all flags."""
+        self = cls.INCLUDE_NOTHING
+        for item in cls:
+            # If this item is not already included in self, include it
+            if not self & item:
+                self |= item
+
+        return self
