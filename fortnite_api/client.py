@@ -1153,6 +1153,9 @@ class SyncClient:
         .. note::
 
             All beta endpoints are prefixed with ``beta_``.
+    response_flags: :class:`~fortnite_api.ResponseFlags.`
+        Denotes the standard response flags to use for all requests that support them.
+        Defaults to :attr:`~fortnite_api.ResponseFlags.INCLUDE_NOTHING`.
 
     Attributes
     ----------
@@ -1160,6 +1163,8 @@ class SyncClient:
         The default language, if any, passed to the client.
     beta: :class:`bool`
         Denotes if the client can make requests to beta endpoints.
+    response_flags: :class:`~fortnite_api.ResponseFlags`
+        The standard response flags to use for all requests that support them.
     """
 
     def __init__(
@@ -1169,10 +1174,12 @@ class SyncClient:
         default_language: GameLanguage = GameLanguage.ENGLISH,
         session: Optional[requests.Session] = None,
         beta: bool = False,
+        response_flags: ResponseFlags = ResponseFlags.INCLUDE_NOTHING,
     ) -> None:
         self.http: SyncHTTPClient = SyncHTTPClient(session=session, token=api_key)
         self.default_language: Optional[GameLanguage] = default_language
         self.beta: bool = beta
+        self.response_flags: ResponseFlags = response_flags
 
     # For with statement
     def __enter__(self) -> Self:
@@ -1184,14 +1191,56 @@ class SyncClient:
     def __exit__(self, *args: Any) -> None:
         self.http.close()
 
-    def _resolve_default_language_value(self, language: Optional[GameLanguage]) -> str:
-        lang = language or self.default_language or GameLanguage.ENGLISH
-        return lang.value
+    def _resolve_default_language_value(self, language: Optional[GameLanguage] = MISSING) -> Optional[str]:
+        if language is None:
+            # This user has specifically passed None, so they want to omit
+            # a language parameter completely.
+            return None
+
+        lang = self.default_language if language is MISSING else language
+        return lang and lang.value
+
+    def _resolve_response_flags_value(self, flags: Optional[ResponseFlags] = MISSING) -> Optional[int]:
+        if flags is None:
+            # This user has specifically passed None, so they want to omit
+            # a response flags parameter completely.
+            return None
+
+        flag = self.response_flags if flags is MISSING else flags
+        return flag and flag.value
 
     # COSMETICS
+    @copy_doc(Client.fetch_cosmetics_all)
+    def fetch_cosmetics_all(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> CosmeticsAll[SyncHTTPClient]:
+        data = self.http.get_cosmetics_all(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
+        return CosmeticsAll(data=data, http=self.http)
+
+    @copy_doc(Client.fetch_cosmetics_br)
+    def fetch_cosmetics_br(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[CosmeticBr[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_br(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticBr(data=x, http=self.http),
+        )
+
     @copy_doc(Client.fetch_cosmetics_cars)
-    def fetch_cosmetics_cars(self, *, language: Optional[GameLanguage] = MISSING) -> List[CosmeticCar[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_cars(language=self._resolve_default_language_value(language))
+    def fetch_cosmetics_cars(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[CosmeticCar[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_cars(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: CosmeticCar(data=x, http=self.http),
@@ -1199,9 +1248,12 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_instruments)
     def fetch_cosmetics_instruments(
-        self, *, language: Optional[GameLanguage] = MISSING
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
     ) -> List[CosmeticInstrument[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_instruments(language=self._resolve_default_language_value(language))
+        data = self.http.get_cosmetics_instruments(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: CosmeticInstrument(data=x, http=self.http),
@@ -1209,73 +1261,93 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_lego_kits)
     def fetch_cosmetics_lego_kits(
-        self, *, language: Optional[GameLanguage] = MISSING
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
     ) -> List[CosmeticLegoKit[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_lego_kits(language=self._resolve_default_language_value(language))
+        data = self.http.get_cosmetics_lego_kits(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: CosmeticLegoKit(data=x, http=self.http),
         )
 
-    @copy_doc(Client.fetch_cosmetics_tracks)
-    def fetch_cosmetics_tracks(self, *, language: Optional[GameLanguage] = MISSING) -> List[CosmeticTrack[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_tracks(language=self._resolve_default_language_value(language))
-        return TransformerListProxy(
-            data,
-            lambda x: CosmeticTrack(data=x, http=self.http),
-        )
-
-    @copy_doc(Client.fetch_cosmetics_br)
-    def fetch_cosmetics_br(self, *, language: Optional[GameLanguage] = MISSING) -> List[CosmeticBr[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_br(language=self._resolve_default_language_value(language))
-        return TransformerListProxy(
-            data,
-            lambda x: CosmeticBr(data=x, http=self.http),
-        )
-
-    @copy_doc(Client.fetch_cosmetic_br)
-    def fetch_cosmetic_br(
-        self, /, cosmetic_id: str, *, language: Optional[GameLanguage] = MISSING
-    ) -> CosmeticBr[SyncHTTPClient]:
-        data = self.http.get_cosmetic_br(cosmetic_id, language=self._resolve_default_language_value(language))
-        return CosmeticBr(data=data, http=self.http)
-
     @copy_doc(Client.fetch_variants_lego)
-    def fetch_variants_lego(self, *, language: Optional[GameLanguage] = MISSING) -> List[VariantLego[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_lego(language=self._resolve_default_language_value(language))
+    def fetch_variants_lego(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[VariantLego[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_lego(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: VariantLego(data=x, http=self.http),
         )
 
     @copy_doc(Client.fetch_variants_beans)
-    def fetch_variants_beans(self, *, language: Optional[GameLanguage] = MISSING) -> List[VariantBean[SyncHTTPClient]]:
-        data = self.http.get_cosmetics_beans(language=self._resolve_default_language_value(language))
+    def fetch_variants_beans(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[VariantBean[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_beans(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return TransformerListProxy(
             data,
             lambda x: VariantBean(data=x, http=self.http),
         )
 
-    @copy_doc(Client.fetch_cosmetics_all)
-    def fetch_cosmetics_all(self, *, language: Optional[GameLanguage] = MISSING) -> CosmeticsAll[SyncHTTPClient]:
-        data = self.http.get_cosmetics_all(language=self._resolve_default_language_value(language))
-        return CosmeticsAll(data=data, http=self.http)
+    @copy_doc(Client.fetch_cosmetics_tracks)
+    def fetch_cosmetics_tracks(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> List[CosmeticTrack[SyncHTTPClient]]:
+        data = self.http.get_cosmetics_tracks(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
+        return TransformerListProxy(
+            data,
+            lambda x: CosmeticTrack(data=x, http=self.http),
+        )
+
+    @copy_doc(Client.fetch_cosmetic_br)
+    def fetch_cosmetic_br(
+        self,
+        /,
+        cosmetic_id: str,
+        *,
+        language: Optional[GameLanguage] = MISSING,
+        response_flags: Optional[ResponseFlags] = MISSING,
+    ) -> CosmeticBr[SyncHTTPClient]:
+        data = self.http.get_cosmetic_br(
+            cosmetic_id,
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
+        return CosmeticBr(data=data, http=self.http)
 
     # NEW COSMETICS
 
     @copy_doc(Client.fetch_cosmetics_new)
-    def fetch_cosmetics_new(self) -> NewCosmetics[SyncHTTPClient]:
-        data = self.http.get_cosmetics_new()
+    def fetch_cosmetics_new(
+        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> NewCosmetics[SyncHTTPClient]:
+        data = self.http.get_cosmetics_new(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return NewCosmetics(data=data, http=self.http)
 
     @overload
     def search_br_cosmetics(
         self,
         *,
-        multiple: Literal[True],
-        language: GameLanguage = GameLanguage.ENGLISH,
+        multiple: Literal[True] = True,
+        language: Optional[GameLanguage] = MISSING,
+        response_flags: Optional[ResponseFlags] = MISSING,
         search_language: GameLanguage = GameLanguage.ENGLISH,
-        match_method: Literal['full', 'contains', 'starts', 'ends'] = 'full',
+        match_method: MatchMethod = MatchMethod.FULL,
         id: Optional[str] = ...,
         name: Optional[str] = ...,
         description: Optional[str] = ...,
@@ -1312,10 +1384,11 @@ class SyncClient:
     def search_br_cosmetics(
         self,
         *,
-        multiple: Literal[False],
-        language: GameLanguage = GameLanguage.ENGLISH,
-        search_language: GameLanguage = GameLanguage.ENGLISH,
-        match_method: Literal['full', 'contains', 'starts', 'ends'] = 'full',
+        multiple: Literal[False] = False,
+        language: Optional[GameLanguage] = MISSING,
+        response_flags: Optional[ResponseFlags] = MISSING,
+        search_language: Optional[GameLanguage] = MISSING,
+        match_method: MatchMethod = MatchMethod.FULL,
         id: Optional[str] = ...,
         name: Optional[str] = ...,
         description: Optional[str] = ...,
@@ -1353,7 +1426,12 @@ class SyncClient:
         multiple = kwargs.pop('multiple')
 
         kwargs['language'] = self._resolve_default_language_value(kwargs.get('language'))
-        kwargs['search_language'] = self._resolve_default_language_value(kwargs.get('search_language'))
+        kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.get('search_language'))
+        kwargs['responseFlags'] = self._resolve_response_flags_value(kwargs.get('response_flags'))
+
+        match_method = kwargs.pop('match_method', None)
+        if match_method is not None:
+            kwargs['matchMethod'] = match_method.value
 
         payload = _transform_dict_for_get_request(kwargs)
         if multiple is True:
