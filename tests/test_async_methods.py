@@ -145,8 +145,8 @@ async def test_async_fetch_cosmetics_br(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_cars(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_cosmetics_cars(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_cars = await client.fetch_cosmetics_cars()
 
     for cosmetic in cosmetics_cars:
@@ -154,8 +154,8 @@ async def test_async_fetch_cosmetics_cars(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_instruments(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_cosmetics_instruments(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_instruments = await client.fetch_cosmetics_instruments()
 
     for cosmetic in cosmetics_instruments:
@@ -163,8 +163,8 @@ async def test_async_fetch_cosmetics_instruments(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_lego_kits(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_cosmetics_lego_kits(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         lego_kits = await client.fetch_cosmetics_lego_kits()
 
     for kit in lego_kits:
@@ -172,8 +172,8 @@ async def test_async_fetch_cosmetics_lego_kits(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_variants_lego(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_variants_lego(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         lego_variants = await client.fetch_variants_lego()
 
     for lego in lego_variants:
@@ -181,8 +181,8 @@ async def test_async_fetch_variants_lego(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_tracks(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_cosmetics_tracks(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_tracks = await client.fetch_cosmetics_tracks()
 
     for cosmetic in cosmetics_tracks:
@@ -190,8 +190,8 @@ async def test_async_fetch_cosmetics_tracks(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetic_br(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_cosmetic_br(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         cosmetic_br = await client.fetch_cosmetic_br(TEST_COSMETIC_ID)
 
     assert isinstance(cosmetic_br, fn_api.CosmeticBr)
@@ -199,8 +199,8 @@ async def test_async_fetch_cosmetic_br(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_new(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_cosmetics_new(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         new_cosmetics = await client.fetch_cosmetics_new()
 
     assert isinstance(new_cosmetics, fn_api.NewCosmetics)
@@ -220,8 +220,8 @@ async def test_async_fetch_cosmetics_new(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_all(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_cosmetics_all(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_all = await client.fetch_cosmetics_all()
 
     assert isinstance(cosmetics_all, fn_api.CosmeticsAll)
@@ -446,8 +446,8 @@ async def test_async_fetch_shop(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_search_cosmetics(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_search_cosmetics(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_multiple_set = await client.search_br_cosmetics(multiple=True, has_set=True)
 
         cosmetic_single_set = await client.search_br_cosmetics(multiple=False, has_set=True)
@@ -461,8 +461,8 @@ async def test_async_search_cosmetics(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_variants_beans(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_async_fetch_variants_beans(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
         beans_variants = await client.fetch_variants_beans()
 
     for bean in beans_variants:

@@ -30,6 +30,7 @@ from typing import Final
 import pytest
 
 from fortnite_api.http import HTTPClient, SyncHTTPClient
+from fortnite_api.flags import ResponseFlags
 
 # Constants for general testing
 TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"
@@ -48,7 +49,7 @@ TEST_STAT_ACCOUNT_ID = '369644c6224d4845aa2b00e63b60241d'
 
 
 @pytest.fixture(scope='session')
-def api_key():
+def api_key() -> str:
     # This fixture is called once per test session, so we can check if we are in a CI environment
     # or a local development environment. If we are in a CI environment, we can get the API key from
     # the environment variables, otherwise we can load it from a .env file.
@@ -62,6 +63,13 @@ def api_key():
 
     load_dotenv()
     return os.environ['TEST_API_KEY']
+
+
+@pytest.fixture(scope='session', params=[flag for flag in ResponseFlags])
+def response_flags(request: pytest.FixtureRequest) -> ResponseFlags:
+    # Returns all the possible flags that can be used in the client. This is to ensure that passing
+    # flags to both the client and the methods that require them is consistent.
+    return request.param
 
 
 @pytest.fixture(scope='session')
