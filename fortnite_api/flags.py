@@ -25,6 +25,9 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
+from typing import Tuple
+
+__all__: Tuple[str, ...] = ('ResponseFlags',)
 
 
 class ResponseFlags(enum.IntFlag):
@@ -39,8 +42,8 @@ class ResponseFlags(enum.IntFlag):
     ----------
     INCLUDE_NOTHING: :class:`int`
         Include nothing special in the response. This will only include standard
-        data in all responses, and won't include special fields
-        like ``paths``, ``gameplay_tags``, and ``shop_history``.
+        data in all responses, ie, any data fields in this class prefixed
+        with ``INCLUDE_``.
     INCLUDE_PATHS: :class:`int`
         Denotes if the response should include the ``paths`` field in the response,
         if the endpoint contains it.
