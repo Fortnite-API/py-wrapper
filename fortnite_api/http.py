@@ -309,12 +309,15 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_shop(self, language: Optional[str] = None):
+    def get_shop(self, language: Optional[str] = None, response_flags: Optional[int] = None):
         r: Route = Route('GET', '/v2/shop')
-        params: Dict[str, str] = {}
+        params: Dict[str, Union[str, int]] = {}
 
         if language:
             params['language'] = language
+
+        if response_flags:
+            params['responseFlags'] = response_flags
 
         return self.request(r, params=params)
 

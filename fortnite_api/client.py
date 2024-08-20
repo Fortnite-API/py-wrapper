@@ -1052,7 +1052,9 @@ class Client:
         raise ValueError("You must pass either a name or an account_id to fetch stats.")
 
     # SHOP
-    async def fetch_shop(self, /, *, language: Optional[GameLanguage] = MISSING) -> Shop:
+    async def fetch_shop(
+        self, /, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> Shop:
         """|coro|
 
         Fetches the current Fortnite item shop.
@@ -1064,13 +1066,21 @@ class Client:
             This will override the default language set on the client.
             Passing ``None`` specifically omits any flags being passed
             to the API.
+        response_flags: Optional[:class:`~fortnite_api.ResponseFlags`]
+            The response flags the API should use when fetching the data. Passing
+            this parameter will override the default :attr:`response_flags` set
+            on the client. Specifically passing ``None`` will omit any flags
+            field being passed to the HTTPs request.
 
         Returns
         -------
         :class:`fortnite_api.Shop`
             The fetched item shop.
         """
-        data = await self.http.get_shop(language=self._resolve_default_language_value(language))
+        data = await self.http.get_shop(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return Shop(data=data, http=self.http)
 
     # BETA METHODS
@@ -1557,6 +1567,11 @@ class SyncClient:
         )
 
     @copy_doc(Client.fetch_shop)
-    def fetch_shop(self, /, *, language: Optional[GameLanguage] = MISSING) -> Shop[SyncHTTPClient]:
-        data = self.http.get_shop(language=self._resolve_default_language_value(language))
+    def fetch_shop(
+        self, /, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+    ) -> Shop[SyncHTTPClient]:
+        data = self.http.get_shop(
+            language=self._resolve_default_language_value(language),
+            response_flags=self._resolve_response_flags_value(response_flags),
+        )
         return Shop(data=data, http=self.http)
