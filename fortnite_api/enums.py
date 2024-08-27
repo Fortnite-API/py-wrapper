@@ -71,8 +71,8 @@ class GameLanguage(enum.Enum):
         Korean language.
     POLISH
         Polish language.
-    PORTUGUESE
-        Portuguese language.
+    PORTUGUESE_BRASIL
+        Portuguese (Brasil) language.
     RUSSIAN
         Russian language.
     TURKISH
