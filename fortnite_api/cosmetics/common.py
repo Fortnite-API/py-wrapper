@@ -237,8 +237,8 @@ class CosmeticImages(Images[HTTPClientT]):
         The featured image of the cosmetic, if available. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
     lego: Optional[:class:`fortnite_api.Asset`]
         The LEGO image of the cosmetic, if available. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
-    other: Dict[:class:`str`, :class:`fortnite_api.Asset`]
-        A mapping other images to their respective asset. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
+    bean: Optional[:class:`fortnite_api.Asset`]
+        The bean image of the cosmetic, if available. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
     small: Optional[:class:`fortnite_api.Asset`]
         The small image of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticInstrument`,
         :class:`fortnite_api.CosmeticCar`, :class:`fortnite_api.CosmeticLegoKit`,
@@ -252,10 +252,11 @@ class CosmeticImages(Images[HTTPClientT]):
     """
 
     __slots__: Tuple[str, ...] = (
+        "small_icon",
+        "icon",
         "featured",
         "lego",
-        "icon",
-        "small_icon",
+        "bean",
         "_other",
         "_http",
         "small",
@@ -271,17 +272,20 @@ class CosmeticImages(Images[HTTPClientT]):
     ) -> None:
         super().__init__(data=data, http=http)
 
+        small_icon = data.get("smallIcon")
+        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
+
+        _icon = data.get("icon")
+        self.icon: Optional[Asset[HTTPClientT]] = _icon and Asset(http=http, url=_icon)
+
         featured = data.get("featured")
         self.featured: Optional[Asset[HTTPClientT]] = featured and Asset(http=http, url=featured)
 
         lego = data.get("lego")
         self.lego: Optional[Asset[HTTPClientT]] = lego and Asset(http=http, url=lego)
 
-        _icon = data.get("icon")
-        self.icon: Optional[Asset[HTTPClientT]] = _icon and Asset(http=http, url=_icon)
-
-        small_icon = data.get("smallIcon")
-        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
+        bean = data.get("bean")
+        self.bean: Optional[Asset[HTTPClientT]] = bean and Asset(http=http, url=bean)
 
         small = data.get("small")
         self.small: Optional[Asset[HTTPClientT]] = small and Asset(http=http, url=small)
