@@ -112,7 +112,7 @@ class TransformerListProxy(Generic[T, K_co, V_co], List[T]):
         self._transform_all()
         return super().__reversed__()
 
-    # For all of the comparison methods, we need to transform all the data so that the comparison is correct.
+    # For all the comparison methods, we need to transform all the data so that the comparison is correct.
     def __gt__(self, value: List[T]) -> bool:
         self._transform_all()
         return super().__gt__(value)

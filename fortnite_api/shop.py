@@ -328,7 +328,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
     banner: Optional[:class:`fortnite_api.ShopEntryBanner`]
         The banner information for this shop entry, if any.
     giftable: :class:`bool`
-        Whether this entry is giftable.
+        Whether this entry is able to be gifted.
     refundable: :class:`bool`
         Whether this entry is refundable.
     sort_priority: :class:`int`
@@ -480,7 +480,7 @@ class Shop(ReconstructAble[Dict[str, Any], HTTPClientT]):
     date: :class:`datetime.datetime`
         The date when this shop was last updated.
     vbuck_icon: :class:`fortnite_api.Asset`
-        An asset of the V-buck icon.
+        An asset of the V-Buck icon.
     entries: List[:class:`fortnite_api.ShopEntry`]
         A list of shop entries. Each entry contains cosmetics that are available in the shop.
     """

@@ -1,7 +1,7 @@
 """
 Basic Example
 -------------
-This example introduces you to the basic usage of the Client client in an asynchronous context.
+This example introduces you to the basic usage of the client in an asynchronous context.
 It familiarizes you with the client and how to use it to fetch data from the Fortnite API.
 """
 

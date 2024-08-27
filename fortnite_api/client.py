@@ -142,7 +142,7 @@ class Client:
     session: Optional[:class:`aiohttp.ClientSession`]
         The session to use for the HTTP requests. If not provided, a new session will be created for you and you must use the class as an async context manager.
     beta: :class:`bool`
-        Whether or not the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``. This is to prevent accidental usage of beta endpoints.
+        Whether the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``. This is to prevent accidental usage of beta endpoints.
 
         .. note::
 
@@ -1158,7 +1158,7 @@ class SyncClient:
     session: Optional[:class:`requests.Session`]
         The session to use for the HTTP requests. If not provided, a new session will be created for you and you must use the class as an async context manager.
     beta: :class:`bool`
-        Whether or not the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``.
+        Whether the client can make requests to the beta API. Any beta endpoints will not be available if this is set to ``False``. Defaults to ``False``.
 
         .. note::
 

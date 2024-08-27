@@ -236,7 +236,7 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
     meta_tags: List[:class:`str`]
         The meta tags of the cosmetic.
     showcase_video_id: Optional[:class:`str`]
-        The showcase Youtube video ID of the cosmetic, if available.
+        The showcase YouTube video ID of the cosmetic, if available.
     dynamic_pak_id: Optional[:class:`str`]
         The dynamic pak ID of the cosmetic, if available.
     item_preview_hero_path: Optional[:class:`str`]
@@ -337,9 +337,9 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
 
     @property
     def showcase_video_url(self) -> Optional[str]:
-        """Optional[:class:`str`]: The URL of the Youtube showcase video of the cosmetic, if any."""
         id = self.showcase_video_id
         if not id:
+        """Optional[:class:`str`]: The URL of the YouTube showcase video of the cosmetic, if any."""
             return None
 
         return f"https://www.youtube.com/watch?v={id}"

@@ -36,7 +36,7 @@ class ResponseFlags(enum.IntFlag):
     """
     .. attributetable:: fortnite_api.ResponseFlags
 
-    Denotes a "response flag" in the Fortnite API. This are toggle-able
+    Denotes a "response flag" in the Fortnite API. These are toggle-able
     options that denote how a response from the API should be formatted and which
     data should be included.
 

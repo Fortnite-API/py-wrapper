@@ -841,13 +841,13 @@ Exceptions have been refactored in Version 3. The exception hierarchy has been r
 
 - :class:`fortnite_api.ServiceUnavailable`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the Fortnite API is unavailable. This is raised when a 503 status code is returned by the Fortnite API. Ideally your program should globally handle this exception in the event of a service outage.
 
-- :class:`fortnite_api.RateLimited`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the client has been rate limited by the Fortnite API. This is raised when a 429 status code is returned by the Fortnite API. Typical endpoints do not have ratelimits, however, stats endpoints do.
+- :class:`fortnite_api.RateLimited`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the client has been rate limited by the Fortnite API. This is raised when a 429 status code is returned by the Fortnite API. Typical endpoints do not have rate limits, however, stats endpoints do.
 
 - :class:`fortnite_api.Unauthorized`: A subclass of :class:`fortnite_api.HTTPException` that is raised when the client is not authorized to access the requested resource. This will be raised when the client attempts to request to stat endpoints without an api key set. This is raised when a 401 status code is returned by the Fortnite API.
 
 - :class:`fortnite_api.BetaAccessNotEnabled`: A subclass of :class:`fortnite_api.FortniteAPIException` raised when a client attempts to call a beta method without the :attr:`~fortnite_api.Client.beta` flag enabled on the client.
 
-- :class:`fortnite_api.BetaUnknownException`: A special subclass of :class:`fortnite_api.FortniteAPIException` that wraps an exception that ocurred while calling or processing a beta endpoint. This will contain the original exception that was raised.
+- :class:`fortnite_api.BetaUnknownException`: A special subclass of :class:`fortnite_api.FortniteAPIException` that wraps an exception that occurred while calling or processing a beta endpoint. This will contain the original exception that was raised.
 
 
 Datetime Objects

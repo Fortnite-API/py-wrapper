@@ -120,7 +120,7 @@ async def main() -> None:
     main function to start the bot. This function will handle the setup and teardown
     of the Fortnite API client and the Discord bot.
 
-    In a real world example, this is also where you would setup any database connections
+    In a real world example, this is also where you would set up any database connections
     or other services that your bot may need throughout its lifetime.
     """
     # (1) Define the fortnite client

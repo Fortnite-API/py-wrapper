@@ -307,7 +307,7 @@ class BrPlayerStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
     Attributes
     ----------
     user: :class:`fortnite_api.Account`
-        The account of the player who's stats are being represented.
+        The account of the player whose stats are being represented.
     battle_pass: Optional[:class:`fortnite_api.BrBattlePass`]
         The player's battle pass level and progress, if available.
     image: Optional[:class:`fortnite_api.Asset`]

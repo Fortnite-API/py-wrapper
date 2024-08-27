@@ -199,11 +199,11 @@ class DynamicKey(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         .. describe:: x == y
 
-            Checks if the two dynamic key's are equal.
+            Checks if the two dynamic keys are equal.
 
         .. describe:: x != y
 
-            Checks if two dynamic key's are not equal.
+            Checks if two dynamic keys are not equal.
 
         .. describe:: str(x)
 

@@ -175,7 +175,7 @@ class POILocation(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         .. describe:: iter(x)
 
-            Returns a iter of the x, y, z coordinates.
+            Returns an iter of the x, y, z coordinates.
 
     Examples
     --------

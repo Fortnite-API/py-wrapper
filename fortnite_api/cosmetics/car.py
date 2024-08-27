@@ -70,7 +70,7 @@ class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
     path: Optional[:class:`str`]
         The path of the car.
     showcase_video_id: Optional[:class:`str`]
-        The showcase Youtube video ID of the cosmetic, if available.
+        The showcase YouTube video ID of the cosmetic, if available.
     shop_history: List[:class:`datetime.datetime`]
         A list of datetimes representing the shop history of the car.
     """
@@ -120,9 +120,9 @@ class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
 
     @property
     def showcase_video_url(self) -> Optional[str]:
-        """Optional[:class:`str`]: The URL of the Youtube showcase video of the cosmetic, if any."""
         id = self.showcase_video_id
         if not id:
+        """Optional[:class:`str`]: The URL of the YouTube showcase video of the cosmetic, if any."""
             return None
 
         return f"https://www.youtube.com/watch?v={id}"

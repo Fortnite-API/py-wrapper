@@ -14,7 +14,7 @@ import fortnite_api
 
 def main():
     # The main way you interact with the API is through the main client.
-    # This client uses an requests Session for its HTTP requests, so
+    # This client uses a requests Session for its HTTP requests, so
     # it's recommended to use the client with an async context manager.
     with fortnite_api.SyncClient(api_key="YOUR_API_KEY") as client:
         # The client has many methods to get cosmetics, news,

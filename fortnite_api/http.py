@@ -65,7 +65,7 @@ class Route:
     """
 
     # General scheme for this used from https://github.com/Rapptz/discord.py/blob/master/discord/http.py#L292-L327
-    # The idea is that, to simplify request logic, a Route can be passed to a request method and it will handle all the
+    # The idea is that, to simplify request logic, a Route can be passed to a request method, and it will handle all the
     # params and URL formatting for you.
 
     BASE_URL: ClassVar[str] = 'https://fortnite-api.com'

@@ -105,7 +105,7 @@ class VariantBean(Cosmetic[Dict[str, Any], HTTPClientT]):
         ------
         ValueError
             The bean variant does not have a corresponding Battle Royale cosmetic.
-            Ie. :attr`cosmetic_id` is ``None``.
+            I.e. :attr`cosmetic_id` is ``None``.
         """
         cosmetic_id = self.cosmetic_id
         if cosmetic_id is None:
