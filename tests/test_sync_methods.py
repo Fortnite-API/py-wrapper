@@ -238,17 +238,17 @@ def test_sync_fetch_cosmetics_all(api_key: str, response_flags: fn_api.ResponseF
 
 def test_sync_map(api_key: str):
     with fn_api.SyncClient(api_key=api_key) as client:
-        map = client.fetch_map()
+        _map = client.fetch_map()
 
-    assert isinstance(map, fn_api.Map)
-    assert isinstance(map.images, fn_api.MapImages)
+    assert isinstance(_map, fn_api.Map)
+    assert isinstance(_map.images, fn_api.MapImages)
 
-    assert map.images.blank
-    assert map.images.pois
+    assert _map.images.blank
+    assert _map.images.pois
 
-    assert map.pois
+    assert _map.pois
 
-    for poi in map.pois:
+    for poi in _map.pois:
         assert isinstance(poi, fn_api.POI)
         assert poi.id
         assert isinstance(poi.location, fn_api.POILocation)
