@@ -337,9 +337,9 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
 
     @property
     def showcase_video_url(self) -> Optional[str]:
-        id = self.showcase_video_id
-        if not id:
         """Optional[:class:`str`]: The URL of the YouTube showcase video of the cosmetic, if any."""
+        _id = self.showcase_video_id
+        if not _id:
             return None
 
-        return f"https://www.youtube.com/watch?v={id}"
+        return f"https://www.youtube.com/watch?v={_id}"
