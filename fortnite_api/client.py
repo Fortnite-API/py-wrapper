@@ -31,7 +31,7 @@ from typing import Any, Callable, List, Literal, Optional, TypeVar, Union, cast,
 
 import aiohttp
 import requests
-from typing_extensions import Concatenate, Coroutine, ParamSpec, Self
+from typing_extensions import Concatenate, Coroutine, ParamSpec
 
 from .aes import Aes
 from .all import CosmeticsAll

@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Any, Generic, Mapping, Tuple, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Generic, Tuple, Type, TypeVar, Union
 
 from typing_extensions import Self
 

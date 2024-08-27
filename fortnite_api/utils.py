@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, Dict, Hashable, List, Tuple, Type, TypeVar, Union
+from typing import Any, Callable, Dict, List, Tuple, Type, TypeVar, Union
 
 try:
     import orjson  # type: ignore

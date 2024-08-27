@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, Generic, Iterable, Iterator, List, SupportsIndex, Union, cast, overload
+from typing import Callable, Dict, Generic, Iterable, Iterator, List, SupportsIndex, Union, cast, overload
 
 from typing_extensions import Self, TypeVar
 

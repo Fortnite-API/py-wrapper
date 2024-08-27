@@ -29,7 +29,6 @@ from typing import TYPE_CHECKING
 import sphinx.application
 from docutils import nodes
 from docutils.parsers.rst import Directive
-from sphinx.locale import _
 
 if TYPE_CHECKING:
     from sphinx.writers.html5 import HTML5Translator
