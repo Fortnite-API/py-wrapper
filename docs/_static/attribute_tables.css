@@ -28,10 +28,7 @@ So, the columns should be side by side and the list items should be displayed as
     display: flex;
     justify-content: space-between;
     border-radius: 0.25rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    padding: 0.5rem 1.25rem;
 }
 
 
