@@ -329,11 +329,7 @@ class HTTPMixin(abc.ABC):
         image: Literal['all', 'keyboardMouse', 'gamepad', 'touch', 'none'] = 'none',
     ):
         r: Route = Route('GET', '/v2/stats/br/v2', name=name)
-        params: Dict[str, str] = {'name': name}
-
-        params['account_type'] = account_type
-        params['time_window'] = time_window
-        params['image'] = image
+        params: Dict[str, str] = {'name': name, 'account_type': account_type, 'time_window': time_window, 'image': image}
 
         return self.request(r, params=params)
 
@@ -344,10 +340,7 @@ class HTTPMixin(abc.ABC):
         image: Literal['all', 'keyboardMouse', 'gamepad', 'touch', 'none'] = 'none',
     ):
         r: Route = Route('GET', '/v2/stats/br/v2/{account_id}', account_id=account_id)
-        params: Dict[str, str] = {}
-
-        params['time_window'] = time_window
-        params['image'] = image
+        params: Dict[str, str] = {'time_window': time_window, 'image': image}
 
         return self.request(r, params=params)
 

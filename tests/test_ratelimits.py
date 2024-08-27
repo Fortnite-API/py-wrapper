@@ -93,7 +93,7 @@ def sync_client(sync_mock_session: MagicMock) -> SyncHTTPClient:
 @pytest.mark.asyncio
 async def test_async_rate_limit_handling(async_client: HTTPClient):
     # Make a request
-    route = Route('GET', 'http://example.com')
+    route = Route('GET', 'https://example.com')
     with pytest.raises(RateLimited) as excinfo:
 
         # This will try 5 times to request, and each time get a 429 response. After it
@@ -109,7 +109,7 @@ async def test_async_rate_limit_handling(async_client: HTTPClient):
 
 
 def test_sync_rate_limit_handling(sync_client: SyncHTTPClient):
-    route = Route('GET', 'http://example.com')
+    route = Route('GET', 'https://example.com')
     with pytest.raises(RateLimited) as excinfo:
         # This will try 5 times to request, and each time get a 429 response. After it
         # should raise the RateLimited error. Any subsequent requests with the same route

@@ -51,7 +51,7 @@ async def test_async_aes(api_key: str):
     assert aes.updated
     assert isinstance(aes.updated, datetime.datetime)
 
-    assert aes != None
+    assert aes is not None
 
     # Ensure that the AES can be fetched with BASE64
     assert aes_b64.build == aes.build
