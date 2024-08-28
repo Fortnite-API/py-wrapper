@@ -1,0 +1,115 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# Load setuptools info and dynamic version
+
+[tool.setuptools]
+packages = [
+    "fortnite_api",
+    "fortnite_api.cosmetics",
+    "fortnite_api.cosmetics.variants",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "fortnite_api.__version__" }
+dependencies = { file = "requirements.txt" }
+
+[tool.setuptools.package-data]
+fortnite_api = ["py.typed"]
+
+# And specify project specific metadata
+
+[project]
+name = "fortnite-api"
+dynamic = ["version", "dependencies"]
+authors = [
+    { name = "Luc1412", email = 'Luc1412.lh@gmail.com' },
+    { name = "Trevor Flahardy", email = "trevorflahardy@gmail.com" },
+]
+description = "A python wrapper for Fortnite-API.com"
+readme = "README.md"
+requires-python = ">=3.8.0"
+license = { file = "LICENSE" }
+keywords = [
+    'fortnite',
+    'fortnite-api.com',
+    'shop',
+    'cosmetics',
+    'fortnite api',
+    'fortnite shop',
+]
+classifiers = [
+    'License :: OSI Approved :: MIT License',
+    'Intended Audience :: Developers',
+    'Natural Language :: English',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Topic :: Internet',
+    'Topic :: Software Development :: Libraries',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Topic :: Utilities',
+]
+
+
+[project.optional-dependencies]
+tests = [
+    'pytest',
+    'pytest-asyncio',
+    'pytest-cov',
+    'python-dotenv',
+    'pytest-mock',
+]
+docs = [
+    'sphinx',
+    'sphinxcontrib_trio',
+    'sphinxcontrib-websupport',
+    'typing-extensions',
+    'furo',
+    'sphinx-copybutton',
+]
+dev = ['black', 'isort', 'discord.py', 'pyright', 'pre-commit']
+speed = ['orjson']
+
+[project.urls]
+"Home Page" = "https://github.com/Fortnite-API/py-wrapper"
+Issues = "https://github.com/Fortnite-API/py-wrapper/issues"
+Documentation = "https://fortnite-api.readthedocs.io/en/rewrite/"
+
+# Pytest configuration
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+testpaths = ["tests"]
+addopts = "--import-mode=importlib"
+
+# Black formatting
+
+[tool.black]
+line-length = 125
+skip-string-normalization = true
+force-exclude = "LICENSE|requirements.txt|pyproject.toml|README.md|setup.cfg"
+
+# Pyright configuration
+
+[tool.pyright]
+typeCheckingMode = "strict"
+reportUnnecessaryTypeIgnoreComment = "error"
+reportUnusedImport = "error"
+pythonVersion = "3.10"
+reportPrivateUsage = "none"
+exclude = ["**/__pycache__", "build", "dist", "docs"]
+include = ["fortnite_api/", "tests/", "examples/"]
+
+# Isort configuration
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+combine_star = true
+line_length = 125
+src_paths = ["fortnite_api/", "tests/", "examples/"]

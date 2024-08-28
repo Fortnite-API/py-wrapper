@@ -1,0 +1,62 @@
+/*
+Given the following HTML code we need to make it look as if it was a table
+
+<div class="py-attribute-table">
+    <div class="py-attribute-table-column">
+        <span>_('Attributes')</span>
+        <ul>
+            <li class="py-attribute-table-entry">
+                <a href="..."></a>
+            </li>
+        </ul>
+    </div>
+    <div class="py-attribute-table-column">
+        <span>_('Methods')</span>
+        <ul>
+            <li class="py-attribute-table-entry">
+                <span class="py-attribute-badge" title="decorator">D</span>
+                <a href="..."></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+So, the columns should be side by side and the list items should be displayed as rows.
+*/
+
+.py-attribute-table {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1.25rem;
+}
+
+
+.py-attribute-table-column {
+    flex: 1;
+    font-size: 0.875em;
+}
+
+/* For the title to be bold */
+.py-attribute-table-column > span {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.py-attribute-table-column ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.py-attribute-table-entry {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* 8px */
+}
+
+.py-attribute-table-column li a {
+    text-decoration: none;
+    color: var(--color-api-name);
+}
+
