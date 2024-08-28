@@ -229,10 +229,6 @@ class CosmeticImages(Images[HTTPClientT]):
 
     Attributes
     ----------
-    small_icon: Optional[:class:`fortnite_api.Asset`]
-        The small icon of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
-    icon: Optional[:class:`fortnite_api.Asset`]
-        The icon of the cosmetic. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
     featured: Optional[:class:`fortnite_api.Asset`]
         The featured image of the cosmetic, if available. Typically available off of :class:`fortnite_api.CosmeticBr` objects.
     lego: Optional[:class:`fortnite_api.Asset`]
@@ -252,8 +248,6 @@ class CosmeticImages(Images[HTTPClientT]):
     """
 
     __slots__: Tuple[str, ...] = (
-        "small_icon",
-        "icon",
         "featured",
         "lego",
         "bean",
@@ -271,12 +265,6 @@ class CosmeticImages(Images[HTTPClientT]):
         http: HTTPClientT,
     ) -> None:
         super().__init__(data=data, http=http)
-
-        small_icon = data.get("smallIcon")
-        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
-
-        _icon = data.get("icon")
-        self.icon: Optional[Asset[HTTPClientT]] = _icon and Asset(http=http, url=_icon)
 
         featured = data.get("featured")
         self.featured: Optional[Asset[HTTPClientT]] = featured and Asset(http=http, url=featured)
