@@ -20,7 +20,7 @@ sphinx-build -b html -j auto -a -n -T -W --keep-going . _build/html
 Ensure you have the following dependencies installed in your environment:
 
 ```bash
-python -m pip install --upgrade pip setuptools wheel
+python -m pip install --upgrade pip setuptools
 pip install -U -r requirements.txt
 pip install -e .[docs]
 ```
