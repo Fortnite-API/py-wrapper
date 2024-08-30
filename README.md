@@ -1,10 +1,11 @@
 # Sync/Async Python wrapper for [Fortnite-API.com](https://fortnite-api.com)
 
+[![Support](https://discordapp.com/api/guilds/621452110558527502/widget.png?style=shield)](https://discord.gg/T4tyYDK)
 ![GitHub issues](https://img.shields.io/github/issues/Fortnite-API/py-wrapper?logo=github)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/fortnite-api)](https://pypi.org/project/fortnite-api)
 [![PyPI](https://img.shields.io/pypi/v/fortnite-api)](https://pypi.org/project/fortnite-api)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fortnite-api?label=python%20version&logo=python&logoColor=yellow)
-[![Support](https://discordapp.com/api/guilds/621452110558527502/widget.png?style=shield)](https://discord.gg/T4tyYDK)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/fortnite-api)](https://pypi.org/project/fortnite-api)
+[![Documentation](https://img.shields.io/readthedocs/fortnite-api)](https://fortnite-api.readthedocs.io/)
 
 Welcome to the Fortnite API Python wrapper! This library offers a complete **async** and **sync** wrapper around the endpoints of [Fortnite-API.com](https://fortnite-api.com)
 
