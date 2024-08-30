@@ -52,7 +52,7 @@ import asyncio
 import fortnite_api
 
 async def main():
-    async with fortnite_api.Client(api_key="your_api_key"):
+    async with fortnite_api.Client(api_key="your_api_key") as client:
         stats = await client.fetch_br_stats(name='some_username')
         print(stats)
 
