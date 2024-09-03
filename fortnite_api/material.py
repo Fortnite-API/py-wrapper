@@ -160,7 +160,7 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         self.id: str = data["id"]
         self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode._from_str(data["primaryMode"])
-        self.product_tag: ProductTag = ProductTag(data["productTag"])
+        self.product_tag: ProductTag = ProductTag._from_str(data["productTag"])
 
         self.images: MaterialInstanceImages[HTTPClientT] = MaterialInstanceImages(data=data["images"], http=http)
 
