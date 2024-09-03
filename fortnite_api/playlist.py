@@ -163,7 +163,7 @@ class Playlist(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.is_large_team_game: bool = data['isLargeTeamGame']
         self.accumulate_to_profile_stats: bool = data['accumulateToProfileStats']
 
-        _images = get_with_fallback(data, 'images', dict)
+        _images = data.get('images')
         self.images: Optional[PlaylistImages[HTTPClientT]] = _images and PlaylistImages(data=_images, http=http)
 
         self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
