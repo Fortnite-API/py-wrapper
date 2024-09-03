@@ -274,7 +274,7 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.color1: str = data['color1']
-        self.color2: Optional[str] = data['color2']
+        self.color2: Optional[str] = data.get('color2')
         self.color3: str = data['color3']
         self.text_background_color: str = data['textBackgroundColor']
 
