@@ -281,7 +281,7 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 class ShopEntryRenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
-    .. attributetable:: fortnite_api.RenderImage
+    .. attributetable:: fortnite_api.ShopEntryRenderImage
 
     Represents a render image for a shop entry. A render image is an image
     used to visually represent a cosmetic item in the shop. This class inherits
@@ -323,7 +323,7 @@ class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPCli
         The ID of the cosmetic item associated with the display asset, if any.
     material_instances: List[:class:`fortnite_api.MaterialInstance`]
         A list of material instances used by the display asset.
-    render_images: List[:class:`fortnite_api.RenderImage`]
+    render_images: List[:class:`fortnite_api.ShopEntryRenderImage`]
         A list of render images used by the display asset.
     """
 
