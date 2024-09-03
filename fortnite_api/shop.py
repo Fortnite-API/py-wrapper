@@ -33,7 +33,7 @@ from typing_extensions import Self
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
-from .enums import BannerIntensity
+from .enums import BannerIntensity, ProductTag
 from .http import HTTPClientT
 from .material import MaterialInstance
 from .proxies import TransformerListProxy
@@ -43,6 +43,8 @@ __all__: Tuple[str, ...] = (
     "ShopEntryBundle",
     "ShopEntryBanner",
     "ShopEntryLayout",
+    "ShopEntryColors",
+    "ShopEntryRenderImage",
     "ShopEntryNewDisplayAsset",
     "ShopEntry",
     "Shop",
@@ -248,6 +250,63 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.display_type: Optional[str] = data.get('displayType')
 
 
+class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.ShopEntryColors
+
+    Represents the colors of a shop entry. This class inherits from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    color1: :class:`str`
+        The first color of background gradient.
+    color2: Optional[:class:`str`]
+        The second color of background gradient. If not present, the gradient only consists of two colors.
+    color3: :class:`str`
+        The third color of background gradient.
+    text_background_color: :class:`str`
+        The fade out overlaying gradient color on which the text is displayed.
+    """
+
+    __slots__: Tuple[str, ...] = ("color1", "color2", "color3", "text_background_color")
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.color1: str = data['color1']
+        self.color2: Optional[str] = data['color2']
+        self.color3: str = data['color3']
+        self.text_background_color: str = data['textBackgroundColor']
+
+
+class ShopEntryRenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.RenderImage
+
+    Represents a render image for a shop entry. A render image is an image
+    used to visually represent a cosmetic item in the shop. This class inherits
+    from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    product_tag: :class:`fortnite_api.ProductTag`
+        The product tag of the render image.
+    file_name: :class:`str`
+        The file name of the render image.
+    image: :class:`fortnite_api.Asset`
+        The image of the render image.
+    """
+
+    __slots__: Tuple[str, ...] = ("product_tag", "file_name", "image")
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.product_tag: ProductTag = ProductTag(data["productTag"])
+        self.file_name: str = data["fileName"]
+        self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
+
+
 class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryNewDisplayAsset
@@ -264,9 +323,11 @@ class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPCli
         The ID of the cosmetic item associated with the display asset, if any.
     material_instances: List[:class:`fortnite_api.MaterialInstance`]
         A list of material instances used by the display asset.
+    render_images: List[:class:`fortnite_api.RenderImage`]
+        A list of render images used by the display asset.
     """
 
-    __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances")
+    __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances", "render_images")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
@@ -275,6 +336,9 @@ class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPCli
         self.cosmetic_id: Optional[str] = data.get("cosmeticId")
         self.material_instances: List[MaterialInstance[HTTPClientT]] = [
             MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, "materialInstances", list)
+        ]
+        self.render_images: List[ShopEntryRenderImage[HTTPClientT]] = [
+            ShopEntryRenderImage(data=instance, http=http) for instance in get_with_fallback(data, "renderImages", list)
         ]
 
 
@@ -349,6 +413,8 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The new display asset path of this entry.
     new_display_asset: :class:`fortnite_api.ShopEntryNewDisplayAsset`
         The new display asset of this entry.
+    colors: :class:`fortnite_api.ShopEntryColors`
+        The colors of this entry.
     br: List[:class:`fortnite_api.CosmeticBr`]
         The Battle Royale cosmetics in this entry.
     tracks: List[:class:`fortnite_api.CosmeticTrack`]
@@ -379,6 +445,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         "tile_size",
         "new_display_asset_path",
         "new_display_asset",
+        "colors",
         "br",
         "tracks",
         "instruments",
