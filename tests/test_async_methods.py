@@ -366,6 +366,7 @@ async def test_async_beta_fetch_material_instances(api_key: str):
 
         assert instance.id
         assert instance.primary_mode
+        assert instance.product_tag
 
         # Walk through all the images and ensure they are assets
         for name, asset in instance.images.items():

@@ -405,3 +405,27 @@ class CustomGender(enum.Enum):
 
     FEMALE = 'EFortCustomGender::Female'
     MALE = 'EFortCustomGender::Male'
+
+
+class ProductTag(enum.Enum):
+    """A class that represents the tag of a product.
+
+    Attributes
+    ----------
+    BATTLE_ROYALE
+        The product is for Battle Royale.
+    LEGO
+        The product is for LEGO.
+    ROCKET_RACING
+        The product is for Rocket Racing.
+    FESTIVAL
+        The product is for Festival.
+    ALL
+        The product is for all modes.
+    """
+
+    BATTLE_ROYALE = 'Product.BR'
+    LEGO = 'Product.Juno'
+    ROCKET_RACING = 'Product.DelMar'
+    FESTIVAL = 'Product.Sparks'
+    ALL = 'Product.MAX'
