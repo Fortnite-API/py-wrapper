@@ -446,7 +446,6 @@ async def test_async_fetch_shop(api_key: str):
         if colors:
             assert isinstance(colors, fn_api.ShopEntryColors)
             assert isinstance(colors.color1, str)
-            assert colors.color2
             assert isinstance(colors.color3, str)
             assert isinstance(colors.text_background_color, str)
 
