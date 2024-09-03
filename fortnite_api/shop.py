@@ -422,6 +422,9 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
             _new_display_asset and ShopEntryNewDisplayAsset(data=data["newDisplayAsset"], http=http)
         )
 
+        _colors = data.get("colors")
+        self.colors: Optional[ShopEntryColors] = _colors and ShopEntryColors(data=_colors, http=http)
+
         self.br: List[CosmeticBr[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "brItems", list),
             transform_data=lambda d: CosmeticBr(data=d, http=http),
