@@ -40,6 +40,7 @@ from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
 __all__: Tuple[str, ...] = (
+    "ShopEntryOfferTag",
     "ShopEntryBundle",
     "ShopEntryBanner",
     "ShopEntryLayout",
@@ -142,6 +143,29 @@ class TileSize:
             height=int(match.group("height")),
             internal=value,
         )
+
+
+class ShopEntryOfferTag(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.ShopEntryOfferTag
+
+    Represents a shop entry offer tag. This class inherits from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The ID of the offer tag.
+    text: :class:`str`
+        The text of the offer tag.
+    """
+
+    __slots__: Tuple[str, ...] = ("id", "text")
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.id: str = data["id"]
+        self.text: str = data["text"]
 
 
 class ShopEntryBundle(ReconstructAble[Dict[str, Any], HTTPClientT]):
@@ -461,6 +485,11 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         self.in_date: datetime.datetime = parse_time(data["inDate"])
         self.out_date: datetime.datetime = parse_time(data["outDate"])
+
+        _offer_tag = data.get("offerTag")
+        self.offer_tag: Optional[ShopEntryOfferTag[HTTPClientT]] = _offer_tag and ShopEntryOfferTag(
+            data=_offer_tag, http=http
+        )
 
         _bundle = data.get("bundle")
         self.bundle: Optional[ShopEntryBundle[HTTPClientT]] = _bundle and ShopEntryBundle(data=_bundle, http=http)
