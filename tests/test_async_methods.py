@@ -327,6 +327,10 @@ def _test_playlist(playlist: fn_api.Playlist[Any]):
     assert isinstance(playlist.is_large_team_game, bool)
     assert isinstance(playlist.accumulate_to_profile_stats, bool)
 
+    images = playlist.images
+    if images:
+        assert isinstance(images, fn_api.PlaylistImages)
+
     assert playlist.path
     assert playlist.added
 
