@@ -326,7 +326,7 @@ class ShopEntryRenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.product_tag: ProductTag = ProductTag(data["productTag"])
+        self.product_tag: ProductTag = ProductTag._from_str(data["productTag"])
         self.file_name: str = data["fileName"]
         self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
 
