@@ -364,6 +364,7 @@ def test_sync_fetch_shop(api_key: str):
             assert layout.id
             assert layout.name
             assert isinstance(layout.index, int)
+            assert isinstance(layout.rank, int)
             assert layout.show_ineligible_offers
 
         assert entry.dev_name

@@ -238,6 +238,8 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The category of the layout, if any.
     index: :class:`int`
         The index of the layout.
+    rank: :class:`int`
+        The rank of the layout used for sorting.
     show_ineligible_offers: :class:`str`
         Whether ineligible offers are displayed in the layout or not.
     background: Optional[:class:`fortnite_api.Asset`]
@@ -253,6 +255,7 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         "name",
         "category",
         "index",
+        "rank",
         "show_ineligible_offers",
         "background",
         'use_wide_preview',
@@ -265,6 +268,7 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.name: str = data["name"]
         self.category: Optional[str] = data.get("category")
         self.index: int = data["index"]
+        self.rank: int = data["rank"]
         self.show_ineligible_offers: str = data["showIneligibleOffers"]
 
         _background = data.get("background")
