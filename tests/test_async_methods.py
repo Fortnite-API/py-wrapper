@@ -400,6 +400,18 @@ async def test_async_fetch_shop(api_key: str):
         assert entry.in_date
         assert entry.out_date
 
+        offer_tag = entry.offer_tag
+        if offer_tag:
+            assert isinstance(offer_tag, fn_api.ShopEntryOfferTag)
+            assert offer_tag.id
+            assert offer_tag.text
+
+        offer_tag = entry.offer_tag
+        if offer_tag:
+            assert isinstance(offer_tag, fn_api.ShopEntryOfferTag)
+            assert offer_tag.id
+            assert offer_tag.text
+
         bundle = entry.bundle
         if bundle:
             assert isinstance(entry.bundle, fn_api.ShopEntryBundle)

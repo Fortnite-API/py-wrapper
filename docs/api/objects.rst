@@ -80,6 +80,9 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 .. autoclass:: fortnite_api.Playlist
     :members:
 
+.. autoclass:: fortnite_api.ShopEntryOfferTag
+    :members:
+
 .. autoclass:: fortnite_api.ShopEntryBundle
     :members:
 
