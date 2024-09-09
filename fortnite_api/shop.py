@@ -460,6 +460,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         "final_price",
         "in_date",
         "out_date",
+        "offer_tag",
         "bundle",
         "banner",
         "giftable",
