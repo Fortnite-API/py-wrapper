@@ -286,7 +286,7 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
     Attributes
     ----------
-    color1: Optional[:class:`str`]
+    color1: :class:`str`
         The first color of background gradient.
     color2: Optional[:class:`str`]
         The second color of background gradient. If not present, the gradient only consists of two colors.
@@ -301,7 +301,7 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.color1: Optional[str] = data.get('color1')
+        self.color1: str = data['color1']
         self.color2: Optional[str] = data.get('color2')
         self.color3: str = data['color3']
         self.text_background_color: str = data['textBackgroundColor']
