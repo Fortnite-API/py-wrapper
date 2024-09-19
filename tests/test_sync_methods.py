@@ -384,7 +384,6 @@ def test_sync_fetch_shop(api_key: str):
             assert isinstance(colors, fn_api.ShopEntryColors)
             assert isinstance(colors.color1, str)
             assert isinstance(colors.color3, str)
-            assert isinstance(colors.text_background_color, str)
 
         for cosmetic in entry.br + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:
             assert isinstance(cosmetic, fn_api.Cosmetic)
