@@ -292,7 +292,7 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The second color of background gradient. If not present, the gradient only consists of two colors.
     color3: :class:`str`
         The third color of background gradient.
-    text_background_color: :class:`str`
+    text_background_color: Optional[:class:`str`]Optional[:class:`str`]
         The fade out overlaying gradient color on which the text is displayed.
     """
 
@@ -304,7 +304,7 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.color1: str = data['color1']
         self.color2: Optional[str] = data.get('color2')
         self.color3: str = data['color3']
-        self.text_background_color: str = data['textBackgroundColor']
+        self.text_background_color: Optional[str] = data.get('textBackgroundColor')
 
 
 class ShopEntryRenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
