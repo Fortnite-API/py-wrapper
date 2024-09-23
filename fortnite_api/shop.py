@@ -258,7 +258,8 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         "rank",
         "show_ineligible_offers",
         "background",
-        'use_wide_preview',
+        "use_wide_preview",
+        "display_type",
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
