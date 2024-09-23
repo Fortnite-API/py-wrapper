@@ -145,7 +145,7 @@ class TileSize:
         )
 
 
-class ShopEntryOfferTag(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class ShopEntryOfferTag(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryOfferTag
 
