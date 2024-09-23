@@ -277,6 +277,7 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         self.use_wide_preview: bool = data.get('useWidePreview', False)
         self.display_type: Optional[str] = data.get('displayType')
+        # Billboards include textureMetadata, stringMetadata and textMetadata
 
 
 class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
