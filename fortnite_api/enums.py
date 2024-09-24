@@ -432,9 +432,7 @@ class ProductTag(enum.Enum):
 
     @classmethod
     def _from_str(cls: Type[Self], string: str) -> Self:
-        # The Epic Games API uses both "CosmeticCompatibleMode" and "CosmeticCompatibleModeLegacy" enums
-        # with the same values, so we need to handle both.
-        # To easily handle this, we'll remove the "ECosmeticCompatibleMode::" or "ECosmeticCompatibleModeLegacy::" prefix.
-        # and then convert it to the enum.
+        # The Epic Games API "Product" enums contains both lower case and capitalized values, so we need to handle both.
+        # To easily handle this, we'll remove the "Product." prefix and convert it to lowercase.
         trimmed = string.split('.')[-1]
         return cls(trimmed.lower())
