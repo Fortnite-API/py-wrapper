@@ -410,11 +410,6 @@ async def test_async_fetch_shop(api_key: str):
             assert offer_tag.id
             assert offer_tag.text
 
-        offer_tag = entry.offer_tag
-        if offer_tag:
-            assert isinstance(offer_tag, fn_api.ShopEntryOfferTag)
-            assert offer_tag.id
-            assert offer_tag.text
 
         bundle = entry.bundle
         if bundle:
