@@ -28,7 +28,7 @@ from typing import Any, Dict, Optional, Tuple
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
-from .enums import CosmeticCompatibleMode
+from .enums import CosmeticCompatibleMode, ProductTag
 from .http import HTTPClientT
 from .utils import get_with_fallback
 
@@ -126,6 +126,8 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The ID of the Material instance.
     primary_mode: :class:`fortnite_api.CosmeticCompatibleMode`
         The primary mode of the Material instance. This denotes what the cosmetic material instance is compatible with.
+    product_tag: :class:`fortnite_api.ProductTag`
+        The product tag of the Material instance.
     images: :class:`fortnite_api.MaterialInstanceImages`
         Represents some images of the Material instance, as they are rendered in game.
     colors: Optional[:class:`fortnite_api.MaterialInstanceColors`]
@@ -146,6 +148,7 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     __slots__: Tuple[str, ...] = (
         "id",
         "primary_mode",
+        "product_tag",
         "images",
         "colors",
         "scalings",
@@ -157,6 +160,7 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         self.id: str = data["id"]
         self.primary_mode: CosmeticCompatibleMode = CosmeticCompatibleMode._from_str(data["primaryMode"])
+        self.product_tag: ProductTag = ProductTag._from_str(data["productTag"])
 
         self.images: MaterialInstanceImages[HTTPClientT] = MaterialInstanceImages(data=data["images"], http=http)
 

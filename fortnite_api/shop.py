@@ -33,16 +33,19 @@ from typing_extensions import Self
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
-from .enums import BannerIntensity
+from .enums import BannerIntensity, ProductTag
 from .http import HTTPClientT
 from .material import MaterialInstance
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
 __all__: Tuple[str, ...] = (
+    "ShopEntryOfferTag",
     "ShopEntryBundle",
     "ShopEntryBanner",
     "ShopEntryLayout",
+    "ShopEntryColors",
+    "ShopEntryRenderImage",
     "ShopEntryNewDisplayAsset",
     "ShopEntry",
     "Shop",
@@ -142,6 +145,29 @@ class TileSize:
         )
 
 
+class ShopEntryOfferTag(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.ShopEntryOfferTag
+
+    Represents a shop entry offer tag. This class inherits from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The ID of the offer tag.
+    text: :class:`str`
+        The text of the offer tag.
+    """
+
+    __slots__: Tuple[str, ...] = ("id", "text")
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.id: str = data["id"]
+        self.text: str = data["text"]
+
+
 class ShopEntryBundle(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryBundle
@@ -212,6 +238,8 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The category of the layout, if any.
     index: :class:`int`
         The index of the layout.
+    rank: :class:`int`
+        The rank of the layout used for sorting.
     show_ineligible_offers: :class:`str`
         Whether ineligible offers are displayed in the layout or not.
     background: Optional[:class:`fortnite_api.Asset`]
@@ -227,9 +255,11 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         "name",
         "category",
         "index",
+        "rank",
         "show_ineligible_offers",
         "background",
-        'use_wide_preview',
+        "use_wide_preview",
+        "display_type",
     )
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
@@ -239,6 +269,7 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.name: str = data["name"]
         self.category: Optional[str] = data.get("category")
         self.index: int = data["index"]
+        self.rank: int = data["rank"]
         self.show_ineligible_offers: str = data["showIneligibleOffers"]
 
         _background = data.get("background")
@@ -246,6 +277,64 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         self.use_wide_preview: bool = data.get('useWidePreview', False)
         self.display_type: Optional[str] = data.get('displayType')
+        # Billboards include textureMetadata, stringMetadata and textMetadata
+
+
+class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.ShopEntryColors
+
+    Represents the colors of a shop entry. This class inherits from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    color1: :class:`str`
+        The first color of background gradient.
+    color2: Optional[:class:`str`]
+        The second color of background gradient. If not present, the gradient only consists of two colors.
+    color3: :class:`str`
+        The third color of background gradient.
+    text_background_color: Optional[:class:`str`]
+        The fade out overlaying gradient color on which the text is displayed.
+    """
+
+    __slots__: Tuple[str, ...] = ("color1", "color2", "color3", "text_background_color")
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.color1: str = data['color1']
+        self.color2: Optional[str] = data.get('color2')
+        self.color3: str = data['color3']
+        self.text_background_color: Optional[str] = data.get('textBackgroundColor')
+
+
+class ShopEntryRenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.ShopEntryRenderImage
+
+    Represents a render image for a shop entry. A render image is an image
+    used to visually represent a cosmetic item in the shop. This class inherits
+    from :class:`~fortnite_api.ReconstructAble`.
+
+    Attributes
+    ----------
+    product_tag: :class:`fortnite_api.ProductTag`
+        The product tag of the render image.
+    file_name: :class:`str`
+        The internal file name of the rendered image. Refers to the name within the game files and **not** the :attr`image`. An example of this is ``T-Featured-Pickaxes-SleepyTimePickaxe``.
+    image: :class:`fortnite_api.Asset`
+        The image of the render image.
+    """
+
+    __slots__: Tuple[str, ...] = ("product_tag", "file_name", "image")
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.product_tag: ProductTag = ProductTag._from_str(data["productTag"])
+        self.file_name: str = data["fileName"]
+        self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
 
 
 class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
@@ -264,9 +353,11 @@ class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPCli
         The ID of the cosmetic item associated with the display asset, if any.
     material_instances: List[:class:`fortnite_api.MaterialInstance`]
         A list of material instances used by the display asset.
+    render_images: List[:class:`fortnite_api.ShopEntryRenderImage`]
+        A list of render images used by the display asset.
     """
 
-    __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances")
+    __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances", "render_images")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
@@ -275,6 +366,9 @@ class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPCli
         self.cosmetic_id: Optional[str] = data.get("cosmeticId")
         self.material_instances: List[MaterialInstance[HTTPClientT]] = [
             MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, "materialInstances", list)
+        ]
+        self.render_images: List[ShopEntryRenderImage[HTTPClientT]] = [
+            ShopEntryRenderImage(data=instance, http=http) for instance in get_with_fallback(data, "renderImages", list)
         ]
 
 
@@ -323,6 +417,8 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The date when this entry was added to the shop.
     out_date: :class:`datetime.datetime`
         The date when this entry will be removed from the shop.
+    offer_tag: Optional[:class:`fortnite_api.ShopEntryOfferTag`]
+        The offer tag of this entry, if any.
     bundle: Optional[:class:`fortnite_api.ShopEntryBundle`]
         The bundle that this entry belongs to, if any.
     banner: Optional[:class:`fortnite_api.ShopEntryBanner`]
@@ -349,6 +445,8 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The new display asset path of this entry.
     new_display_asset: :class:`fortnite_api.ShopEntryNewDisplayAsset`
         The new display asset of this entry.
+    colors: :class:`fortnite_api.ShopEntryColors`
+        The colors of this entry.
     br: List[:class:`fortnite_api.CosmeticBr`]
         The Battle Royale cosmetics in this entry.
     tracks: List[:class:`fortnite_api.CosmeticTrack`]
@@ -366,6 +464,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         "final_price",
         "in_date",
         "out_date",
+        "offer_tag",
         "bundle",
         "banner",
         "giftable",
@@ -379,6 +478,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         "tile_size",
         "new_display_asset_path",
         "new_display_asset",
+        "colors",
         "br",
         "tracks",
         "instruments",
@@ -394,6 +494,11 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
         self.in_date: datetime.datetime = parse_time(data["inDate"])
         self.out_date: datetime.datetime = parse_time(data["outDate"])
+
+        _offer_tag = data.get("offerTag")
+        self.offer_tag: Optional[ShopEntryOfferTag[HTTPClientT]] = _offer_tag and ShopEntryOfferTag(
+            data=_offer_tag, http=http
+        )
 
         _bundle = data.get("bundle")
         self.bundle: Optional[ShopEntryBundle[HTTPClientT]] = _bundle and ShopEntryBundle(data=_bundle, http=http)
@@ -421,6 +526,9 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.new_display_asset: Optional[ShopEntryNewDisplayAsset[HTTPClientT]] = (
             _new_display_asset and ShopEntryNewDisplayAsset(data=data["newDisplayAsset"], http=http)
         )
+
+        _colors = data.get("colors")
+        self.colors: Optional[ShopEntryColors] = _colors and ShopEntryColors(data=_colors, http=http)
 
         self.br: List[CosmeticBr[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "brItems", list),
