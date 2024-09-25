@@ -417,6 +417,8 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The date when this entry was added to the shop.
     out_date: :class:`datetime.datetime`
         The date when this entry will be removed from the shop.
+    offer_tag: Optional[:class:`fortnite_api.ShopEntryOfferTag`]
+        The offer tag of this entry, if any.
     bundle: Optional[:class:`fortnite_api.ShopEntryBundle`]
         The bundle that this entry belongs to, if any.
     banner: Optional[:class:`fortnite_api.ShopEntryBanner`]
