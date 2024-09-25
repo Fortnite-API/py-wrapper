@@ -294,7 +294,7 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The second color of background gradient. If not present, the gradient only consists of two colors.
     color3: :class:`str`
         The third color of background gradient.
-    text_background_color: Optional[:class:`str`]Optional[:class:`str`]
+    text_background_color: Optional[:class:`str`]
         The fade out overlaying gradient color on which the text is displayed.
     """
 
