@@ -322,7 +322,7 @@ class ShopEntryRenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
     product_tag: :class:`fortnite_api.ProductTag`
         The product tag of the render image.
     file_name: :class:`str`
-        The file name of the render image.
+        The internal file name of the rendered image. Refers to the name within the game files and **not** the :attr`image`. An example of this is ``T-Featured-Pickaxes-SleepyTimePickaxe``.
     image: :class:`fortnite_api.Asset`
         The image of the render image.
     """
