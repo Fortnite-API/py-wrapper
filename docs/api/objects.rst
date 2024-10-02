@@ -80,6 +80,9 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 .. autoclass:: fortnite_api.Playlist
     :members:
 
+.. autoclass:: fortnite_api.ShopEntryOfferTag
+    :members:
+
 .. autoclass:: fortnite_api.ShopEntryBundle
     :members:
 
@@ -87,6 +90,12 @@ The API has many objects that represent different parts of the Fortnite API. Bel
     :members:
 
 .. autoclass:: fortnite_api.ShopEntryLayout
+    :members:
+
+.. autoclass:: fortnite_api.ShopEntryColors
+    :members:
+
+.. autoclass:: fortnite_api.ShopEntryRenderImage
     :members:
 
 .. autoclass:: fortnite_api.ShopEntryNewDisplayAsset
@@ -227,6 +236,9 @@ Enumerations
     :members:
 
 .. autoclass:: fortnite_api.CustomGender
+    :members:
+
+.. autoclass:: fortnite_api.ProductTag
     :members:
 
 

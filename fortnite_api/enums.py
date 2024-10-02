@@ -405,3 +405,34 @@ class CustomGender(enum.Enum):
 
     FEMALE = 'EFortCustomGender::Female'
     MALE = 'EFortCustomGender::Male'
+
+
+class ProductTag(enum.Enum):
+    """A class that represents the tag of a product.
+
+    Attributes
+    ----------
+    BATTLE_ROYALE
+        The product is for Battle Royale.
+    LEGO
+        The product is for LEGO.
+    ROCKET_RACING
+        The product is for Rocket Racing.
+    FESTIVAL
+        The product is for Festival.
+    ALL
+        The product is for all modes.
+    """
+
+    BATTLE_ROYALE = 'br'
+    LEGO = 'juno'
+    ROCKET_RACING = 'delmar'
+    FESTIVAL = 'sparks'
+    ALL = 'max'
+
+    @classmethod
+    def _from_str(cls: Type[Self], string: str) -> Self:
+        # The Epic Games API "Product" enums contains both lower case and capitalized values, so we need to handle both.
+        # To easily handle this, we'll remove the "Product." prefix and convert it to lowercase.
+        trimmed = string.split('.')[-1]
+        return cls(trimmed.lower())
