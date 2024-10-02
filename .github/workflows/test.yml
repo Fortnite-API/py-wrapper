@@ -3,7 +3,7 @@
 
 name: Pytests
 
-on: 
+on:
   push:
   pull_request:
     types: [ opened, reopened, synchronize ]
@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python 3.8
         uses: actions/setup-python@v5
@@ -26,16 +26,15 @@ jobs:
 
       - name: Install Dependencies and Package
         run: |
-          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip setuptools
           pip install -U -r requirements.txt
           pip install -e .[tests]
-      
+
       - name: Run Pytest Checks
         shell: bash
         env:
           TEST_API_KEY: ${{ secrets.TEST_API_KEY }}
-        run: |
-          python -m pytest --cov=fortnite_api --import-mode=importlib -vs tests/
+        run: python -m pytest --cov=fortnite_api --import-mode=importlib -vs tests/
 
   black:
     name: Black Formatting Check
@@ -43,46 +42,44 @@ jobs:
 
     # Checkout the repository
     steps:
-        - name: Checkout
-          uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Setup Python 3.8
-          uses: actions/setup-python@v5
-          with:
-            python-version: "3.8"
-            cache: "pip" # Cache the pip packages to speed up the workflow
+      - name: Setup Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+          cache: "pip" # Cache the pip packages to speed up the workflow
 
-        - name: Install Dependencies and Project
-          run: |
-            python -m pip install --upgrade pip setuptools
-            pip install -U -r requirements.txt
-            pip install -e .[dev]
+      - name: Install Dependencies and Project
+        run: |
+          python -m pip install -U pip setuptools
+          pip install -U -r requirements.txt
+          pip install -e .[dev]
 
-        - name: Run Black Check
-          run: |
-            black --check --diff --verbose fortnite_api
+      - name: Run Black Check
+        run: black --check --diff --verbose fortnite_api
 
   isort:
-      name: Isort Formatting Check
-      runs-on: ubuntu-latest
+    name: Isort Formatting Check
+    runs-on: ubuntu-latest
 
-      # Checkout the repository
-      steps:
-          - name: Checkout
-            uses: actions/checkout@v4
+    # Checkout the repository
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-          - name: Setup Python 3.8
-            uses: actions/setup-python@v5
-            with:
-              python-version: "3.8"
-              cache: "pip" # Cache the pip packages to speed up the workflow
+      - name: Setup Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+          cache: "pip" # Cache the pip packages to speed up the workflow
 
-          - name: Install Dependencies and Project
-            run: |
-              python -m pip install --upgrade pip setuptools
-              pip install -U -r requirements.txt
-              pip install -e .[dev]
+      - name: Install Dependencies and Project
+        run: |
+          python -m pip install -U pip setuptools
+          pip install -U -r requirements.txt
+          pip install -e .[dev]
 
-          - name: Run Isort Check
-            run: |
-              isort --check --diff fortnite_api
+      - name: Run Isort Check
+        run: isort --check --diff fortnite_api
