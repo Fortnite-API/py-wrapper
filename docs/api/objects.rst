@@ -47,6 +47,15 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 .. autoclass:: fortnite_api.POILocation
     :members:
 
+.. autoclass:: fortnite_api.NewCosmetic
+    :members:
+
+.. autoclass:: fortnite_api.NewCosmetics 
+    :members:
+
+.. autoclass:: fortnite_api.RenderImage
+    :members:
+
 .. autoclass:: fortnite_api.MaterialInstanceImages
     :members:
 
@@ -56,10 +65,11 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 .. autoclass:: fortnite_api.MaterialInstance
     :members:
 
-.. autoclass:: fortnite_api.NewCosmetic
+
+.. autoclass:: fortnite_api.MaterialInstanceImages
     :members:
 
-.. autoclass:: fortnite_api.NewCosmetics 
+.. autoclass:: fortnite_api.NewDisplayAsset
     :members:
 
 .. autoclass:: fortnite_api.News
@@ -93,12 +103,6 @@ The API has many objects that represent different parts of the Fortnite API. Bel
     :members:
 
 .. autoclass:: fortnite_api.ShopEntryColors
-    :members:
-
-.. autoclass:: fortnite_api.ShopEntryRenderImage
-    :members:
-
-.. autoclass:: fortnite_api.ShopEntryNewDisplayAsset
     :members:
 
 .. autoclass:: fortnite_api.ShopEntry 
