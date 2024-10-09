@@ -356,6 +356,34 @@ async def test_async_fetch_playlist_by_id(api_key: str):
 
 
 @pytest.mark.asyncio
+async def test_async_beta_fetch_new_display_assets(api_key: str):
+
+    # Ensure you cannot call this without beta=True
+    with pytest.raises(fn_api.BetaAccessNotEnabled):
+        await fn_api.Client().beta_fetch_new_display_assets()
+
+    async with fn_api.Client(beta=True, api_key=api_key) as client:
+        new_display_assets = await client.beta_fetch_new_display_assets()
+
+    for new_display_asset in new_display_assets:
+        assert isinstance(new_display_asset, fn_api.NewDisplayAsset)
+
+        assert new_display_asset.id
+
+        for material_instance in new_display_asset.material_instances:
+            assert isinstance(material_instance, fn_api.MaterialInstance)
+
+        for render_image in new_display_asset.render_images:
+            assert isinstance(render_image, fn_api.RenderImage)
+
+            assert isinstance(render_image.product_tag, fn_api.ProductTag)
+            assert render_image.file_name
+            assert isinstance(render_image.image, fn_api.Asset)
+
+        assert new_display_asset == new_display_asset
+
+
+@pytest.mark.asyncio
 async def test_async_beta_fetch_material_instances(api_key: str):
 
     # Ensure you cannot call this without beta=True

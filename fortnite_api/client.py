@@ -43,8 +43,8 @@ from .errors import BetaAccessNotEnabled, BetaUnknownException, MissingAPIKey
 from .flags import ResponseFlags
 from .http import HTTPClient, SyncHTTPClient
 from .map import Map
-from .material import MaterialInstance
 from .new import NewCosmetics
+from .new_display_asset import MaterialInstance, NewDisplayAsset
 from .news import GameModeNews, News
 from .playlist import Playlist
 from .proxies import TransformerListProxy
@@ -1086,6 +1086,54 @@ class Client:
     # BETA METHODS
 
     @beta_method
+    async def beta_fetch_new_display_assets(self) -> List[NewDisplayAsset]:
+        """|coro|
+
+        Fetches all the new display assets available in Fortnite.
+
+        .. note::
+
+            This is a beta method. This cannot be called unless :attr:`beta`
+            is set to ``True`` in the client.
+
+        .. warning::
+
+            At any time, for any reason, this method could break - either from local parsing errors or upstream API changes. Always be prepared for this. It is highly recommended
+            to wrap this method in a try/except block to catch any exceptions that may be raised.
+
+            .. code-block:: python3
+
+                try:
+                    assets = await client.beta_fetch_new_display_assets()
+                except fortnite_api.BetaUnknownException as exc:
+                    # Any exception raised from beta methods will be wrapped in BetaUnknownException,
+                    # get the root cause of the exception with exc.original.
+                    original = exc.original
+                    print(f"An unknown error occurred: {original}")
+                else:
+                    print(assets)
+
+        Returns
+        --------
+        List[:class:`fortnite_api.NewDisplayAsset`]
+            The fetched new display assets.
+
+        Raises
+        ------
+        BetaAccessNotEnabled
+            The client does not have beta access enabled through :attr:`~beta`.
+        BetaUnknownException
+            An unknown error occurred while fetching the new display assets. This could be due to
+            an issue with the API or the client. Any unknown errors raised will be wrapped in this exception.
+        """
+        data = await self.http.beta_get_new_display_assets()
+
+        return TransformerListProxy(
+            data,
+            lambda x: NewDisplayAsset(data=x, http=self.http),
+        )
+
+    @beta_method
     async def beta_fetch_material_instances(self) -> List[MaterialInstance]:
         """|coro|
 
@@ -1555,6 +1603,16 @@ class SyncClient:
             return BrPlayerStats(data=data, http=self.http)
 
         raise ValueError("You must pass either a name or an account_id to fetch stats.")
+
+    @copy_doc(Client.beta_fetch_new_display_assets)
+    @beta_method
+    def beta_fetch_new_display_assets(self) -> List[NewDisplayAsset[SyncHTTPClient]]:
+        data = self.http.beta_get_new_display_assets()
+
+        return TransformerListProxy(
+            data,
+            lambda x: NewDisplayAsset(data=x, http=self.http),
+        )
 
     @copy_doc(Client.beta_fetch_material_instances)
     @beta_method
