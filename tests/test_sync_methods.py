@@ -373,7 +373,7 @@ def test_sync_fetch_shop(api_key: str):
 
         new_display_asset = entry.new_display_asset
         if new_display_asset:
-            assert isinstance(new_display_asset, fn_api.ShopEntryNewDisplayAsset)
+            assert isinstance(new_display_asset, fn_api.NewDisplayAsset)
             assert new_display_asset.id
 
             for material_instance in new_display_asset.material_instances:
