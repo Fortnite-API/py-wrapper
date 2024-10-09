@@ -50,7 +50,7 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 .. autoclass:: fortnite_api.NewCosmetic
     :members:
 
-.. autoclass:: fortnite_api.NewCosmetics 
+.. autoclass:: fortnite_api.NewCosmetics
     :members:
 
 .. autoclass:: fortnite_api.RenderImage
@@ -64,7 +64,6 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 
 .. autoclass:: fortnite_api.MaterialInstance
     :members:
-
 
 .. autoclass:: fortnite_api.MaterialInstanceImages
     :members:
