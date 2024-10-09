@@ -65,9 +65,6 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 .. autoclass:: fortnite_api.MaterialInstance
     :members:
 
-.. autoclass:: fortnite_api.MaterialInstanceImages
-    :members:
-
 .. autoclass:: fortnite_api.NewDisplayAsset
     :members:
 
