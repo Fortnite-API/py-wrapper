@@ -296,7 +296,7 @@ def test_sync_beta_fetch_new_display_assets(api_key: str):
     with pytest.raises(fn_api.BetaAccessNotEnabled):
         fn_api.SyncClient().beta_fetch_new_display_assets()
 
-    async with fn_api.SyncClient(beta=True, api_key=api_key) as client:
+    with fn_api.SyncClient(beta=True, api_key=api_key) as client:
         new_display_assets = client.beta_fetch_new_display_assets()
 
     for new_display_asset in new_display_assets:
