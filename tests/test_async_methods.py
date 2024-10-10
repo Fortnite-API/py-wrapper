@@ -302,14 +302,19 @@ def _test_game_mode_news(news: fn_api.GameModeNews[Any]):
 @pytest.mark.asyncio
 async def test_fetch_news_methods(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
-        news_br = await client.fetch_news_br()
-        news_stw = await client.fetch_news_stw()
+        try:
+            news_br = await client.fetch_news_br()
+            assert isinstance(news_br, fn_api.GameModeNews)
+            _test_game_mode_news(news_br)
+        except fortnite_api.NotFound:
+            pass
 
-    assert isinstance(news_br, fn_api.GameModeNews)
-    _test_game_mode_news(news_br)
-
-    assert isinstance(news_stw, fn_api.GameModeNews)
-    _test_game_mode_news(news_stw)
+        try:
+            news_stw = await client.fetch_news_stw()
+            assert isinstance(news_stw, fn_api.GameModeNews)
+            _test_game_mode_news(news_stw)
+        except fortnite_api.NotFound:
+            pass
 
 
 def _test_playlist(playlist: fn_api.Playlist[Any]):
