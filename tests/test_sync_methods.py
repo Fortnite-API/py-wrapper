@@ -264,14 +264,19 @@ def test_fetch_news(api_key: str):
 
 def test_fetch_news_methods(api_key: str):
     with fn_api.SyncClient(api_key=api_key) as client:
-        news_br = client.fetch_news_br()
-        news_stw = client.fetch_news_stw()
+        try:
+            news_br = client.fetch_news_br()
+            assert isinstance(news_br, fn_api.GameModeNews)
+            _test_game_mode_news(news_br)
+        except fn_api.NotFound:
+            pass
 
-    assert isinstance(news_stw, fn_api.GameModeNews)
-    _test_game_mode_news(news_br)
-
-    assert isinstance(news_stw, fn_api.GameModeNews)
-    _test_game_mode_news(news_stw)
+        try:
+            news_stw = client.fetch_news_stw()
+            assert isinstance(news_stw, fn_api.GameModeNews)
+            _test_game_mode_news(news_stw)
+        except fn_api.NotFound:
+            pass
 
 
 def test_sync_fetch_playlists(api_key: str):

@@ -897,6 +897,11 @@ class Client:
         -------
         :class:`fortnite_api.GameModeNews`
             The Battle Royale news.
+
+        Raises
+        ------
+        NotFound
+            News for the requested language currently doesn't exist.
         """
         data = await self.http.get_news_br(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
@@ -918,6 +923,11 @@ class Client:
         -------
         :class:`fortnite_api.GameModeNews`
             The Save the World news.
+
+        Raises
+        ------
+        NotFound
+            News for the requested language currently doesn't exist.
         """
         data = await self.http.get_news_stw(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
