@@ -125,7 +125,7 @@ class GameModeNews(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class NewsMotd(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class NewsMotd(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMotd
 
@@ -143,6 +143,8 @@ class NewsMotd(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
     Attributes
     -----------
+    id: :class:`str`
+        The id of the motd.
     title: :class:`str`
         The title of the motd.
     tab_title: :class:`str`
@@ -158,6 +160,7 @@ class NewsMotd(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
 
     __slots__: Tuple[str, ...] = (
+        "id",
         "title",
         "tab_title",
         "body",
@@ -170,6 +173,7 @@ class NewsMotd(ReconstructAble[Dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
+        self.id: str = data["id"]
         self.title: str = data["title"]
         self.tab_title: str = data["tabTitle"]
         self.body: str = data["body"]
