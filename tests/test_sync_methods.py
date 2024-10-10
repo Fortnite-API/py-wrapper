@@ -268,14 +268,14 @@ def test_fetch_news_methods(api_key: str):
             news_br = client.fetch_news_br()
             assert isinstance(news_br, fn_api.GameModeNews)
             _test_game_mode_news(news_br)
-        except fortnite_api.NotFound:
+        except fn_api.NotFound:
             pass
 
         try:
             news_stw = client.fetch_news_stw()
             assert isinstance(news_stw, fn_api.GameModeNews)
             _test_game_mode_news(news_stw)
-        except fortnite_api.NotFound:
+        except fn_api.NotFound:
             pass
 
 
