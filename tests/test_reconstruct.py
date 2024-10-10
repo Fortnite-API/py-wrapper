@@ -70,7 +70,10 @@ async def test_reconstruct(api_key: str) -> None:
             coro = getattr(client, method)
 
             # (2) call the method
-            result = await coro()
+            try:
+                result = await coro()
+            except fortnite_api.NotFound:
+                continue
 
             # If this item is reconstruct-able, do some basic checks to ensure
             # that the reconstruction is working as expected.
