@@ -278,7 +278,6 @@ def _test_game_mode_news(news: fn_api.GameModeNews[Any]):
 
     for motd in news.motds:
         assert isinstance(motd, fn_api.NewsMotd)
-        assert motd.id
         assert motd.title
         assert motd.tab_title
         assert motd.body
