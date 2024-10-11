@@ -141,8 +141,6 @@ class BannerColor(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The id of the color.
     color: :class:`str`
         The color of the banner.
-    colour: :class:`str`
-        An alias to :attr:`~color`.
     category: :class:`str`
         The category of the banner.
     sub_category_group: :class:`int`
@@ -156,7 +154,6 @@ class BannerColor(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.id: str = data["id"]
 
         self.color: str = data["color"]
-        self.colour = self.color
 
         self.category: str = data["category"]
         self.sub_category_group: int = data["subCategoryGroup"]  # TODO: Convert this to enum?
