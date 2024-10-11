@@ -207,7 +207,7 @@ class NewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
     Represents a new display asset for a shop entry. A display asset is an asset that is
     used to visually represent a cosmetic item in the shop. This class inherits
-    from :class:`~fortnite_api.ReconstructAble`.
+    from :class:`~fortnite_api.ReconstructAble` and :class:`~fortnite_api.Hashable`.
 
     Attributes
     ----------
