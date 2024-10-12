@@ -253,6 +253,8 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         .. opt-in:: INCLUDE_PATHS
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the cosmetic.
+
+        .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
     __slots__: Tuple[str, ...] = (

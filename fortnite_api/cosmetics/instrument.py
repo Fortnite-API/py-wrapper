@@ -75,6 +75,8 @@ class CosmeticInstrument(Cosmetic[Dict[str, Any], HTTPClientT]):
         The showcase YouTube video ID of the cosmetic, if available.
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the instrument.
+
+        .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
     __slots__: Tuple[str, ...] = (

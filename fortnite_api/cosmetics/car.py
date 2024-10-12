@@ -77,6 +77,8 @@ class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
         The showcase YouTube video ID of the cosmetic, if available.
     shop_history: List[:class:`datetime.datetime`]
         A list of datetimes representing the shop history of the car.
+
+        .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
     __slots__: Tuple[str, ...] = (
