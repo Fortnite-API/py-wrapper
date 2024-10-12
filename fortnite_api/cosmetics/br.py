@@ -243,10 +243,16 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         The dynamic pak ID of the cosmetic, if available.
     item_preview_hero_path: Optional[:class:`str`]
         The item preview hero path of the cosmetic, if available.
+
+        .. opt-in:: INCLUDE_PATHS
     display_asset_path: Optional[:class:`str`]
         The display asset path of the cosmetic, if available.
+
+        .. opt-in:: INCLUDE_PATHS
     definition_path: Optional[:class:`str`]
         The definition path of the cosmetic, if available.
+
+        .. opt-in:: INCLUDE_PATHS
     path: Optional[:class:`str`]
         The path of the cosmetic, if available.
 
