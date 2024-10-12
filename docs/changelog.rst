@@ -30,13 +30,13 @@ New Features
 
 Bug Fixes
 ~~~~~~~~~
-- Fetching specific game mode news when no news is available now raises :class:`fortnite_api.NotFound` instead of :class:`fortnite_api.ServiceUnavailable`, thanks to proper handling from Fortnite-API.com. Documentation has been updated accordingly.
 - Fixed an issue where ``type`` and ``time_window`` parameters were not respected when fetching stats.
 - :attr:`fortnite_api.Playlist.images` now returns ``None`` when no images are available, instead of an empty dict.
 - Ensured all datetime objects include timezone information to avoid returning naive datetime objects in rare cases.
 
 Miscellaneous
 ~~~~~~~~~~~~~
+- Fetching specific game mode news raised :class:`fortnite_api.ServiceUnavailable`, due to improper handling from Fortnite-API.com. This has been fixed within the API. Now, when no news is available, :class:`fortnite_api.NotFound` is raised instead. This change is reflected in the documentation.
 - Improved documentation for attributes that require specific response flags to be set.
 
 
