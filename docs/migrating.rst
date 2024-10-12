@@ -404,7 +404,7 @@ shop objects to the new shop objects is as follows:
     *   - ``ShopLayout``
         - :class:`fortnite_api.ShopEntryLayout`
     *   - ``ShopNewDisplayAsset``
-        - :class:`fortnite_api.ShopEntryNewDisplayAsset`
+        - :class:`fortnite_api.NewDisplayAsset`
     *   - ``ShopMaterialInstance``
         - Depreciated, moved to a more generic :class:`fortnite_api.MaterialInstance` class for the material instance endpoints. More on this later.
     *   - ``ShopMaterialInstanceImages``
@@ -898,7 +898,7 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.Images`: Represents images returned from the API. This is used across all cosmetics objects through the :class:`fortnite_api.CosmeticImages` object, as well as in the :class:`fortnite_api.Banner` object.
 
-- :class:`fortnite_api.MaterialInstance`: Represents a material instance in Fortnite. If you do not know what a material instance is, check the documentation for the object in the library. This is used when fetching material instances manually, or sometimes given in the :class:`~fortnite_api.ShopEntryNewDisplayAsset` object from the shop.
+- :class:`fortnite_api.MaterialInstance`: Represents a material instance in Fortnite. If you do not know what a material instance is, check the documentation for the object in the library. This is used when fetching material instances manually, or sometimes given in the :class:`~fortnite_api.NewDisplayAsset` object from the shop.
 
 - :class:`fortnite_api.MaterialInstanceImages`: A special class that represents the images of a material instance. It is given from the :class:`~fortnite_api.MaterialInstance` class. 
 

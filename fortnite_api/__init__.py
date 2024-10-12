@@ -39,8 +39,8 @@ from .errors import *
 from .flags import *
 from .images import *
 from .map import *
-from .material import *
 from .new import *
+from .new_display_asset import *
 from .news import *
 from .playlist import *
 from .shop import *

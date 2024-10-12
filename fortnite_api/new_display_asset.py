@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
@@ -33,10 +33,44 @@ from .http import HTTPClientT
 from .utils import get_with_fallback
 
 __all__: Tuple[str, ...] = (
+    "RenderImage",
     "MaterialInstanceImages",
     "MaterialInstanceColors",
     "MaterialInstance",
+    "NewDisplayAsset",
 )
+
+
+class RenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.RenderImage
+
+    Represents a render image for a shop entry. A render image is an image
+    used to visually represent a cosmetic item in the shop. This class inherits
+    from :class:`~fortnite_api.ReconstructAble`.
+
+    .. versionchanged:: v3.1.0
+        Renamed from ``ShopEntryRenderImage`` to a more generic ``RenderImage``
+        to reflect its usage across the API.
+
+    Attributes
+    ----------
+    product_tag: :class:`fortnite_api.ProductTag`
+        The product tag of the render image.
+    file_name: :class:`str`
+        The internal file name of the rendered image. Refers to the name within the game files and **not** the :attr`image`. An example of this is ``T-Featured-Pickaxes-SleepyTimePickaxe``.
+    image: :class:`fortnite_api.Asset`
+        The image of the render image.
+    """
+
+    __slots__: Tuple[str, ...] = ("product_tag", "file_name", "image")
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.product_tag: ProductTag = ProductTag._from_str(data["productTag"])
+        self.file_name: str = data["fileName"]
+        self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
 
 
 class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
@@ -49,6 +83,9 @@ class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
 
     This class inherits from :class:`dict`, and thus, supports all the operations that a normal
     dictionary does, such as indexing, iteration, etc.
+
+    .. versionchanged:: v3.1.0
+        Moved from the now-deleted ``fortnite_api.material`` to ``fortnite_api.new_display_asset``.
 
     Attributes
     ----------
@@ -81,6 +118,9 @@ class MaterialInstanceColors(Dict[str, str]):
     Represents some metadata about the colors of a Material instance. Although the keys are dynamically generated in the API, the most common keys are exposed as attributes.
 
     This class inherits from :class:`dict`, and thus, supports all the operations that a normal dictionary does, such as indexing, iteration, etc.
+
+    .. versionchanged:: v3.1.0
+        Moved from the now-deleted ``fortnite_api.material`` to ``fortnite_api.new_display_asset``.
 
     Attributes
     ----------
@@ -119,6 +159,9 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     This class represents a Material instance, which is said to be a child of a bigger parent Material.
 
     This class inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
+
+    .. versionchanged:: v3.1.0
+        Moved from the now-deleted ``fortnite_api.material`` to ``fortnite_api.new_display_asset``.
 
     Attributes
     ----------
@@ -169,3 +212,42 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.scalings: Dict[str, Any] = get_with_fallback(data, "scalings", dict)
 
         self.flags: Dict[str, Any] = get_with_fallback(data, "flags", dict)  # This is always None at this time.
+
+
+class NewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+    """
+    .. attributetable:: fortnite_api.NewDisplayAsset
+
+    Represents a new display asset for a shop entry. A display asset is an asset that is
+    used to visually represent a cosmetic item in the shop. This class inherits
+    from :class:`~fortnite_api.ReconstructAble` and :class:`~fortnite_api.Hashable`.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The ID of the display asset.
+    cosmetic_id: Optional[:class:`str`]
+        The ID of the cosmetic item associated with the display asset, if any.
+    material_instances: List[:class:`fortnite_api.MaterialInstance`]
+        A list of material instances used by the display asset.
+    render_images: List[:class:`fortnite_api.RenderImage`]
+        A list of render images used by the display asset.
+
+    .. versionchanged:: v3.1.0
+        Renamed from ``ShopEntryNewDisplayAsset`` to a more generic ``NewDisplayAsset``
+        to better reflect its usage across the API.
+    """
+
+    __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances", "render_images")
+
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+        super().__init__(data=data, http=http)
+
+        self.id: str = data["id"]
+        self.cosmetic_id: Optional[str] = data.get("cosmeticId")
+        self.material_instances: List[MaterialInstance[HTTPClientT]] = [
+            MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, "materialInstances", list)
+        ]
+        self.render_images: List[RenderImage[HTTPClientT]] = [
+            RenderImage(data=instance, http=http) for instance in get_with_fallback(data, "renderImages", list)
+        ]
