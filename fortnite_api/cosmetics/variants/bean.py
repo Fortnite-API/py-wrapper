@@ -56,6 +56,8 @@ class VariantBean(Cosmetic[Dict[str, Any], HTTPClientT]):
         Denotes the gender of this bean.
     gameplay_tags: List[:class:`str`]
         The gameplay tags associated with this bean.
+
+        .. opt-in:: INCLUDE_GAMEPLAY_TAGS
     images: Optional[:class:`fortnite_api.CosmeticImages`]
         Any display images of this bean in the game. Will be ``None``
         if there are no images.

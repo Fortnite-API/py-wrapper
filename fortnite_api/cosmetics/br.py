@@ -233,6 +233,8 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         The search tags of the cosmetic.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the cosmetic.
+
+        .. opt-in:: INCLUDE_GAMEPLAY_TAGS
     meta_tags: List[:class:`str`]
         The meta tags of the cosmetic.
     showcase_video_id: Optional[:class:`str`]
@@ -249,7 +251,6 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         The path of the cosmetic, if available.
 
         .. opt-in:: INCLUDE_PATHS
-
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the cosmetic.
     """

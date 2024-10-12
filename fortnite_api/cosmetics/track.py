@@ -114,6 +114,8 @@ class CosmeticTrack(Cosmetic[Dict[str, Any], HTTPClientT]):
         The difficulty of the track.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the track.
+
+        .. opt-in:: INCLUDE_GAMEPLAY_TAGS
     genres: List[:class:`str`]
         The genres of the track.
     album_art: :class:`fortnite_api.Asset`

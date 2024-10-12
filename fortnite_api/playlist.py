@@ -111,11 +111,12 @@ class Playlist(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The images associated with the playlist.
     gameplay_tags: List[:class:`str`]
         The gameplay tags for the playlist.
+
+        .. opt-in:: INCLUDE_GAMEPLAY_TAGS
     path: :class:`str`
         The path of the playlist.
 
         .. opt-in:: INCLUDE_PATHS
-
     added: :class:`datetime.datetime`
         The time the playlist was added.
     """
