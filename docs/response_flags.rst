@@ -14,7 +14,7 @@ By default, any response flags are not enabled on the :class:`~fortnite_api.Clie
 Using the Response Flags Class
 ------------------------------
 The :class:`~fortnite_api.ResponseFlags` class provides a set of flags that you can enable or disable and set in the client.
-This class is a subclass of the built-in :class:`~py.enum.IntFlag`, and thus, supports bitwise operations.
+This class is a subclass of the built-in :class:`~py:enum.IntFlag`, and thus, supports bitwise operations.
 
 To consider how to use response flags, let's consider the following example:
 
@@ -27,7 +27,7 @@ To consider how to use response flags, let's consider the following example:
         GREEN = auto()
         BLUE = auto()
 
-Here, we have defined a class titled ``Color`` as a subclass of :class:`~py.enum.IntFlag`. This class has three fields: ``RED``, ``GREEN``, and ``BLUE``. Each field is an instance of the :class:`~py.enum.auto` class, which automatically assigns a unique value to each field.
+Here, we have defined a class titled ``Color`` as a subclass of :class:`~py:enum.IntFlag`. This class has three fields: ``RED``, ``GREEN``, and ``BLUE``. Each field is an instance of the :class:`~py:enum.auto` class, which automatically assigns a unique value to each field.
 
 To enable the ``RED`` and ``GREEN`` flags, you can use the bitwise OR operator:
 
