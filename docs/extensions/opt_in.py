@@ -43,12 +43,10 @@ class OptInDirective(rst.Directive):
 
     .. code-block:: rst
 
-        .. danger::
+        .. important::
 
             This is opt-in. For this parameter to be available, you must enable the
             <user-set-flag-link> flag on the client.
-
-        .. seealso::
 
             See the :ref:`response flags documentation <response_flags>` for more information on
             what response flags are and how to use them.
