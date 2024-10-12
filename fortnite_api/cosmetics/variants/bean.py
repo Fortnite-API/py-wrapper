@@ -62,6 +62,8 @@ class VariantBean(Cosmetic[Dict[str, Any], HTTPClientT]):
     path: Optional[:class:`str`]
         The game path of this bean. Will be ``None`` if there is no path
         in the API response.
+
+        .. opt-in:: INCLUDE_PATHS
     """
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:

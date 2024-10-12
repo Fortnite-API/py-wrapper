@@ -60,6 +60,9 @@ class CosmeticLegoKit(Cosmetic[Dict[str, Any], HTTPClientT]):
         Any LEGO kit images.
     path: Optional[:class:`str`]
         The path of the LEGO kit.
+
+        .. opt-in:: INCLUDE_PATHS
+
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the LEGO kit.
     """

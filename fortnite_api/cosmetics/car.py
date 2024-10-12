@@ -69,6 +69,9 @@ class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
         The gameplay tags of the car.
     path: Optional[:class:`str`]
         The path of the car.
+
+        .. opt-in:: INCLUDE_PATHS
+
     showcase_video_id: Optional[:class:`str`]
         The showcase YouTube video ID of the cosmetic, if available.
     shop_history: List[:class:`datetime.datetime`]

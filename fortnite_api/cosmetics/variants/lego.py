@@ -64,6 +64,8 @@ class VariantLego(Cosmetic[Dict[str, Any], HTTPClientT]):
     path: Optional[:class:`str`]
         The path of the lego cosmetic variant. Will be ``None`` if
         the API response does not contain a path.
+
+        .. opt-in:: INCLUDE_PATHS
     """
 
     __slots__: Tuple[str, ...] = ('cosmetic_id', 'sound_library_tags', 'images', 'path')

@@ -247,6 +247,9 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         The definition path of the cosmetic, if available.
     path: Optional[:class:`str`]
         The path of the cosmetic, if available.
+
+        .. opt-in:: INCLUDE_PATHS
+
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the cosmetic.
     """
