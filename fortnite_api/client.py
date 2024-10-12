@@ -1101,6 +1101,8 @@ class Client:
 
         Fetches all the new display assets available in Fortnite.
 
+        .. versionadded:: v3.1.0
+
         .. note::
 
             This is a beta method. This cannot be called unless :attr:`beta`

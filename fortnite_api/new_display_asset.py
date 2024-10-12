@@ -49,6 +49,10 @@ class RenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
     used to visually represent a cosmetic item in the shop. This class inherits
     from :class:`~fortnite_api.ReconstructAble`.
 
+    .. versionchanged:: v3.1.0
+        Renamed from ``ShopEntryRenderImage`` to a more generic ``RenderImage``
+        to reflect its usage across the API.
+
     Attributes
     ----------
     product_tag: :class:`fortnite_api.ProductTag`
@@ -79,6 +83,9 @@ class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
 
     This class inherits from :class:`dict`, and thus, supports all the operations that a normal
     dictionary does, such as indexing, iteration, etc.
+
+    .. versionchanged:: v3.1.0
+        Moved from the now-deleted ``fortnite_api.material`` to ``fortnite_api.new_display_asset``.
 
     Attributes
     ----------
@@ -111,6 +118,9 @@ class MaterialInstanceColors(Dict[str, str]):
     Represents some metadata about the colors of a Material instance. Although the keys are dynamically generated in the API, the most common keys are exposed as attributes.
 
     This class inherits from :class:`dict`, and thus, supports all the operations that a normal dictionary does, such as indexing, iteration, etc.
+
+    .. versionchanged:: v3.1.0
+        Moved from the now-deleted ``fortnite_api.material`` to ``fortnite_api.new_display_asset``.
 
     Attributes
     ----------
@@ -149,6 +159,9 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
     This class represents a Material instance, which is said to be a child of a bigger parent Material.
 
     This class inherits from :class:`~fortnite_api.Hashable` and :class:`~fortnite_api.ReconstructAble`.
+
+    .. versionchanged:: v3.1.0
+        Moved from the now-deleted ``fortnite_api.material`` to ``fortnite_api.new_display_asset``.
 
     Attributes
     ----------
@@ -219,6 +232,10 @@ class NewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         A list of material instances used by the display asset.
     render_images: List[:class:`fortnite_api.RenderImage`]
         A list of render images used by the display asset.
+
+    .. versionchanged:: v3.1.0
+        Renamed from ``ShopEntryNewDisplayAsset`` to a more generic ``NewDisplayAsset``
+        to better reflect its usage across the API.
     """
 
     __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances", "render_images")
