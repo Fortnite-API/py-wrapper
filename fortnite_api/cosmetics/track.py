@@ -114,12 +114,16 @@ class CosmeticTrack(Cosmetic[Dict[str, Any], HTTPClientT]):
         The difficulty of the track.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the track.
+
+        .. opt-in:: INCLUDE_GAMEPLAY_TAGS
     genres: List[:class:`str`]
         The genres of the track.
     album_art: :class:`fortnite_api.Asset`
         The album art of the track.
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the track.
+
+        .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
     __slots__: Tuple[str, ...] = (

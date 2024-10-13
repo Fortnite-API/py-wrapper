@@ -36,6 +36,7 @@ extensions = [
     'exception_hierarchy',
     'outdated_code_blocks',
     'attribute_table',
+    'opt_in',
 ]
 
 autodoc_member_order = 'bysource'
