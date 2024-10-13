@@ -33,9 +33,9 @@ from typing_extensions import Self
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
-from .enums import BannerIntensity, ProductTag
+from .enums import BannerIntensity
 from .http import HTTPClientT
-from .material import MaterialInstance
+from .new_display_asset import NewDisplayAsset
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
@@ -45,8 +45,6 @@ __all__: Tuple[str, ...] = (
     "ShopEntryBanner",
     "ShopEntryLayout",
     "ShopEntryColors",
-    "ShopEntryRenderImage",
-    "ShopEntryNewDisplayAsset",
     "ShopEntry",
     "Shop",
     "TileSize",
@@ -309,69 +307,6 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.text_background_color: Optional[str] = data.get('textBackgroundColor')
 
 
-class ShopEntryRenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
-    """
-    .. attributetable:: fortnite_api.ShopEntryRenderImage
-
-    Represents a render image for a shop entry. A render image is an image
-    used to visually represent a cosmetic item in the shop. This class inherits
-    from :class:`~fortnite_api.ReconstructAble`.
-
-    Attributes
-    ----------
-    product_tag: :class:`fortnite_api.ProductTag`
-        The product tag of the render image.
-    file_name: :class:`str`
-        The internal file name of the rendered image. Refers to the name within the game files and **not** the :attr`image`. An example of this is ``T-Featured-Pickaxes-SleepyTimePickaxe``.
-    image: :class:`fortnite_api.Asset`
-        The image of the render image.
-    """
-
-    __slots__: Tuple[str, ...] = ("product_tag", "file_name", "image")
-
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        super().__init__(data=data, http=http)
-
-        self.product_tag: ProductTag = ProductTag._from_str(data["productTag"])
-        self.file_name: str = data["fileName"]
-        self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
-
-
-class ShopEntryNewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
-    """
-    .. attributetable:: fortnite_api.ShopEntryNewDisplayAsset
-
-    Represents a new display asset for a shop entry. A display asset is an asset that is
-    used to visually represent a cosmetic item in the shop. This class inherits
-    from :class:`~fortnite_api.ReconstructAble`.
-
-    Attributes
-    ----------
-    id: :class:`str`
-        The ID of the display asset.
-    cosmetic_id: Optional[:class:`str`]
-        The ID of the cosmetic item associated with the display asset, if any.
-    material_instances: List[:class:`fortnite_api.MaterialInstance`]
-        A list of material instances used by the display asset.
-    render_images: List[:class:`fortnite_api.ShopEntryRenderImage`]
-        A list of render images used by the display asset.
-    """
-
-    __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances", "render_images")
-
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
-        super().__init__(data=data, http=http)
-
-        self.id: str = data["id"]
-        self.cosmetic_id: Optional[str] = data.get("cosmeticId")
-        self.material_instances: List[MaterialInstance[HTTPClientT]] = [
-            MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, "materialInstances", list)
-        ]
-        self.render_images: List[ShopEntryRenderImage[HTTPClientT]] = [
-            ShopEntryRenderImage(data=instance, http=http) for instance in get_with_fallback(data, "renderImages", list)
-        ]
-
-
 class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntry
@@ -445,7 +380,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The tile size of this entry.
     new_display_asset_path: Optional[:class:`str`]
         The new display asset path of this entry.
-    new_display_asset: :class:`fortnite_api.ShopEntryNewDisplayAsset`
+    new_display_asset: :class:`fortnite_api.NewDisplayAsset`
         The new display asset of this entry.
     colors: :class:`fortnite_api.ShopEntryColors`
         The colors of this entry.
@@ -525,8 +460,8 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.new_display_asset_path: Optional[str] = data.get("newDisplayAssetPath")
 
         _new_display_asset = data.get("newDisplayAsset")
-        self.new_display_asset: Optional[ShopEntryNewDisplayAsset[HTTPClientT]] = (
-            _new_display_asset and ShopEntryNewDisplayAsset(data=data["newDisplayAsset"], http=http)
+        self.new_display_asset: Optional[NewDisplayAsset[HTTPClientT]] = _new_display_asset and NewDisplayAsset(
+            data=data["newDisplayAsset"], http=http
         )
 
         _colors = data.get("colors")
