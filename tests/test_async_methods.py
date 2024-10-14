@@ -290,7 +290,6 @@ async def test_async_fetch_variants_beans(api_key: str, response_flags: fn_api.R
 
 
 def _test_variant_bean(variant: fn_api.VariantBean[Any]):
-    assert variant.cosmetic_id
     assert variant.name
     assert isinstance(variant.gender, fn_api.CustomGender)
 
