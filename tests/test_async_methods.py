@@ -318,12 +318,12 @@ def _test_cosmetic_track(cosmetic: fn_api.CosmeticTrack[Any]):
 
     difficulty = cosmetic.difficulty
     assert isinstance(difficulty, fn_api.CosmeticTrackDifficulty)
-    assert difficulty.vocals
-    assert difficulty.guitar
-    assert difficulty.bass
-    assert difficulty.plastic_bass
-    assert difficulty.drums
-    assert difficulty.plastic_drums
+    assert isinstance(difficulty.vocals, int)
+    assert isinstance(difficulty.guitar, int)
+    assert isinstance(difficulty.bass, int)
+    assert isinstance(difficulty.plastic_bass, int)
+    assert isinstance(difficulty.drums, int)
+    assert isinstance(difficulty.plastic_drums, int)
     assert isinstance(cosmetic.genres, list)
     assert isinstance(cosmetic.album_art, fn_api.Asset)
 
