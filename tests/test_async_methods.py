@@ -326,10 +326,7 @@ def _test_cosmetic_track(cosmetic: fn_api.CosmeticTrack[Any]):
     assert difficulty.drums
     assert difficulty.plastic_drums
     assert isinstance(cosmetic.genres, list)
-
-    images = cosmetic.images
-    if images:
-        assert isinstance(images, fn_api.CosmeticImages)
+    assert isinstance(cosmetic.album_art, fn_api.Asset)
 
 
 @pytest.mark.asyncio
