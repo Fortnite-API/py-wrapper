@@ -24,8 +24,8 @@ SOFTWARE.
 
 from __future__ import annotations
 import inspect
-from typing import TYPE_CHECKING, Any, Callable, Concatenate, Coroutine, Generic, TypeVar, TypeAlias
-from typing_extensions import TypeIs, ParamSpec
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, Generic, TypeVar, TypeAlias
+from typing_extensions import TypeIs, ParamSpec, Concatenate
 
 import requests
 import fortnite_api
