@@ -134,6 +134,7 @@ async def test_async_fetch_playlist(api_key: str):
     if len(playlists) >= 2:
         assert first != playlists[1]
 
+
 def _test_cosmetic_type_info(type_info: fn_api.CosmeticTypeInfo[Any]):
     assert isinstance(type_info, fn_api.CosmeticTypeInfo)
     assert isinstance(type_info.value, fn_api.CosmeticType)
@@ -141,11 +142,13 @@ def _test_cosmetic_type_info(type_info: fn_api.CosmeticTypeInfo[Any]):
     assert type_info.display_value
     assert type_info.backend_value
 
+
 def _test_cosmetic_rarity_info(rarity_info: fn_api.CosmeticRarityInfo[Any]):
     assert isinstance(rarity_info, fn_api.CosmeticRarityInfo)
     assert isinstance(rarity_info.value, fn_api.CosmeticRarity)
     assert rarity_info.display_value
     assert rarity_info.backend_value
+
 
 def _test_cosmetic_series_info(series_info: fn_api.CosmeticSeriesInfo[Any]):
     assert isinstance(series_info, fn_api.CosmeticSeriesInfo)
@@ -161,6 +164,57 @@ async def test_async_fetch_cosmetics_br(api_key: str):
 
     for cosmetic in cosmetics_br:
         _test_cosmetic_br(cosmetic)
+
+
+def _test_cosmetic_br(cosmetic: fn_api.CosmeticBr[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticBr)
+    assert cosmetic.name
+    assert cosmetic.description
+
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
+
+    rarity_info = cosmetic.rarity
+    if rarity_info:
+        _test_cosmetic_rarity_info(rarity_info)
+
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
+
+    _set = cosmetic.set
+    if _set:
+        assert isinstance(_set, fn_api.CosmeticBrSet)
+        assert _set.text
+        assert _set.backend_value
+
+    introduction = cosmetic.introduction
+    if introduction:
+        assert isinstance(introduction, fn_api.CosmeticBrIntroduction)
+        assert introduction.chapter
+        assert introduction.season
+        assert introduction.text
+        assert introduction.backend_value
+
+    images = cosmetic.images
+    if images:
+        assert isinstance(images, fn_api.CosmeticImages)
+
+    variants = cosmetic.variants
+    for variant in variants:
+        assert isinstance(variant, fn_api.CosmeticBrVariant)
+        assert variant.channel
+
+        options = variant.options
+        for option in options:
+            assert isinstance(option, fn_api.CosmeticBrVariantOption)
+            assert option.tag
+            assert isinstance(option.image, fn_api.Asset)
+
+    assert isinstance(cosmetic.built_in_emote_ids, list)
+    assert isinstance(cosmetic.search_tags, list)
+    assert isinstance(cosmetic.meta_tags, list)
 
 
 @pytest.mark.asyncio
@@ -327,57 +381,6 @@ async def test_async_fetch_cosmetic_br(api_key: str, response_flags: fn_api.Resp
 
     assert isinstance(cosmetic_br, fn_api.CosmeticBr)
     assert cosmetic_br.id == TEST_COSMETIC_ID
-
-
-def _test_cosmetic_br(cosmetic: fn_api.CosmeticBr[Any]):
-    assert isinstance(cosmetic, fn_api.CosmeticBr)
-    assert cosmetic.name
-    assert cosmetic.description
-
-    type_info = cosmetic.type
-    if type_info:
-        _test_cosmetic_type_info(type_info)
-
-    rarity_info = cosmetic.rarity
-    if rarity_info:
-        _test_cosmetic_rarity_info(rarity_info)
-
-    series_info = cosmetic.series
-    if series_info:
-        _test_cosmetic_series_info(series_info)
-
-    _set = cosmetic.set
-    if _set:
-        assert isinstance(_set, fn_api.CosmeticBrSet)
-        assert _set.text
-        assert _set.backend_value
-
-    introduction = cosmetic.introduction
-    if introduction:
-        assert isinstance(introduction, fn_api.CosmeticBrIntroduction)
-        assert introduction.chapter
-        assert introduction.season
-        assert introduction.text
-        assert introduction.backend_value
-
-    images = cosmetic.images
-    if images:
-        assert isinstance(images, fn_api.CosmeticImages)
-
-    variants = cosmetic.variants
-    for variant in variants:
-        assert isinstance(variant, fn_api.CosmeticBrVariant)
-        assert variant.channel
-
-        options = variant.options
-        for option in options:
-            assert isinstance(option, fn_api.CosmeticBrVariantOption)
-            assert option.tag
-            assert isinstance(option.image, fn_api.Asset)
-
-    assert isinstance(cosmetic.built_in_emote_ids, list)
-    assert isinstance(cosmetic.search_tags, list)
-    assert isinstance(cosmetic.meta_tags, list)
 
 
 @pytest.mark.asyncio

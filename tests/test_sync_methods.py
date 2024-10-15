@@ -142,6 +142,14 @@ def test_sync_fetch_playlist(api_key: str):
         assert first != playlists[1]
 
 
+def test_sync_fetch_cosmetics_br(api_key: str, response_flags: fn_api.ResponseFlags):
+    with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
+        cosmetics_br = client.fetch_cosmetics_br()
+
+    for cosmetic in cosmetics_br:
+        _test_cosmetic_br(cosmetic)
+
+
 def test_sync_fetch_cosmetics_cars(api_key: str, response_flags: fn_api.ResponseFlags):
     with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_cars = client.fetch_cosmetics_cars()
@@ -188,14 +196,6 @@ def test_sync_fetch_cosmetics_tracks(api_key: str, response_flags: fn_api.Respon
 
     for cosmetic in cosmetics_tracks:
         _test_cosmetic_track(cosmetic)
-
-
-def test_sync_fetch_cosmetics_br(api_key: str, response_flags: fn_api.ResponseFlags):
-    with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_br = client.fetch_cosmetics_br()
-
-    for cosmetic in cosmetics_br:
-        _test_cosmetic_br(cosmetic)
 
 
 def test_sync_fetch_cosmetic_br(api_key: str, response_flags: fn_api.ResponseFlags):
