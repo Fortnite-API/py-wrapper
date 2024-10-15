@@ -134,6 +134,25 @@ async def test_async_fetch_playlist(api_key: str):
     if len(playlists) >= 2:
         assert first != playlists[1]
 
+def _test_cosmetic_type_info(type_info: fn_api.CosmeticTypeInfo[Any]):
+    assert isinstance(type_info, fn_api.CosmeticTypeInfo)
+    assert isinstance(type_info.value, fn_api.CosmeticType)
+    assert type_info.raw_value
+    assert type_info.display_value
+    assert type_info.backend_value
+
+def _test_cosmetic_rarity_info(rarity_info: fn_api.CosmeticRarityInfo[Any]):
+    assert isinstance(rarity_info, fn_api.CosmeticRarityInfo)
+    assert isinstance(rarity_info.value, fn_api.CosmeticRarity)
+    assert rarity_info.display_value
+    assert rarity_info.backend_value
+
+def _test_cosmetic_series_info(series_info: fn_api.CosmeticSeriesInfo[Any]):
+    assert isinstance(series_info, fn_api.CosmeticSeriesInfo)
+    assert series_info.value
+    assert series_info.backend_value
+    assert series_info.colors
+
 
 @pytest.mark.asyncio
 async def test_async_fetch_cosmetics_br(api_key: str):
@@ -159,31 +178,21 @@ def _test_cosmetic_car(cosmetic: fn_api.CosmeticCar[Any]):
     assert cosmetic.name
     assert cosmetic.description
 
-    _type = cosmetic.type
-    if _type:
-        assert isinstance(_type, fn_api.CosmeticTypeInfo)
-        assert isinstance(_type.value, fn_api.CosmeticType)
-        assert _type.raw_value
-        assert _type.display_value
-        assert _type.backend_value
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
 
-    rarity = cosmetic.rarity
-    if rarity:
-        assert isinstance(rarity, fn_api.CosmeticRarityInfo)
-        assert isinstance(rarity.value, fn_api.CosmeticRarity)
-        assert rarity.display_value
-        assert rarity.backend_value
+    rarity_info = cosmetic.rarity
+    if rarity_info:
+        _test_cosmetic_rarity_info(rarity_info)
 
     images = cosmetic.images
     if images:
         assert isinstance(images, fn_api.CosmeticImages)
 
-    series = cosmetic.series
-    if series:
-        assert isinstance(series, fn_api.CosmeticSeriesInfo)
-        assert series.value
-        assert series.backend_value
-        assert series.colors
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
 
 
 @pytest.mark.asyncio
@@ -200,31 +209,21 @@ def _test_cosmetic_instrument(cosmetic: fn_api.CosmeticInstrument[Any]):
     assert cosmetic.name
     assert cosmetic.description
 
-    _type = cosmetic.type
-    if _type:
-        assert isinstance(_type, fn_api.CosmeticTypeInfo)
-        assert isinstance(_type.value, fn_api.CosmeticType)
-        assert _type.raw_value
-        assert _type.display_value
-        assert _type.backend_value
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
 
-    rarity = cosmetic.rarity
-    if rarity:
-        assert isinstance(rarity, fn_api.CosmeticRarityInfo)
-        assert isinstance(rarity.value, fn_api.CosmeticRarity)
-        assert rarity.display_value
-        assert rarity.backend_value
+    rarity_info = cosmetic.rarity
+    if rarity_info:
+        _test_cosmetic_rarity_info(rarity_info)
 
     images = cosmetic.images
     if images:
         assert isinstance(images, fn_api.CosmeticImages)
 
-    series = cosmetic.series
-    if series:
-        assert isinstance(series, fn_api.CosmeticSeriesInfo)
-        assert series.value
-        assert series.backend_value
-        assert series.colors
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
 
 
 @pytest.mark.asyncio
@@ -240,20 +239,13 @@ async def test_async_fetch_cosmetics_lego_kits(api_key: str, response_flags: fn_
 def _test_cosmetic_lego_kits(cosmetic: fn_api.CosmeticLegoKit[Any]):
     assert cosmetic.name
 
-    _type = cosmetic.type
-    if _type:
-        assert isinstance(_type, fn_api.CosmeticTypeInfo)
-        assert isinstance(_type.value, fn_api.CosmeticType)
-        assert _type.raw_value
-        assert _type.display_value
-        assert _type.backend_value
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
 
-    series = cosmetic.series
-    if series:
-        assert isinstance(series, fn_api.CosmeticSeriesInfo)
-        assert series.value
-        assert series.backend_value
-        assert series.colors
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
 
     images = cosmetic.images
     if images:
@@ -285,7 +277,6 @@ async def test_async_fetch_variants_beans(api_key: str, response_flags: fn_api.R
         beans_variants = await client.fetch_variants_beans()
 
     for bean in beans_variants:
-        assert isinstance(bean, fn_api.VariantBean)
         _test_variant_bean(bean)
 
 
@@ -341,27 +332,17 @@ def _test_cosmetic_br(cosmetic: fn_api.CosmeticBr[Any]):
     assert cosmetic.name
     assert cosmetic.description
 
-    _type = cosmetic.type
-    if _type:
-        assert isinstance(_type, fn_api.CosmeticTypeInfo)
-        assert isinstance(_type.value, fn_api.CosmeticType)
-        assert _type.raw_value
-        assert _type.display_value
-        assert _type.backend_value
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
 
-    rarity = cosmetic.rarity
-    if rarity:
-        assert isinstance(rarity, fn_api.CosmeticRarityInfo)
-        assert isinstance(rarity.value, fn_api.CosmeticRarity)
-        assert rarity.display_value
-        assert rarity.backend_value
+    rarity_info = cosmetic.rarity
+    if rarity_info:
+        _test_cosmetic_rarity_info(rarity_info)
 
-    series = cosmetic.series
-    if series:
-        assert isinstance(series, fn_api.CosmeticSeriesInfo)
-        assert series.value
-        assert series.backend_value
-        assert series.colors
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
 
     _set = cosmetic.set
     if _set:
