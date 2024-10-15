@@ -160,7 +160,7 @@ async def test_async_fetch_cosmetics_br(api_key: str):
         cosmetics_br = await client.fetch_cosmetics_br()
 
     for cosmetic in cosmetics_br:
-        assert isinstance(cosmetic, fn_api.CosmeticBr)
+        _test_cosmetic_br(cosmetic)
 
 
 @pytest.mark.asyncio
@@ -169,11 +169,11 @@ async def test_async_fetch_cosmetics_cars(api_key: str, response_flags: fn_api.R
         cosmetics_cars = await client.fetch_cosmetics_cars()
 
     for cosmetic in cosmetics_cars:
-        assert isinstance(cosmetic, fn_api.CosmeticCar)
         _test_cosmetic_car(cosmetic)
 
 
 def _test_cosmetic_car(cosmetic: fn_api.CosmeticCar[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticCar)
     assert cosmetic.vehicle_id
     assert cosmetic.name
     assert cosmetic.description
@@ -201,11 +201,11 @@ async def test_async_fetch_cosmetics_instruments(api_key: str, response_flags: f
         cosmetics_instruments = await client.fetch_cosmetics_instruments()
 
     for cosmetic in cosmetics_instruments:
-        assert isinstance(cosmetic, fn_api.CosmeticInstrument)
         _test_cosmetic_instrument(cosmetic)
 
 
 def _test_cosmetic_instrument(cosmetic: fn_api.CosmeticInstrument[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticInstrument)
     assert cosmetic.name
     assert cosmetic.description
 
@@ -232,11 +232,11 @@ async def test_async_fetch_cosmetics_lego_kits(api_key: str, response_flags: fn_
         lego_kits = await client.fetch_cosmetics_lego_kits()
 
     for kit in lego_kits:
-        assert isinstance(kit, fn_api.CosmeticLegoKit)
         _test_cosmetic_lego_kits(kit)
 
 
 def _test_cosmetic_lego_kits(cosmetic: fn_api.CosmeticLegoKit[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticLegoKit)
     assert cosmetic.name
 
     type_info = cosmetic.type
@@ -258,11 +258,11 @@ async def test_async_fetch_variants_lego(api_key: str, response_flags: fn_api.Re
         lego_variants = await client.fetch_variants_lego()
 
     for lego in lego_variants:
-        assert isinstance(lego, fn_api.VariantLego)
         _test_variant_lego(lego)
 
 
 def _test_variant_lego(variant: fn_api.VariantLego[Any]):
+    assert isinstance(variant, fn_api.VariantLego)
     assert variant.cosmetic_id
     assert isinstance(variant.sound_library_tags, list)
 
@@ -281,6 +281,7 @@ async def test_async_fetch_variants_beans(api_key: str, response_flags: fn_api.R
 
 
 def _test_variant_bean(variant: fn_api.VariantBean[Any]):
+    assert isinstance(variant, fn_api.VariantBean)
     assert variant.name
     assert isinstance(variant.gender, fn_api.CustomGender)
 
@@ -295,11 +296,11 @@ async def test_async_fetch_cosmetics_tracks(api_key: str, response_flags: fn_api
         cosmetics_tracks = await client.fetch_cosmetics_tracks()
 
     for cosmetic in cosmetics_tracks:
-        assert isinstance(cosmetic, fn_api.CosmeticTrack)
         _test_cosmetic_track(cosmetic)
 
 
 def _test_cosmetic_track(cosmetic: fn_api.CosmeticTrack[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticTrack)
     assert cosmetic.dev_name
     assert cosmetic.title
     assert cosmetic.artist
@@ -329,6 +330,7 @@ async def test_async_fetch_cosmetic_br(api_key: str, response_flags: fn_api.Resp
 
 
 def _test_cosmetic_br(cosmetic: fn_api.CosmeticBr[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticBr)
     assert cosmetic.name
     assert cosmetic.description
 
