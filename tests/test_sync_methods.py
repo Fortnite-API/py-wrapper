@@ -32,7 +32,17 @@ import fortnite_api as fn_api
 from fortnite_api.http import SyncHTTPClient
 
 from .conftest import TEST_ACCOUNT_ID, TEST_ACCOUNT_NAME, TEST_COSMETIC_ID, TEST_CREATOR_CODE, TEST_DEFAULT_PLAYLIST
-from .test_async_methods import _test_game_mode_news, _test_playlist
+from .test_async_methods import (
+    _test_cosmetic_br,
+    _test_cosmetic_car,
+    _test_cosmetic_instrument,
+    _test_cosmetic_lego_kits,
+    _test_cosmetic_track,
+    _test_game_mode_news,
+    _test_playlist,
+    _test_variant_bean,
+    _test_variant_lego,
+)
 
 
 def test_sync_aes(api_key: str):
@@ -132,12 +142,20 @@ def test_sync_fetch_playlist(api_key: str):
         assert first != playlists[1]
 
 
+def test_sync_fetch_cosmetics_br(api_key: str, response_flags: fn_api.ResponseFlags):
+    with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
+        cosmetics_br = client.fetch_cosmetics_br()
+
+    for cosmetic in cosmetics_br:
+        _test_cosmetic_br(cosmetic)
+
+
 def test_sync_fetch_cosmetics_cars(api_key: str, response_flags: fn_api.ResponseFlags):
     with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_cars = client.fetch_cosmetics_cars()
 
     for cosmetic in cosmetics_cars:
-        assert isinstance(cosmetic, fn_api.CosmeticCar)
+        _test_cosmetic_car(cosmetic)
 
 
 def test_sync_fetch_cosmetics_instruments(api_key: str, response_flags: fn_api.ResponseFlags):
@@ -145,7 +163,7 @@ def test_sync_fetch_cosmetics_instruments(api_key: str, response_flags: fn_api.R
         cosmetics_instruments = client.fetch_cosmetics_instruments()
 
     for cosmetic in cosmetics_instruments:
-        assert isinstance(cosmetic, fn_api.CosmeticInstrument)
+        _test_cosmetic_instrument(cosmetic)
 
 
 def test_sync_fetch_cosmetics_lego_kits(api_key: str, response_flags: fn_api.ResponseFlags):
@@ -153,7 +171,7 @@ def test_sync_fetch_cosmetics_lego_kits(api_key: str, response_flags: fn_api.Res
         lego_kits = client.fetch_cosmetics_lego_kits()
 
     for kit in lego_kits:
-        assert isinstance(kit, fn_api.CosmeticLegoKit)
+        _test_cosmetic_lego_kits(kit)
 
 
 def test_sync_fetch_variants_lego(api_key: str, response_flags: fn_api.ResponseFlags):
@@ -161,7 +179,7 @@ def test_sync_fetch_variants_lego(api_key: str, response_flags: fn_api.ResponseF
         variants_lego = client.fetch_variants_lego()
 
     for variant in variants_lego:
-        assert isinstance(variant, fn_api.VariantLego)
+        _test_variant_lego(variant)
 
 
 def test_sync_fetch_variants_beans(api_key: str, response_flags: fn_api.ResponseFlags):
@@ -169,7 +187,7 @@ def test_sync_fetch_variants_beans(api_key: str, response_flags: fn_api.Response
         variants_beans = client.fetch_variants_beans()
 
     for variant in variants_beans:
-        assert isinstance(variant, fn_api.VariantBean)
+        _test_variant_bean(variant)
 
 
 def test_sync_fetch_cosmetics_tracks(api_key: str, response_flags: fn_api.ResponseFlags):
@@ -177,15 +195,7 @@ def test_sync_fetch_cosmetics_tracks(api_key: str, response_flags: fn_api.Respon
         cosmetics_tracks = client.fetch_cosmetics_tracks()
 
     for cosmetic in cosmetics_tracks:
-        assert isinstance(cosmetic, fn_api.CosmeticTrack)
-
-
-def test_sync_fetch_cosmetics_br(api_key: str, response_flags: fn_api.ResponseFlags):
-    with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_br = client.fetch_cosmetics_br()
-
-    for cosmetic in cosmetics_br:
-        assert isinstance(cosmetic, fn_api.CosmeticBr)
+        _test_cosmetic_track(cosmetic)
 
 
 def test_sync_fetch_cosmetic_br(api_key: str, response_flags: fn_api.ResponseFlags):
