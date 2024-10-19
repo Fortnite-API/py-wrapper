@@ -374,8 +374,6 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The offer ID of this entry.
     display_asset_path: Optional[:class:`str`]
         The display asset path of this entry.
-
-        .. opt-in:: INCLUDE_PATHS
     tile_size: :class:`fortnite_api.TileSize`
         The tile size of this entry.
     new_display_asset_path: Optional[:class:`str`]
