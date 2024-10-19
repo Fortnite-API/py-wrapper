@@ -14,7 +14,7 @@ This version introduces new data for shop-related objects, reflecting the update
 Breaking Changes
 ~~~~~~~~~~~~~~~~
 - ``ShopEntryNewDisplayAsset`` has been renamed to :class:`fortnite_api.NewDisplayAsset`.
-- ``Banner.colour`` has been removed as it was merely an alias for :attr:`fortnite_api.Banner.color`.
+- ``BannerColor.colour`` has been removed as it was merely an alias for :attr:`fortnite_api.BannerColor.color`.
 
 New Features
 ~~~~~~~~~~~~
