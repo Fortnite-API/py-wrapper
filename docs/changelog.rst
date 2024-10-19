@@ -34,6 +34,11 @@ Bug Fixes
 - :attr:`fortnite_api.Playlist.images` now returns ``None`` when no images are available, instead of an empty dict.
 - Ensured all datetime objects include timezone information to avoid returning naive datetime objects in rare cases.
 
+Documentation
+~~~~~~~~~~~~~
+- Added :ref:`response flags <response_flags>` documentation to explain how to use the ``fortnite_api.ResponseFlags`` class, how to enable response flags, which response flags are available, and when you should enable them.
+- Added ``opt-in`` directive on attributes that require a specific response flag to be set. This is to ensure users are aware of the response flags required to access certain attributes when using the API.
+
 Miscellaneous
 ~~~~~~~~~~~~~
 - Fetching specific game mode news raised :class:`fortnite_api.ServiceUnavailable`, due to improper handling from Fortnite-API.com. This has been fixed within the API. Now, when no news is available, :class:`fortnite_api.NotFound` is raised instead. This change is reflected in the documentation.
