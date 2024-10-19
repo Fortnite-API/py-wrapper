@@ -65,12 +65,18 @@ class CosmeticInstrument(Cosmetic[Dict[str, Any], HTTPClientT]):
         The series of the instrument.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the instrument.
+
+        .. opt-in:: INCLUDE_GAMEPLAY_TAGS
     path: Optional[:class:`str`]
         The path of the instrument.
+
+        .. opt-in:: INCLUDE_PATHS
     showcase_video_id: Optional[:class:`str`]
         The showcase YouTube video ID of the cosmetic, if available.
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the instrument.
+
+        .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
     __slots__: Tuple[str, ...] = (
