@@ -56,12 +56,18 @@ class CosmeticLegoKit(Cosmetic[Dict[str, Any], HTTPClientT]):
         The type of the LEGO kit.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the LEGO kit.
+
+        .. opt-in:: INCLUDE_GAMEPLAY_TAGS
     images: Optional[:class:`fortnite_api.CosmeticImages`]
         Any LEGO kit images.
     path: Optional[:class:`str`]
         The path of the LEGO kit.
+
+        .. opt-in:: INCLUDE_PATHS
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the LEGO kit.
+
+        .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
     __slots__: Tuple[str, ...] = ('name', 'type', 'gameplay_tags', 'images', 'path', 'shop_history')
