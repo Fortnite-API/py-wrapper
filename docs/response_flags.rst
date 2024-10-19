@@ -6,7 +6,7 @@ Response Flags
 ==============
 
 The Fortnite-API uses response flags to indicate if some optional fields are present in an API response. These flags
-are optional, meaning that you can choose not to include them in the response. 
+are optional, meaning that you can choose not to include them in the response.
 
 By default, any response flags are not enabled on the :class:`~fortnite_api.Client` and :class:`~fortnite_api.SyncClient` class. To enable them, you can set the
 ``response_flags`` parameter in the constructor.
@@ -58,11 +58,29 @@ These are several fields on the :class:`~fortnite_api.ResponseFlags` class.
 - :attr:`~fortnite_api.ResponseFlags.INCLUDE_GAMEPLAY_TAGS`: Enables the ``gameplay_tags`` field of a response to be present. By default, the gameplay tags of a Fortnite cosmetic are not included in the response and will simply be an empty list.
 - :attr:`~fortnite_api.ResponseFlags.INCLUDE_SHOP_HISTORY`: Enables the ``shop_history`` field of a response to be present. By default, the shop history of a Fortnite cosmetic is not included in the response and will simply be an empty list.
 
-To enable response flags, you can use the bitwise OR operator to combine the flags you want to enable, or use the :meth:`~fortnite_api.ResponseFlags.all` method to enable everything.
+To enable response flags, you can use the bitwise OR operator to combine the flags you want to enable, or use the :meth:`~fortnite_api.ResponseFlags.all` method to enable everything. Note you should **only use response flags that correspond to the fields you are actively using, see below.**
+
+.. important::
+
+    You should **only enable the response flags that your client is actively using**. Enabling unnecessary response flags leads to increased bandwidth usage, longer response times, higher memory costs, and decreased performance due to the overhead. It's recommended to disable all response flags by default and enable the flags you need as you develop.
+
+    Using :meth:`fortnite_api.ResponseFlags.all` is only recommended if your client is actively using all the fields. Otherwise, you should enable only the flags you need. The API may be updated to include more fields in the future, many of which your client may not need.
+
+    .. code-block:: python3
+        :caption: A bad example of enabling all response flags.
+        :emphasize-lines: 1, 5
+
+        response_flags = ResponseFlags.all()
+        async with fortnite_api.Client(response_flags=response_flags) as client:
+            # Fetch a cosmetic
+            cosmetic = await client.fetch_cosmetic_br('CID_028_Athena_Commando_F')
+            print(cosmetic.path)
+
+    In this example, the client is only using the ``path`` field, but all response flags are enabled. This is inefficient and should be avoided.
 
 .. hint::
 
-    Every attribute that requires a specific response flag to be set in this documentation will have a note indicating 
+    Every attribute that requires a specific response flag to be set in this documentation will have a note indicating
     which response flag is required to be set on the client class. If the response flag is not set, the attribute will
     not have an expected value.
 
@@ -75,7 +93,7 @@ Setting response flags on the client is simple. You can set the ``response_flags
 
     import fortnite_api
 
-    # NOTE: Shorthand import for readability. Doing this 
+    # NOTE: Shorthand import for readability. Doing this
     # is optional and not required.
     from fortnite_api import ResponseFlags
 
@@ -83,15 +101,15 @@ Setting response flags on the client is simple. You can set the ``response_flags
         response_flags = ResponseFlags.INCLUDE_PATHS | ResponseFlags.INCLUDE_GAMEPLAY_TAGS
         async with fortnite_api.Client(response_flags=response_flags) as client:
             # (1) Fetch the Renegade Raider
-            cosmetic = await client.fetch_cosmetic_br('CID_028_Athena_Commando_F') 
-            
+            cosmetic = await client.fetch_cosmetic_br('CID_028_Athena_Commando_F')
+
             # (2) Print the path and gameplay tags
             print(cosmetic.path)
             >>> 'Athena/Items/Cosmetics/Characters/CID_028_Athena_Commando_F'
             print(cosmetic.gameplay_tags)
             >>> ['Cosmetics.Source.Season1', ...]
 
-            # (3) Print the shop history. Note this will ALWAYS be 
+            # (3) Print the shop history. Note this will ALWAYS be
             # an EMPTY LIST because the shop history response flag has not
             # been set on the client class.
             print(cosmetic.shop_history)
@@ -109,8 +127,8 @@ Now, let's enable all response flags using the :meth:`~fortnite_api.ResponseFlag
         response_flags = fortnite_api.ResponseFlags.all()
         async with fortnite_api.Client(response_flags=response_flags) as client:
             # (1) Fetch the Renegade Raider
-            cosmetic = await client.fetch_cosmetic_br('CID_028_Athena_Commando_F') 
-            
+            cosmetic = await client.fetch_cosmetic_br('CID_028_Athena_Commando_F')
+
             # (2) Print the path, gameplay tags, and shop history
             print(cosmetic.path)
             >>> 'Athena/Items/Cosmetics/Characters/CID_028_Athena_Commando_F'
