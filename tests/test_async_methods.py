@@ -135,13 +135,86 @@ async def test_async_fetch_playlist(api_key: str):
         assert first != playlists[1]
 
 
+def _test_cosmetic_type_info(type_info: fn_api.CosmeticTypeInfo[Any]):
+    assert isinstance(type_info, fn_api.CosmeticTypeInfo)
+    assert isinstance(type_info.value, fn_api.CosmeticType)
+    assert type_info.raw_value
+    assert type_info.display_value
+    assert type_info.backend_value
+
+
+def _test_cosmetic_rarity_info(rarity_info: fn_api.CosmeticRarityInfo[Any]):
+    assert isinstance(rarity_info, fn_api.CosmeticRarityInfo)
+    assert isinstance(rarity_info.value, fn_api.CosmeticRarity)
+    assert rarity_info.display_value
+    assert rarity_info.backend_value
+
+
+def _test_cosmetic_series_info(series_info: fn_api.CosmeticSeriesInfo[Any]):
+    assert isinstance(series_info, fn_api.CosmeticSeriesInfo)
+    assert series_info.value
+    assert series_info.backend_value
+    assert series_info.colors
+
+
 @pytest.mark.asyncio
 async def test_async_fetch_cosmetics_br(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         cosmetics_br = await client.fetch_cosmetics_br()
 
     for cosmetic in cosmetics_br:
-        assert isinstance(cosmetic, fn_api.CosmeticBr)
+        _test_cosmetic_br(cosmetic)
+
+
+def _test_cosmetic_br(cosmetic: fn_api.CosmeticBr[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticBr)
+    assert cosmetic.name
+    assert cosmetic.description
+
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
+
+    rarity_info = cosmetic.rarity
+    if rarity_info:
+        _test_cosmetic_rarity_info(rarity_info)
+
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
+
+    _set = cosmetic.set
+    if _set:
+        assert isinstance(_set, fn_api.CosmeticBrSet)
+        assert _set.text
+        assert _set.backend_value
+
+    introduction = cosmetic.introduction
+    if introduction:
+        assert isinstance(introduction, fn_api.CosmeticBrIntroduction)
+        assert introduction.chapter
+        assert introduction.season
+        assert introduction.text
+        assert introduction.backend_value
+
+    images = cosmetic.images
+    if images:
+        assert isinstance(images, fn_api.CosmeticImages)
+
+    variants = cosmetic.variants
+    for variant in variants:
+        assert isinstance(variant, fn_api.CosmeticBrVariant)
+        assert variant.channel
+
+        options = variant.options
+        for option in options:
+            assert isinstance(option, fn_api.CosmeticBrVariantOption)
+            assert option.tag
+            assert isinstance(option.image, fn_api.Asset)
+
+    assert isinstance(cosmetic.built_in_emote_ids, list)
+    assert isinstance(cosmetic.search_tags, list)
+    assert isinstance(cosmetic.meta_tags, list)
 
 
 @pytest.mark.asyncio
@@ -150,7 +223,30 @@ async def test_async_fetch_cosmetics_cars(api_key: str, response_flags: fn_api.R
         cosmetics_cars = await client.fetch_cosmetics_cars()
 
     for cosmetic in cosmetics_cars:
-        assert isinstance(cosmetic, fn_api.CosmeticCar)
+        _test_cosmetic_car(cosmetic)
+
+
+def _test_cosmetic_car(cosmetic: fn_api.CosmeticCar[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticCar)
+    assert cosmetic.vehicle_id
+    assert cosmetic.name
+    assert cosmetic.description
+
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
+
+    rarity_info = cosmetic.rarity
+    if rarity_info:
+        _test_cosmetic_rarity_info(rarity_info)
+
+    images = cosmetic.images
+    if images:
+        assert isinstance(images, fn_api.CosmeticImages)
+
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
 
 
 @pytest.mark.asyncio
@@ -159,7 +255,29 @@ async def test_async_fetch_cosmetics_instruments(api_key: str, response_flags: f
         cosmetics_instruments = await client.fetch_cosmetics_instruments()
 
     for cosmetic in cosmetics_instruments:
-        assert isinstance(cosmetic, fn_api.CosmeticInstrument)
+        _test_cosmetic_instrument(cosmetic)
+
+
+def _test_cosmetic_instrument(cosmetic: fn_api.CosmeticInstrument[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticInstrument)
+    assert cosmetic.name
+    assert cosmetic.description
+
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
+
+    rarity_info = cosmetic.rarity
+    if rarity_info:
+        _test_cosmetic_rarity_info(rarity_info)
+
+    images = cosmetic.images
+    if images:
+        assert isinstance(images, fn_api.CosmeticImages)
+
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
 
 
 @pytest.mark.asyncio
@@ -168,7 +286,24 @@ async def test_async_fetch_cosmetics_lego_kits(api_key: str, response_flags: fn_
         lego_kits = await client.fetch_cosmetics_lego_kits()
 
     for kit in lego_kits:
-        assert isinstance(kit, fn_api.CosmeticLegoKit)
+        _test_cosmetic_lego_kits(kit)
+
+
+def _test_cosmetic_lego_kits(cosmetic: fn_api.CosmeticLegoKit[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticLegoKit)
+    assert cosmetic.name
+
+    type_info = cosmetic.type
+    if type_info:
+        _test_cosmetic_type_info(type_info)
+
+    series_info = cosmetic.series
+    if series_info:
+        _test_cosmetic_series_info(series_info)
+
+    images = cosmetic.images
+    if images:
+        assert isinstance(images, fn_api.CosmeticImages)
 
 
 @pytest.mark.asyncio
@@ -177,7 +312,36 @@ async def test_async_fetch_variants_lego(api_key: str, response_flags: fn_api.Re
         lego_variants = await client.fetch_variants_lego()
 
     for lego in lego_variants:
-        assert isinstance(lego, fn_api.VariantLego)
+        _test_variant_lego(lego)
+
+
+def _test_variant_lego(variant: fn_api.VariantLego[Any]):
+    assert isinstance(variant, fn_api.VariantLego)
+    assert variant.cosmetic_id
+    assert isinstance(variant.sound_library_tags, list)
+
+    images = variant.images
+    if images:
+        assert isinstance(images, fn_api.CosmeticImages)
+
+
+@pytest.mark.asyncio
+async def test_async_fetch_variants_beans(api_key: str, response_flags: fn_api.ResponseFlags):
+    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
+        beans_variants = await client.fetch_variants_beans()
+
+    for bean in beans_variants:
+        _test_variant_bean(bean)
+
+
+def _test_variant_bean(variant: fn_api.VariantBean[Any]):
+    assert isinstance(variant, fn_api.VariantBean)
+    assert variant.name
+    assert isinstance(variant.gender, fn_api.CustomGender)
+
+    images = variant.images
+    if images:
+        assert isinstance(images, fn_api.CosmeticImages)
 
 
 @pytest.mark.asyncio
@@ -186,7 +350,28 @@ async def test_async_fetch_cosmetics_tracks(api_key: str, response_flags: fn_api
         cosmetics_tracks = await client.fetch_cosmetics_tracks()
 
     for cosmetic in cosmetics_tracks:
-        assert isinstance(cosmetic, fn_api.CosmeticTrack)
+        _test_cosmetic_track(cosmetic)
+
+
+def _test_cosmetic_track(cosmetic: fn_api.CosmeticTrack[Any]):
+    assert isinstance(cosmetic, fn_api.CosmeticTrack)
+    assert cosmetic.dev_name
+    assert cosmetic.title
+    assert cosmetic.artist
+    assert cosmetic.release_year
+    assert cosmetic.bpm
+    assert cosmetic.duration
+
+    difficulty = cosmetic.difficulty
+    assert isinstance(difficulty, fn_api.CosmeticTrackDifficulty)
+    assert isinstance(difficulty.vocals, int)
+    assert isinstance(difficulty.guitar, int)
+    assert isinstance(difficulty.bass, int)
+    assert isinstance(difficulty.plastic_bass, int)
+    assert isinstance(difficulty.drums, int)
+    assert isinstance(difficulty.plastic_drums, int)
+    assert isinstance(cosmetic.genres, list)
+    assert isinstance(cosmetic.album_art, fn_api.Asset)
 
 
 @pytest.mark.asyncio
@@ -361,6 +546,34 @@ async def test_async_fetch_playlist_by_id(api_key: str):
 
 
 @pytest.mark.asyncio
+async def test_async_beta_fetch_new_display_assets(api_key: str):
+
+    # Ensure you cannot call this without beta=True
+    with pytest.raises(fn_api.BetaAccessNotEnabled):
+        await fn_api.Client().beta_fetch_new_display_assets()
+
+    async with fn_api.Client(beta=True, api_key=api_key) as client:
+        new_display_assets = await client.beta_fetch_new_display_assets()
+
+    for new_display_asset in new_display_assets:
+        assert isinstance(new_display_asset, fn_api.NewDisplayAsset)
+
+        assert new_display_asset.id
+
+        for material_instance in new_display_asset.material_instances:
+            assert isinstance(material_instance, fn_api.MaterialInstance)
+
+        for render_image in new_display_asset.render_images:
+            assert isinstance(render_image, fn_api.RenderImage)
+
+            assert isinstance(render_image.product_tag, fn_api.ProductTag)
+            assert render_image.file_name
+            assert isinstance(render_image.image, fn_api.Asset)
+
+        assert new_display_asset == new_display_asset
+
+
+@pytest.mark.asyncio
 async def test_async_beta_fetch_material_instances(api_key: str):
 
     # Ensure you cannot call this without beta=True
@@ -452,7 +665,7 @@ async def test_async_fetch_shop(api_key: str):
 
         new_display_asset = entry.new_display_asset
         if new_display_asset:
-            assert isinstance(new_display_asset, fn_api.ShopEntryNewDisplayAsset)
+            assert isinstance(new_display_asset, fn_api.NewDisplayAsset)
             assert new_display_asset.id
 
             for material_instance in new_display_asset.material_instances:
@@ -481,15 +694,3 @@ async def test_async_search_cosmetics(api_key: str, response_flags: fn_api.Respo
 
     assert isinstance(cosmetic_single_set, fn_api.CosmeticBr)
     assert cosmetic_single_set.set is not None
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_variants_beans(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        beans_variants = await client.fetch_variants_beans()
-
-    for bean in beans_variants:
-        assert isinstance(bean, fn_api.VariantBean)
-
-        assert bean.name
-        assert bean.gender

@@ -344,6 +344,10 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
+    def beta_get_new_display_assets(self):
+        r: Route = Route('GET', '/beta/newdisplayassets')
+        return self.request(r)
+
     def beta_get_material_instances(self):
         r: Route = Route('GET', '/beta/materialinstances')
         return self.request(r)
