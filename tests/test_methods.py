@@ -23,13 +23,15 @@ SOFTWARE.
 """
 
 from __future__ import annotations
+
 import inspect
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, Generic, TypeVar
-from fortnite_api import ReconstructAble
-from typing_extensions import TypeIs, ParamSpec, Concatenate, TypeAlias
 
 import requests
+from typing_extensions import Concatenate, ParamSpec, TypeAlias, TypeIs
+
 import fortnite_api
+from fortnite_api import ReconstructAble
 
 P = ParamSpec('P')
 T = TypeVar('T')

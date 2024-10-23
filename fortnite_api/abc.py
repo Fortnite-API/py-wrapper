@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Any, Generic, Tuple, Type, TypeVar, Union, overload, Mapping
+from typing import TYPE_CHECKING, Any, Generic, Mapping, Tuple, Type, TypeVar, Union, overload
 
 from .http import HTTPClient, HTTPClientT, SyncHTTPClient
 
