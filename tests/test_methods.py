@@ -24,8 +24,8 @@ SOFTWARE.
 
 from __future__ import annotations
 import inspect
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, Generic, TypeVar, TypeAlias
-from typing_extensions import TypeIs, ParamSpec, Concatenate
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, Generic, TypeVar
+from typing_extensions import TypeIs, ParamSpec, Concatenate, TypeAlias
 
 import requests
 import fortnite_api
@@ -55,7 +55,7 @@ class HybridMethodProxy(Generic[P, T]):
         self.__sync_method = sync_method
 
     def _validate_results(self, async_res: T, sync_res: T) -> None:
-        assert type(async_res) == type(sync_res), f"Expected {type(async_res)}, got {type(sync_res)}"
+        assert type(async_res) is type(sync_res), f"Expected {type(async_res)}, got {type(sync_res)}"
 
         if isinstance(async_res, fortnite_api.Hashable):
             assert isinstance(sync_res, fortnite_api.Hashable)
