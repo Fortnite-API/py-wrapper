@@ -25,6 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 import inspect
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, Generic, TypeVar
+from fortnite_api import ReconstructAble
 from typing_extensions import TypeIs, ParamSpec, Concatenate, TypeAlias
 
 import requests
@@ -64,12 +65,15 @@ class HybridMethodProxy(Generic[P, T]):
         if isinstance(async_res, fortnite_api.ReconstructAble):
             assert isinstance(sync_res, fortnite_api.ReconstructAble)
 
-            async_raw_data = sync_res.to_dict()
-            sync_raw_data = sync_res.to_dict()
+            sync_res_narrowed: ReconstructAble[Any, fortnite_api.SyncHTTPClient] = sync_res
+            async_res_narrowed: ReconstructAble[Any, fortnite_api.HTTPClient] = async_res
+
+            async_raw_data = sync_res_narrowed.to_dict()
+            sync_raw_data = sync_res_narrowed.to_dict()
             assert async_raw_data == sync_raw_data
 
-            async_reconstructed = type(async_res).from_dict(async_raw_data)
-            sync_reconstructed = type(sync_res).from_dict(sync_raw_data)
+            async_reconstructed = type(async_res_narrowed).from_dict(async_raw_data, client=self.__hybrid_client)
+            sync_reconstructed = type(sync_res_narrowed).from_dict(sync_raw_data, client=self.__sync_client)
 
             assert isinstance(async_reconstructed, type(sync_reconstructed))
 
