@@ -317,7 +317,7 @@ are as follows:
         - This method has been depreciated. Use :meth:`fortnite_api.Client.fetch_cosmetics_new` instead.
     *   - ``client.cosmetics.search_all()``
         - :meth:`fortnite_api.Client.search_br_cosmetics`
-    *   - ``client.cosmetics.search_first()````
+    *   - ``client.cosmetics.search_first()``
         - :meth:`fortnite_api.Client.search_br_cosmetics`
 
 Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
