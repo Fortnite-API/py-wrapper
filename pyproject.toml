@@ -29,7 +29,7 @@ authors = [
 ]
 description = "A python wrapper for Fortnite-API.com"
 readme = "README.md"
-requires-python = ">=3.8.0"
+requires-python = ">=3.9.0"
 license = { file = "LICENSE" }
 keywords = [
     'fortnite',
@@ -44,7 +44,6 @@ classifiers = [
     'Intended Audience :: Developers',
     'Natural Language :: English',
     'Operating System :: OS Independent',
-    'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',

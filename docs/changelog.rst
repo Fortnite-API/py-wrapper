@@ -5,6 +5,16 @@
 Changelog
 =========
 
+.. _vp3p2p0:
+
+v3.2.0
+-------
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+- Drop support for Python 3.8. The minimum supported Python version is now 3.9.
+
+
 .. _vp3p1p0:
 
 v3.1.0
