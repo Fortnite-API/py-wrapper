@@ -233,6 +233,8 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         The search tags of the cosmetic.
     gameplay_tags: List[:class:`str`]
         The gameplay tags of the cosmetic.
+
+        .. opt-in:: INCLUDE_GAMEPLAY_TAGS
     meta_tags: List[:class:`str`]
         The meta tags of the cosmetic.
     showcase_video_id: Optional[:class:`str`]
@@ -241,14 +243,24 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         The dynamic pak ID of the cosmetic, if available.
     item_preview_hero_path: Optional[:class:`str`]
         The item preview hero path of the cosmetic, if available.
+
+        .. opt-in:: INCLUDE_PATHS
     display_asset_path: Optional[:class:`str`]
         The display asset path of the cosmetic, if available.
+
+        .. opt-in:: INCLUDE_PATHS
     definition_path: Optional[:class:`str`]
         The definition path of the cosmetic, if available.
+
+        .. opt-in:: INCLUDE_PATHS
     path: Optional[:class:`str`]
         The path of the cosmetic, if available.
+
+        .. opt-in:: INCLUDE_PATHS
     shop_history: List[:class:`datetime.datetime`]
         The shop history of the cosmetic.
+
+        .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
     __slots__: Tuple[str, ...] = (

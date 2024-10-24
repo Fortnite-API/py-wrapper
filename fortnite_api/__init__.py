@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = '3.1.0a'
+__version__ = '3.2.0a'
 
 from . import proxies as proxies, utils as utils
 from .abc import *

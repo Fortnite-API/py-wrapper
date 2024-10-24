@@ -96,3 +96,12 @@ The changelog contains a list of all changes made to the Fortnite-API Python lib
    :maxdepth: 3
    
    changelog
+
+
+Additional Resources
+--------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   response_flags

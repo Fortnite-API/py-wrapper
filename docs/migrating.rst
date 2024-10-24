@@ -38,7 +38,7 @@ So for example, after creating an instance of the client, you simply call the me
 
 .. code-block:: python3
 
-    # "with" discussed later
+    # "with" discussed later, don't worry about it for now
     with fortnite_api.SyncClient() as client:
         # Method to fetch all cosmetics
         client.fetch_cosmetics_all()
@@ -170,6 +170,8 @@ separately for both clients in the next section.
         - The session parameter accepts an HTTP session into the client. By default this is an optional parameter. This parameter comes in useful if you want to manage a session yourself. In that case, it is a required parameter. This is different in the :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient` - so what is the difference? Below will discuss the differences between the two clients' initialization parameters.
     *   - ``beta``
         - Denotes if the client has the permissions to access beta endpoints (always prefixed with ``beta_fetch_x``). This is a new parameter that is set to ``False`` by default. If you want to access beta endpoints, you must set this parameter to ``True``.
+    *   - ``response_flags``
+        - Denotes the response flags that the client should attach to its requests to the Fortnite API. This is a new parameter that is set to :attr:`~fortnite_api.ResponseFlags.INCLUDE_NOTHING` by default. It is **highly recommended** you read through the :ref:`response flags section <response_flags>` to understand how to use this parameter effectively, which flags are available, and where they affect the responses from the Fortnite API.
 
 See the documentation for these parameters in :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient`.
 
@@ -315,7 +317,7 @@ are as follows:
         - This method has been depreciated. Use :meth:`fortnite_api.Client.fetch_cosmetics_new` instead.
     *   - ``client.cosmetics.search_all()``
         - :meth:`fortnite_api.Client.search_br_cosmetics`
-    *   - ``client.cosmetics.search_first()````
+    *   - ``client.cosmetics.search_first()``
         - :meth:`fortnite_api.Client.search_br_cosmetics`
 
 Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
