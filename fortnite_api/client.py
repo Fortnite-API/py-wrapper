@@ -1030,6 +1030,8 @@ class Client:
         ------
         NotFound
             A player with that name was not found.
+        Forbidden
+            The player has set their stats to private within the account settings.
         ValueError
             You cannot pass both a ``name`` and an ``account_id`` to fetch stats at the
             same time, or, you must pass either a ``name`` or an ``account_id`` to fetch stats.
