@@ -24,9 +24,10 @@ SOFTWARE.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Any, Sequence
+
 from docutils import nodes
 from docutils.parsers import rst
-from typing import TYPE_CHECKING, Any, Sequence
 from sphinx.addnodes import pending_xref
 
 # from sphinx.roles import XRefRole
