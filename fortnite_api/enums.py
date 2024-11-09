@@ -25,9 +25,11 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
-from typing import Type
+from typing import Any, Type, TypeVar
 
 from typing_extensions import Self
+
+E = TypeVar('E', bound='Enum')
 
 
 class KeyFormat(enum.Enum):
@@ -436,3 +438,21 @@ class ProductTag(enum.Enum):
         # To easily handle this, we'll remove the "Product." prefix and convert it to lowercase.
         trimmed = string.split('.')[-1]
         return cls(trimmed.lower())
+
+
+def create_unknown_value(cls: Type[E], val: Any) -> E:
+    value_cls = cls._enum_value_cls_  # type: ignore # This is narrowed below
+    name = f'unknown_{val}'
+    return value_cls(name=name, value=val)
+
+
+def try_enum(cls: Type[E], val: Any) -> E:
+    """A function that tries to turn the value into enum ``cls``.
+
+    If it fails it returns a proxy invalid value instead.
+    """
+
+    try:
+        return cls._enum_value_map_[val]  # type: ignore # All errors are caught below
+    except (KeyError, TypeError, AttributeError):
+        return create_unknown_value(cls, val)

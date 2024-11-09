@@ -33,7 +33,7 @@ from typing_extensions import Self
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
-from .enums import BannerIntensity
+from .enums import BannerIntensity, try_enum
 from .http import HTTPClientT
 from .new_display_asset import NewDisplayAsset
 from .proxies import TransformerListProxy
@@ -215,7 +215,7 @@ class ShopEntryBanner(ReconstructAble[Dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.value: str = data["value"]
-        self.intensity: BannerIntensity = BannerIntensity(data["intensity"])
+        self.intensity: BannerIntensity = try_enum(BannerIntensity, data["intensity"])
         self.backend_value: str = data["backendValue"]
 
 

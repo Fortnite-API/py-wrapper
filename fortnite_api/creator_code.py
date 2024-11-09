@@ -28,7 +28,7 @@ from typing import Any, Dict, Tuple
 
 from .abc import ReconstructAble
 from .account import Account
-from .enums import CreatorCodeStatus
+from .enums import CreatorCodeStatus, try_enum
 from .http import HTTPClientT
 from .utils import simple_repr
 
@@ -75,7 +75,7 @@ class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.code: str = data["code"]
         self.account: Account[HTTPClientT] = Account(data=data["account"], http=http)
         self.verified: bool = data["verified"]
-        self.status: CreatorCodeStatus = CreatorCodeStatus(data["status"].lower())
+        self.status: CreatorCodeStatus = try_enum(CreatorCodeStatus, data["status"])
 
     @property
     def disabled(self) -> bool:
