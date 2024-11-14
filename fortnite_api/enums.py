@@ -327,21 +327,6 @@ class StatsImageType(enum.Enum):
     NONE = 'none'
 
 
-class CreatorCodeStatus(enum.Enum):
-    """Represents the status of a creator code.
-
-    Attributes
-    ----------
-    ACTIVE
-        The creator code is active.
-    DISABLED
-        The creator code is disabled.
-    """
-
-    ACTIVE = 'active'
-    DISABLED = 'disabled'
-
-
 class CosmeticCompatibleMode(enum.Enum):
     """A class that represents the compatibility of a cosmetic :class:`fortnite_api.MaterialInstance` with other modes.
 
