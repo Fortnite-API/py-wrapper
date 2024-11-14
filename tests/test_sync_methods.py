@@ -124,6 +124,7 @@ def test_sync_creator_code(api_key: str):
     mock_account_payload = dict(id=TEST_ACCOUNT_ID, name=TEST_ACCOUNT_NAME)
     assert creator_code.account == fn_api.Account(data=mock_account_payload, http=SyncHTTPClient())
 
+
 def test_sync_fetch_playlist(api_key: str):
     with fn_api.SyncClient(api_key=api_key) as client:
         playlists = client.fetch_playlists()
