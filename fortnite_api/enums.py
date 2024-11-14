@@ -24,7 +24,6 @@ SOFTWARE.
 
 from __future__ import annotations
 
-import enum
 import types
 from collections import namedtuple
 from typing import Any, Type, TypeVar, TYPE_CHECKING, ClassVar, List, Dict, Tuple, Iterator, Mapping
@@ -156,7 +155,7 @@ else:
                 return value
 
 
-class KeyFormat(enum.Enum):
+class KeyFormat(Enum):
     """Represents a return format type for the AES endpoint.
 
     Attributes
@@ -171,7 +170,7 @@ class KeyFormat(enum.Enum):
     BASE64 = 'base64'
 
 
-class GameLanguage(enum.Enum):
+class GameLanguage(Enum):
     """Represents a language that Fortnite supports. This can be
     used to change the return language of many API calls.
 
@@ -226,7 +225,7 @@ class GameLanguage(enum.Enum):
     CHINESE_TRADITIONAL = 'zh-Hant'
 
 
-class MatchMethod(enum.Enum):
+class MatchMethod(Enum):
     """Represents a string matching method for some search methods in the API.
 
     Attributes
@@ -247,7 +246,7 @@ class MatchMethod(enum.Enum):
     ENDS = 'ends'
 
 
-class CosmeticCategory(enum.Enum):
+class CosmeticCategory(Enum):
     """Represents the internal names for the types of a cosmetics in Fortnite.
 
     Attributes
@@ -277,7 +276,7 @@ class CosmeticCategory(enum.Enum):
     BEANS = "beans"
 
 
-class CosmeticRarity(enum.Enum):
+class CosmeticRarity(Enum):
     """Represents a rarity of a :class:`~fortnite_api.Cosmetic` object.
 
     Attributes
@@ -319,7 +318,7 @@ class CosmeticRarity(enum.Enum):
     MYTHIC = 'mythic'
 
 
-class CosmeticType(enum.Enum):
+class CosmeticType(Enum):
     """Represents a type of a :class:`fortnite_api.CosmeticBr` cosmetic.
 
     Attributes
@@ -396,7 +395,7 @@ class CosmeticType(enum.Enum):
     SHOUT = 'shout'
 
 
-class AccountType(enum.Enum):
+class AccountType(Enum):
     """Represents the type of a :class:`fortnite_api.account.Account`.
 
     Attributes
@@ -414,7 +413,7 @@ class AccountType(enum.Enum):
     XBL = 'xbl'
 
 
-class TimeWindow(enum.Enum):
+class TimeWindow(Enum):
     """Represents a time window for statistics in the API.
 
     Attributes
@@ -429,7 +428,7 @@ class TimeWindow(enum.Enum):
     LIFETIME = 'lifetime'
 
 
-class StatsImageType(enum.Enum):
+class StatsImageType(Enum):
     """Represents the type of image that should be returned from the stats image endpoint.
 
     Attributes
@@ -453,7 +452,7 @@ class StatsImageType(enum.Enum):
     NONE = 'none'
 
 
-class CreatorCodeStatus(enum.Enum):
+class CreatorCodeStatus(Enum):
     """Represents the status of a creator code.
 
     Attributes
@@ -468,7 +467,7 @@ class CreatorCodeStatus(enum.Enum):
     DISABLED = 'disabled'
 
 
-class CosmeticCompatibleMode(enum.Enum):
+class CosmeticCompatibleMode(Enum):
     """A class that represents the compatibility of a cosmetic :class:`fortnite_api.MaterialInstance` with other modes.
 
     Attributes
@@ -501,7 +500,7 @@ class CosmeticCompatibleMode(enum.Enum):
         return cls(trimmed.lower())
 
 
-class BannerIntensity(enum.Enum):
+class BannerIntensity(Enum):
     """Denotes the intensity of a :class:`fortnite_api.ShopEntryBanner`.
 
     Attributes
@@ -516,7 +515,7 @@ class BannerIntensity(enum.Enum):
     HIGH = 'High'
 
 
-class CustomGender(enum.Enum):
+class CustomGender(Enum):
     """Denotes the gender of a character in Fortnite.
 
     At the moment, this is only used on the :class:`fortnite_api.VariantBean` class.
@@ -533,7 +532,7 @@ class CustomGender(enum.Enum):
     MALE = 'EFortCustomGender::Male'
 
 
-class ProductTag(enum.Enum):
+class ProductTag(Enum):
     """A class that represents the tag of a product.
 
     Attributes
