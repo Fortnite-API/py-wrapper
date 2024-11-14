@@ -26,11 +26,12 @@ from __future__ import annotations
 
 import types
 from collections import namedtuple
-from typing import Any, Type, TypeVar, TYPE_CHECKING, ClassVar, List, Dict, Tuple, Iterator, Mapping
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, Tuple, Type, TypeVar
 
 from typing_extensions import Self
 
 E = TypeVar('E', bound='Enum')
+
 
 def _create_value_cls(name: str, comparable: bool):
     # All the type ignores here are due to the type checker being unable to recognise
@@ -58,12 +59,12 @@ class EnumMeta(type):
         _enum_value_map_: ClassVar[Dict[Any, Any]]
 
     def __new__(
-            cls,
-            name: str,
-            bases: Tuple[type, ...],
-            attrs: Dict[str, Any],
-            *,
-            comparable: bool = False,
+        cls,
+        name: str,
+        bases: Tuple[type, ...],
+        attrs: Dict[str, Any],
+        *,
+        comparable: bool = False,
     ) -> EnumMeta:
         value_mapping = {}
         member_mapping = {}
