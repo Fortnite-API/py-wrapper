@@ -2,6 +2,7 @@
 MIT License
 
 Copyright (c) 2019-present Luc1412
+Portions of this code are Copyright (c) 2015-present Rapptz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
