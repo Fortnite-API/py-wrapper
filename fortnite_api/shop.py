@@ -114,7 +114,7 @@ class TileSize:
         ``Size_<width>_x_<height>``. It has been exposed in the case that
         the user wants to construct a tile size from a custom value.
 
-        If an invalid value is passed, the tile size defaults to 1x1.
+        If an invalid value is passed, the tile size defaults to a width and height of 0.
 
         Parameters
         ----------
@@ -131,7 +131,7 @@ class TileSize:
         if not match:
             # Epic may change the format or messes up the value.
             # In one such case, this value was "ERROR BAD SIZE".
-            raise cls(width=1, height=1, internal=value)
+            raise cls(width=0, height=0, internal=value)
 
         return cls(
             width=int(match.group("width")),
