@@ -14,6 +14,12 @@ New Features
 ~~~~~~~~~~~~
 - Added support for :attr:`fortnite_api.CosmeticType.SHOES`.
 
+Miscellaneous
+~~~~~~~~~~~~~
+- Add safeguards against Fortnite changes or messed up values within the API.
+    - All enums now can handle unknown values. This means that if the API returns a value that is not in the enum, it will be stored as an attribute on the enum object.
+    - :class:`fortnite_api.TileSize` now has a fallback value of width and height of 0.
+
 
 .. _vp3p1p0:
 
