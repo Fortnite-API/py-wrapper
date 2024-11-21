@@ -75,7 +75,7 @@ class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.code: str = data["code"]
         self.account: Account[HTTPClientT] = Account(data=data["account"], http=http)
         self.verified: bool = data["verified"]
-        self.status: CreatorCodeStatus = try_enum(CreatorCodeStatus, data["status"])
+        self.status: CreatorCodeStatus = try_enum(CreatorCodeStatus, data["status"].lower())
 
     @property
     def disabled(self) -> bool:
