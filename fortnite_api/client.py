@@ -27,7 +27,7 @@ from __future__ import annotations
 import datetime
 import functools
 import inspect
-from typing import Any, Callable, List, Literal, Optional, TypeVar, Union, cast, overload
+from typing import Any, Callable, List, Literal, Optional, Tuple, TypeVar, Union, cast, overload
 
 import aiohttp
 import requests
@@ -51,6 +51,11 @@ from .proxies import TransformerListProxy
 from .shop import Shop
 from .stats import BrPlayerStats
 from .utils import MISSING, _transform_dict_for_get_request, copy_doc, remove_prefix
+
+__all__: Tuple[str, ...] = (
+    'Client',
+    'SyncClient',
+)
 
 T = TypeVar('T')
 TC = TypeVar('TC')

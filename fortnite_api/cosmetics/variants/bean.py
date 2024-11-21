@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Tuple, Union, overload
 
 from ...enums import CustomGender, GameLanguage, try_enum
 from ...http import HTTPClientT
@@ -34,6 +34,8 @@ from ..common import Cosmetic, CosmeticImages
 
 if TYPE_CHECKING:
     from ...http import HTTPClient, SyncHTTPClient
+
+__all__: Tuple[str, ...] = ('VariantBean',)
 
 
 class VariantBean(Cosmetic[Dict[str, Any], HTTPClientT]):
