@@ -15,6 +15,12 @@ Breaking Changes
 - ``CreatorCode.status`` and ``CreatorCode.disabled`` have been removed, since they where never returned by this endpoint. Disabled creator codes always raise :class:`fortnite_api.NotFound` when trying to fetch them.
 - ``CreatorCode.verified`` has been removed, since it isn't used within the affiliate system. It always returns ``False``.
 
+
+New Features
+~~~~~~~~~~~~
+- Added support for :attr:`fortnite_api.CosmeticType.SHOES`.
+
+
 .. _vp3p1p0:
 
 v3.1.0

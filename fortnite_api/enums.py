@@ -219,6 +219,7 @@ class CosmeticType(enum.Enum):
     PET
     PET_CARRIER
     PICKAXE
+    SHOES
     GLIDER
     CONTRAIL
     AURA
@@ -252,6 +253,7 @@ class CosmeticType(enum.Enum):
     PET_CARRIER = 'petcarrier'
     PICKAXE = 'pickaxe'
     GLIDER = 'glider'
+    SHOES = 'shoe'
     CONTRAIL = 'contrail'
     AURA = 'aura'
 
