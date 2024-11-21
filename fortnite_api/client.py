@@ -52,7 +52,7 @@ from .shop import Shop
 from .stats import BrPlayerStats
 from .utils import MISSING, _transform_dict_for_get_request, copy_doc, remove_prefix
 
-__all__ = Tuple[str, ...] = (
+__all__: Tuple[str, ...] = (
     'Client',
     'SyncClient',
 )
