@@ -114,6 +114,8 @@ class TileSize:
         ``Size_<width>_x_<height>``. It has been exposed in the case that
         the user wants to construct a tile size from a custom value.
 
+        If an invalid value is passed, the tile size defaults to 1x1.
+
         Parameters
         ----------
         value: :class:`str`
@@ -123,18 +125,13 @@ class TileSize:
         -------
         :class:`TileSize`
             The constructed tile size.
-
-        Raises
-        ------
-        ValueError
-            If the value is not in the correct format.
         """
         # Try and match the regex
         match = _TILE_SIZE_REGEX.match(value)
         if not match:
-            # Epic only uses the tile sizing on the regex. If there isn't a match
-            # we can safely assume an exception must be raised
-            raise ValueError(f"Invalid tile size: {value!r}")
+            # Epic may change the format or messes up the value.
+            # In one such case, this value was "ERROR BAD SIZE".
+            raise cls(width=1, height=1, internal=value)
 
         return cls(
             width=int(match.group("width")),
