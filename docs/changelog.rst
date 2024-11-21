@@ -5,6 +5,16 @@
 Changelog
 =========
 
+.. _vp3p2p0:
+
+v3.2.0
+-------
+
+New Features
+~~~~~~~~~~~~
+- Added support for :attr:`fortnite_api.CosmeticType.SHOES`.
+
+
 .. _vp3p1p0:
 
 v3.1.0
