@@ -38,5 +38,5 @@ def test_dummy_enum():
     assert valid_instance.value == valid_value
 
     invalid_instance = try_enum(DummyEnum, invalid_value)
-    assert invalid_instance.name == f'"UNKNOWN_{invalid_value}"'
+    assert invalid_instance.name == f"UNKNOWN_{invalid_value}"
     assert invalid_instance.value == invalid_value
