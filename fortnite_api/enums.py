@@ -39,7 +39,6 @@ __all__: Tuple[str, ...] = (
     'AccountType',
     'TimeWindow',
     'StatsImageType',
-    'CreatorCodeStatus',
     'CosmeticCompatibleMode',
     'BannerIntensity',
     'CustomGender',
