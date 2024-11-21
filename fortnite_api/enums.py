@@ -499,7 +499,7 @@ class CosmeticCompatibleMode(Enum):
         # To easily handle this, we'll remove the "ECosmeticCompatibleMode::" or "ECosmeticCompatibleModeLegacy::" prefix.
         # and then convert it to the enum.
         trimmed = string.split('::')[-1]
-        return cls(trimmed.lower())
+        return try_enum(cls, trimmed)
 
 
 class BannerIntensity(Enum):
@@ -562,7 +562,7 @@ class ProductTag(Enum):
         # The Epic Games API "Product" enums contains both lower case and capitalized values, so we need to handle both.
         # To easily handle this, we'll remove the "Product." prefix and convert it to lowercase.
         trimmed = string.split('.')[-1]
-        return cls(trimmed.lower())
+        return try_enum(cls, trimmed.lower())
 
 
 def create_unknown_value(cls: Type[E], val: Any) -> E:
