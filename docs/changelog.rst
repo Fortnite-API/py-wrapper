@@ -14,6 +14,11 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 - Drop support for Python 3.8. The minimum supported Python version is now 3.9.
 
+New Features
+~~~~~~~~~~~~
+- Added support for :attr:`fortnite_api.CosmeticType.SHOES`.
+
+
 
 .. _vp3p1p0:
 
