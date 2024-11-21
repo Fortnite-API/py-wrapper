@@ -21,13 +21,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from fortnite_api import Enum, try_enum
+
+from fortnite_api.enums import Enum, try_enum
 
 
 class DummyEnum(Enum):
     FOO = "foo"
     BAR = "bar"
     BAZ = "baz"
+
 
 def test_dummy_enum():
     valid_value = "foo"
