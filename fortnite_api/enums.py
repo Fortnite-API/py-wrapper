@@ -53,8 +53,8 @@ E = TypeVar('E', bound='Enum')
 
 
 def _create_value_cls(name: str, comparable: bool):
-    # All the type ignores here are due to the type checker being unable to recognise
-    # Runtime type creation without exploding.
+    # Pyright cannot statically recognize the runtime type creation. All of the following
+    # type ignores in this function are a result of this.
     cls = namedtuple('_EnumValue_' + name, 'name value')
     cls.__repr__ = lambda self: f'<{name}.{self.name}: {self.value!r}>'  # type: ignore
     cls.__str__ = lambda self: f'{name}.{self.name}'  # type: ignore
@@ -63,16 +63,16 @@ def _create_value_cls(name: str, comparable: bool):
         cls.__ge__ = lambda self, other: isinstance(other, self.__class__) and self.value >= other.value  # type: ignore
         cls.__lt__ = lambda self, other: isinstance(other, self.__class__) and self.value < other.value  # type: ignore
         cls.__gt__ = lambda self, other: isinstance(other, self.__class__) and self.value > other.value  # type: ignore
+    
     return cls
 
 
-def _is_descriptor(obj):
+def _is_descriptor(obj: Type[object]) -> bool:
     return hasattr(obj, '__get__') or hasattr(obj, '__set__') or hasattr(obj, '__delete__')
 
 
 class EnumMeta(type):
     if TYPE_CHECKING:
-        __name__: ClassVar[str]
         _enum_member_names_: ClassVar[List[str]]
         _enum_member_map_: ClassVar[Dict[str, Any]]
         _enum_value_map_: ClassVar[Dict[Any, Any]]
@@ -85,9 +85,9 @@ class EnumMeta(type):
         *,
         comparable: bool = False,
     ) -> EnumMeta:
-        value_mapping = {}
-        member_mapping = {}
-        member_names = []
+        value_mapping: Dict[OldValue, NewValue] = {}
+        member_mapping: Dict[str, NewValue] = {}
+        member_names: List[str] = []
 
         value_cls = _create_value_cls(name, comparable)
         for key, value in list(attrs.items()):

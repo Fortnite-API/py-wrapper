@@ -16,8 +16,8 @@ New Features
 
 Miscellaneous
 ~~~~~~~~~~~~~
-- Add safeguards against Fortnite changes or messed up values within the API.
-    - All enums now can handle unknown values. This means that if the API returns a value that is not in the enum, it will be stored as an attribute on the enum object.
+- Add safeguards against Epic Games' API changing or providing invalid values in API responses.
+    - All enums now can handle unknown values via an internally defined "Enum-like" class. This means that if the API returns a value that is not in the enum, it will be stored as an attribute on the enum object.
     - :class:`fortnite_api.TileSize` now has a fallback value of width and height of 0.
 
 
