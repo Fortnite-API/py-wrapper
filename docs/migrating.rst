@@ -892,8 +892,6 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.StatsImageType`: An enum that represents which type of battle royale statistics image type should be returned from the API when fetching BR stats. This is used as a parameter when fetching BR stats. 
 
-- :class:`fortnite_api.CreatorCodeStatus`: An enum that represents if a creator code is active or not. This is used in a :class:`~fortnite_api.CreatorCode` object.
-
 - :class:`fortnite_api.BannerIntensity`: An enum that represents the intensity of a banner color. This is used in the :class:`~fortnite_api.ShopEntryBanner` class to represent the intensity of a banner color.
 
 - :class:`fortnite_api.FortniteAPIException` and all its subclasses found in :ref:`the exception hierarchy <api-exception-hierarchy>`: These are exceptions that are raised when an error occurs while fetching data from the Fortnite API. They are used across the library. For what each of them do, see the :ref:`exception hierarchy <api-exception-hierarchy>`.

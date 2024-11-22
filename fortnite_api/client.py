@@ -835,7 +835,7 @@ class Client:
         Raises
         ------
         NotFound
-            A creator code with that name was not found.
+            A creator code with that name doesn't exist or has been disabled.
         """
         data = await self.http.get_creator_code(name)
         return CreatorCode(data=data, http=self.http)
