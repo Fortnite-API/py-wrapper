@@ -32,7 +32,7 @@ from typing import Any, Callable, Literal, Optional, TypeVar, Union, cast, overl
 
 import aiohttp
 import requests
-from typing_extensions import Concatenate, ParamSpec
+from typing_extensions import Concatenate, ParamSpec, Self
 
 from .aes import Aes
 from .all import CosmeticsAll
