@@ -28,7 +28,6 @@ from typing import Any, Dict, Tuple
 
 from .abc import ReconstructAble
 from .account import Account
-from .enums import CreatorCodeStatus, try_enum
 from .http import HTTPClientT
 from .utils import simple_repr
 
@@ -57,27 +56,12 @@ class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
     account: :class:`fortnite_api.Account`
         The account associated with the creator code. Ie, the account
         that owns the creator code.
-    status: :class:`fortnite_api.CreatorCodeStatus`
-        The current status of the creator code.
-    verified: :class:`bool`
-        Whether the creator code is verified.
-
-        .. note::
-
-            From internal testing, this seems to be always ``False``.
     """
 
-    __slots__: Tuple[str, ...] = ("code", "account", "verified", "status")
+    __slots__: Tuple[str, ...] = ("code", "account")
 
     def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.code: str = data["code"]
         self.account: Account[HTTPClientT] = Account(data=data["account"], http=http)
-        self.verified: bool = data["verified"]
-        self.status: CreatorCodeStatus = try_enum(CreatorCodeStatus, data["status"].lower())
-
-    @property
-    def disabled(self) -> bool:
-        """:class:`bool`: Whether the creator code is disabled."""
-        return self.status is CreatorCodeStatus.DISABLED
