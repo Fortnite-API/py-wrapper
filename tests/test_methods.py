@@ -27,6 +27,7 @@ from __future__ import annotations
 import inspect
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, Generic, TypeVar
 
+import pytest
 import requests
 from typing_extensions import Concatenate, ParamSpec, TypeAlias, TypeIs
 
@@ -134,3 +135,10 @@ class ClientHybrid(fortnite_api.Client):
             return item
 
         return HybridMethodProxy(self, self.__sync_client, item, sync_item)
+
+
+@pytest.mark.asyncio
+async def test_hybrid_client():
+    async with ClientHybrid() as client:
+        data = await client.fetch_aes()
+        print(data)
