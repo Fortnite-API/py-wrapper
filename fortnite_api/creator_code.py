@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Tuple
+from typing import Any
 
 from .abc import ReconstructAble
 from .account import Account
@@ -32,11 +32,11 @@ from .enums import CreatorCodeStatus
 from .http import HTTPClientT
 from .utils import simple_repr
 
-__all__: Tuple[str, ...] = ("CreatorCode",)
+__all__: tuple[str, ...] = ("CreatorCode",)
 
 
 @simple_repr
-class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CreatorCode(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CreatorCode
 
@@ -67,9 +67,9 @@ class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
             From internal testing, this seems to be always ``False``.
     """
 
-    __slots__: Tuple[str, ...] = ("code", "account", "verified", "status")
+    __slots__: tuple[str, ...] = ("code", "account", "verified", "status")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.code: str = data["code"]

@@ -27,7 +27,8 @@ from __future__ import annotations
 import importlib
 import inspect
 import re
-from typing import TYPE_CHECKING, ClassVar, Dict, List, NamedTuple, Optional, Sequence, Tuple
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, ClassVar, NamedTuple, Optional
 
 from docutils import nodes
 from sphinx import addnodes
@@ -124,7 +125,7 @@ class PyAttributeTable(SphinxDirective):
     final_argument_whitespace = False
     option_spec: ClassVar[OptionSpec] = {}  # type: ignore
 
-    def parse_name(self, content: str) -> Tuple[str, str]:
+    def parse_name(self, content: str) -> tuple[str, str]:
         match = _name_parser_regex.match(content)
         if match is None:
             raise RuntimeError(f"content {content} somehow doesn't match regex in {self.env.docname}.")
@@ -140,7 +141,7 @@ class PyAttributeTable(SphinxDirective):
 
         return modulename, name
 
-    def run(self) -> List[attributetableplaceholder]:
+    def run(self) -> list[attributetableplaceholder]:
         """If you're curious on the HTML this is meant to generate:
 
         <div class="py-attribute-table">
@@ -177,10 +178,10 @@ class PyAttributeTable(SphinxDirective):
         return [node]
 
 
-def build_lookup_table(env: BuildEnvironment) -> Dict[str, List[str]]:
+def build_lookup_table(env: BuildEnvironment) -> dict[str, list[str]]:
     # Given an environment, load up a lookup table of
     # full-class-name: objects
-    result: Dict[str, List[str]] = {}
+    result: dict[str, list[str]] = {}
     domain = env.domains['py']
 
     ignored = {
@@ -231,12 +232,12 @@ def process_attributetable(app: Sphinx, doctree: nodes.Node, fromdocname: str) -
 
 
 def get_class_results(
-    lookup: Dict[str, List[str]], modulename: str, name: str, fullname: str
-) -> Dict[str, List[TableElement]]:
+    lookup: dict[str, list[str]], modulename: str, name: str, fullname: str
+) -> dict[str, list[TableElement]]:
     module = importlib.import_module(modulename)
     cls = getattr(module, name)
 
-    groups: Dict[str, List[TableElement]] = {
+    groups: dict[str, list[TableElement]] = {
         _('Attributes'): [],
         _('Methods'): [],
     }

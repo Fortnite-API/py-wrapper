@@ -1,11 +1,9 @@
-from typing import Tuple
-
 from fortnite_api.utils import simple_repr
 
 
 @simple_repr
 class Foo:
-    __slots__: Tuple[str, ...] = ('foo', 'bar', 'baz')
+    __slots__: tuple[str, ...] = ('foo', 'bar', 'baz')
 
     def __init__(self, foo: int, bar: int, baz: int) -> None:
         self.foo = foo
@@ -15,7 +13,7 @@ class Foo:
 
 @simple_repr
 class Bar(Foo):
-    __slots__: Tuple[str, ...] = ('buz',)
+    __slots__: tuple[str, ...] = ('buz',)
 
     def __init__(self, foo: int, bar: int, baz: int, buz: int) -> None:
         super().__init__(foo, bar, baz)

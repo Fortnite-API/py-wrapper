@@ -25,17 +25,17 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeriesInfo, CosmeticTypeInfo
 
-__all__: Tuple[str, ...] = ('CosmeticCar',)
+__all__: tuple[str, ...] = ('CosmeticCar',)
 
 
 @simple_repr
-class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
+class CosmeticCar(Cosmetic[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticCar
 
@@ -81,7 +81,7 @@ class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
         .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         'vehicle_id',
         'name',
         'description',
@@ -95,7 +95,7 @@ class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
         'shop_history',
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.vehicle_id: str = data['vehicleId']
@@ -116,11 +116,11 @@ class CosmeticCar(Cosmetic[Dict[str, Any], HTTPClientT]):
             data=_series, http=self._http
         )
 
-        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
         self.path: Optional[str] = data.get('path')
         self.showcase_video_id: Optional[str] = data.get('showcaseVideo')
 
-        self.shop_history: List[datetime.datetime] = [
+        self.shop_history: list[datetime.datetime] = [
             parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
         ]
 

@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 from ..abc import ReconstructAble
 from ..asset import Asset
@@ -33,7 +33,7 @@ from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeriesInfo, CosmeticTypeInfo
 
-__all__: Tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     'CosmeticBrSet',
     'CosmeticBrIntroduction',
     'CosmeticBrVariant',
@@ -43,7 +43,7 @@ __all__: Tuple[str, ...] = (
 
 
 @simple_repr
-class CosmeticBrSet(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticBrSet(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrSet
 
@@ -66,9 +66,9 @@ class CosmeticBrSet(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The backend value of this set.
     """
 
-    __slots__: Tuple[str, ...] = ('value', 'text', 'backend_value')
+    __slots__: tuple[str, ...] = ('value', 'text', 'backend_value')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.value: Optional[str] = data.get('value')
@@ -77,7 +77,7 @@ class CosmeticBrSet(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class CosmeticBrIntroduction(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticBrIntroduction(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrIntroduction
 
@@ -102,9 +102,9 @@ class CosmeticBrIntroduction(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The backend value of this introduction.
     """
 
-    __slots__: Tuple[str, ...] = ('chapter', 'season', 'text', 'backend_value')
+    __slots__: tuple[str, ...] = ('chapter', 'season', 'text', 'backend_value')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
         self.chapter: int = int(data['chapter'])
         self.season: str = data['season']
@@ -113,7 +113,7 @@ class CosmeticBrIntroduction(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class CosmeticBrVariantOption(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticBrVariantOption(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrVariantOption
 
@@ -138,9 +138,9 @@ class CosmeticBrVariantOption(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The image of the variant option.
     """
 
-    __slots__: Tuple[str, ...] = ('tag', 'name', 'unlock_requirements', 'image')
+    __slots__: tuple[str, ...] = ('tag', 'name', 'unlock_requirements', 'image')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.tag: str = data['tag']
@@ -150,7 +150,7 @@ class CosmeticBrVariantOption(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class CosmeticBrVariant(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticBrVariant(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrVariant
 
@@ -173,21 +173,21 @@ class CosmeticBrVariant(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The options for the variant, if any.
     """
 
-    __slots__: Tuple[str, ...] = ('channel', 'type', 'options')
+    __slots__: tuple[str, ...] = ('channel', 'type', 'options')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.channel: str = data['channel']
         self.type: Optional[str] = data.get('type')
 
-        self.options: List[CosmeticBrVariantOption[HTTPClientT]] = [
+        self.options: list[CosmeticBrVariantOption[HTTPClientT]] = [
             CosmeticBrVariantOption(data=option, http=http) for option in data['options']
         ]
 
 
 @simple_repr
-class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
+class CosmeticBr(Cosmetic[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBr
 
@@ -263,7 +263,7 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         'name',
         'description',
         'exclusive_description',
@@ -292,7 +292,7 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
     def __init__(
         self,
         *,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         http: HTTPClientT,
     ) -> None:
         super().__init__(http=http, data=data)
@@ -323,18 +323,18 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         images = data.get('images')
         self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages(http=http, data=images)
 
-        variants: List[Dict[str, Any]] = get_with_fallback(data, 'variants', list)
-        self.variants: List[CosmeticBrVariant[HTTPClientT]] = [
+        variants: list[dict[str, Any]] = get_with_fallback(data, 'variants', list)
+        self.variants: list[CosmeticBrVariant[HTTPClientT]] = [
             CosmeticBrVariant(data=variant, http=http) for variant in variants
         ]
 
-        built_in_emote_ids: List[str] = get_with_fallback(data, 'builtInEmoteId', list)
-        self.built_in_emote_ids: List[str] = built_in_emote_ids
+        built_in_emote_ids: list[str] = get_with_fallback(data, 'builtInEmoteId', list)
+        self.built_in_emote_ids: list[str] = built_in_emote_ids
 
-        self.search_tags: List[str] = get_with_fallback(data, 'searchTags', list)
+        self.search_tags: list[str] = get_with_fallback(data, 'searchTags', list)
 
-        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
-        self.meta_tags: List[str] = get_with_fallback(data, 'metaTags', list)
+        self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.meta_tags: list[str] = get_with_fallback(data, 'metaTags', list)
 
         self.showcase_video_id: Optional[str] = data.get('showcaseVideo')
         self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId')
@@ -343,7 +343,7 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         self.definition_path: Optional[str] = data.get('definitionPath')
         self.path: Optional[str] = data.get('path')
 
-        self.shop_history: List[datetime.datetime] = [
+        self.shop_history: list[datetime.datetime] = [
             parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
         ]
 

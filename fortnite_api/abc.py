@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Generic, Tuple, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Generic, TypeVar, Union
 
 from typing_extensions import Self
 
@@ -36,7 +36,7 @@ DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 if TYPE_CHECKING:
     from .client import Client, SyncClient
 
-__all__: Tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')
+__all__: tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')
 
 
 class IdComparable:
@@ -115,7 +115,7 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
     # still keeping the correct HTTPClient type.
 
     @classmethod
-    def from_dict(cls: Type[Self], data: DictT, *, client: Union[Client, SyncClient]) -> Self:
+    def from_dict(cls: type[Self], data: DictT, *, client: Union[Client, SyncClient]) -> Self:
         """Reconstructs this class from a raw dictionary object. This is useful for when you
         store the raw data and want to reconstruct the object later on.
 

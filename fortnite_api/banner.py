@@ -24,21 +24,21 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Optional
 
 from .abc import Hashable, ReconstructAble
 from .http import HTTPClientT
 from .images import Images
 from .utils import simple_repr
 
-__all__: Tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     "Banner",
     "BannerColor",
 )
 
 
 @simple_repr
-class Banner(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class Banner(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Banner
 
@@ -97,7 +97,7 @@ class Banner(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         Preview images of the banner.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "id",
         "name",
         "description",
@@ -107,7 +107,7 @@ class Banner(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         "images",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
@@ -121,7 +121,7 @@ class Banner(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class BannerColor(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class BannerColor(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BannerColor
 
@@ -147,9 +147,9 @@ class BannerColor(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The sub category group of the banner.
     """
 
-    __slots__: Tuple[str, ...] = ("id", "color", "category", "sub_category_group")
+    __slots__: tuple[str, ...] = ("id", "color", "category", "sub_category_group")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
         self.id: str = data["id"]
 
