@@ -49,6 +49,7 @@ __all__: Tuple[str, ...] = (
 
 
 E = TypeVar('E', bound='Enum')
+OldValue = NewValue = Any
 
 
 def _create_value_cls(name: str, comparable: bool):
