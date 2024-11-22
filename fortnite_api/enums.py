@@ -39,7 +39,6 @@ __all__: Tuple[str, ...] = (
     'AccountType',
     'TimeWindow',
     'StatsImageType',
-    'CreatorCodeStatus',
     'CosmeticCompatibleMode',
     'BannerIntensity',
     'CustomGender',
@@ -344,21 +343,6 @@ class StatsImageType(enum.Enum):
     GAMEPAD = 'gamepad'
     TOUCH = 'touch'
     NONE = 'none'
-
-
-class CreatorCodeStatus(enum.Enum):
-    """Represents the status of a creator code.
-
-    Attributes
-    ----------
-    ACTIVE
-        The creator code is active.
-    DISABLED
-        The creator code is disabled.
-    """
-
-    ACTIVE = 'active'
-    DISABLED = 'disabled'
 
 
 class CosmeticCompatibleMode(enum.Enum):
