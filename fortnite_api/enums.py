@@ -26,7 +26,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import types
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, NamedTuple, Tuple, Type, TypeVar
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, NamedTuple, Tuple, Type, TypeVar, Union
 
 from typing_extensions import Self
 
@@ -51,22 +51,22 @@ E = TypeVar('E', bound='Enum')
 OldValue = NewValue = Any
 
 
-def _create_value_cls(name: str, comparable: bool) -> Type[NamedTuple]:
-    # Pyright cannot statically recognize the runtime type creation. All of the following
-    # type ignores in this function are a result of this.
-    class _EnumValue(NamedTuple):
-        name: str
-        value: Any
+# Denotes an internal marker used to create the value class.
+class _EnumValue(NamedTuple):
+    name: str
+    value: Any
 
+
+def _create_value_cls(name: str, comparable: bool) -> Type[_EnumValue]:
     cls = _EnumValue
     cls.__name__ = '_EnumValue_' + name
-    cls.__repr__ = lambda self: f'<{name}.{self.name}: {self.value!r}>'  # type: ignore
-    cls.__str__ = lambda self: f'{name}.{self.name}'  # type: ignore
+    cls.__repr__ = lambda self: f'<{name}.{self.name}: {self.value!r}>'
+    cls.__str__ = lambda self: f'{name}.{self.name}'
     if comparable:
-        cls.__le__ = lambda self, other: isinstance(other, self.__class__) and self.value <= other.value  # type: ignore
-        cls.__ge__ = lambda self, other: isinstance(other, self.__class__) and self.value >= other.value  # type: ignore
-        cls.__lt__ = lambda self, other: isinstance(other, self.__class__) and self.value < other.value  # type: ignore
-        cls.__gt__ = lambda self, other: isinstance(other, self.__class__) and self.value > other.value  # type: ignore
+        cls.__le__ = lambda self, other: isinstance(other, self.__class__) and self.value <= other.value
+        cls.__ge__ = lambda self, other: isinstance(other, self.__class__) and self.value >= other.value
+        cls.__lt__ = lambda self, other: isinstance(other, self.__class__) and self.value < other.value
+        cls.__gt__ = lambda self, other: isinstance(other, self.__class__) and self.value > other.value
 
     return cls
 
@@ -76,11 +76,6 @@ def _is_descriptor(obj: Type[object]) -> bool:
 
 
 class EnumMeta(type):
-    if TYPE_CHECKING:
-        _enum_member_names_: ClassVar[List[str]]
-        _enum_member_map_: ClassVar[Dict[str, Any]]
-        _enum_value_map_: ClassVar[Dict[Any, Any]]
-
     def __new__(
         cls,
         name: str,
@@ -89,8 +84,8 @@ class EnumMeta(type):
         *,
         comparable: bool = False,
     ) -> EnumMeta:
-        value_mapping: Dict[OldValue, NewValue] = {}
-        member_mapping: Dict[str, NewValue] = {}
+        value_mapping: Dict[OldValue, _EnumValue] = {}
+        member_mapping: Dict[str, _EnumValue] = {}
         member_names: List[str] = []
 
         value_cls = _create_value_cls(name, comparable)
@@ -123,32 +118,32 @@ class EnumMeta(type):
         attrs['_enum_member_names_'] = member_names
         attrs['_enum_value_cls_'] = value_cls
         actual_cls = super().__new__(cls, name, bases, attrs)
-        value_cls._actual_enum_cls_ = actual_cls  # type: ignore # Runtime attribute isn't understood
+        value_cls._actual_enum_cls_ = actual_cls  # type: ignore # Runtime attribute isn't understood.
         return actual_cls
 
-    def __iter__(cls) -> Iterator[Any]:
+    def __iter__(cls: Type[Enum]) -> Iterator[Any]:
         return (cls._enum_member_map_[name] for name in cls._enum_member_names_)
 
-    def __reversed__(cls) -> Iterator[Any]:
+    def __reversed__(cls: Type[Enum]) -> Iterator[Any]:
         return (cls._enum_member_map_[name] for name in reversed(cls._enum_member_names_))
 
-    def __len__(cls) -> int:
+    def __len__(cls: Type[Enum]) -> int:
         return len(cls._enum_member_names_)
 
     def __repr__(cls) -> str:
         return f'<enum {cls.__name__}>'
 
     @property
-    def __members__(cls) -> Mapping[str, Any]:
+    def __members__(cls: Type[Enum]) -> Mapping[str, Any]:
         return types.MappingProxyType(cls._enum_member_map_)
 
-    def __call__(cls, value: str) -> Any:
+    def __call__(cls: Type[Enum], value: str) -> Any:
         try:
             return cls._enum_value_map_[value]
         except (KeyError, TypeError):
             raise ValueError(f"{value!r} is not a valid {cls.__name__}")
 
-    def __getitem__(cls, key: str) -> Any:
+    def __getitem__(cls: Type[Enum], key: str) -> Any:
         return cls._enum_member_map_[key]
 
     def __setattr__(cls, name: str, value: Any) -> None:
@@ -166,17 +161,21 @@ class EnumMeta(type):
             return False
 
 
-if TYPE_CHECKING:
-    from enum import Enum
-else:
+class Enum(metaclass=EnumMeta):
+    if TYPE_CHECKING:
+        # Set in the metaclass when __new__ is called. The newly
+        # created cls has these attributes set.
+        _enum_member_names_: ClassVar[List[str]]
+        _enum_member_map_: ClassVar[Dict[str, _EnumValue]]
+        _enum_value_map_: ClassVar[Dict[OldValue, _EnumValue]]
+        _enum_value_cls_: ClassVar[Type[_EnumValue]]
 
-    class Enum(metaclass=EnumMeta):
-        @classmethod
-        def try_value(cls, value):
-            try:
-                return cls._enum_value_map_[value]
-            except (KeyError, TypeError):
-                return value
+    @classmethod
+    def try_value(cls, value: OldValue) -> Union[OldValue, NewValue]:
+        try:
+            return cls._enum_value_map_[value]
+        except (KeyError, TypeError):
+            return value
 
 
 class KeyFormat(Enum):
@@ -574,8 +573,8 @@ class ProductTag(Enum):
         return try_enum(cls, trimmed.lower())
 
 
-def create_unknown_value(cls: Type[E], val: Any) -> E:
-    value_cls = cls._enum_value_cls_  # type: ignore # This is narrowed below
+def create_unknown_value(cls: Type[E], val: Any) -> _EnumValue:
+    value_cls = cls._enum_value_cls_
     name = f'UNKNOWN_{val}'
     return value_cls(name=name, value=val)
 
@@ -586,7 +585,12 @@ def try_enum(cls: Type[E], val: Any) -> E:
     If it fails it returns a proxy invalid value instead.
     """
 
+    # The return value from this function will be masked. We denote its value
+    # as E as if an instance of "cls" (Type[E]) is returned. This doesn't actually happen,
+    # an enum value is returned instead. A python enum.Enum conforms to a single class,
+    # so to keep this interface we'll mock that behavior.
+
     try:
-        return cls._enum_value_map_[val]  # type: ignore # All errors are caught below
+        return cls._enum_value_map_[val]  # type: ignore
     except (KeyError, TypeError, AttributeError):
-        return create_unknown_value(cls, val)
+        return create_unknown_value(cls, val)  # type: ignore
