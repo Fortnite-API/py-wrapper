@@ -26,8 +26,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import types
-from collections import namedtuple
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, Tuple, Type, TypeVar
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, NamedTuple, Tuple, Type, TypeVar
 
 from typing_extensions import Self
 
@@ -52,10 +51,15 @@ E = TypeVar('E', bound='Enum')
 OldValue = NewValue = Any
 
 
-def _create_value_cls(name: str, comparable: bool):
+def _create_value_cls(name: str, comparable: bool) -> Type[NamedTuple]:
     # Pyright cannot statically recognize the runtime type creation. All of the following
     # type ignores in this function are a result of this.
-    cls = namedtuple('_EnumValue_' + name, 'name value')
+    class _EnumValue(NamedTuple):
+        name: str
+        value: Any
+
+    cls = _EnumValue
+    cls.__name__ = '_EnumValue_' + name
     cls.__repr__ = lambda self: f'<{name}.{self.name}: {self.value!r}>'  # type: ignore
     cls.__str__ = lambda self: f'{name}.{self.name}'  # type: ignore
     if comparable:
