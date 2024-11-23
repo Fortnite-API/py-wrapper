@@ -27,18 +27,50 @@ from fortnite_api.enums import Enum, try_enum
 
 class DummyEnum(Enum):
     FOO = "foo"
-    BAR = "bar"
+    BAR = "bar" 
     BAZ = "baz"
 
 
 def test_dummy_enum():
+    # Test basic enum functionality
+    assert len(DummyEnum) == 3
+    assert list(DummyEnum) == [DummyEnum.FOO, DummyEnum.BAR, DummyEnum.BAZ]
+    assert list(reversed(DummyEnum)) == [DummyEnum.BAZ, DummyEnum.BAR, DummyEnum.FOO]
+    
+    # Test enum member access
+    assert DummyEnum.FOO.name == "FOO"
+    assert DummyEnum.FOO.value == "foo"
+    assert DummyEnum["FOO"] == DummyEnum.FOO
+    assert DummyEnum("foo") == DummyEnum.FOO
+    
+    # Test immutability
+    with pytest.raises(TypeError):
+        DummyEnum.FOO = "new"
+    with pytest.raises(TypeError):
+        del DummyEnum.FOO
+        
+    # Test try_enum functionality
     valid_value = "foo"
     invalid_value = "invalid"
 
     valid_instance = try_enum(DummyEnum, valid_value)
     assert valid_instance == DummyEnum.FOO
     assert valid_instance.value == valid_value
+    assert isinstance(valid_instance, DummyEnum)
 
     invalid_instance = try_enum(DummyEnum, invalid_value)
     assert invalid_instance.name == f"UNKNOWN_{invalid_value}"
     assert invalid_instance.value == invalid_value
+    assert isinstance(invalid_instance, DummyEnum)
+
+    # Test string representations
+    assert str(DummyEnum.FOO) == "DummyEnum.FOO"
+    assert repr(DummyEnum.FOO) == "<DummyEnum.FOO: 'foo'>"
+    assert repr(DummyEnum) == "<enum DummyEnum>"
+
+    # Test members property
+    assert DummyEnum.__members__ == {
+        "FOO": DummyEnum.FOO,
+        "BAR": DummyEnum.BAR,
+        "BAZ": DummyEnum.BAZ
+    }
