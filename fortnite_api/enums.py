@@ -26,7 +26,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import types
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, NamedTuple, Tuple, Type, TypeVar
+from collections import namedtuple
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, Tuple, Type, TypeVar
 
 from typing_extensions import Self
 
@@ -51,20 +52,17 @@ E = TypeVar('E', bound='Enum')
 OldValue = NewValue = Any
 
 
-class _EnumValue(NamedTuple):
-    name: str
-    value: Any
-
-
-def _create_value_cls(name: str, comparable: bool) -> Type[_EnumValue]:
-    cls = _EnumValue
-    cls.__repr__ = lambda self: f'<{name}.{self.name}: {self.value!r}>'
-    cls.__str__ = lambda self: f'{name}.{self.name}'
+def _create_value_cls(name: str, comparable: bool):
+    # Pyright cannot statically recognize the runtime type creation. All of the following
+    # type ignores in this function are a result of this.
+    cls = namedtuple('_EnumValue_' + name, 'name value')
+    cls.__repr__ = lambda self: f'<{name}.{self.name}: {self.value!r}>'  # type: ignore
+    cls.__str__ = lambda self: f'{name}.{self.name}'  # type: ignore
     if comparable:
-        cls.__le__ = lambda self, other: isinstance(other, self.__class__) and self.value <= other.value
-        cls.__ge__ = lambda self, other: isinstance(other, self.__class__) and self.value >= other.value
-        cls.__lt__ = lambda self, other: isinstance(other, self.__class__) and self.value < other.value
-        cls.__gt__ = lambda self, other: isinstance(other, self.__class__) and self.value > other.value
+        cls.__le__ = lambda self, other: isinstance(other, self.__class__) and self.value <= other.value  # type: ignore
+        cls.__ge__ = lambda self, other: isinstance(other, self.__class__) and self.value >= other.value  # type: ignore
+        cls.__lt__ = lambda self, other: isinstance(other, self.__class__) and self.value < other.value  # type: ignore
+        cls.__gt__ = lambda self, other: isinstance(other, self.__class__) and self.value > other.value  # type: ignore
 
     return cls
 
