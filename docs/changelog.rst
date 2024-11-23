@@ -14,6 +14,7 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 - ``CreatorCode.status`` and ``CreatorCode.disabled`` have been removed, since they where never returned by this endpoint. Disabled creator codes always raise :class:`fortnite_api.NotFound` when trying to fetch them.
 - ``CreatorCode.verified`` has been removed, since it isn't used within the affiliate system. It always returns ``False``.
+- All enums now use an internal "Enum-like" class to handle unknown values, instead of the built-in ``enum.Enum``. This potentially breaks type checks, but it should not break core functionality.
 
 
 New Features
