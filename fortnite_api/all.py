@@ -27,6 +27,7 @@ from typing import Any
 
 from .abc import ReconstructAble
 from .cosmetics import (
+    Cosmetic,
     CosmeticBr,
     CosmeticCar,
     CosmeticInstrument,
@@ -34,7 +35,6 @@ from .cosmetics import (
     CosmeticTrack,
     VariantBean,
     VariantLego,
-    Cosmetic,
 )
 from .http import HTTPClientT
 from .proxies import TransformerListProxy

@@ -34,7 +34,8 @@ from .http import HTTPClient, HTTPClientT, SyncHTTPClient
 DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 
 if TYPE_CHECKING:
-    from typing import Mapping, Any
+    from typing import Any, Mapping
+
     from .client import Client, SyncClient
 
 __all__: tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')

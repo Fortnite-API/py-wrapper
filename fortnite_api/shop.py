@@ -32,13 +32,12 @@ from typing_extensions import Self
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, Cosmetic
+from .cosmetics import Cosmetic, CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
 from .enums import BannerIntensity
 from .http import HTTPClientT
 from .new_display_asset import NewDisplayAsset
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
-
 
 __all__: tuple[str, ...] = (
     "ShopEntryOfferTag",
