@@ -23,16 +23,22 @@ SOFTWARE.
 """
 
 from collections.abc import Generator
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from .abc import ReconstructAble
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantBean, VariantLego
+from .cosmetics import (
+    CosmeticBr,
+    CosmeticCar,
+    CosmeticInstrument,
+    CosmeticLegoKit,
+    CosmeticTrack,
+    VariantBean,
+    VariantLego,
+    Cosmetic,
+)
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, simple_repr
-
-if TYPE_CHECKING:
-    from .cosmetics import Cosmetic
 
 __all__: tuple[str, ...] = ("CosmeticsAll",)
 

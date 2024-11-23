@@ -26,21 +26,19 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import TYPE_CHECKING, Any, Generator, Optional
+from typing import Any, Generator, Optional
 
 from typing_extensions import Self
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, Cosmetic
 from .enums import BannerIntensity
 from .http import HTTPClientT
 from .new_display_asset import NewDisplayAsset
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
-if TYPE_CHECKING:
-    from .cosmetics import Cosmetic
 
 __all__: tuple[str, ...] = (
     "ShopEntryOfferTag",
