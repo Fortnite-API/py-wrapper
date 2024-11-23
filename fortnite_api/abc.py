@@ -34,6 +34,7 @@ from .http import HTTPClient, HTTPClientT, SyncHTTPClient
 DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 
 if TYPE_CHECKING:
+    from typing import Mapping, Any
     from .client import Client, SyncClient
 
 __all__: tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')
@@ -130,12 +131,12 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
             # Whenever the client is a SyncClient, we can safely assume that the http
             # attribute is a SyncHTTPClient, as this is the only HTTPClientT possible.
             sync_http: SyncHTTPClient = client.http
-            return cls(data=data, http=sync_http)
+            return cls(data=data, http=sync_http)  # type: ignore # Pyright cannot infer the type of cls
         else:
             # Whenever the client is a Client, we can safely assume that the http
             # attribute is a HTTPClient, as this is the only HTTPClientT possible.
             http: HTTPClient = client.http
-            return cls(data=data, http=http)
+            return cls(data=data, http=http)  # type: ignore # Pyright cannot infer the type of cls
 
     def to_dict(self) -> DictT:
         """Turns this object into a raw dictionary object. This is useful for when you

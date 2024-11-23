@@ -25,13 +25,16 @@ SOFTWARE.
 from __future__ import annotations
 
 from collections.abc import Iterable, Iterator
-from typing import Callable, Generic, SupportsIndex, Union, cast, overload
+from typing import TYPE_CHECKING, Callable, Generic, SupportsIndex, Union, cast, overload
 
 from typing_extensions import Self, TypeVar
 
 T = TypeVar('T')
 K_co = TypeVar('K_co', covariant=True, default='str')
 V_co = TypeVar('V_co', covariant=True, default='Any')
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class TransformerListProxy(Generic[T, K_co, V_co], list[T]):

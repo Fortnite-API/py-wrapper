@@ -25,7 +25,14 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Callable, TypeVar, Union
+
+K_co = TypeVar('K_co', bound='Hashable', covariant=True)
+V_co = TypeVar('V_co', covariant=True)
+T = TypeVar('T')
+
+if TYPE_CHECKING:
+    from collections.abc import Hashable
 
 try:
     import orjson  # type: ignore
@@ -35,10 +42,6 @@ except ImportError:
     import json
 
     _has_orjson: bool = False
-
-K_co = TypeVar('K_co', bound='Hashable', covariant=True)
-V_co = TypeVar('V_co', covariant=True)
-T = TypeVar('T')
 
 __all__: tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json', 'MISSING')
 

@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Generator, Optional
 
 from typing_extensions import Self
 
@@ -38,6 +38,9 @@ from .http import HTTPClientT
 from .new_display_asset import NewDisplayAsset
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
+
+if TYPE_CHECKING:
+    from .cosmetics import Cosmetic
 
 __all__: tuple[str, ...] = (
     "ShopEntryOfferTag",
@@ -463,7 +466,7 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
         )
 
         _colors = data.get("colors")
-        self.colors: Optional[ShopEntryColors] = _colors and ShopEntryColors(data=_colors, http=http)
+        self.colors: Optional[ShopEntryColors[HTTPClientT]] = _colors and ShopEntryColors(data=_colors, http=http)
 
         self.br: list[CosmeticBr[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "brItems", list),
@@ -490,7 +493,7 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
             transform_data=lambda d: CosmeticLegoKit(data=d, http=http),
         )
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[Cosmetic[dict[str, Any], HTTPClientT], None, None]:
         yield from self.br
 
         yield from self.tracks

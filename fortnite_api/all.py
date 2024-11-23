@@ -22,13 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import Any
+from collections.abc import Generator
+from typing import TYPE_CHECKING, Any
 
 from .abc import ReconstructAble
 from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantBean, VariantLego
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, simple_repr
+
+if TYPE_CHECKING:
+    from .cosmetics import Cosmetic
 
 __all__: tuple[str, ...] = ("CosmeticsAll",)
 
@@ -141,7 +145,7 @@ class CosmeticsAll(ReconstructAble[dict[str, Any], HTTPClientT]):
             lambda x: VariantBean(data=x, http=self._http),
         )
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[Cosmetic[dict[str, Any], HTTPClientT], None, None]:
         yield from self.br
 
         yield from self.tracks
@@ -156,7 +160,7 @@ class CosmeticsAll(ReconstructAble[dict[str, Any], HTTPClientT]):
 
         yield from self.lego_kits
 
-    def __len__(self):
+    def __len__(self) -> int:
         return (
             len(self.br)
             + len(self.tracks)
