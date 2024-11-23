@@ -22,12 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import pytest
 from fortnite_api.enums import Enum, try_enum
 
 
 class DummyEnum(Enum):
     FOO = "foo"
-    BAR = "bar" 
+    BAR = "bar"
     BAZ = "baz"
 
 
