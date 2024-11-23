@@ -26,7 +26,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import types
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, NamedTuple, Tuple, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, NamedTuple, Tuple, Type, TypeVar
 
 from typing_extensions import Self
 
@@ -48,7 +48,7 @@ __all__: Tuple[str, ...] = (
 
 
 E = TypeVar('E', bound='Enum')
-OldValue = NewValue = Any
+OldValue = Any
 
 
 # Denotes an internal marker used to create the value class.
@@ -171,7 +171,7 @@ class Enum(metaclass=EnumMeta):
         _enum_value_cls_: ClassVar[Type[_EnumValue]]
 
     @classmethod
-    def try_value(cls, value: OldValue) -> Union[OldValue, NewValue]:
+    def try_value(cls, value: Any) -> Any:
         try:
             return cls._enum_value_map_[value]
         except (KeyError, TypeError):
