@@ -26,7 +26,8 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import Any, Generator, Optional
+from collections.abc import Generator
+from typing import Any, Optional
 
 from typing_extensions import Self
 
