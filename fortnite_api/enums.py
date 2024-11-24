@@ -26,11 +26,11 @@ SOFTWARE.
 from __future__ import annotations
 
 import types
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, NamedTuple, Tuple, Type, TypeVar
+from typing import TYPE_CHECKING, Any, ClassVar, Iterator, Mapping, NamedTuple, TypeVar
 
 from typing_extensions import Self
 
-__all__: Tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     'KeyFormat',
     'GameLanguage',
     'MatchMethod',
@@ -48,16 +48,18 @@ __all__: Tuple[str, ...] = (
 
 
 E = TypeVar('E', bound='Enum')
-OldValue = Any
+OldValue = NewValue = Any
 
 
-# Denotes an internal marker used to create the value class.
-class _EnumValue(NamedTuple):
-    name: str
-    value: Any
+def _create_value_cls(name: str, comparable: bool) -> type[NewValue]:
+    class _EnumValue(NamedTuple):
+        # Denotes an internal marker used to create the value class. The definition
+        # of this must be localized in this function because its methods
+        # are changed multiple times at runtime. This is exposed outside of this
+        # function as a type "NewValue", which denotes the type of the value class.
+        name: str
+        value: Any
 
-
-def _create_value_cls(name: str, comparable: bool) -> Type[_EnumValue]:
     cls = _EnumValue
     cls.__name__ = '_EnumValue_' + name
     cls.__repr__ = lambda self: f'<{name}.{self.name}: {self.value!r}>'
@@ -71,7 +73,7 @@ def _create_value_cls(name: str, comparable: bool) -> Type[_EnumValue]:
     return cls
 
 
-def _is_descriptor(obj: Type[object]) -> bool:
+def _is_descriptor(obj: type[object]) -> bool:
     return hasattr(obj, '__get__') or hasattr(obj, '__set__') or hasattr(obj, '__delete__')
 
 
@@ -79,14 +81,14 @@ class EnumMeta(type):
     def __new__(
         cls,
         name: str,
-        bases: Tuple[type, ...],
-        attrs: Dict[str, Any],
+        bases: tuple[type, ...],
+        attrs: dict[str, Any],
         *,
         comparable: bool = False,
     ) -> EnumMeta:
-        value_mapping: Dict[OldValue, _EnumValue] = {}
-        member_mapping: Dict[str, _EnumValue] = {}
-        member_names: List[str] = []
+        value_mapping: dict[OldValue, NewValue] = {}
+        member_mapping: dict[str, NewValue] = {}
+        member_names: list[str] = []
 
         value_cls = _create_value_cls(name, comparable)
         for key, value in list(attrs.items()):
@@ -118,32 +120,32 @@ class EnumMeta(type):
         attrs['_enum_member_names_'] = member_names
         attrs['_enum_value_cls_'] = value_cls
         actual_cls = super().__new__(cls, name, bases, attrs)
-        value_cls._actual_enum_cls_ = actual_cls  # type: ignore # Runtime attribute isn't understood.
+        value_cls._actual_enum_cls_ = actual_cls
         return actual_cls
 
-    def __iter__(cls: Type[Enum]) -> Iterator[Any]:
+    def __iter__(cls: type[Enum]) -> Iterator[Any]:
         return (cls._enum_member_map_[name] for name in cls._enum_member_names_)
 
-    def __reversed__(cls: Type[Enum]) -> Iterator[Any]:
+    def __reversed__(cls: type[Enum]) -> Iterator[Any]:
         return (cls._enum_member_map_[name] for name in reversed(cls._enum_member_names_))
 
-    def __len__(cls: Type[Enum]) -> int:
+    def __len__(cls: type[Enum]) -> int:
         return len(cls._enum_member_names_)
 
     def __repr__(cls) -> str:
         return f'<enum {cls.__name__}>'
 
     @property
-    def __members__(cls: Type[Enum]) -> Mapping[str, Any]:
+    def __members__(cls: type[Enum]) -> Mapping[str, Any]:
         return types.MappingProxyType(cls._enum_member_map_)
 
-    def __call__(cls: Type[Enum], value: str) -> Any:
+    def __call__(cls: type[Enum], value: str) -> Any:
         try:
             return cls._enum_value_map_[value]
         except (KeyError, TypeError):
             raise ValueError(f"{value!r} is not a valid {cls.__name__}")
 
-    def __getitem__(cls: Type[Enum], key: str) -> Any:
+    def __getitem__(cls: type[Enum], key: str) -> Any:
         return cls._enum_member_map_[key]
 
     def __setattr__(cls, name: str, value: Any) -> None:
@@ -165,10 +167,10 @@ class Enum(metaclass=EnumMeta):
     if TYPE_CHECKING:
         # Set in the metaclass when __new__ is called. The newly
         # created cls has these attributes set.
-        _enum_member_names_: ClassVar[List[str]]
-        _enum_member_map_: ClassVar[Dict[str, _EnumValue]]
-        _enum_value_map_: ClassVar[Dict[OldValue, _EnumValue]]
-        _enum_value_cls_: ClassVar[Type[_EnumValue]]
+        _enum_member_names_: ClassVar[list[str]]
+        _enum_member_map_: ClassVar[dict[str, NewValue]]
+        _enum_value_map_: ClassVar[dict[OldValue, NewValue]]
+        _enum_value_cls_: ClassVar[type[NewValue]]
 
     @classmethod
     def try_value(cls, value: Any) -> Any:
@@ -501,7 +503,7 @@ class CosmeticCompatibleMode(Enum):
     ALL = 'max'
 
     @classmethod
-    def _from_str(cls: Type[Self], string: str) -> Self:
+    def _from_str(cls: type[Self], string: str) -> Self:
         # The Epic Games API uses both "CosmeticCompatibleMode" and "CosmeticCompatibleModeLegacy" enums
         # with the same values, so we need to handle both.
         # To easily handle this, we'll remove the "ECosmeticCompatibleMode::" or "ECosmeticCompatibleModeLegacy::" prefix.
@@ -566,31 +568,25 @@ class ProductTag(Enum):
     ALL = 'max'
 
     @classmethod
-    def _from_str(cls: Type[Self], string: str) -> Self:
+    def _from_str(cls: type[Self], string: str) -> Self:
         # The Epic Games API "Product" enums contains both lower case and capitalized values, so we need to handle both.
         # To easily handle this, we'll remove the "Product." prefix and convert it to lowercase.
         trimmed = string.split('.')[-1]
         return try_enum(cls, trimmed.lower())
 
 
-def create_unknown_value(cls: Type[E], val: Any) -> _EnumValue:
+def create_unknown_value(cls: type[E], val: Any) -> NewValue:
     value_cls = cls._enum_value_cls_
     name = f'UNKNOWN_{val}'
     return value_cls(name=name, value=val)
 
 
-def try_enum(cls: Type[E], val: Any) -> E:
+def try_enum(cls: type[E], val: Any) -> E:
     """A function that tries to turn the value into enum ``cls``.
 
     If it fails it returns a proxy invalid value instead.
     """
-
-    # The return value from this function will be masked. We denote its value
-    # as E as if an instance of "cls" (Type[E]) is returned. This doesn't actually happen,
-    # an enum value is returned instead. A python enum.Enum conforms to a single class,
-    # so to keep this interface we'll mock that behavior.
-
     try:
-        return cls._enum_value_map_[val]  # type: ignore
+        return cls._enum_value_map_[val]
     except (KeyError, TypeError, AttributeError):
-        return create_unknown_value(cls, val)  # type: ignore
+        return create_unknown_value(cls, val)
