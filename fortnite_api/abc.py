@@ -25,16 +25,19 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Any, Generic, Mapping, Tuple, Type, TypeVar, Union, overload
+from typing import TYPE_CHECKING, Generic, TypeVar, Union, overload
 
 from .http import HTTPClient, HTTPClientT, SyncHTTPClient
 
 DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from typing import Any
+
     from .client import Client, SyncClient
 
-__all__: Tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')
+__all__: tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')
 
 
 class IdComparable:
@@ -115,13 +118,13 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
     @overload
     @classmethod
     def from_dict(
-        cls: Type[ReconstructAble[Any, SyncHTTPClient]], data: DictT, *, client: SyncClient
+        cls: type[ReconstructAble[Any, SyncHTTPClient]], data: DictT, *, client: SyncClient
     ) -> ReconstructAble[DictT, SyncHTTPClient]: ...
 
     @overload
     @classmethod
     def from_dict(
-        cls: Type[ReconstructAble[Any, HTTPClient]], data: DictT, *, client: Client
+        cls: type[ReconstructAble[Any, HTTPClient]], data: DictT, *, client: Client
     ) -> ReconstructAble[DictT, HTTPClient]: ...
 
     @classmethod

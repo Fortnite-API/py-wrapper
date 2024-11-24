@@ -25,9 +25,24 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
-from typing import Type
 
 from typing_extensions import Self
+
+__all__: tuple[str, ...] = (
+    'KeyFormat',
+    'GameLanguage',
+    'MatchMethod',
+    'CosmeticCategory',
+    'CosmeticRarity',
+    'CosmeticType',
+    'AccountType',
+    'TimeWindow',
+    'StatsImageType',
+    'CosmeticCompatibleMode',
+    'BannerIntensity',
+    'CustomGender',
+    'ProductTag',
+)
 
 
 class KeyFormat(enum.Enum):
@@ -203,6 +218,7 @@ class CosmeticType(enum.Enum):
     PET
     PET_CARRIER
     PICKAXE
+    SHOES
     GLIDER
     CONTRAIL
     AURA
@@ -236,6 +252,7 @@ class CosmeticType(enum.Enum):
     PET_CARRIER = 'petcarrier'
     PICKAXE = 'pickaxe'
     GLIDER = 'glider'
+    SHOES = 'shoe'
     CONTRAIL = 'contrail'
     AURA = 'aura'
 
@@ -327,21 +344,6 @@ class StatsImageType(enum.Enum):
     NONE = 'none'
 
 
-class CreatorCodeStatus(enum.Enum):
-    """Represents the status of a creator code.
-
-    Attributes
-    ----------
-    ACTIVE
-        The creator code is active.
-    DISABLED
-        The creator code is disabled.
-    """
-
-    ACTIVE = 'active'
-    DISABLED = 'disabled'
-
-
 class CosmeticCompatibleMode(enum.Enum):
     """A class that represents the compatibility of a cosmetic :class:`fortnite_api.MaterialInstance` with other modes.
 
@@ -366,7 +368,7 @@ class CosmeticCompatibleMode(enum.Enum):
     ALL = 'max'
 
     @classmethod
-    def _from_str(cls: Type[Self], string: str) -> Self:
+    def _from_str(cls: type[Self], string: str) -> Self:
         # The Epic Games API uses both "CosmeticCompatibleMode" and "CosmeticCompatibleModeLegacy" enums
         # with the same values, so we need to handle both.
         # To easily handle this, we'll remove the "ECosmeticCompatibleMode::" or "ECosmeticCompatibleModeLegacy::" prefix.
@@ -431,7 +433,7 @@ class ProductTag(enum.Enum):
     ALL = 'max'
 
     @classmethod
-    def _from_str(cls: Type[Self], string: str) -> Self:
+    def _from_str(cls: type[Self], string: str) -> Self:
         # The Epic Games API "Product" enums contains both lower case and capitalized values, so we need to handle both.
         # To easily handle this, we'll remove the "Product." prefix and convert it to lowercase.
         trimmed = string.split('.')[-1]

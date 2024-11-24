@@ -10,7 +10,7 @@
 import os
 import re
 import sys
-from typing import Any, Dict
+from typing import Any
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -159,7 +159,7 @@ resource_links = {
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options: Dict[str, Any] = {
+html_theme_options: dict[str, Any] = {
     "source_repository": "https://github.com/Fortnite-API/py-wrapper",
     "source_branch": "main",
 }

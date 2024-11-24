@@ -25,7 +25,6 @@ SOFTWARE.
 from __future__ import annotations
 
 import dataclasses
-from typing import Dict, List
 
 from fortnite_api.proxies import TransformerListProxy
 
@@ -37,14 +36,14 @@ class PlaceholderPerson:
 
 def test_proxy():
     # A random list of people
-    people_raw_data: List[Dict[str, str]] = [
+    people_raw_data: list[dict[str, str]] = [
         dict(name="Daniel Maxwell"),
         dict(name="Francis Andrews"),
         dict(name="Stella Norton"),
         dict(name="Nathaniel Reeves"),
     ]
 
-    people: List[PlaceholderPerson] = [PlaceholderPerson(**person) for person in people_raw_data]
+    people: list[PlaceholderPerson] = [PlaceholderPerson(**person) for person in people_raw_data]
 
     proxy = TransformerListProxy(people_raw_data, transform_data=lambda data: PlaceholderPerson(**data))
 

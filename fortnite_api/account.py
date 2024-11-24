@@ -24,17 +24,17 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Tuple
+from typing import Any
 
 from .abc import Hashable, ReconstructAble
 from .http import HTTPClientT
 from .utils import simple_repr
 
-__all__: Tuple[str, ...] = ("Account",)
+__all__: tuple[str, ...] = ("Account",)
 
 
 @simple_repr
-class Account(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class Account(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Account
 
@@ -60,12 +60,12 @@ class Account(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The display name of the account.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "id",
         "name",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
