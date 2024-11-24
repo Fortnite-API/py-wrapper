@@ -30,7 +30,7 @@ from typing import TYPE_CHECKING, Any, ClassVar, Dict, Iterator, List, Mapping, 
 
 from typing_extensions import Self
 
-__all__: Tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     'KeyFormat',
     'GameLanguage',
     'MatchMethod',
@@ -501,7 +501,7 @@ class CosmeticCompatibleMode(Enum):
     ALL = 'max'
 
     @classmethod
-    def _from_str(cls: Type[Self], string: str) -> Self:
+    def _from_str(cls: type[Self], string: str) -> Self:
         # The Epic Games API uses both "CosmeticCompatibleMode" and "CosmeticCompatibleModeLegacy" enums
         # with the same values, so we need to handle both.
         # To easily handle this, we'll remove the "ECosmeticCompatibleMode::" or "ECosmeticCompatibleModeLegacy::" prefix.
@@ -566,7 +566,7 @@ class ProductTag(Enum):
     ALL = 'max'
 
     @classmethod
-    def _from_str(cls: Type[Self], string: str) -> Self:
+    def _from_str(cls: type[Self], string: str) -> Self:
         # The Epic Games API "Product" enums contains both lower case and capitalized values, so we need to handle both.
         # To easily handle this, we'll remove the "Product." prefix and convert it to lowercase.
         trimmed = string.split('.')[-1]

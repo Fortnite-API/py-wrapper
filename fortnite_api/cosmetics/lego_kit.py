@@ -24,17 +24,17 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic, CosmeticImages, CosmeticSeriesInfo, CosmeticTypeInfo
 
-__all__: Tuple[str, ...] = ('CosmeticLegoKit',)
+__all__: tuple[str, ...] = ('CosmeticLegoKit',)
 
 
 @simple_repr
-class CosmeticLegoKit(Cosmetic[Dict[str, Any], HTTPClientT]):
+class CosmeticLegoKit(Cosmetic[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticLegoKit
 
@@ -70,9 +70,9 @@ class CosmeticLegoKit(Cosmetic[Dict[str, Any], HTTPClientT]):
         .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
-    __slots__: Tuple[str, ...] = ('name', 'type', 'gameplay_tags', 'images', 'path', 'shop_history')
+    __slots__: tuple[str, ...] = ('name', 'type', 'gameplay_tags', 'images', 'path', 'shop_history')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.name: str = data['name']
@@ -83,7 +83,7 @@ class CosmeticLegoKit(Cosmetic[Dict[str, Any], HTTPClientT]):
         _series = data.get('series')
         self.series: Optional[CosmeticSeriesInfo[HTTPClientT]] = _series and CosmeticSeriesInfo(data=_series, http=http)
 
-        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
 
         _images = data.get('images')
         self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=http)

@@ -24,7 +24,8 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Coroutine, Dict, List, Optional, Tuple, Union, overload
+from collections.abc import Coroutine
+from typing import TYPE_CHECKING, Any, Optional, Union, overload
 
 from ...enums import CustomGender, GameLanguage, try_enum
 from ...http import HTTPClientT
@@ -35,10 +36,10 @@ from ..common import Cosmetic, CosmeticImages
 if TYPE_CHECKING:
     from ...http import HTTPClient, SyncHTTPClient
 
-__all__: Tuple[str, ...] = ('VariantBean',)
+__all__: tuple[str, ...] = ('VariantBean',)
 
 
-class VariantBean(Cosmetic[Dict[str, Any], HTTPClientT]):
+class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.VariantBean
 
@@ -70,13 +71,13 @@ class VariantBean(Cosmetic[Dict[str, Any], HTTPClientT]):
         .. opt-in:: INCLUDE_PATHS
     """
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.cosmetic_id: Optional[str] = data.get('cosmetic_id')
         self.name: str = data['name']
         self.gender: CustomGender = try_enum(CustomGender, data['gender'])
-        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplay_tags', list)
+        self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplay_tags', list)
 
         _images = data.get('images')
         self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=http)

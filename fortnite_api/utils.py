@@ -25,7 +25,14 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Callable, Dict, List, Tuple, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Callable, TypeVar, Union
+
+K_co = TypeVar('K_co', bound='Hashable', covariant=True)
+V_co = TypeVar('V_co', covariant=True)
+T = TypeVar('T')
+
+if TYPE_CHECKING:
+    from collections.abc import Hashable
 
 try:
     import orjson  # type: ignore
@@ -36,11 +43,7 @@ except ImportError:
 
     _has_orjson: bool = False
 
-K_co = TypeVar('K_co', bound='Hashable', covariant=True)
-V_co = TypeVar('V_co', covariant=True)
-T = TypeVar('T')
-
-__all__: Tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json', 'MISSING')
+__all__: tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json', 'MISSING')
 
 BACKUP_TIMESTAMP: str = '0001-01-01T00:00:00'
 
@@ -66,12 +69,12 @@ MISSING: Any = _MissingSentinel()
 
 if _has_orjson:
 
-    def to_json(string: Union[str, bytes]) -> Dict[Any, Any]:
+    def to_json(string: Union[str, bytes]) -> dict[Any, Any]:
         return orjson.loads(string)  # type: ignore
 
 else:
 
-    def to_json(string: Union[str, bytes]) -> Dict[Any, Any]:
+    def to_json(string: Union[str, bytes]) -> dict[Any, Any]:
         return json.loads(string)  # type: ignore
 
 
@@ -151,10 +154,10 @@ def remove_prefix(text: str) -> Callable[[T], T]:
     return wrapped
 
 
-def simple_repr(cls: Type[T]) -> Type[T]:
+def simple_repr(cls: type[T]) -> type[T]:
     # If this cls does not have __slots__, return it as is
     try:
-        slots: List[str] = list(getattr(cls, '__slots__'))
+        slots: list[str] = list(getattr(cls, '__slots__'))
     except AttributeError:
         return cls
 
@@ -175,7 +178,7 @@ def simple_repr(cls: Type[T]) -> Type[T]:
     return cls
 
 
-def get_with_fallback(dict: Dict[K_co, V_co], key: K_co, default_factory: Callable[[], V_co]) -> V_co:
+def get_with_fallback(dict: dict[K_co, V_co], key: K_co, default_factory: Callable[[], V_co]) -> V_co:
     result = dict.get(key, MISSING)
     if result is MISSING:
         # Use the default factory
@@ -190,14 +193,14 @@ def get_with_fallback(dict: Dict[K_co, V_co], key: K_co, default_factory: Callab
 
 # A function name that transform some large dict into something that can be used in a get
 # request as a payload (so turns into camelCase from snake case, and transforms booleans into strings)
-def _transform_dict_for_get_request(data: Dict[str, Any]) -> Dict[str, Any]:
+def _transform_dict_for_get_request(data: dict[str, Any]) -> dict[str, Any]:
     updated = data.copy()
     for key, value in updated.items():
         if isinstance(value, bool):
             updated[key] = str(value).lower()
 
         elif isinstance(value, dict):
-            inner: Dict[str, Any] = value  # narrow the dict type to pass it along (should always be [str, Any])
+            inner: dict[str, Any] = value  # narrow the dict type to pass it along (should always be [str, Any])
             updated[key] = _transform_dict_for_get_request(inner)
 
         if '_' in key:

@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Any, Dict
+from typing import Any
 
 import pytest
 
@@ -34,7 +34,7 @@ from fortnite_api.http import SyncHTTPClient
 
 
 @pytest.fixture
-def sample_aes_data() -> Dict[str, Any]:
+def sample_aes_data() -> dict[str, Any]:
     return {
         'mainKey': 'test_main_key',
         'build': '++Fortnite+Release-29.10-CL-32567225-Windows',
@@ -49,7 +49,7 @@ def sample_aes_data() -> Dict[str, Any]:
     }
 
 
-def test_aes_initialization(sample_aes_data: Dict[str, Any], mock_sync_http: SyncHTTPClient):
+def test_aes_initialization(sample_aes_data: dict[str, Any], mock_sync_http: SyncHTTPClient):
     aes = Aes(data=sample_aes_data, http=mock_sync_http)
 
     assert aes.main_key == 'test_main_key'
@@ -63,7 +63,7 @@ def test_aes_initialization(sample_aes_data: Dict[str, Any], mock_sync_http: Syn
     assert aes.to_dict() == sample_aes_data
 
 
-def test_aes_equality(sample_aes_data: Dict[str, Any], mock_sync_http: SyncHTTPClient):
+def test_aes_equality(sample_aes_data: dict[str, Any], mock_sync_http: SyncHTTPClient):
     aes1 = Aes(data=sample_aes_data, http=mock_sync_http)
     aes2 = Aes(data=sample_aes_data, http=mock_sync_http)
 

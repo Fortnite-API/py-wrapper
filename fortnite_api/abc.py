@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Generic, Tuple, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Generic, TypeVar, Union
 
 from typing_extensions import Self
 
@@ -34,9 +34,11 @@ from .http import HTTPClient, HTTPClientT, SyncHTTPClient
 DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 
 if TYPE_CHECKING:
+    from typing import Any, Mapping
+
     from .client import Client, SyncClient
 
-__all__: Tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')
+__all__: tuple[str, ...] = ('IdComparable', 'Hashable', 'ReconstructAble')
 
 
 class IdComparable:
@@ -115,7 +117,7 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
     # still keeping the correct HTTPClient type.
 
     @classmethod
-    def from_dict(cls: Type[Self], data: DictT, *, client: Union[Client, SyncClient]) -> Self:
+    def from_dict(cls: type[Self], data: DictT, *, client: Union[Client, SyncClient]) -> Self:
         """Reconstructs this class from a raw dictionary object. This is useful for when you
         store the raw data and want to reconstruct the object later on.
 
@@ -130,12 +132,12 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
             # Whenever the client is a SyncClient, we can safely assume that the http
             # attribute is a SyncHTTPClient, as this is the only HTTPClientT possible.
             sync_http: SyncHTTPClient = client.http
-            return cls(data=data, http=sync_http)
+            return cls(data=data, http=sync_http)  # type: ignore # Pyright cannot infer the type of cls
         else:
             # Whenever the client is a Client, we can safely assume that the http
             # attribute is a HTTPClient, as this is the only HTTPClientT possible.
             http: HTTPClient = client.http
-            return cls(data=data, http=http)
+            return cls(data=data, http=http)  # type: ignore # Pyright cannot infer the type of cls
 
     def to_dict(self) -> DictT:
         """Turns this object into a raw dictionary object. This is useful for when you

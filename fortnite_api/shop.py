@@ -26,20 +26,20 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import Any, Dict, List, Optional, Tuple, Type
+from typing import Any, Generator, Optional
 
 from typing_extensions import Self
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
+from .cosmetics import Cosmetic, CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
 from .enums import BannerIntensity, try_enum
 from .http import HTTPClientT
 from .new_display_asset import NewDisplayAsset
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
-__all__: Tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     "ShopEntryOfferTag",
     "ShopEntryBundle",
     "ShopEntryBanner",
@@ -91,7 +91,7 @@ class TileSize:
         in the format ``Size_<width>_x_<height>``.
     """
 
-    __slots__: Tuple[str, ...] = ("width", "height", "internal")
+    __slots__: tuple[str, ...] = ("width", "height", "internal")
 
     def __init__(self, *, width: int, height: int, internal: str) -> None:
         self.width: int = width
@@ -108,7 +108,7 @@ class TileSize:
         return value.width == self.width and value.height == self.height
 
     @classmethod
-    def from_value(cls: Type[Self], value: str, /) -> Self:
+    def from_value(cls: type[Self], value: str, /) -> Self:
         """Constructs a tile size from the value provided by the API. This method
         parses the passed value and ensures that it is in the correct format,
         ``Size_<width>_x_<height>``. It has been exposed in the case that
@@ -140,7 +140,7 @@ class TileSize:
         )
 
 
-class ShopEntryOfferTag(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class ShopEntryOfferTag(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryOfferTag
 
@@ -154,16 +154,16 @@ class ShopEntryOfferTag(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The text of the offer tag.
     """
 
-    __slots__: Tuple[str, ...] = ("id", "text")
+    __slots__: tuple[str, ...] = ("id", "text")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
         self.text: str = data["text"]
 
 
-class ShopEntryBundle(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class ShopEntryBundle(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryBundle
 
@@ -179,9 +179,9 @@ class ShopEntryBundle(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The image of the bundle.
     """
 
-    __slots__: Tuple[str, ...] = ("name", "info", "image")
+    __slots__: tuple[str, ...] = ("name", "info", "image")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.name: str = data["name"]
@@ -189,7 +189,7 @@ class ShopEntryBundle(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
 
 
-class ShopEntryBanner(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class ShopEntryBanner(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryBanner
 
@@ -206,9 +206,9 @@ class ShopEntryBanner(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The backend value of the banner.
     """
 
-    __slots__: Tuple[str, ...] = ("value", "intensity", "backend_value")
+    __slots__: tuple[str, ...] = ("value", "intensity", "backend_value")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.value: str = data["value"]
@@ -216,7 +216,7 @@ class ShopEntryBanner(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.backend_value: str = data["backendValue"]
 
 
-class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class ShopEntryLayout(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryLayout
 
@@ -245,7 +245,7 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The display type of the layout, if any specified.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "id",
         "name",
         "category",
@@ -257,7 +257,7 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         "display_type",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
@@ -275,7 +275,7 @@ class ShopEntryLayout(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         # Billboards include textureMetadata, stringMetadata and textMetadata
 
 
-class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class ShopEntryColors(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntryColors
 
@@ -293,9 +293,9 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The fade out overlaying gradient color on which the text is displayed.
     """
 
-    __slots__: Tuple[str, ...] = ("color1", "color2", "color3", "text_background_color")
+    __slots__: tuple[str, ...] = ("color1", "color2", "color3", "text_background_color")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.color1: str = data['color1']
@@ -304,7 +304,7 @@ class ShopEntryColors(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.text_background_color: Optional[str] = data.get('textBackgroundColor')
 
 
-class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.ShopEntry
 
@@ -391,7 +391,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The LEGO kits in this entry.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "regular_price",
         "final_price",
         "in_date",
@@ -418,7 +418,7 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         "lego_kits",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.regular_price: int = data["regularPrice"]
@@ -460,54 +460,49 @@ class ShopEntry(ReconstructAble[Dict[str, Any], HTTPClientT]):
         )
 
         _colors = data.get("colors")
-        self.colors: Optional[ShopEntryColors] = _colors and ShopEntryColors(data=_colors, http=http)
+        self.colors: Optional[ShopEntryColors[HTTPClientT]] = _colors and ShopEntryColors(data=_colors, http=http)
 
-        self.br: List[CosmeticBr[HTTPClientT]] = TransformerListProxy(
+        self.br: list[CosmeticBr[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "brItems", list),
             transform_data=lambda d: CosmeticBr(data=d, http=http),
         )
 
-        self.tracks: List[CosmeticTrack[HTTPClientT]] = TransformerListProxy(
+        self.tracks: list[CosmeticTrack[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "tracks", list),
             transform_data=lambda d: CosmeticTrack(data=d, http=http),
         )
 
-        self.instruments: List[CosmeticInstrument[HTTPClientT]] = TransformerListProxy(
+        self.instruments: list[CosmeticInstrument[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "instruments", list),
             transform_data=lambda d: CosmeticInstrument(data=d, http=http),
         )
 
-        self.cars: List[CosmeticCar[HTTPClientT]] = TransformerListProxy(
+        self.cars: list[CosmeticCar[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "cars", list),
             transform_data=lambda d: CosmeticCar(data=d, http=http),
         )
 
-        self.lego_kits: List[CosmeticLegoKit[HTTPClientT]] = TransformerListProxy(
+        self.lego_kits: list[CosmeticLegoKit[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "legoKits", list),
             transform_data=lambda d: CosmeticLegoKit(data=d, http=http),
         )
 
-    def __iter__(self):
-        for br in self.br:
-            yield br
+    def __iter__(self) -> Generator[Cosmetic[dict[str, Any], HTTPClientT], None, None]:
+        yield from self.br
 
-        for track in self.tracks:
-            yield track
+        yield from self.tracks
 
-        for instrument in self.instruments:
-            yield instrument
+        yield from self.instruments
 
-        for car in self.cars:
-            yield car
+        yield from self.cars
 
-        for lego in self.lego_kits:
-            yield lego
+        yield from self.lego_kits
 
     def __len__(self):
         return len(self.br) + len(self.tracks) + len(self.instruments) + len(self.cars) + len(self.lego_kits)
 
 
-class Shop(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class Shop(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Shop
 
@@ -525,14 +520,14 @@ class Shop(ReconstructAble[Dict[str, Any], HTTPClientT]):
         A list of shop entries. Each entry contains cosmetics that are available in the shop.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "hash",
         "date",
         "vbuck_icon",
         "entries",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.hash: str = data["hash"]
@@ -541,4 +536,4 @@ class Shop(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.vbuck_icon: Asset[HTTPClientT] = Asset(url=data["vbuckIcon"], http=http)
 
         _entries = get_with_fallback(data, "entries", list)
-        self.entries: List[ShopEntry[HTTPClientT]] = [ShopEntry(data=item, http=http) for item in _entries]
+        self.entries: list[ShopEntry[HTTPClientT]] = [ShopEntry(data=item, http=http) for item in _entries]
