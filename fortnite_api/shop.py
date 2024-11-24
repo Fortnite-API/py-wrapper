@@ -84,9 +84,9 @@ class TileSize:
     Attributes
     ----------
     width: :class:`int`
-        The width of the tile.
+        The width of the tile. This value will be -1 if the tile size is invalid.
     height: :class:`int`
-        The height of the tile.
+        The height of the tile. This value will be -1 if the tile size is invalid.
     internal: :class:`str`
         The internal representation of the tile size. This can be the default Epic API value
         in the format ``Size_<width>_x_<height>``.
@@ -115,7 +115,7 @@ class TileSize:
         ``Size_<width>_x_<height>``. It has been exposed in the case that
         the user wants to construct a tile size from a custom value.
 
-        If an invalid value is passed, the tile size defaults to a width and height of 0.
+        If an invalid value is passed, the tile size defaults to a width and height of -1.
 
         Parameters
         ----------
@@ -132,7 +132,7 @@ class TileSize:
         if not match:
             # Epic may change the format or messes up the value.
             # In one such case, this value was "ERROR BAD SIZE".
-            raise cls(width=0, height=0, internal=value)
+            raise cls(width=-1, height=-1, internal=value)
 
         return cls(
             width=int(match.group("width")),

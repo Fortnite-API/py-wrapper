@@ -25,7 +25,7 @@ Miscellaneous
 ~~~~~~~~~~~~~
 - Add safeguards against Epic Games' API changing or providing invalid values in API responses.
     - All enums now can handle unknown values via an internally defined "Enum-like" class. If the API returns a value not in the enum, it will be stored as an attribute on the enum object. The interface for using this class is the same as using :class:`py:enum.Enum`.
-    - :class:`fortnite_api.TileSize` now has a fallback value of width and height of 0.
+    - :class:`fortnite_api.TileSize` now has a fallback value of width and height of -1.
 
 
 
