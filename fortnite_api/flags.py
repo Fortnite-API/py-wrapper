@@ -25,11 +25,10 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
-from typing import Tuple, Type
 
 from typing_extensions import Self
 
-__all__: Tuple[str, ...] = ('ResponseFlags',)
+__all__: tuple[str, ...] = ('ResponseFlags',)
 
 
 class ResponseFlags(enum.IntFlag):
@@ -63,7 +62,7 @@ class ResponseFlags(enum.IntFlag):
     INCLUDE_SHOP_HISTORY = 1 << 2
 
     @classmethod
-    def all(cls: Type[Self]) -> Self:
+    def all(cls: type[Self]) -> Self:
         """:class:`ResponseFlags`: Returns a flag that includes all flags."""
         self = cls.INCLUDE_NOTHING
         for item in cls:

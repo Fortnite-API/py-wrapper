@@ -24,18 +24,18 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Tuple
+from typing import Any
 
 from .abc import ReconstructAble
 from .account import Account
 from .http import HTTPClientT
 from .utils import simple_repr
 
-__all__: Tuple[str, ...] = ("CreatorCode",)
+__all__: tuple[str, ...] = ("CreatorCode",)
 
 
 @simple_repr
-class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CreatorCode(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CreatorCode
 
@@ -58,9 +58,9 @@ class CreatorCode(ReconstructAble[Dict[str, Any], HTTPClientT]):
         that owns the creator code.
     """
 
-    __slots__: Tuple[str, ...] = ("code", "account")
+    __slots__: tuple[str, ...] = ("code", "account")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.code: str = data["code"]

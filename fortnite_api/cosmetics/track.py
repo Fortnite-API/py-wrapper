@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 from ..abc import ReconstructAble
 from ..asset import Asset
@@ -33,11 +33,11 @@ from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic
 
-__all__: Tuple[str, ...] = ('CosmeticTrackDifficulty', 'CosmeticTrack')
+__all__: tuple[str, ...] = ('CosmeticTrackDifficulty', 'CosmeticTrack')
 
 
 @simple_repr
-class CosmeticTrackDifficulty(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticTrackDifficulty(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticTrackDifficulty
 
@@ -66,9 +66,9 @@ class CosmeticTrackDifficulty(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The plastic drums difficulty of the track.
     """
 
-    __slots__: Tuple[str, ...] = ('vocals', 'guitar', 'bass', 'plastic_bass', 'drums', 'plastic_drums')
+    __slots__: tuple[str, ...] = ('vocals', 'guitar', 'bass', 'plastic_bass', 'drums', 'plastic_drums')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.vocals: int = data['vocals']
@@ -80,7 +80,7 @@ class CosmeticTrackDifficulty(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class CosmeticTrack(Cosmetic[Dict[str, Any], HTTPClientT]):
+class CosmeticTrack(Cosmetic[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticTrack
 
@@ -126,7 +126,7 @@ class CosmeticTrack(Cosmetic[Dict[str, Any], HTTPClientT]):
         .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         'dev_name',
         'title',
         'artist',
@@ -141,7 +141,7 @@ class CosmeticTrack(Cosmetic[Dict[str, Any], HTTPClientT]):
         'shop_history',
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.dev_name: str = data['devName']
@@ -153,10 +153,10 @@ class CosmeticTrack(Cosmetic[Dict[str, Any], HTTPClientT]):
         self.duration: int = data['duration']
 
         self.difficulty: CosmeticTrackDifficulty[HTTPClientT] = CosmeticTrackDifficulty(data=data['difficulty'], http=http)
-        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
-        self.genres: List[str] = get_with_fallback(data, 'genres', list)
+        self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.genres: list[str] = get_with_fallback(data, 'genres', list)
         self.album_art: Asset[HTTPClientT] = Asset(http=http, url=data['albumArt'])
 
-        self.shop_history: List[datetime.datetime] = [
+        self.shop_history: list[datetime.datetime] = [
             parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
         ]
