@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Generic, TypeVar, Union, overload
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, Union, overload
 
 from .http import HTTPClient, HTTPClientT, SyncHTTPClient
 
@@ -33,7 +33,6 @@ DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
-    from typing import Any
 
     from .client import Client, SyncClient
 
