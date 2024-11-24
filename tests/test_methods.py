@@ -25,7 +25,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import inspect
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, Generic, TypeVar
+from collections.abc import Coroutine
+from typing import TYPE_CHECKING, Any, Callable, Generic, TypeVar
 
 import pytest
 import requests
