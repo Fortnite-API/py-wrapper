@@ -28,7 +28,6 @@ Miscellaneous
     - :class:`fortnite_api.TileSize` now has a fallback value of width and height of -1.
 
 
-
 .. _vp3p1p0:
 
 v3.1.0
