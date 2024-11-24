@@ -23,6 +23,7 @@ SOFTWARE.
 """
 
 import pytest
+
 from fortnite_api.enums import Enum, try_enum
 
 
@@ -37,19 +38,19 @@ def test_dummy_enum():
     assert len(DummyEnum) == 3
     assert list(DummyEnum) == [DummyEnum.FOO, DummyEnum.BAR, DummyEnum.BAZ]
     assert list(reversed(DummyEnum)) == [DummyEnum.BAZ, DummyEnum.BAR, DummyEnum.FOO]
-    
+
     # Test enum member access
     assert DummyEnum.FOO.name == "FOO"
     assert DummyEnum.FOO.value == "foo"
     assert DummyEnum["FOO"] == DummyEnum.FOO
     assert DummyEnum("foo") == DummyEnum.FOO
-    
+
     # Test immutability
     with pytest.raises(TypeError):
         DummyEnum.FOO = "new"
     with pytest.raises(TypeError):
         del DummyEnum.FOO
-        
+
     # Test try_enum functionality
     valid_value = "foo"
     invalid_value = "invalid"
@@ -70,8 +71,4 @@ def test_dummy_enum():
     assert repr(DummyEnum) == "<enum DummyEnum>"
 
     # Test members property
-    assert DummyEnum.__members__ == {
-        "FOO": DummyEnum.FOO,
-        "BAR": DummyEnum.BAR,
-        "BAZ": DummyEnum.BAZ
-    }
+    assert DummyEnum.__members__ == {"FOO": DummyEnum.FOO, "BAR": DummyEnum.BAR, "BAZ": DummyEnum.BAZ}
