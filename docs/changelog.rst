@@ -14,7 +14,7 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 - ``CreatorCode.status`` and ``CreatorCode.disabled`` have been removed, since they where never returned by this endpoint. Disabled creator codes always raise :class:`fortnite_api.NotFound` when trying to fetch them.
 - ``CreatorCode.verified`` has been removed, since it isn't used within the affiliate system. It always returns ``False``.
-- All enums now use an internal "Enum-like" class to handle unknown values, instead of the built-in ``enum.Enum``. This potentially breaks type checks, but it should not break core functionality.
+- All enums now use an internal "Enum-like" class to handle unknown values, instead of the built-in :class:`py.enum.Enum`. This potentially breaks type checks, but does not break core functionality or change the enum interface; you can use them the same.
 
 
 New Features
@@ -24,7 +24,7 @@ New Features
 Miscellaneous
 ~~~~~~~~~~~~~
 - Add safeguards against Epic Games' API changing or providing invalid values in API responses.
-    - All enums now can handle unknown values via an internally defined "Enum-like" class. This means that if the API returns a value that is not in the enum, it will be stored as an attribute on the enum object.
+    - All enums now can handle unknown values via an internally defined "Enum-like" class. If the API returns a value not in the enum, it will be stored as an attribute on the enum object. The interface for using this class is the same as using :class:`py.enum.Enum`.
     - :class:`fortnite_api.TileSize` now has a fallback value of width and height of 0.
 
 
