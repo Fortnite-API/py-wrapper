@@ -26,7 +26,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import types
-from typing import TYPE_CHECKING, Any, ClassVar, Iterator, Mapping, NamedTuple, TypeVar
+from collections.abc import Iterator, Mapping
+from typing import TYPE_CHECKING, Any, ClassVar, NamedTuple, TypeVar
 
 from typing_extensions import Self
 
