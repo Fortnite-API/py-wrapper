@@ -9,17 +9,28 @@ Changelog
 
 v3.2.0
 -------
+This version introduces support for new Shoes cosmetic type, drops support for Python 3.8, and adds safeguards and future proofing against potential API changes.
 
 Breaking Changes
 ~~~~~~~~~~~~~~~~
 - Drop support for Python 3.8. The minimum supported Python version is now 3.9.
-- ``CreatorCode.status`` and ``CreatorCode.disabled`` have been removed, since they where never returned by this endpoint. Disabled creator codes always raise :class:`fortnite_api.NotFound` when trying to fetch them.
+- ``CreatorCode.status`` and ``CreatorCode.disabled`` have been removed, since both returned a static value. Disabled creator codes always raise :class:`fortnite_api.NotFound` when trying to fetch them.
 - ``CreatorCode.verified`` has been removed, since it isn't used within the affiliate system. It always returns ``False``.
+- All enums now use an internal "Enum-like" class to handle unknown values, instead of the built-in :class:`py:enum.Enum`. This potentially breaks type checks, but does not break core functionality or change the enum interface; you can use them the same.
 
 New Features
 ~~~~~~~~~~~~
 - Added support for :attr:`fortnite_api.CosmeticType.SHOES`.
 
+Documentation
+~~~~~~~~~~~~~
+- Document :class:`fortnite_api.Forbidden` to be raised by :meth:`fortnite_api.Client.fetch_br_stats` and :meth:`fortnite_api.SyncClient.fetch_br_stats`.
+
+Miscellaneous
+~~~~~~~~~~~~~
+- Add safeguards against Epic Games' API changing or providing invalid values in API responses.
+    - All enums now can handle unknown values via an internally defined "Enum-like" class. If the API returns a value not in the enum, it will be stored as an attribute on the enum object. The interface for using this class is the same as using :class:`py:enum.Enum`.
+    - :class:`fortnite_api.TileSize` no longer raises :class:`ValueError` when an unknown value is passed to it. Instead, it now has a fallback value of `-1` for both width and height.
 
 
 .. _vp3p1p0:

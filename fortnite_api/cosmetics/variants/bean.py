@@ -27,7 +27,7 @@ from __future__ import annotations
 from collections.abc import Coroutine
 from typing import TYPE_CHECKING, Any, Optional, Union, overload
 
-from ...enums import CustomGender, GameLanguage
+from ...enums import CustomGender, GameLanguage, try_enum
 from ...http import HTTPClientT
 from ...utils import get_with_fallback
 from ..br import CosmeticBr
@@ -76,7 +76,7 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
 
         self.cosmetic_id: Optional[str] = data.get('cosmetic_id')
         self.name: str = data['name']
-        self.gender: CustomGender = CustomGender(data['gender'])
+        self.gender: CustomGender = try_enum(CustomGender, data['gender'])
         self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplay_tags', list)
 
         _images = data.get('images')
