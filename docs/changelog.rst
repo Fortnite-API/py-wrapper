@@ -9,6 +9,7 @@ Changelog
 
 v3.2.0
 -------
+This version introduces support for new Shoes cosmetic type, drops support for Python 3.8, and adds safeguards and future proofing against potential API changes.
 
 Breaking Changes
 ~~~~~~~~~~~~~~~~
@@ -28,8 +29,8 @@ Documentation
 Miscellaneous
 ~~~~~~~~~~~~~
 - Add safeguards against Epic Games' API changing or providing invalid values in API responses.
-    - All enums now can handle unknown values via an internally defined "Enum-like" class. If the API returns a value not in the enum, it will be stored as an attribute on the enum object. The interface for using this class is the same as using :class:`py:enum.Enum`.
-    - :class:`fortnite_api.TileSize` no longer raises :class:`ValueError` when an unknown value is passed to it. Instead, it now has a fallback value of `-1` for both width and height.
+  - All enums now can handle unknown values via an internally defined "Enum-like" class. If the API returns a value not in the enum, it will be stored as an attribute on the enum object. The interface for using this class is the same as using :class:`py:enum.Enum`.
+  - :class:`fortnite_api.TileSize` no longer raises :class:`ValueError` when an unknown value is passed to it. Instead, it now has a fallback value of `-1` for both width and height.
 
 
 .. _vp3p1p0:
