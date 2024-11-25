@@ -34,7 +34,7 @@ from typing_extensions import Self
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .cosmetics import Cosmetic, CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
-from .enums import BannerIntensity
+from .enums import BannerIntensity, try_enum
 from .http import HTTPClientT
 from .new_display_asset import NewDisplayAsset
 from .proxies import TransformerListProxy
@@ -84,9 +84,9 @@ class TileSize:
     Attributes
     ----------
     width: :class:`int`
-        The width of the tile.
+        The width of the tile. This value will be -1 if the tile size is invalid.
     height: :class:`int`
-        The height of the tile.
+        The height of the tile. This value will be -1 if the tile size is invalid.
     internal: :class:`str`
         The internal representation of the tile size. This can be the default Epic API value
         in the format ``Size_<width>_x_<height>``.
@@ -115,6 +115,8 @@ class TileSize:
         ``Size_<width>_x_<height>``. It has been exposed in the case that
         the user wants to construct a tile size from a custom value.
 
+        If an invalid value is passed, the tile size defaults to a width and height of -1.
+
         Parameters
         ----------
         value: :class:`str`
@@ -124,18 +126,13 @@ class TileSize:
         -------
         :class:`TileSize`
             The constructed tile size.
-
-        Raises
-        ------
-        ValueError
-            If the value is not in the correct format.
         """
         # Try and match the regex
         match = _TILE_SIZE_REGEX.match(value)
         if not match:
-            # Epic only uses the tile sizing on the regex. If there isn't a match
-            # we can safely assume an exception must be raised
-            raise ValueError(f"Invalid tile size: {value!r}")
+            # Epic may change the format or messes up the value.
+            # In one such case, this value was "ERROR BAD SIZE".
+            raise cls(width=-1, height=-1, internal=value)
 
         return cls(
             width=int(match.group("width")),
@@ -216,7 +213,7 @@ class ShopEntryBanner(ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.value: str = data["value"]
-        self.intensity: BannerIntensity = BannerIntensity(data["intensity"])
+        self.intensity: BannerIntensity = try_enum(BannerIntensity, data["intensity"])
         self.backend_value: str = data["backendValue"]
 
 
