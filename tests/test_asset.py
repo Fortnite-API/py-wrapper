@@ -62,11 +62,8 @@ def test_asset():
     assert mock_asset._max_size is fortnite_api.utils.MISSING
     assert mock_asset.max_size == -1
 
-    try:
+    with pytest.raises(ValueError):
         mock_asset.resize(256)
-        assert False, "Should not be able to resize this asset."
-    except ValueError:
-        pass
 
     mock_asset._max_size = 256
     assert mock_asset.can_resize is True
@@ -74,18 +71,12 @@ def test_asset():
     assert mock_asset.max_size == 256
 
     # Asset that you cannot resize to something that isn't a power of 2
-    try:
+    with pytest.raises(ValueError):
         mock_asset.resize(255)
-        assert False, "Should not be able to resize this asset to a non-power of 2."
-    except TypeError:
-        pass
 
     # Ensure that you cannot resize to something bigger than the max size
-    try:
+    with pytest.raises(ValueError):
         mock_asset.resize(512)
-        assert False, "Should not be able to resize this asset to a size bigger than the max size."
-    except ValueError:
-        pass
 
     assert mock_asset._size is fortnite_api.utils.MISSING
 
