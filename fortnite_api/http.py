@@ -426,19 +426,18 @@ class HTTPClient(HTTPMixin):
 
                 continue
 
-            if response.status in {500, 502, 504}:
+            if response.status > 500:
                 await asyncio.sleep(1 + tries * 2)
                 continue
-
-            if response.status > 500:
-                raise ServiceUnavailable(error, response, data)
 
         if response is not None:
             # If we hit the limit 5 times, there are bigger issues.
             if response.status == 429:
                 raise RateLimited(error, response, data)
+            if response.status > 500:
+                raise ServiceUnavailable(error, response, data)
 
-            raise ServiceUnavailable('Service unavailable', response, data)
+            raise HTTPException(error, response, data)
 
         raise RuntimeError('Unreachable code reached!')
 
@@ -518,17 +517,17 @@ class SyncHTTPClient(HTTPMixin):
 
                 continue
 
-            if response.status_code in {500, 502, 504}:
+            if response.status_code > 500:
                 time.sleep(1 + tries * 2)
                 continue
 
+        if response is not None:
+            # If we hit the limit 5 times, there are bigger issues.
+            if response.status_code == 429:
+                raise RateLimited(error, response, data)
             if response.status_code > 500:
                 raise ServiceUnavailable(error, response, data)
 
-        if response is not None:
-            if response.status_code == 429:
-                raise RateLimited(error, response, data)
-
-            raise ServiceUnavailable('Service unavailable', response, data)
+            raise HTTPException(error, response, data)
 
         raise RuntimeError('Unreachable code reached!')

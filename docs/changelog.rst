@@ -13,6 +13,7 @@ v3.3.0
 Bug Fixes
 ~~~~~~~~~
 - Fixed an issue that caused a :class:`KeyError` to be raised when using :meth:`fortnite_api.Client.search_br_cosmetics` or :meth:`fortnite_api.SyncClient.search_br_cosmetics` without `multiple` parameter.
+- Fixed an issue that caused :class:`fortnite_api.ServiceUnavailable` to be raised with a static message as a fallback for all unhandled http status codes. Instead :class:`fortnite_api.HTTPException` is raised with the proper error message.
 
 
 .. _vp3p2p0:
