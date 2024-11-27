@@ -126,7 +126,7 @@ def test_sync_banner_colors(api_key: str):
 def test_sync_creator_code(api_key: str):
     with fn_api.SyncClient(api_key=api_key) as client:
         with pytest.raises(fn_api.NotFound):
-            client.search_br_cosmetics(id=TEST_INVALID_CREATOR_CODE)
+            client.fetch_creator_code(id=TEST_INVALID_CREATOR_CODE)
         creator_code = client.fetch_creator_code(name=TEST_CREATOR_CODE)
 
     assert isinstance(creator_code, fn_api.CreatorCode)
@@ -309,7 +309,7 @@ def test_sync_fetch_playlists(api_key: str):
 def test_sync_fetch_playlist_by_id(api_key: str):
     with fn_api.SyncClient(api_key=api_key) as client:
         with pytest.raises(fn_api.NotFound):
-            client.search_br_cosmetics(id=TEST_INVALID_PLAYLIST_ID)
+            client.fetch_playlist(id=TEST_INVALID_PLAYLIST_ID)
         playlist = client.fetch_playlist(TEST_PLAYLIST_ID)
 
     assert playlist.id == TEST_PLAYLIST_ID

@@ -118,7 +118,7 @@ async def test_async_banner_colors(api_key: str):
 async def test_async_creator_code(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         with pytest.raises(fn_api.NotFound):
-            await client.search_br_cosmetics(id=TEST_INVALID_CREATOR_CODE)
+            await client.fetch_creator_code(name=TEST_INVALID_CREATOR_CODE)
         creator_code = await client.fetch_creator_code(name=TEST_CREATOR_CODE)
 
     assert isinstance(creator_code, fn_api.CreatorCode)

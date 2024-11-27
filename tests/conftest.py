@@ -36,7 +36,7 @@ from fortnite_api.http import HTTPClient, SyncHTTPClient
 TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"
 TEST_ACCOUNT_NAME: Final[str] = "Ninja"
 TEST_CREATOR_CODE: Final[str] = "ninja"
-TEST_INVALID_CREATOR_CODE: Final[str] = "invalidcreatorcode!!!"
+TEST_INVALID_CREATOR_CODE: Final[str] = "invalidcreatorcode"
 
 # Constant for testing cosmetics
 TEST_COSMETIC_ID: Final[str] = "Backpack_BrakePedal"
