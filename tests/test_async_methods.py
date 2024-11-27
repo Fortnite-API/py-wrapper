@@ -32,7 +32,16 @@ import pytest
 import fortnite_api as fn_api
 from fortnite_api.http import HTTPClient
 
-from .conftest import TEST_ACCOUNT_ID, TEST_ACCOUNT_NAME, TEST_COSMETIC_ID, TEST_CREATOR_CODE, TEST_DEFAULT_PLAYLIST
+from .conftest import (
+    TEST_ACCOUNT_ID,
+    TEST_ACCOUNT_NAME,
+    TEST_COSMETIC_ID,
+    TEST_CREATOR_CODE,
+    TEST_INVALID_COSMETIC_ID,
+    TEST_INVALID_CREATOR_CODE,
+    TEST_INVALID_PLAYLIST_ID,
+    TEST_PLAYLIST_ID,
+)
 
 
 @pytest.mark.asyncio
@@ -108,6 +117,8 @@ async def test_async_banner_colors(api_key: str):
 @pytest.mark.asyncio
 async def test_async_creator_code(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
+        with pytest.raises(fn_api.NotFound):
+            await client.fetch_creator_code(name=TEST_INVALID_CREATOR_CODE)
         creator_code = await client.fetch_creator_code(name=TEST_CREATOR_CODE)
 
     assert isinstance(creator_code, fn_api.CreatorCode)
@@ -377,6 +388,8 @@ def _test_cosmetic_track(cosmetic: fn_api.CosmeticTrack[Any]):
 @pytest.mark.asyncio
 async def test_async_fetch_cosmetic_br(api_key: str, response_flags: fn_api.ResponseFlags):
     async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
+        with pytest.raises(fn_api.NotFound):
+            await client.fetch_cosmetic_br(TEST_INVALID_COSMETIC_ID)
         cosmetic_br = await client.fetch_cosmetic_br(TEST_COSMETIC_ID)
 
     assert isinstance(cosmetic_br, fn_api.CosmeticBr)
@@ -539,9 +552,11 @@ async def test_async_fetch_playlists(api_key: str):
 @pytest.mark.asyncio
 async def test_async_fetch_playlist_by_id(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
-        playlist = await client.fetch_playlist(TEST_DEFAULT_PLAYLIST)
+        with pytest.raises(fn_api.NotFound):
+            await client.fetch_playlist(TEST_INVALID_PLAYLIST_ID)
+        playlist = await client.fetch_playlist(TEST_PLAYLIST_ID)
 
-    assert playlist.id == TEST_DEFAULT_PLAYLIST
+    assert playlist.id == TEST_PLAYLIST_ID
     _test_playlist(playlist)
 
 
@@ -684,8 +699,9 @@ async def test_async_fetch_shop(api_key: str):
 @pytest.mark.asyncio
 async def test_async_search_cosmetics(api_key: str, response_flags: fn_api.ResponseFlags):
     async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
+        with pytest.raises(fn_api.NotFound):
+            await client.search_br_cosmetics(id=TEST_INVALID_COSMETIC_ID)
         cosmetics_multiple_set = await client.search_br_cosmetics(multiple=True, has_set=True)
-
         cosmetic_single_set = await client.search_br_cosmetics(multiple=False, has_set=True)
 
     assert isinstance(cosmetics_multiple_set, list)

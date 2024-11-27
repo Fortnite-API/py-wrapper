@@ -36,16 +36,21 @@ from fortnite_api.http import HTTPClient, SyncHTTPClient
 TEST_ACCOUNT_ID: Final[str] = "4735ce9132924caf8a5b17789b40f79c"
 TEST_ACCOUNT_NAME: Final[str] = "Ninja"
 TEST_CREATOR_CODE: Final[str] = "ninja"
+TEST_INVALID_CREATOR_CODE: Final[str] = "invalidcreatorcode"
 
 # Constant for testing cosmetics
 TEST_COSMETIC_ID: Final[str] = "Backpack_BrakePedal"
+TEST_INVALID_COSMETIC_ID: Final[str] = "Invalid"
 
 # Constants for testing playlist fetching
-TEST_DEFAULT_PLAYLIST: Final[str] = "Playlist_NoBuildBR_Duo"
+TEST_PLAYLIST_ID: Final[str] = "Playlist_NoBuildBR_Duo"
+TEST_INVALID_PLAYLIST_ID: Final[str] = "Invalid"
 
 # Constants for fetching stats
 TEST_STAT_ACCOUNT_NAME = "Luc1412"
-TEST_STAT_ACCOUNT_ID = '369644c6224d4845aa2b00e63b60241d'
+TEST_INVALID_STAT_ACCOUNT_NAME = "InvalidAccountName"
+TEST_STAT_ACCOUNT_ID = "369644c6224d4845aa2b00e63b60241d"
+TEST_INVALID_STAT_ACCOUNT_ID = "21332424543544535435435"
 
 
 @pytest.fixture(scope='session')

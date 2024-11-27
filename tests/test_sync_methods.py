@@ -31,7 +31,16 @@ import pytest
 import fortnite_api as fn_api
 from fortnite_api.http import SyncHTTPClient
 
-from .conftest import TEST_ACCOUNT_ID, TEST_ACCOUNT_NAME, TEST_COSMETIC_ID, TEST_CREATOR_CODE, TEST_DEFAULT_PLAYLIST
+from .conftest import (
+    TEST_ACCOUNT_ID,
+    TEST_ACCOUNT_NAME,
+    TEST_COSMETIC_ID,
+    TEST_CREATOR_CODE,
+    TEST_INVALID_COSMETIC_ID,
+    TEST_INVALID_CREATOR_CODE,
+    TEST_INVALID_PLAYLIST_ID,
+    TEST_PLAYLIST_ID,
+)
 from .test_async_methods import (
     _test_cosmetic_br,
     _test_cosmetic_car,
@@ -116,6 +125,8 @@ def test_sync_banner_colors(api_key: str):
 
 def test_sync_creator_code(api_key: str):
     with fn_api.SyncClient(api_key=api_key) as client:
+        with pytest.raises(fn_api.NotFound):
+            client.fetch_creator_code(name=TEST_INVALID_CREATOR_CODE)
         creator_code = client.fetch_creator_code(name=TEST_CREATOR_CODE)
 
     assert isinstance(creator_code, fn_api.CreatorCode)
@@ -200,6 +211,8 @@ def test_sync_fetch_cosmetics_tracks(api_key: str, response_flags: fn_api.Respon
 
 def test_sync_fetch_cosmetic_br(api_key: str, response_flags: fn_api.ResponseFlags):
     with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
+        with pytest.raises(fn_api.NotFound):
+            client.fetch_cosmetic_br(TEST_INVALID_COSMETIC_ID)
         cosmetic_br = client.fetch_cosmetic_br(TEST_COSMETIC_ID)
 
     assert isinstance(cosmetic_br, fn_api.CosmeticBr)
@@ -299,9 +312,11 @@ def test_sync_fetch_playlists(api_key: str):
 
 def test_sync_fetch_playlist_by_id(api_key: str):
     with fn_api.SyncClient(api_key=api_key) as client:
-        playlist = client.fetch_playlist(TEST_DEFAULT_PLAYLIST)
+        with pytest.raises(fn_api.NotFound):
+            client.fetch_playlist(TEST_INVALID_PLAYLIST_ID)
+        playlist = client.fetch_playlist(TEST_PLAYLIST_ID)
 
-    assert playlist.id == TEST_DEFAULT_PLAYLIST
+    assert playlist.id == TEST_PLAYLIST_ID
     _test_playlist(playlist)
 
 
@@ -433,6 +448,8 @@ def test_sync_fetch_shop(api_key: str):
 
 def test_sync_search_cosmetics(api_key: str, response_flags: fn_api.ResponseFlags):
     with fn_api.SyncClient(api_key=api_key, response_flags=response_flags) as client:
+        with pytest.raises(fn_api.NotFound):
+            client.search_br_cosmetics(id=TEST_INVALID_COSMETIC_ID)
         cosmetics_multiple_set = client.search_br_cosmetics(multiple=True, has_set=True)
         cosmetic_single_set = client.search_br_cosmetics(multiple=False, has_set=True)
 
