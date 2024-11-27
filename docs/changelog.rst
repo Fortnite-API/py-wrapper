@@ -13,6 +13,7 @@ v3.3.0
 Bug Fixes
 ~~~~~~~~~
 - Fixed an issue that caused a :class:`KeyError` to be raised when using :meth:`fortnite_api.Client.search_br_cosmetics` or :meth:`fortnite_api.SyncClient.search_br_cosmetics` without `multiple` parameter.
+- Fixed an issue that caused :class:`fortnite_api.Asset.resize` to raise :class:`TypeError` instead of :class:`ValueError` when the given size isn't a power of 2.
 
 
 .. _vp3p2p0:

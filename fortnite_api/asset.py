@@ -146,7 +146,7 @@ class Asset(Generic[HTTPClientT]):
             raise ValueError('This asset does not support resizing.')
 
         if (size & (size - 1) != 0) or size <= 0:
-            raise TypeError('Size must be a power of 2.')
+            raise ValueError('Size must be a power of 2.')
 
         if self._max_size is not None:
             if size > self._max_size:
