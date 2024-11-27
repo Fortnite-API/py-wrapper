@@ -733,7 +733,7 @@ class Client:
         NotFound
             No cosmetics were found with the search criteria.
         """
-        multiple = kwargs.pop('multiple')
+        multiple = kwargs.pop('multiple', False)
 
         kwargs['language'] = self._resolve_default_language_value(kwargs.pop('language', MISSING))
         kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.pop('search_language', MISSING))
@@ -1501,7 +1501,7 @@ class SyncClient:
 
     @copy_doc(Client.search_br_cosmetics)
     def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr[SyncHTTPClient], list[CosmeticBr[SyncHTTPClient]]]:
-        multiple = kwargs.pop('multiple')
+        multiple = kwargs.pop('multiple', False)
 
         kwargs['language'] = self._resolve_default_language_value(kwargs.pop('language', MISSING))
         kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.pop('search_language', MISSING))
