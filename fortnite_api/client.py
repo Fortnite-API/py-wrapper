@@ -27,12 +27,11 @@ from __future__ import annotations
 import datetime
 import functools
 import inspect
-from collections.abc import Coroutine
-from typing import Any, Callable, Literal, Optional, TypeVar, Union, cast, overload
+from typing import Any, Callable, List, Literal, Optional, TypeVar, Union, cast, overload
 
 import aiohttp
 import requests
-from typing_extensions import Concatenate, ParamSpec, Self
+from typing_extensions import Concatenate, Coroutine, ParamSpec
 
 from .aes import Aes
 from .all import CosmeticsAll
@@ -52,11 +51,6 @@ from .proxies import TransformerListProxy
 from .shop import Shop
 from .stats import BrPlayerStats
 from .utils import MISSING, _transform_dict_for_get_request, copy_doc, remove_prefix
-
-__all__: tuple[str, ...] = (
-    'Client',
-    'SyncClient',
-)
 
 T = TypeVar('T')
 TC = TypeVar('TC')
@@ -242,7 +236,7 @@ class Client:
 
     async def fetch_cosmetics_br(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticBr]:
+    ) -> List[CosmeticBr]:
         """|coro|
 
         Fetches all Battle Royale cosmetics available in Fortnite.
@@ -276,7 +270,7 @@ class Client:
 
     async def fetch_cosmetics_cars(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticCar]:
+    ) -> List[CosmeticCar]:
         """|coro|
 
         Fetches all Car cosmetics available in Fortnite.
@@ -310,7 +304,7 @@ class Client:
 
     async def fetch_cosmetics_instruments(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticInstrument]:
+    ) -> List[CosmeticInstrument]:
         """|coro|
 
         Fetches all instrument cosmetics available in Fortnite.
@@ -344,7 +338,7 @@ class Client:
 
     async def fetch_cosmetics_lego_kits(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticLegoKit]:
+    ) -> List[CosmeticLegoKit]:
         """|coro|
 
         Fetches all lego kit cosmetics available in Fortnite.
@@ -378,7 +372,7 @@ class Client:
 
     async def fetch_variants_lego(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[VariantLego]:
+    ) -> List[VariantLego]:
         """|coro|
 
         Fetches all lego cosmetic variants available in Fortnite.
@@ -413,7 +407,7 @@ class Client:
 
     async def fetch_variants_beans(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[VariantBean]:
+    ) -> List[VariantBean]:
         """|coro|
 
         Fetches all bean cosmetic variants available in Fortnite. For more information
@@ -449,7 +443,7 @@ class Client:
 
     async def fetch_cosmetics_tracks(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticTrack]:
+    ) -> List[CosmeticTrack]:
         """|coro|
 
         Fetches all audio track cosmetics available in Fortnite.
@@ -598,7 +592,7 @@ class Client:
         added_since: Optional[datetime.datetime] = ...,
         unseen_for: Optional[int] = ...,
         last_appearance: Optional[datetime.datetime] = ...,
-    ) -> list[CosmeticBr]: ...
+    ) -> List[CosmeticBr]: ...
 
     @overload
     async def search_br_cosmetics(
@@ -641,7 +635,7 @@ class Client:
         last_appearance: Optional[datetime.datetime] = ...,
     ) -> CosmeticBr: ...
 
-    async def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr, list[CosmeticBr]]:
+    async def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr, List[CosmeticBr]]:
         """|coro|
 
         Searches all Battle Royale cosmetics available in Fortnite and returns
@@ -775,7 +769,7 @@ class Client:
         return Aes(data=data, http=self.http)
 
     # BANNERS
-    async def fetch_banners(self, *, language: Optional[GameLanguage] = MISSING) -> list[Banner]:
+    async def fetch_banners(self, *, language: Optional[GameLanguage] = MISSING) -> List[Banner]:
         """|coro|
 
         Fetch all banners available in Fortnite.
@@ -799,7 +793,7 @@ class Client:
             lambda x: Banner(data=x, http=self.http),
         )
 
-    async def fetch_banner_colors(self) -> list[BannerColor]:
+    async def fetch_banner_colors(self) -> List[BannerColor]:
         """|coro|
 
         Fetch all banner colors available in Fortnite.
@@ -835,7 +829,7 @@ class Client:
         Raises
         ------
         NotFound
-            A creator code with that name doesn't exist or has been disabled.
+            A creator code with that name was not found.
         """
         data = await self.http.get_creator_code(name)
         return CreatorCode(data=data, http=self.http)
@@ -940,7 +934,7 @@ class Client:
 
     # PLAYLISTS
 
-    async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = MISSING) -> list[Playlist]:
+    async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = MISSING) -> List[Playlist]:
         """|coro|
 
         Fetches a list of current playlists available in Fortnite.
@@ -1036,8 +1030,6 @@ class Client:
         ------
         NotFound
             A player with that name was not found.
-        Forbidden
-            The player has set their stats to private within the account settings.
         ValueError
             You cannot pass both a ``name`` and an ``account_id`` to fetch stats at the
             same time, or, you must pass either a ``name`` or an ``account_id`` to fetch stats.
@@ -1104,7 +1096,7 @@ class Client:
     # BETA METHODS
 
     @beta_method
-    async def beta_fetch_new_display_assets(self) -> list[NewDisplayAsset]:
+    async def beta_fetch_new_display_assets(self) -> List[NewDisplayAsset]:
         """|coro|
 
         Fetches all the new display assets available in Fortnite.
@@ -1154,7 +1146,7 @@ class Client:
         )
 
     @beta_method
-    async def beta_fetch_material_instances(self) -> list[MaterialInstance]:
+    async def beta_fetch_material_instances(self) -> List[MaterialInstance]:
         """|coro|
 
         Fetches all the material instances available in Fortnite.
@@ -1301,7 +1293,7 @@ class SyncClient:
     @copy_doc(Client.fetch_cosmetics_br)
     def fetch_cosmetics_br(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticBr[SyncHTTPClient]]:
+    ) -> List[CosmeticBr[SyncHTTPClient]]:
         data = self.http.get_cosmetics_br(
             language=self._resolve_default_language_value(language),
             response_flags=self._resolve_response_flags_value(response_flags),
@@ -1314,7 +1306,7 @@ class SyncClient:
     @copy_doc(Client.fetch_cosmetics_cars)
     def fetch_cosmetics_cars(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticCar[SyncHTTPClient]]:
+    ) -> List[CosmeticCar[SyncHTTPClient]]:
         data = self.http.get_cosmetics_cars(
             language=self._resolve_default_language_value(language),
             response_flags=self._resolve_response_flags_value(response_flags),
@@ -1327,7 +1319,7 @@ class SyncClient:
     @copy_doc(Client.fetch_cosmetics_instruments)
     def fetch_cosmetics_instruments(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticInstrument[SyncHTTPClient]]:
+    ) -> List[CosmeticInstrument[SyncHTTPClient]]:
         data = self.http.get_cosmetics_instruments(
             language=self._resolve_default_language_value(language),
             response_flags=self._resolve_response_flags_value(response_flags),
@@ -1340,7 +1332,7 @@ class SyncClient:
     @copy_doc(Client.fetch_cosmetics_lego_kits)
     def fetch_cosmetics_lego_kits(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticLegoKit[SyncHTTPClient]]:
+    ) -> List[CosmeticLegoKit[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego_kits(
             language=self._resolve_default_language_value(language),
             response_flags=self._resolve_response_flags_value(response_flags),
@@ -1353,7 +1345,7 @@ class SyncClient:
     @copy_doc(Client.fetch_variants_lego)
     def fetch_variants_lego(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[VariantLego[SyncHTTPClient]]:
+    ) -> List[VariantLego[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego(
             language=self._resolve_default_language_value(language),
             response_flags=self._resolve_response_flags_value(response_flags),
@@ -1366,7 +1358,7 @@ class SyncClient:
     @copy_doc(Client.fetch_variants_beans)
     def fetch_variants_beans(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[VariantBean[SyncHTTPClient]]:
+    ) -> List[VariantBean[SyncHTTPClient]]:
         data = self.http.get_cosmetics_beans(
             language=self._resolve_default_language_value(language),
             response_flags=self._resolve_response_flags_value(response_flags),
@@ -1379,7 +1371,7 @@ class SyncClient:
     @copy_doc(Client.fetch_cosmetics_tracks)
     def fetch_cosmetics_tracks(
         self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
-    ) -> list[CosmeticTrack[SyncHTTPClient]]:
+    ) -> List[CosmeticTrack[SyncHTTPClient]]:
         data = self.http.get_cosmetics_tracks(
             language=self._resolve_default_language_value(language),
             response_flags=self._resolve_response_flags_value(response_flags),
@@ -1456,7 +1448,7 @@ class SyncClient:
         added_since: Optional[datetime.datetime] = ...,
         unseen_for: Optional[int] = ...,
         last_appearance: Optional[datetime.datetime] = ...,
-    ) -> list[CosmeticBr[SyncHTTPClient]]: ...
+    ) -> List[CosmeticBr[SyncHTTPClient]]: ...
 
     @overload
     def search_br_cosmetics(
@@ -1531,7 +1523,7 @@ class SyncClient:
 
     # BANNERS
     @copy_doc(Client.fetch_banners)
-    def fetch_banners(self, *, language: Optional[GameLanguage] = MISSING) -> list[Banner[SyncHTTPClient]]:
+    def fetch_banners(self, *, language: Optional[GameLanguage] = MISSING) -> List[Banner[SyncHTTPClient]]:
         data = self.http.get_banners(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
@@ -1539,7 +1531,7 @@ class SyncClient:
         )
 
     @copy_doc(Client.fetch_banner_colors)
-    def fetch_banner_colors(self) -> list[BannerColor[SyncHTTPClient]]:
+    def fetch_banner_colors(self) -> List[BannerColor[SyncHTTPClient]]:
         data = self.http.get_banner_colors()
         return TransformerListProxy(
             data,
@@ -1580,7 +1572,7 @@ class SyncClient:
     # PLAYLISTS
 
     @copy_doc(Client.fetch_playlists)
-    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = MISSING) -> list[Playlist[SyncHTTPClient]]:
+    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = MISSING) -> List[Playlist[SyncHTTPClient]]:
         data = self.http.get_playlists(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
@@ -1626,7 +1618,7 @@ class SyncClient:
 
     @copy_doc(Client.beta_fetch_new_display_assets)
     @beta_method
-    def beta_fetch_new_display_assets(self) -> list[NewDisplayAsset[SyncHTTPClient]]:
+    def beta_fetch_new_display_assets(self) -> List[NewDisplayAsset[SyncHTTPClient]]:
         data = self.http.beta_get_new_display_assets()
 
         return TransformerListProxy(
@@ -1636,7 +1628,7 @@ class SyncClient:
 
     @copy_doc(Client.beta_fetch_material_instances)
     @beta_method
-    def beta_fetch_material_instances(self) -> list[MaterialInstance[SyncHTTPClient]]:
+    def beta_fetch_material_instances(self) -> List[MaterialInstance[SyncHTTPClient]]:
         data = self.http.beta_get_material_instances()
 
         return TransformerListProxy(

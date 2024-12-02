@@ -26,8 +26,7 @@ from __future__ import annotations
 
 import dataclasses
 import re
-from collections.abc import Generator
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple, Union
 
 from .abc import ReconstructAble
 from .http import HTTPClientT
@@ -36,7 +35,7 @@ from .utils import parse_time, simple_repr
 if TYPE_CHECKING:
     import datetime
 
-__all__: tuple[str, ...] = ("Aes", "DynamicKey", "Version")
+__all__: Tuple[str, ...] = ("Aes", "DynamicKey", "Version")
 
 VERSION_REGEX: re.Pattern[str] = re.compile(r"(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})")
 
@@ -89,7 +88,7 @@ class Version:
 
 
 @simple_repr
-class Aes(ReconstructAble[dict[str, Any], HTTPClientT]):
+class Aes(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Aes
 
@@ -144,7 +143,7 @@ class Aes(ReconstructAble[dict[str, Any], HTTPClientT]):
         All current dynamic keys
     """
 
-    __slots__: tuple[str, ...] = (
+    __slots__: Tuple[str, ...] = (
         "main_key",
         "build",
         "version",
@@ -152,7 +151,7 @@ class Aes(ReconstructAble[dict[str, Any], HTTPClientT]):
         "dynamic_keys",
     )
 
-    def __init__(self, *, data: dict[str, Any], http: HTTPClientT):
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT):
         super().__init__(data=data, http=http)
 
         self.main_key: Optional[str] = data.get("mainKey")
@@ -165,7 +164,7 @@ class Aes(ReconstructAble[dict[str, Any], HTTPClientT]):
             major, minor = version_info[0]
             self.version = Version(major=int(major), minor=int(minor))
 
-        self.dynamic_keys: list[DynamicKey[HTTPClientT]] = [
+        self.dynamic_keys: List[DynamicKey[HTTPClientT]] = [
             DynamicKey(data=entry, http=http) for entry in data.get("dynamicKeys", [])
         ]
         self.updated: datetime.datetime = parse_time(data["updated"])
@@ -190,7 +189,7 @@ class Aes(ReconstructAble[dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class DynamicKey(ReconstructAble[dict[str, Any], HTTPClientT]):
+class DynamicKey(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.DynamicKey
 
@@ -228,9 +227,9 @@ class DynamicKey(ReconstructAble[dict[str, Any], HTTPClientT]):
         The key.
     """
 
-    __slots__: tuple[str, ...] = ("pak_filename", "pak_guid", "key")
+    __slots__: Tuple[str, ...] = ("pak_filename", "pak_guid", "key")
 
-    def __init__(self, *, data: dict[str, Any], http: HTTPClientT):
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT):
         super().__init__(data=data, http=http)
 
         self.pak_filename: str = data["pakFilename"]

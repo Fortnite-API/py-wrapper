@@ -226,6 +226,9 @@ Enumerations
 .. autoclass:: fortnite_api.StatsImageType
     :members:
 
+.. autoclass:: fortnite_api.CreatorCodeStatus
+    :members:
+
 .. autoclass:: fortnite_api.CosmeticCompatibleMode
     :members:
 

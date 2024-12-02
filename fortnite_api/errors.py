@@ -24,13 +24,13 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Tuple, Union
 
 if TYPE_CHECKING:
     import aiohttp
     import requests
 
-__all__: tuple[str, ...] = (
+__all__: Tuple[str, ...] = (
     "FortniteAPIException",
     "HTTPException",
     "NotFound",

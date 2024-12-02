@@ -22,29 +22,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from collections.abc import Generator
-from typing import Any
+from typing import Any, Dict, Tuple
 
 from .abc import ReconstructAble
-from .cosmetics import (
-    Cosmetic,
-    CosmeticBr,
-    CosmeticCar,
-    CosmeticInstrument,
-    CosmeticLegoKit,
-    CosmeticTrack,
-    VariantBean,
-    VariantLego,
-)
+from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantBean, VariantLego
 from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, simple_repr
 
-__all__: tuple[str, ...] = ("CosmeticsAll",)
+__all__: Tuple[str, ...] = ("CosmeticsAll",)
 
 
 @simple_repr
-class CosmeticsAll(ReconstructAble[dict[str, Any], HTTPClientT]):
+class CosmeticsAll(ReconstructAble[Dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticsAll
 
@@ -96,7 +86,7 @@ class CosmeticsAll(ReconstructAble[dict[str, Any], HTTPClientT]):
         A list of all lego kit cosmetics.
     """
 
-    __slots__: tuple[str, ...] = (
+    __slots__: Tuple[str, ...] = (
         "br",
         "tracks",
         "instruments",
@@ -106,7 +96,7 @@ class CosmeticsAll(ReconstructAble[dict[str, Any], HTTPClientT]):
         "beans",
     )
 
-    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         _br = get_with_fallback(data, "br", list)
@@ -151,22 +141,29 @@ class CosmeticsAll(ReconstructAble[dict[str, Any], HTTPClientT]):
             lambda x: VariantBean(data=x, http=self._http),
         )
 
-    def __iter__(self) -> Generator[Cosmetic[dict[str, Any], HTTPClientT], None, None]:
-        yield from self.br
+    def __iter__(self):
+        for br in self.br:
+            yield br
 
-        yield from self.tracks
+        for track in self.tracks:
+            yield track
 
-        yield from self.instruments
+        for instrument in self.instruments:
+            yield instrument
 
-        yield from self.cars
+        for car in self.cars:
+            yield car
 
-        yield from self.lego
+        for lego in self.lego:
+            yield lego
 
-        yield from self.beans
+        for bean in self.beans:
+            yield bean
 
-        yield from self.lego_kits
+        for lego_kit in self.lego_kits:
+            yield lego_kit
 
-    def __len__(self) -> int:
+    def __len__(self):
         return (
             len(self.br)
             + len(self.tracks)

@@ -24,8 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, Generic, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, Coroutine, Generic, Optional, Tuple, Union, overload
 
 from typing_extensions import Self
 
@@ -36,7 +35,7 @@ if TYPE_CHECKING:
     from .http import HTTPClient, SyncHTTPClient
 
 
-__all__: tuple[str, ...] = ('Asset',)
+__all__: Tuple[str, ...] = ('Asset',)
 
 
 class _AssetRoute(Route):
@@ -64,7 +63,7 @@ class Asset(Generic[HTTPClientT]):
             icon: bytes = await images.icon.read()
     """
 
-    __slots__: tuple[str, ...] = ('_http', '_url', '_max_size', '_size')
+    __slots__: Tuple[str, ...] = ('_http', '_url', '_max_size', '_size')
 
     def __init__(self, *, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING, size: int = MISSING) -> None:
         self._http: HTTPClientT = http
@@ -90,7 +89,7 @@ class Asset(Generic[HTTPClientT]):
         return hash(self.url)
 
     def __repr__(self) -> str:
-        return f'<Asset url={self.url!r}>'
+        return '<Asset url={0.url!r}>'.format(self)
 
     @property
     def url(self) -> str:
