@@ -62,7 +62,7 @@ async def test_fetch_cosmetic_types(api_key: str, response_flags: fortnite_api.R
     async with ClientHybrid(api_key=api_key) as client:
         # Pyright can't seem to narrow CosmeticBr[Any] to fortnite_api.Cosmetic[Any, Any], but
         # Callable[[Any], None] is actually requesting that an instance of AnyCosmetic is passed.
-        METHOD_MAPPING: dict[CoroFunc[..., Iterable[AnyCosmetic]], Callable[[Any], None]] = {
+        FETCHER_VALIDATOR_MAPPING: dict[CoroFunc[..., Iterable[AnyCosmetic]], Callable[[Any], None]] = {
             client.fetch_cosmetics_br: test_cosmetic_br,
             client.fetch_cosmetics_cars: test_cosmetic_car,
             client.fetch_cosmetics_instruments: test_cosmetic_instrument,
@@ -73,15 +73,15 @@ async def test_fetch_cosmetic_types(api_key: str, response_flags: fortnite_api.R
         }
 
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
-        for cosmetic_fetcher, validator in METHOD_MAPPING.items():
+        for cosmetic_fetcher, validator in FETCHER_VALIDATOR_MAPPING.items():
             try:
                 cosmetics = await cosmetic_fetcher()
-            except Exception as exc:
+            except Exception:
                 # For some reason, fetching this has failed. This is most likely an API issue
                 # or something incorrect with the client, as the actual transformation of
                 # DictT to cosmetic object is done in the for loop below.
                 log.error('Failed to fetch cosmetics from method %s.', cosmetic_fetcher.__name__)
-                raise exc
+                raise
 
             try:
                 # This is wrapped in a try block due to the actual object transformation, as discussed
@@ -100,12 +100,12 @@ async def test_fetch_cosmetic_types(api_key: str, response_flags: fortnite_api.R
                         )
                         raise
             except AssertionError:
-                # Handled inside the loop already. Simply want to ignore this.
+                # Handled inside the loop already. Simply want to bring this up the flag pole.
                 raise
             except Exception:
                 # A cosmetic has failed to initialize or the validator function has thrown some sort of exception.
                 # Either way, this is something that is not expected behavior.
-                log.error('Error from method %s', cosmetic_fetcher.__name__)
+                log.error('Error related to fetcher method %s', cosmetic_fetcher.__name__)
                 raise
 
 
@@ -157,8 +157,10 @@ async def test_fetch_cosmetics_all(api_key: str, response_flags: fortnite_api.Re
     assert cosmetics_all.beans
     assert cosmetics_all.to_dict()
 
-    # Ensure that you can iter over the cosmetics
+    # Ensure that the response from the API is not 0 cosmetics. If it is, it is likely an
+    # API issue that needs to be addressed.
     assert len(cosmetics_all) != 0
+
     for cosmetic in cosmetics_all:
         assert isinstance(cosmetic, fortnite_api.Cosmetic)
 
