@@ -59,7 +59,7 @@ async def test_fetch_cosmetic_types(api_key: str, response_flags: fortnite_api.R
     # to validator function. To give some extra error information, if needed, we'll catch any exceptions
     # raised from these functions, log them for the report, then re-raise them for pytest to catch.
 
-    async with ClientHybrid(api_key=api_key) as client:
+    async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         # Pyright can't seem to narrow CosmeticBr[Any] to fortnite_api.Cosmetic[Any, Any], but
         # Callable[[Any], None] is actually requesting that an instance of AnyCosmetic is passed.
         FETCHER_VALIDATOR_MAPPING: dict[CoroFunc[..., Iterable[AnyCosmetic]], Callable[[Any], None]] = {
