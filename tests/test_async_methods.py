@@ -24,6 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 import datetime
 from typing import Any
 
@@ -31,13 +32,12 @@ import pytest
 
 import fortnite_api as fn_api
 from fortnite_api.http import HTTPClient
+from .cosmetics.cosmetic_utils import test_cosmetic_br, test_cosmetic_car, test_cosmetic_instrument, test_cosmetic_lego_kits
 
 from .conftest import (
     TEST_ACCOUNT_ID,
     TEST_ACCOUNT_NAME,
-    TEST_COSMETIC_ID,
     TEST_CREATOR_CODE,
-    TEST_INVALID_COSMETIC_ID,
     TEST_INVALID_CREATOR_CODE,
     TEST_INVALID_PLAYLIST_ID,
     TEST_PLAYLIST_ID,
@@ -144,123 +144,6 @@ async def test_async_fetch_playlist(api_key: str):
 
     if len(playlists) >= 2:
         assert first != playlists[1]
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetics_br(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
-        cosmetics_br = await client.fetch_cosmetics_br()
-
-    for cosmetic in cosmetics_br:
-        _test_cosmetic_br(cosmetic)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetics_cars(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_cars = await client.fetch_cosmetics_cars()
-
-    for cosmetic in cosmetics_cars:
-        _test_cosmetic_car(cosmetic)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetics_instruments(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_instruments = await client.fetch_cosmetics_instruments()
-
-    for cosmetic in cosmetics_instruments:
-        _test_cosmetic_instrument(cosmetic)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetics_lego_kits(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        lego_kits = await client.fetch_cosmetics_lego_kits()
-
-    for kit in lego_kits:
-        _test_cosmetic_lego_kits(kit)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_variants_lego(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        lego_variants = await client.fetch_variants_lego()
-
-    for lego in lego_variants:
-        _test_variant_lego(lego)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_variants_beans(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        beans_variants = await client.fetch_variants_beans()
-
-    for bean in beans_variants:
-        _test_variant_bean(bean)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetics_tracks(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_tracks = await client.fetch_cosmetics_tracks()
-
-    for cosmetic in cosmetics_tracks:
-        _test_cosmetic_track(cosmetic)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetic_br(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        with pytest.raises(fn_api.NotFound):
-            await client.fetch_cosmetic_br(TEST_INVALID_COSMETIC_ID)
-        cosmetic_br = await client.fetch_cosmetic_br(TEST_COSMETIC_ID)
-
-    assert isinstance(cosmetic_br, fn_api.CosmeticBr)
-    assert cosmetic_br.id == TEST_COSMETIC_ID
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetics_new(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        new_cosmetics = await client.fetch_cosmetics_new()
-
-    assert isinstance(new_cosmetics, fn_api.NewCosmetics)
-
-    assert new_cosmetics.global_hash
-    assert new_cosmetics.date
-    assert new_cosmetics.global_last_addition
-    assert new_cosmetics.build
-    assert new_cosmetics.previous_build
-
-    assert isinstance(new_cosmetics.br, fn_api.NewCosmetic)
-    assert isinstance(new_cosmetics.tracks, fn_api.NewCosmetic)
-    assert isinstance(new_cosmetics.instruments, fn_api.NewCosmetic)
-    assert isinstance(new_cosmetics.cars, fn_api.NewCosmetic)
-    assert isinstance(new_cosmetics.lego, fn_api.NewCosmetic)
-    assert isinstance(new_cosmetics.lego_kits, fn_api.NewCosmetic)
-
-
-@pytest.mark.asyncio
-async def test_async_fetch_cosmetics_all(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_all = await client.fetch_cosmetics_all()
-
-    assert isinstance(cosmetics_all, fn_api.CosmeticsAll)
-
-    assert cosmetics_all.br
-    assert cosmetics_all.tracks
-    assert cosmetics_all.instruments
-    assert cosmetics_all.cars
-    assert cosmetics_all.lego
-    assert cosmetics_all.lego_kits
-    assert cosmetics_all.beans
-    assert cosmetics_all.to_dict()
-
-    # Ensure that you can iter over the cosmetics
-    assert len(cosmetics_all) != 0
-    for cosmetic in cosmetics_all:
-        assert isinstance(cosmetic, fn_api.Cosmetic)
 
 
 @pytest.mark.asyncio
@@ -516,21 +399,13 @@ async def test_async_fetch_shop(api_key: str):
             assert isinstance(colors.color1, str)
             assert isinstance(colors.color3, str)
 
+        COSMETIC_TYPE_MAPPING: dict[type[fn_api.Cosmetic[Any]], Callable[..., Any]] = {
+            fn_api.CosmeticBr: test_cosmetic_br,
+            fn_api.CosmeticInstrument: test_cosmetic_instrument,
+            fn_api.CosmeticCar: test_cosmetic_car,
+            fn_api.CosmeticLegoKit: test_cosmetic_lego_kits,
+        }
+
         for cosmetic in entry.br + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:
-            assert isinstance(cosmetic, fn_api.Cosmetic)
-
-
-@pytest.mark.asyncio
-async def test_async_search_cosmetics(api_key: str, response_flags: fn_api.ResponseFlags):
-    async with fn_api.Client(api_key=api_key, response_flags=response_flags) as client:
-        with pytest.raises(fn_api.NotFound):
-            await client.search_br_cosmetics(id=TEST_INVALID_COSMETIC_ID)
-        cosmetics_multiple_set = await client.search_br_cosmetics(multiple=True, has_set=True)
-        cosmetic_single_set = await client.search_br_cosmetics(multiple=False, has_set=True)
-
-    assert isinstance(cosmetics_multiple_set, list)
-    for cosmetic in cosmetics_multiple_set:
-        assert cosmetic.set is not None
-
-    assert isinstance(cosmetic_single_set, fn_api.CosmeticBr)
-    assert cosmetic_single_set.set is not None
+            tester = COSMETIC_TYPE_MAPPING[type(cosmetic)]
+            tester(cosmetic)
