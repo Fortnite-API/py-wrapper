@@ -24,13 +24,15 @@ SOFTWARE.
 
 from __future__ import annotations
 
+import logging
+from collections.abc import Coroutine, Callable
 import inspect
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, Callable, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 import pytest
 import requests
-from typing_extensions import Concatenate, ParamSpec, TypeAlias, TypeIs
+from typing_extensions import Concatenate, ParamSpec, TypeAlias
 
 import fortnite_api
 from fortnite_api import ReconstructAble
@@ -43,6 +45,8 @@ if TYPE_CHECKING:
     SyncClient = fortnite_api.SyncClient
 
     CoroFunc = Callable[P, Coroutine[Any, Any, T]]
+
+log = logging.getLogger(__name__)
 
 
 class HybridMethodProxy(Generic[P, T]):
@@ -65,6 +69,7 @@ class HybridMethodProxy(Generic[P, T]):
         if isinstance(async_res, fortnite_api.Hashable):
             assert isinstance(sync_res, fortnite_api.Hashable)
             assert async_res == sync_res
+            log.debug('Hashable comparison passed for method %s.', self.__async_method.__name__)
 
         if isinstance(async_res, fortnite_api.ReconstructAble):
             assert isinstance(sync_res, fortnite_api.ReconstructAble)
@@ -75,11 +80,16 @@ class HybridMethodProxy(Generic[P, T]):
             async_raw_data = sync_res_narrowed.to_dict()
             sync_raw_data = sync_res_narrowed.to_dict()
             assert async_raw_data == sync_raw_data
+            log.debug('Raw data equality passed for method %s', self.__async_method.__name__)
 
             async_reconstructed = type(async_res_narrowed).from_dict(async_raw_data, client=self.__hybrid_client)
             sync_reconstructed = type(sync_res_narrowed).from_dict(sync_raw_data, client=self.__sync_client)
 
             assert isinstance(async_reconstructed, type(sync_reconstructed))
+            assert async_reconstructed == sync_reconstructed
+            assert type(async_reconstructed) is type(async_res_narrowed)
+            assert type(sync_reconstructed) is type(sync_res_narrowed)
+            log.debug('Reconstructed data equality passed for method %s', self.__async_method.__name__)
 
     async def __call__(self, *args: P.args, **kwargs: P.kwargs) -> T:
         # Call the sync method first
@@ -88,6 +98,7 @@ class HybridMethodProxy(Generic[P, T]):
         # Call the async method
         async_result = await self.__async_method(self.__hybrid_client, *args, **kwargs)
 
+        log.debug('Validating results for %s', self.__async_method.__name__)
         self._validate_results(async_result, sync_result)
         return async_result
 
@@ -107,39 +118,33 @@ class ClientHybrid(fortnite_api.Client):
         kwargs.pop('session', None)
         session = requests.Session()
         self.__sync_client: fortnite_api.SyncClient = fortnite_api.SyncClient(*args, session=session, **kwargs)
+        logging.info('Injecting hybrid methods.')
+        self.__inject_hybrid_methods()
+
+    def __inject_hybrid_methods(self) -> None:
+        # Walks through all the public coroutine methods in this class. If it finds one,
+        # it will mark it as a hybrid proxy method with it and its sync counterpart.
+        for key, value in fortnite_api.Client.__dict__.items():
+            if inspect.iscoroutinefunction(value):
+                sync_value = getattr(fortnite_api.SyncClient, key, None)
+                if sync_value is not None and inspect.isfunction(sync_value):
+                    setattr(self, key, HybridMethodProxy(self, self.__sync_client, value, sync_value))
 
     async def __aexit__(self, *args: Any) -> None:
         # We need to ensure that the sync client is also closed
         self.__sync_client.__exit__(*args)
         return await super().__aexit__(*args)
 
-    @staticmethod
-    def __is_coroutine_function(item: Any) -> TypeIs[Callable[..., Coroutine[Any, Any, Any]]]:
-        return inspect.iscoroutinefunction(item)
-
-    @staticmethod
-    def __is_function(item: Any) -> TypeIs[Callable[..., Any]]:
-        return inspect.isfunction(item)
-
-    def __getattribute__(self, name: str) -> Any:
-        item = super().__getattribute__(name)
-
-        if not self.__is_coroutine_function(item):
-            # Internal function of some sort, want to ignore in case.
-            return item
-
-        sync_item = getattr(self.__sync_client, name)
-        if not self.__is_function(sync_item):
-            # The sync client has a similar name, but it's not a function.
-            # This is likely a property or something else that we don't want to
-            # call.
-            return item
-
-        return HybridMethodProxy(self, self.__sync_client, item, sync_item)
-
 
 @pytest.mark.asyncio
 async def test_hybrid_client():
-    async with ClientHybrid() as client:
-        data = await client.fetch_aes()
-        print(data)
+    hybrid_client = ClientHybrid()
+
+    # Walk through all coroutines in the normal client - ensure that
+    # every coro on the normal is a proxy method on the hybrid client.
+    for key, value in fortnite_api.Client.__dict__.items():
+        if inspect.iscoroutinefunction(value) and not key.startswith('_'):
+            assert hasattr(hybrid_client, key)
+
+            method = getattr(hybrid_client, key)
+            assert isinstance(method, HybridMethodProxy)
