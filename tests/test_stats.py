@@ -31,13 +31,13 @@ import pytest
 
 import fortnite_api
 
+from .client.test_client_hybrid import ClientHybrid
 from .conftest import (
     TEST_INVALID_STAT_ACCOUNT_ID,
     TEST_INVALID_STAT_ACCOUNT_NAME,
     TEST_STAT_ACCOUNT_ID,
     TEST_STAT_ACCOUNT_NAME,
 )
-from .client.test_client_hybrid import ClientHybrid
 
 
 def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:

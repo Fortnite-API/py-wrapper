@@ -24,8 +24,8 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from collections.abc import Coroutine, Callable, Iterable
 import logging
+from collections.abc import Callable, Coroutine, Iterable
 from typing import Any, ParamSpec, TypeAlias, TypeVar
 
 import pytest
@@ -43,7 +43,6 @@ from .cosmetic_utils import (
     test_variant_bean,
     test_variant_lego,
 )
-
 
 P = ParamSpec('P')
 T = TypeVar('T')
