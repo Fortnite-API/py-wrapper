@@ -30,25 +30,25 @@ import aiohttp
 import pytest
 import requests
 
-import fortnite_api as fn_api
+import fortnite_api
 
 
 def test_sync_client_initialization():
-    with requests.Session() as session, fn_api.SyncClient(session=session) as client:
+    with requests.Session() as session, fortnite_api.SyncClient(session=session) as client:
         assert client
 
-    with fn_api.SyncClient() as client:
+    with fortnite_api.SyncClient() as client:
         assert client
 
 
 @pytest.mark.asyncio
-async def test_sync_client_initialization():
-    async with aiohttp.ClientSession() as session, fn_api.Client(session=session) as client:
+async def test_async_client_initialization():
+    async with aiohttp.ClientSession() as session, fortnite_api.Client(session=session) as client:
         assert client
 
     assert session.closed == True, "Session should be closed after client is closed"
 
-    async with fn_api.Client() as client:
+    async with fortnite_api.Client() as client:
         assert client
 
     client_session = client.http.session
@@ -58,7 +58,7 @@ async def test_sync_client_initialization():
 # A test to ensure that all the methods on async and sync clients are the same.
 # The async client has all the main methods, so we'll walk through the async client.
 def test_client_method_equivalence():
-    for method in fn_api.Client.__dict__.values():
+    for method in fortnite_api.Client.__dict__.values():
         try:
             doc = getattr(method, '__doc__')
         except AttributeError:
@@ -66,13 +66,13 @@ def test_client_method_equivalence():
         else:
             if doc and inspect.iscoroutinefunction(method):
                 # This is some documented coroutine function, ensure it's on the sync client
-                assert hasattr(fn_api.SyncClient, method.__name__)
+                assert hasattr(fortnite_api.SyncClient, method.__name__)
 
 
 @pytest.mark.asyncio
-async def test_sync_client_without_content_manager():
+async def test_async_client_without_content_manager():
     session = aiohttp.ClientSession()
-    client = fn_api.Client(session=session)
+    client = fortnite_api.Client(session=session)
     assert client
     assert client.http.session is not None
 
@@ -89,7 +89,7 @@ async def test_sync_client_without_content_manager():
 
 def test_sync_client_without_content_manager():
     session = requests.Session()
-    client = fn_api.SyncClient(session=session)
+    client = fortnite_api.SyncClient(session=session)
     assert client
     assert client.http.session is not None
 

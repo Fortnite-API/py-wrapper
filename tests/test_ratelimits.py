@@ -91,7 +91,7 @@ def sync_client(sync_mock_session: MagicMock) -> SyncHTTPClient:
 
 
 @pytest.mark.asyncio
-async def test_sync_rate_limit_handling(async_client: HTTPClient):
+async def test_async_rate_limit_handling(async_client: HTTPClient):
     # Make a request
     route = Route('GET', 'https://example.com')
     with pytest.raises(RateLimited) as excinfo:
