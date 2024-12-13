@@ -46,7 +46,7 @@ async def test_async_client_initialization():
     async with aiohttp.ClientSession() as session, fn_api.Client(session=session) as client:
         assert client
 
-    assert session.closed == True, "Session should be closed after client is closed"
+    assert session.closed, "Session should be closed after client is closed"
 
     async with fn_api.Client() as client:
         assert client
