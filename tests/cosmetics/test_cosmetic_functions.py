@@ -24,6 +24,10 @@ SOFTWARE.
 
 from __future__ import annotations
 
+from collections.abc import Coroutine, Callable, Iterable
+import logging
+from typing import Any, ParamSpec, TypeAlias, TypeVar
+
 import pytest
 
 import fortnite_api
@@ -34,74 +38,76 @@ from .cosmetic_utils import (
     test_cosmetic_br,
     test_cosmetic_car,
     test_cosmetic_instrument,
-    test_cosmetic_lego_kits,
+    test_cosmetic_lego_kit,
     test_cosmetic_track,
     test_variant_bean,
     test_variant_lego,
 )
 
 
+P = ParamSpec('P')
+T = TypeVar('T')
+AnyCosmetic: TypeAlias = fortnite_api.Cosmetic[Any, Any]
+CoroFunc = Callable[P, Coroutine[Any, Any, T]]
+
+log = logging.getLogger(__name__)
+
+
 @pytest.mark.asyncio
-async def test_fetch_cosmetics_br(api_key: str):
+async def test_fetch_cosmetic_types(api_key: str, response_flags: fortnite_api.ResponseFlags) -> None:
+    # A lot of the cosmetic fetching methods on the client all return TransformerListProxy[CosmeticT].
+    # To encompass all these in a single test, we're going to create a mapping of cosmetic fetcher
+    # to validator function. To give some extra error information, if needed, we'll catch any exceptions
+    # raised from these functions, log them for the report, then re-raise them for pytest to catch.
+
     async with ClientHybrid(api_key=api_key) as client:
-        cosmetics_br = await client.fetch_cosmetics_br()
+        # Pyright can't seem to narrow CosmeticBr[Any] to fortnite_api.Cosmetic[Any, Any], but
+        # Callable[[Any], None] is actually requesting that an instance of AnyCosmetic is passed.
+        METHOD_MAPPING: dict[CoroFunc[..., Iterable[AnyCosmetic]], Callable[[Any], None]] = {
+            client.fetch_cosmetics_br: test_cosmetic_br,
+            client.fetch_cosmetics_cars: test_cosmetic_car,
+            client.fetch_cosmetics_instruments: test_cosmetic_instrument,
+            client.fetch_cosmetics_lego_kits: test_cosmetic_lego_kit,
+            client.fetch_variants_lego: test_variant_lego,
+            client.fetch_variants_beans: test_variant_bean,
+            client.fetch_cosmetics_tracks: test_cosmetic_track,
+        }
 
-    for cosmetic in cosmetics_br:
-        test_cosmetic_br(cosmetic)
-
-
-@pytest.mark.asyncio
-async def test_fetch_cosmetics_cars(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_cars = await client.fetch_cosmetics_cars()
+        for cosmetic_fetcher, validator in METHOD_MAPPING.items():
+            try:
+                cosmetics = await cosmetic_fetcher()
+            except Exception as exc:
+                # For some reason, fetching this has failed. This is most likely an API issue
+                # or something incorrect with the client, as the actual transformation of
+                # DictT to cosmetic object is done in the for loop below.
+                log.error('Failed to fetch cosmetics from method %s.', cosmetic_fetcher.__name__)
+                raise exc
 
-    for cosmetic in cosmetics_cars:
-        test_cosmetic_car(cosmetic)
-
-
-@pytest.mark.asyncio
-async def test_fetch_cosmetics_instruments(api_key: str, response_flags: fortnite_api.ResponseFlags):
-    async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_instruments = await client.fetch_cosmetics_instruments()
-
-    for cosmetic in cosmetics_instruments:
-        test_cosmetic_instrument(cosmetic)
-
-
-@pytest.mark.asyncio
-async def test_fetch_cosmetics_lego_kits(api_key: str, response_flags: fortnite_api.ResponseFlags):
-    async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
-        lego_kits = await client.fetch_cosmetics_lego_kits()
-
-    for kit in lego_kits:
-        test_cosmetic_lego_kits(kit)
-
-
-@pytest.mark.asyncio
-async def test_fetch_variants_lego(api_key: str, response_flags: fortnite_api.ResponseFlags):
-    async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
-        lego_variants = await client.fetch_variants_lego()
-
-    for lego in lego_variants:
-        test_variant_lego(lego)
-
-
-@pytest.mark.asyncio
-async def test_fetch_variants_beans(api_key: str, response_flags: fortnite_api.ResponseFlags):
-    async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
-        beans_variants = await client.fetch_variants_beans()
-
-    for bean in beans_variants:
-        test_variant_bean(bean)
-
-
-@pytest.mark.asyncio
-async def test_fetch_cosmetics_tracks(api_key: str, response_flags: fortnite_api.ResponseFlags):
-    async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
-        cosmetics_tracks = await client.fetch_cosmetics_tracks()
-
-    for cosmetic in cosmetics_tracks:
-        test_cosmetic_track(cosmetic)
+            try:
+                # This is wrapped in a try block due to the actual object transformation, as discussed
+                # above. If it's going to, the initialization of an object is going to fail here. We want
+                # to ensure that this is picked up, if so.
+                for cosmetic in cosmetics:
+                    try:
+                        validator(cosmetic)
+                    except AssertionError:
+                        # We know that the object is initialized okay, but this validator function has failed.
+                        # Ensure that some relevant information is logged alongside this.
+                        log.error(
+                            'Validation for cosmetic %s has failed from fetcher %s.',
+                            cosmetic.__class__.__name__,
+                            cosmetic_fetcher.__name__,
+                        )
+                        raise
+            except AssertionError:
+                # Handled inside the loop already. Simply want to ignore this.
+                raise
+            except Exception:
+                # A cosmetic has failed to initialize or the validator function has thrown some sort of exception.
+                # Either way, this is something that is not expected behavior.
+                log.error('Error from method %s', cosmetic_fetcher.__name__)
+                raise
 
 
 @pytest.mark.asyncio
