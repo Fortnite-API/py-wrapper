@@ -24,23 +24,20 @@ SOFTWARE.
 
 from __future__ import annotations
 
-import fortnite_api
-from ..client.test_client_hybrid import ClientHybrid
-
 import pytest
 
-from ..conftest import (
-    TEST_COSMETIC_ID,
-    TEST_INVALID_COSMETIC_ID,
-)
+import fortnite_api
+
+from ..client.test_client_hybrid import ClientHybrid
+from ..conftest import TEST_COSMETIC_ID, TEST_INVALID_COSMETIC_ID
 from .cosmetic_utils import (
     test_cosmetic_br,
     test_cosmetic_car,
     test_cosmetic_instrument,
     test_cosmetic_lego_kits,
+    test_cosmetic_track,
     test_variant_bean,
     test_variant_lego,
-    test_cosmetic_track,
 )
 
 

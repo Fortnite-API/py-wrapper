@@ -24,15 +24,14 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from collections.abc import Callable
 import datetime
+from collections.abc import Callable
 from typing import Any
 
 import pytest
 
 import fortnite_api as fn_api
 from fortnite_api.http import HTTPClient
-from .cosmetics.cosmetic_utils import test_cosmetic_br, test_cosmetic_car, test_cosmetic_instrument, test_cosmetic_lego_kits
 
 from .conftest import (
     TEST_ACCOUNT_ID,
@@ -42,6 +41,7 @@ from .conftest import (
     TEST_INVALID_PLAYLIST_ID,
     TEST_PLAYLIST_ID,
 )
+from .cosmetics.cosmetic_utils import test_cosmetic_br, test_cosmetic_car, test_cosmetic_instrument, test_cosmetic_lego_kits
 
 
 @pytest.mark.asyncio
