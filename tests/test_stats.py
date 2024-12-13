@@ -79,7 +79,7 @@ def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_br_stats_by_name(api_key: str):
+async def test_sync_fetch_br_stats_by_name(api_key: str):
     async with fortnite_api.Client(api_key=api_key) as client:
         with pytest.raises(fortnite_api.NotFound):
             await client.fetch_br_stats(name=TEST_INVALID_STAT_ACCOUNT_NAME)
@@ -90,7 +90,7 @@ async def test_async_fetch_br_stats_by_name(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_br_stats_by_account_id(api_key: str):
+async def test_sync_fetch_br_stats_by_account_id(api_key: str):
     async with fortnite_api.Client(api_key=api_key) as client:
         with pytest.raises(fortnite_api.NotFound):
             await client.fetch_br_stats(name=TEST_INVALID_STAT_ACCOUNT_ID)

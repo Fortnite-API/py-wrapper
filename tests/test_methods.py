@@ -45,7 +45,7 @@ from .cosmetics.cosmetic_utils import test_cosmetic_br, test_cosmetic_car, test_
 
 
 @pytest.mark.asyncio
-async def test_async_aes(api_key: str):
+async def test_sync_aes(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         aes = await client.fetch_aes()
 
@@ -71,7 +71,7 @@ async def test_async_aes(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_banners(api_key: str):
+async def test_sync_banners(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         banners = await client.fetch_banners()
 
@@ -94,7 +94,7 @@ async def test_async_banners(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_banner_colors(api_key: str):
+async def test_sync_banner_colors(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         banner_colors = await client.fetch_banner_colors()
 
@@ -115,7 +115,7 @@ async def test_async_banner_colors(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_creator_code(api_key: str):
+async def test_sync_creator_code(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         with pytest.raises(fn_api.NotFound):
             await client.fetch_creator_code(name=TEST_INVALID_CREATOR_CODE)
@@ -133,7 +133,7 @@ async def test_async_creator_code(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlist(api_key: str):
+async def test_sync_fetch_playlist(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         playlists = await client.fetch_playlists()
 
@@ -147,7 +147,7 @@ async def test_async_fetch_playlist(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_map(api_key: str):
+async def test_sync_map(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         _map = await client.fetch_map()
 
@@ -248,7 +248,7 @@ def _test_playlist(playlist: fn_api.Playlist[Any]):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlists(api_key: str):
+async def test_sync_fetch_playlists(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         playlists = await client.fetch_playlists()
 
@@ -257,7 +257,7 @@ async def test_async_fetch_playlists(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_playlist_by_id(api_key: str):
+async def test_sync_fetch_playlist_by_id(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         with pytest.raises(fn_api.NotFound):
             await client.fetch_playlist(TEST_INVALID_PLAYLIST_ID)
@@ -268,7 +268,7 @@ async def test_async_fetch_playlist_by_id(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_beta_fetch_new_display_assets(api_key: str):
+async def test_sync_beta_fetch_new_display_assets(api_key: str):
 
     # Ensure you cannot call this without beta=True
     with pytest.raises(fn_api.BetaAccessNotEnabled):
@@ -296,7 +296,7 @@ async def test_async_beta_fetch_new_display_assets(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_beta_fetch_material_instances(api_key: str):
+async def test_sync_beta_fetch_material_instances(api_key: str):
 
     # Ensure you cannot call this without beta=True
     with pytest.raises(fn_api.BetaAccessNotEnabled):
@@ -321,7 +321,7 @@ async def test_async_beta_fetch_material_instances(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_shop(api_key: str):
+async def test_sync_fetch_shop(api_key: str):
     async with fn_api.Client(api_key=api_key) as client:
         shop = await client.fetch_shop()
 

@@ -42,7 +42,7 @@ def test_sync_client_initialization():
 
 
 @pytest.mark.asyncio
-async def test_async_client_initialization():
+async def test_sync_client_initialization():
     async with aiohttp.ClientSession() as session, fn_api.Client(session=session) as client:
         assert client
 
@@ -70,7 +70,7 @@ def test_client_method_equivalence():
 
 
 @pytest.mark.asyncio
-async def test_async_client_without_content_manager():
+async def test_sync_client_without_content_manager():
     session = aiohttp.ClientSession()
     client = fn_api.Client(session=session)
     assert client

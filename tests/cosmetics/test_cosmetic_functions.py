@@ -42,7 +42,7 @@ from .cosmetic_utils import (
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_br(api_key: str):
+async def test_sync_fetch_cosmetics_br(api_key: str):
     async with ClientHybrid(api_key=api_key) as client:
         cosmetics_br = await client.fetch_cosmetics_br()
 
@@ -51,7 +51,7 @@ async def test_async_fetch_cosmetics_br(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_cars(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_cosmetics_cars(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_cars = await client.fetch_cosmetics_cars()
 
@@ -60,7 +60,7 @@ async def test_async_fetch_cosmetics_cars(api_key: str, response_flags: fortnite
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_instruments(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_cosmetics_instruments(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_instruments = await client.fetch_cosmetics_instruments()
 
@@ -69,7 +69,7 @@ async def test_async_fetch_cosmetics_instruments(api_key: str, response_flags: f
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_lego_kits(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_cosmetics_lego_kits(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         lego_kits = await client.fetch_cosmetics_lego_kits()
 
@@ -78,7 +78,7 @@ async def test_async_fetch_cosmetics_lego_kits(api_key: str, response_flags: for
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_variants_lego(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_variants_lego(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         lego_variants = await client.fetch_variants_lego()
 
@@ -87,7 +87,7 @@ async def test_async_fetch_variants_lego(api_key: str, response_flags: fortnite_
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_variants_beans(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_variants_beans(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         beans_variants = await client.fetch_variants_beans()
 
@@ -96,7 +96,7 @@ async def test_async_fetch_variants_beans(api_key: str, response_flags: fortnite
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_tracks(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_cosmetics_tracks(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_tracks = await client.fetch_cosmetics_tracks()
 
@@ -105,7 +105,7 @@ async def test_async_fetch_cosmetics_tracks(api_key: str, response_flags: fortni
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetic_br(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_cosmetic_br(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         with pytest.raises(fortnite_api.NotFound):
             await client.fetch_cosmetic_br(TEST_INVALID_COSMETIC_ID)
@@ -116,7 +116,7 @@ async def test_async_fetch_cosmetic_br(api_key: str, response_flags: fortnite_ap
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_new(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_cosmetics_new(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         new_cosmetics = await client.fetch_cosmetics_new()
 
@@ -137,7 +137,7 @@ async def test_async_fetch_cosmetics_new(api_key: str, response_flags: fortnite_
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_cosmetics_all(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_fetch_cosmetics_all(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         cosmetics_all = await client.fetch_cosmetics_all()
 
@@ -159,7 +159,7 @@ async def test_async_fetch_cosmetics_all(api_key: str, response_flags: fortnite_
 
 
 @pytest.mark.asyncio
-async def test_async_search_cosmetics(api_key: str, response_flags: fortnite_api.ResponseFlags):
+async def test_sync_search_cosmetics(api_key: str, response_flags: fortnite_api.ResponseFlags):
     async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         with pytest.raises(fortnite_api.NotFound):
             await client.search_br_cosmetics(id=TEST_INVALID_COSMETIC_ID)
