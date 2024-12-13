@@ -33,6 +33,7 @@ import pytest
 import fortnite_api
 from fortnite_api.http import HTTPClient
 
+from .client.test_client_hybrid import ClientHybrid
 from .conftest import (
     TEST_ACCOUNT_ID,
     TEST_ACCOUNT_NAME,
@@ -42,7 +43,6 @@ from .conftest import (
     TEST_PLAYLIST_ID,
 )
 from .cosmetics.cosmetic_utils import test_cosmetic_br, test_cosmetic_car, test_cosmetic_instrument, test_cosmetic_lego_kit
-from .client.test_client_hybrid import ClientHybrid
 
 
 @pytest.mark.asyncio
