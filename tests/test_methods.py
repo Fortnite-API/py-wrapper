@@ -30,7 +30,7 @@ from typing import Any
 
 import pytest
 
-import fortnite_api as fn_api
+import fortnite_api
 from fortnite_api.http import HTTPClient
 
 from .conftest import (
@@ -42,17 +42,18 @@ from .conftest import (
     TEST_PLAYLIST_ID,
 )
 from .cosmetics.cosmetic_utils import test_cosmetic_br, test_cosmetic_car, test_cosmetic_instrument, test_cosmetic_lego_kits
+from .client.test_client_hybrid import ClientHybrid
 
 
 @pytest.mark.asyncio
-async def test_sync_aes(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_aes(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         aes = await client.fetch_aes()
 
         # Ensure that the AES can be fetched with BASE64
-        aes_b64 = await client.fetch_aes(key_format=fn_api.KeyFormat.BASE64)
+        aes_b64 = await client.fetch_aes(key_format=fortnite_api.KeyFormat.BASE64)
 
-    assert isinstance(aes, fn_api.Aes)
+    assert isinstance(aes, fortnite_api.Aes)
     assert aes.main_key
     assert aes.build
     assert aes.version
@@ -71,12 +72,12 @@ async def test_sync_aes(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_sync_banners(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_banners(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         banners = await client.fetch_banners()
 
     for banner in banners:
-        assert isinstance(banner, fn_api.Banner)
+        assert isinstance(banner, fortnite_api.Banner)
 
         assert banner.id
         assert banner.name
@@ -94,12 +95,12 @@ async def test_sync_banners(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_sync_banner_colors(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_banner_colors(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         banner_colors = await client.fetch_banner_colors()
 
     for color in banner_colors:
-        assert isinstance(color, fn_api.BannerColor)
+        assert isinstance(color, fortnite_api.BannerColor)
 
         assert color.id
         assert color.color
@@ -115,26 +116,26 @@ async def test_sync_banner_colors(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_sync_creator_code(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
-        with pytest.raises(fn_api.NotFound):
+async def test_creator_code(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
+        with pytest.raises(fortnite_api.NotFound):
             await client.fetch_creator_code(name=TEST_INVALID_CREATOR_CODE)
         creator_code = await client.fetch_creator_code(name=TEST_CREATOR_CODE)
 
-    assert isinstance(creator_code, fn_api.CreatorCode)
+    assert isinstance(creator_code, fortnite_api.CreatorCode)
     assert creator_code.code == TEST_CREATOR_CODE
 
     mock_account_payload = dict(id=TEST_ACCOUNT_ID, name=TEST_ACCOUNT_NAME)
-    assert creator_code.account == fn_api.Account(data=mock_account_payload, http=HTTPClient())
+    assert creator_code.account == fortnite_api.Account(data=mock_account_payload, http=HTTPClient())
 
-    assert creator_code.status is fn_api.CreatorCodeStatus.ACTIVE
+    assert creator_code.status is fortnite_api.CreatorCodeStatus.ACTIVE
     assert creator_code.disabled is False
     assert creator_code.verified is False
 
 
 @pytest.mark.asyncio
-async def test_sync_fetch_playlist(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_fetch_playlist(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         playlists = await client.fetch_playlists()
 
     assert len(playlists), "Playlists should not be empty"
@@ -147,12 +148,12 @@ async def test_sync_fetch_playlist(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_sync_map(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_map(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         _map = await client.fetch_map()
 
-    assert isinstance(_map, fn_api.Map)
-    assert isinstance(_map.images, fn_api.MapImages)
+    assert isinstance(_map, fortnite_api.Map)
+    assert isinstance(_map.images, fortnite_api.MapImages)
 
     assert _map.images.blank
     assert _map.images.pois
@@ -160,70 +161,70 @@ async def test_sync_map(api_key: str):
     assert _map.pois
 
     for poi in _map.pois:
-        assert isinstance(poi, fn_api.POI)
+        assert isinstance(poi, fortnite_api.POI)
         assert poi.id
-        assert isinstance(poi.location, fn_api.POILocation)
+        assert isinstance(poi.location, fortnite_api.POILocation)
 
 
 @pytest.mark.asyncio
 async def test_fetch_news(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+    async with ClientHybrid(api_key=api_key) as client:
         news = await client.fetch_news()
 
-    assert isinstance(news, fn_api.News)
+    assert isinstance(news, fortnite_api.News)
     assert news.to_dict()
 
 
-def _test_game_mode_news(news: fn_api.GameModeNews[Any]):
+def _test_game_mode_news(news: fortnite_api.GameModeNews[Any]):
     assert news.hash
     assert news.date
 
     if news.image:
-        assert isinstance(news.image, fn_api.Asset)
+        assert isinstance(news.image, fortnite_api.Asset)
 
     for motd in news.motds:
-        assert isinstance(motd, fn_api.NewsMotd)
+        assert isinstance(motd, fortnite_api.NewsMotd)
         assert motd.id
         assert motd.title
         assert motd.tab_title
         assert motd.body
 
         assert motd.image
-        assert isinstance(motd.image, fn_api.Asset)
+        assert isinstance(motd.image, fortnite_api.Asset)
 
         assert motd.title_image
-        assert isinstance(motd.title_image, fn_api.Asset)
+        assert isinstance(motd.title_image, fortnite_api.Asset)
 
         assert motd.sorting_priority
 
     for message in news.messages:
-        assert isinstance(message, fn_api.NewsMessage)
+        assert isinstance(message, fortnite_api.NewsMessage)
         assert message.title
         assert message.body
 
-        assert isinstance(message.image, fn_api.Asset)
+        assert isinstance(message.image, fortnite_api.Asset)
 
 
 @pytest.mark.asyncio
 async def test_fetch_news_methods(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+    async with ClientHybrid(api_key=api_key) as client:
         try:
             news_br = await client.fetch_news_br()
-            assert isinstance(news_br, fn_api.GameModeNews)
+            assert isinstance(news_br, fortnite_api.GameModeNews)
             _test_game_mode_news(news_br)
-        except fn_api.NotFound:
+        except fortnite_api.NotFound:
             pass
 
         try:
             news_stw = await client.fetch_news_stw()
-            assert isinstance(news_stw, fn_api.GameModeNews)
+            assert isinstance(news_stw, fortnite_api.GameModeNews)
             _test_game_mode_news(news_stw)
-        except fn_api.NotFound:
+        except fortnite_api.NotFound:
             pass
 
 
-def _test_playlist(playlist: fn_api.Playlist[Any]):
-    assert isinstance(playlist, fn_api.Playlist)
+def _test_playlist(playlist: fortnite_api.Playlist[Any]):
+    assert isinstance(playlist, fortnite_api.Playlist)
     assert playlist.name
     assert playlist.min_players
     assert playlist.max_players
@@ -239,7 +240,7 @@ def _test_playlist(playlist: fn_api.Playlist[Any]):
 
     images = playlist.images
     if images:
-        assert isinstance(images, fn_api.PlaylistImages)
+        assert isinstance(images, fortnite_api.PlaylistImages)
 
     assert playlist.path
     assert playlist.added
@@ -248,8 +249,8 @@ def _test_playlist(playlist: fn_api.Playlist[Any]):
 
 
 @pytest.mark.asyncio
-async def test_sync_fetch_playlists(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_fetch_playlists(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         playlists = await client.fetch_playlists()
 
     for playlist in playlists:
@@ -257,9 +258,9 @@ async def test_sync_fetch_playlists(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_sync_fetch_playlist_by_id(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
-        with pytest.raises(fn_api.NotFound):
+async def test_fetch_playlist_by_id(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
+        with pytest.raises(fortnite_api.NotFound):
             await client.fetch_playlist(TEST_INVALID_PLAYLIST_ID)
         playlist = await client.fetch_playlist(TEST_PLAYLIST_ID)
 
@@ -268,45 +269,45 @@ async def test_sync_fetch_playlist_by_id(api_key: str):
 
 
 @pytest.mark.asyncio
-async def test_sync_beta_fetch_new_display_assets(api_key: str):
+async def test_beta_fetch_new_display_assets(api_key: str):
 
     # Ensure you cannot call this without beta=True
-    with pytest.raises(fn_api.BetaAccessNotEnabled):
-        await fn_api.Client().beta_fetch_new_display_assets()
+    with pytest.raises(fortnite_api.BetaAccessNotEnabled):
+        await ClientHybrid().beta_fetch_new_display_assets()
 
-    async with fn_api.Client(beta=True, api_key=api_key) as client:
+    async with ClientHybrid(beta=True, api_key=api_key) as client:
         new_display_assets = await client.beta_fetch_new_display_assets()
 
     for new_display_asset in new_display_assets:
-        assert isinstance(new_display_asset, fn_api.NewDisplayAsset)
+        assert isinstance(new_display_asset, fortnite_api.NewDisplayAsset)
 
         assert new_display_asset.id
 
         for material_instance in new_display_asset.material_instances:
-            assert isinstance(material_instance, fn_api.MaterialInstance)
+            assert isinstance(material_instance, fortnite_api.MaterialInstance)
 
         for render_image in new_display_asset.render_images:
-            assert isinstance(render_image, fn_api.RenderImage)
+            assert isinstance(render_image, fortnite_api.RenderImage)
 
-            assert isinstance(render_image.product_tag, fn_api.ProductTag)
+            assert isinstance(render_image.product_tag, fortnite_api.ProductTag)
             assert render_image.file_name
-            assert isinstance(render_image.image, fn_api.Asset)
+            assert isinstance(render_image.image, fortnite_api.Asset)
 
         assert new_display_asset == new_display_asset
 
 
 @pytest.mark.asyncio
-async def test_sync_beta_fetch_material_instances(api_key: str):
+async def test_beta_fetch_material_instances(api_key: str):
 
     # Ensure you cannot call this without beta=True
-    with pytest.raises(fn_api.BetaAccessNotEnabled):
-        await fn_api.Client().beta_fetch_material_instances()
+    with pytest.raises(fortnite_api.BetaAccessNotEnabled):
+        await ClientHybrid().beta_fetch_material_instances()
 
-    async with fn_api.Client(beta=True, api_key=api_key) as client:
+    async with ClientHybrid(beta=True, api_key=api_key) as client:
         material_instances = await client.beta_fetch_material_instances()
 
     for instance in material_instances:
-        assert isinstance(instance, fn_api.MaterialInstance)
+        assert isinstance(instance, fortnite_api.MaterialInstance)
 
         assert instance.id
         assert instance.primary_mode
@@ -315,17 +316,17 @@ async def test_sync_beta_fetch_material_instances(api_key: str):
         # Walk through all the images and ensure they are assets
         for name, asset in instance.images.items():
             assert isinstance(name, str)
-            assert isinstance(asset, fn_api.Asset)
+            assert isinstance(asset, fortnite_api.Asset)
 
         assert instance == instance
 
 
 @pytest.mark.asyncio
-async def test_sync_fetch_shop(api_key: str):
-    async with fn_api.Client(api_key=api_key) as client:
+async def test_fetch_shop(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         shop = await client.fetch_shop()
 
-    assert isinstance(shop, fn_api.Shop)
+    assert isinstance(shop, fortnite_api.Shop)
 
     if not shop.entries:
         return
@@ -338,7 +339,7 @@ async def test_sync_fetch_shop(api_key: str):
         for cosmetic in entry:
             assert cosmetic.id
 
-        assert isinstance(entry, fn_api.ShopEntry)
+        assert isinstance(entry, fortnite_api.ShopEntry)
         assert isinstance(entry.regular_price, int)
         assert isinstance(entry.final_price, int)
         assert entry.in_date
@@ -346,13 +347,13 @@ async def test_sync_fetch_shop(api_key: str):
 
         offer_tag = entry.offer_tag
         if offer_tag:
-            assert isinstance(offer_tag, fn_api.ShopEntryOfferTag)
+            assert isinstance(offer_tag, fortnite_api.ShopEntryOfferTag)
             assert offer_tag.id
             assert offer_tag.text
 
         bundle = entry.bundle
         if bundle:
-            assert isinstance(entry.bundle, fn_api.ShopEntryBundle)
+            assert isinstance(entry.bundle, fortnite_api.ShopEntryBundle)
             assert bundle.name
             assert bundle.info
             assert bundle.image
@@ -369,12 +370,12 @@ async def test_sync_fetch_shop(api_key: str):
         assert isinstance(entry.layout_id, str)
 
         tile_size = entry.tile_size
-        assert isinstance(tile_size, fn_api.TileSize)
+        assert isinstance(tile_size, fortnite_api.TileSize)
         assert tile_size.internal == f'Size_{tile_size.width}_x_{tile_size.height}'
 
         layout = entry.layout
         if layout:
-            assert isinstance(layout, fn_api.ShopEntryLayout)
+            assert isinstance(layout, fortnite_api.ShopEntryLayout)
             assert layout.id
             assert layout.name
             assert isinstance(layout.index, int)
@@ -387,23 +388,23 @@ async def test_sync_fetch_shop(api_key: str):
 
         new_display_asset = entry.new_display_asset
         if new_display_asset:
-            assert isinstance(new_display_asset, fn_api.NewDisplayAsset)
+            assert isinstance(new_display_asset, fortnite_api.NewDisplayAsset)
             assert new_display_asset.id
 
             for material_instance in new_display_asset.material_instances:
-                assert isinstance(material_instance, fn_api.MaterialInstance)
+                assert isinstance(material_instance, fortnite_api.MaterialInstance)
 
         colors = entry.colors
         if colors:
-            assert isinstance(colors, fn_api.ShopEntryColors)
+            assert isinstance(colors, fortnite_api.ShopEntryColors)
             assert isinstance(colors.color1, str)
             assert isinstance(colors.color3, str)
 
-        COSMETIC_TYPE_MAPPING: dict[type[fn_api.Cosmetic[Any]], Callable[..., Any]] = {
-            fn_api.CosmeticBr: test_cosmetic_br,
-            fn_api.CosmeticInstrument: test_cosmetic_instrument,
-            fn_api.CosmeticCar: test_cosmetic_car,
-            fn_api.CosmeticLegoKit: test_cosmetic_lego_kits,
+        COSMETIC_TYPE_MAPPING: dict[type[fortnite_api.Cosmetic[Any]], Callable[..., Any]] = {
+            fortnite_api.CosmeticBr: test_cosmetic_br,
+            fortnite_api.CosmeticInstrument: test_cosmetic_instrument,
+            fortnite_api.CosmeticCar: test_cosmetic_car,
+            fortnite_api.CosmeticLegoKit: test_cosmetic_lego_kits,
         }
 
         for cosmetic in entry.br + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:

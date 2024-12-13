@@ -42,7 +42,7 @@ def test_sync_asset_reading():
 
 
 @pytest.mark.asyncio
-async def test_sync_asset_reading():
+async def test_async_asset_reading():
     async with fortnite_api.Client() as client:
 
         mock_asset = fortnite_api.Asset(http=client.http, url=V_BUCK_ICON_URL)
