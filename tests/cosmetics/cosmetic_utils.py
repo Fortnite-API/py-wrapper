@@ -147,7 +147,7 @@ def test_cosmetic_instrument(cosmetic: fortnite_api.CosmeticInstrument[Any]):
         test_cosmetic_series_info(series_info)
 
 
-def test_cosmetic_lego_kits(cosmetic: fortnite_api.CosmeticLegoKit[Any]):
+def test_cosmetic_lego_kit(cosmetic: fortnite_api.CosmeticLegoKit[Any]):
     assert isinstance(cosmetic, fortnite_api.CosmeticLegoKit)
     assert cosmetic.name
 

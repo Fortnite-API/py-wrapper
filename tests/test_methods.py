@@ -41,7 +41,7 @@ from .conftest import (
     TEST_INVALID_PLAYLIST_ID,
     TEST_PLAYLIST_ID,
 )
-from .cosmetics.cosmetic_utils import test_cosmetic_br, test_cosmetic_car, test_cosmetic_instrument, test_cosmetic_lego_kits
+from .cosmetics.cosmetic_utils import test_cosmetic_br, test_cosmetic_car, test_cosmetic_instrument, test_cosmetic_lego_kit
 from .client.test_client_hybrid import ClientHybrid
 
 
@@ -404,7 +404,7 @@ async def test_fetch_shop(api_key: str):
             fortnite_api.CosmeticBr: test_cosmetic_br,
             fortnite_api.CosmeticInstrument: test_cosmetic_instrument,
             fortnite_api.CosmeticCar: test_cosmetic_car,
-            fortnite_api.CosmeticLegoKit: test_cosmetic_lego_kits,
+            fortnite_api.CosmeticLegoKit: test_cosmetic_lego_kit,
         }
 
         for cosmetic in entry.br + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:
