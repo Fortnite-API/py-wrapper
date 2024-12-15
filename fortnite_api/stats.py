@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple
+from typing import TYPE_CHECKING, Any
 
 from .abc import ReconstructAble
 from .account import Account
@@ -35,7 +35,7 @@ from .utils import parse_time
 if TYPE_CHECKING:
     import datetime
 
-__all__: Tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     "BrPlayerStats",
     "BrBattlePass",
     "BrInputs",
@@ -44,7 +44,7 @@ __all__: Tuple[str, ...] = (
 )
 
 
-class BrBattlePass(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class BrBattlePass(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BrBattlePass
 
@@ -59,16 +59,16 @@ class BrBattlePass(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The progress through the current battle pass.
     """
 
-    __slots__: Tuple[str, ...] = ("level", "progress")
+    __slots__: tuple[str, ...] = ("level", "progress")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.level: int = data["level"]
-        self.progress: Optional[int] = data["progress"]
+        self.progress: int | None = data["progress"]
 
 
-class BrGameModeStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class BrGameModeStats(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BrGameModeStats
 
@@ -132,7 +132,7 @@ class BrGameModeStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The date when this stat data was last updated within the Epic Games API.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "score",
         "score_per_min",
         "score_per_match",
@@ -155,7 +155,7 @@ class BrGameModeStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
         "last_modified",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.score: int = data["score"]
@@ -163,12 +163,12 @@ class BrGameModeStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.score_per_match: float = data["scorePerMatch"]
         self.wins: int = data["wins"]
 
-        self.top3: Optional[int] = data.get("top3")
-        self.top5: Optional[int] = data.get("top5")
-        self.top6: Optional[int] = data.get("top6")
-        self.top10: Optional[int] = data.get("top10")
-        self.top12: Optional[int] = data.get("top12")
-        self.top25: Optional[int] = data.get("top25")
+        self.top3: int | None = data.get("top3")
+        self.top5: int | None = data.get("top5")
+        self.top6: int | None = data.get("top6")
+        self.top10: int | None = data.get("top10")
+        self.top12: int | None = data.get("top12")
+        self.top25: int | None = data.get("top25")
 
         self.kills: int = data["kills"]
         self.kills_per_min: float = data["killsPerMin"]
@@ -183,7 +183,7 @@ class BrGameModeStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.last_modified: datetime.datetime = parse_time(data["lastModified"])
 
 
-class BrInputStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class BrInputStats(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BrInputStats
 
@@ -202,25 +202,25 @@ class BrInputStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The player's stats for squad game modes. This is ``None`` if the player has no stats for squad game modes.
     """
 
-    __slots__: Tuple[str, ...] = ("overall", "solo", "duo", "squad")
+    __slots__: tuple[str, ...] = ("overall", "solo", "duo", "squad")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         _overall = data.get("overall")
-        self.overall: Optional[BrGameModeStats[HTTPClientT]] = _overall and BrGameModeStats(data=_overall, http=http)
+        self.overall: BrGameModeStats[HTTPClientT] | None = _overall and BrGameModeStats(data=_overall, http=http)
 
         _solo = data.get("solo")
-        self.solo: Optional[BrGameModeStats[HTTPClientT]] = _solo and BrGameModeStats(data=_solo, http=http)
+        self.solo: BrGameModeStats[HTTPClientT] | None = _solo and BrGameModeStats(data=_solo, http=http)
 
         _duo = data.get("duo")
-        self.duo: Optional[BrGameModeStats[HTTPClientT]] = _duo and BrGameModeStats(data=_duo, http=http)
+        self.duo: BrGameModeStats[HTTPClientT] | None = _duo and BrGameModeStats(data=_duo, http=http)
 
         _squad = data.get("squad")
-        self.squad: Optional[BrGameModeStats[HTTPClientT]] = _squad and BrGameModeStats(data=_squad, http=http)
+        self.squad: BrGameModeStats[HTTPClientT] | None = _squad and BrGameModeStats(data=_squad, http=http)
 
 
-class BrInputs(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class BrInputs(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BrInputs
 
@@ -244,27 +244,27 @@ class BrInputs(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The player's stats for touch input. This is ``None`` if the player has no stats.
     """
 
-    __slots__: Tuple[str, ...] = ("all", "keyboard_mouse", "gamepad", "touch")
+    __slots__: tuple[str, ...] = ("all", "keyboard_mouse", "gamepad", "touch")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         _all = data.get("all")
-        self.all: Optional[BrInputStats[HTTPClientT]] = _all and BrInputStats(data=_all, http=http)
+        self.all: BrInputStats[HTTPClientT] | None = _all and BrInputStats(data=_all, http=http)
 
         _keyboard_mouse = data.get("keyboardMouse")
-        self.keyboard_mouse: Optional[BrInputStats[HTTPClientT]] = _keyboard_mouse and BrInputStats(
+        self.keyboard_mouse: BrInputStats[HTTPClientT] | None = _keyboard_mouse and BrInputStats(
             data=_keyboard_mouse, http=http
         )
 
         _gamepad = data.get("gamepad")
-        self.gamepad: Optional[BrInputStats[HTTPClientT]] = _gamepad and BrInputStats(data=_gamepad, http=http)
+        self.gamepad: BrInputStats[HTTPClientT] | None = _gamepad and BrInputStats(data=_gamepad, http=http)
 
         _touch = data.get("touch")
-        self.touch: Optional[BrInputStats[HTTPClientT]] = _touch and BrInputStats(data=_touch, http=http)
+        self.touch: BrInputStats[HTTPClientT] | None = _touch and BrInputStats(data=_touch, http=http)
 
 
-class BrPlayerStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class BrPlayerStats(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.BrPlayerStats
 
@@ -316,19 +316,19 @@ class BrPlayerStats(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The player's stats for all input types. This is ``None`` if the player has no stats.
     """
 
-    __slots__: Tuple[str, ...] = ("user", "battle_pass", "image", "inputs")
+    __slots__: tuple[str, ...] = ("user", "battle_pass", "image", "inputs")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         _user = data["account"]
         self.user: Account[HTTPClientT] = Account(data=_user, http=http)
 
         _battle_pass = data.get("battlePass")
-        self.battle_pass: Optional[BrBattlePass[HTTPClientT]] = _battle_pass and BrBattlePass(data=_battle_pass, http=http)
+        self.battle_pass: BrBattlePass[HTTPClientT] | None = _battle_pass and BrBattlePass(data=_battle_pass, http=http)
 
         _image = data.get("image")
-        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
+        self.image: Asset[HTTPClientT] | None = _image and Asset(http=http, url=_image)
 
         _inputs = data.get("stats")
-        self.inputs: Optional[BrInputs[HTTPClientT]] = _inputs and BrInputs(data=_inputs, http=http)
+        self.inputs: BrInputs[HTTPClientT] | None = _inputs and BrInputs(data=_inputs, http=http)

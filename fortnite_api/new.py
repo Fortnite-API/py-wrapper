@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, Generic, List, Optional, Tuple, Type
+from typing import Any, Generic
 
 from .abc import ReconstructAble
 from .cosmetics import (
@@ -43,7 +43,7 @@ from .http import HTTPClientT
 from .proxies import TransformerListProxy
 from .utils import get_with_fallback, parse_time
 
-__all__: Tuple[str, ...] = ("NewCosmetic", "NewCosmetics")
+__all__: tuple[str, ...] = ("NewCosmetic", "NewCosmetics")
 
 
 class NewCosmetic(Generic[CosmeticT]):
@@ -90,17 +90,17 @@ class NewCosmetic(Generic[CosmeticT]):
         self,
         *,
         type: CosmeticCategory,
-        hash: Optional[str] = None,
-        last_addition: Optional[datetime.datetime] = None,
-        items: List[CosmeticT],
+        hash: str | None = None,
+        last_addition: datetime.datetime | None = None,
+        items: list[CosmeticT],
     ) -> None:
         self.type: CosmeticCategory = type
-        self.hash: Optional[str] = hash
-        self.last_addition: Optional[datetime.datetime] = last_addition
-        self.items: List[CosmeticT] = items
+        self.hash: str | None = hash
+        self.last_addition: datetime.datetime | None = last_addition
+        self.items: list[CosmeticT] = items
 
 
-class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class NewCosmetics(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewCosmetics
 
@@ -146,7 +146,7 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The new bean cosmetic variants.
     """
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.build: str = data["build"]
@@ -206,12 +206,12 @@ class NewCosmetics(ReconstructAble[Dict[str, Any], HTTPClientT]):
         *,
         cosmetic_type: CosmeticCategory,
         internal_key: str,
-        cosmetic_class: Type[CosmeticT],
+        cosmetic_class: type[CosmeticT],
     ) -> NewCosmetic[CosmeticT]:
-        cosmetic_items: List[Dict[str, Any]] = get_with_fallback(self._items, internal_key, list)
+        cosmetic_items: list[dict[str, Any]] = get_with_fallback(self._items, internal_key, list)
 
         last_addition_str = self._last_additions[internal_key]
-        last_addition: Optional[datetime.datetime] = last_addition_str and parse_time(last_addition_str)
+        last_addition: datetime.datetime | None = last_addition_str and parse_time(last_addition_str)
 
         return NewCosmetic(
             type=cosmetic_type,

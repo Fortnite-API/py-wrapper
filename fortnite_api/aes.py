@@ -26,7 +26,8 @@ from __future__ import annotations
 
 import dataclasses
 import re
-from typing import TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple, Union
+from collections.abc import Generator
+from typing import TYPE_CHECKING, Any
 
 from .abc import ReconstructAble
 from .http import HTTPClientT
@@ -35,7 +36,7 @@ from .utils import parse_time, simple_repr
 if TYPE_CHECKING:
     import datetime
 
-__all__: Tuple[str, ...] = ("Aes", "DynamicKey", "Version")
+__all__: tuple[str, ...] = ("Aes", "DynamicKey", "Version")
 
 VERSION_REGEX: re.Pattern[str] = re.compile(r"(?P<version>[0-9]{2})\.(?P<subversion>[0-9]{2})")
 
@@ -82,13 +83,13 @@ class Version:
     def __str__(self) -> str:
         return f"{self.major}.{self.minor}"
 
-    def __iter__(self) -> Generator[int, None, None]:
+    def __iter__(self) -> Generator[int]:
         yield self.major
         yield self.minor
 
 
 @simple_repr
-class Aes(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class Aes(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Aes
 
@@ -143,7 +144,7 @@ class Aes(ReconstructAble[Dict[str, Any], HTTPClientT]):
         All current dynamic keys
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "main_key",
         "build",
         "version",
@@ -151,20 +152,20 @@ class Aes(ReconstructAble[Dict[str, Any], HTTPClientT]):
         "dynamic_keys",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT):
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT):
         super().__init__(data=data, http=http)
 
-        self.main_key: Optional[str] = data.get("mainKey")
+        self.main_key: str | None = data.get("mainKey")
         self.build: str = data["build"]
 
         # In the case that the API gives us an invalid version, we will set it to None
-        self.version: Optional[Version] = None
+        self.version: Version | None = None
         version_info = VERSION_REGEX.findall(self.build)
         if version_info and len(version_info[0]) == 2:
             major, minor = version_info[0]
             self.version = Version(major=int(major), minor=int(minor))
 
-        self.dynamic_keys: List[DynamicKey[HTTPClientT]] = [
+        self.dynamic_keys: list[DynamicKey[HTTPClientT]] = [
             DynamicKey(data=entry, http=http) for entry in data.get("dynamicKeys", [])
         ]
         self.updated: datetime.datetime = parse_time(data["updated"])
@@ -189,7 +190,7 @@ class Aes(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class DynamicKey(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class DynamicKey(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.DynamicKey
 
@@ -227,9 +228,9 @@ class DynamicKey(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The key.
     """
 
-    __slots__: Tuple[str, ...] = ("pak_filename", "pak_guid", "key")
+    __slots__: tuple[str, ...] = ("pak_filename", "pak_guid", "key")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT):
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT):
         super().__init__(data=data, http=http)
 
         self.pak_filename: str = data["pakFilename"]
@@ -239,7 +240,7 @@ class DynamicKey(ReconstructAble[Dict[str, Any], HTTPClientT]):
     def __hash__(self) -> int:
         return hash((self.pak_filename, self.pak_guid, self.key))
 
-    def __eq__(self, o: Union[object, DynamicKey]) -> bool:
+    def __eq__(self, o: object | DynamicKey) -> bool:
         if not isinstance(o, DynamicKey):
             return False
 

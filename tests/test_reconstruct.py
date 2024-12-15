@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, TypedDict
+from typing import Any, TypedDict
 
 import pytest
 
@@ -43,7 +43,7 @@ from fortnite_api.http import HTTPClient
 
 @pytest.mark.asyncio
 async def test_reconstruct(api_key: str) -> None:
-    methods_to_test: List[str] = [
+    methods_to_test: list[str] = [
         'fetch_cosmetics_all',
         'fetch_cosmetics_br',
         'fetch_cosmetics_cars',
@@ -78,7 +78,7 @@ async def test_reconstruct(api_key: str) -> None:
             # If this item is reconstruct-able, do some basic checks to ensure
             # that the reconstruction is working as expected.
             if isinstance(result, fortnite_api.abc.ReconstructAble):
-                narrowed: fortnite_api.abc.ReconstructAble[Dict[str, Any], HTTPClient] = result
+                narrowed: fortnite_api.abc.ReconstructAble[dict[str, Any], HTTPClient] = result
 
                 # (3) deconstruct the object
                 deconstructed = narrowed.to_dict()

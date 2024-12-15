@@ -24,18 +24,18 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 from .abc import ReconstructAble
 from .asset import Asset
 from .http import HTTPClientT
 from .utils import simple_repr
 
-__all__: Tuple[str, ...] = ('Images',)
+__all__: tuple[str, ...] = ('Images',)
 
 
 @simple_repr
-class Images(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class Images(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Images
 
@@ -58,13 +58,13 @@ class Images(ReconstructAble[Dict[str, Any], HTTPClientT]):
         An icon asset. Typically, this is the main image of the object.
     """
 
-    __slots__: Tuple[str, ...] = ('small_icon', 'icon')
+    __slots__: tuple[str, ...] = ('small_icon', 'icon')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         small_icon = data.get('smallIcon')
-        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
+        self.small_icon: Asset[HTTPClientT] | None = small_icon and Asset(http=http, url=small_icon)
 
         icon = data.get('icon')
-        self.icon: Optional[Asset[HTTPClientT]] = icon and Asset(http=http, url=icon)
+        self.icon: Asset[HTTPClientT] | None = icon and Asset(http=http, url=icon)

@@ -27,9 +27,9 @@ from __future__ import annotations
 import logging
 from collections.abc import Callable, Coroutine, Iterable
 from typing import Any, TypeVar
-from typing_extensions import ParamSpec, TypeAlias
 
 import pytest
+from typing_extensions import ParamSpec, TypeAlias
 
 import fortnite_api
 

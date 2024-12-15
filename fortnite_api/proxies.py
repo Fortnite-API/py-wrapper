@@ -24,16 +24,20 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Callable, Dict, Generic, Iterable, Iterator, List, SupportsIndex, Union, cast, overload
+from collections.abc import Iterable, Iterator
+from typing import TYPE_CHECKING, Callable, Generic, SupportsIndex, cast, overload
 
 from typing_extensions import Self, TypeVar
+
+if TYPE_CHECKING:
+    from typing import Any
 
 T = TypeVar('T')
 K_co = TypeVar('K_co', covariant=True, default='str')
 V_co = TypeVar('V_co', covariant=True, default='Any')
 
 
-class TransformerListProxy(Generic[T, K_co, V_co], List[T]):
+class TransformerListProxy(Generic[T, K_co, V_co], list[T]):
     """
     .. attributetable:: fortnite_api.proxies.TransformerListProxy
 
@@ -52,16 +56,16 @@ class TransformerListProxy(Generic[T, K_co, V_co], List[T]):
     to ensure that the data is always in a consistent state.
     """
 
-    def __init__(self, raw_data: Iterable[Dict[K_co, V_co]], /, transform_data: Callable[[Dict[K_co, V_co]], T]) -> None:
-        self._transform_data: Callable[[Dict[K_co, V_co]], T] = transform_data
-        super().__init__(cast(List[T], raw_data))
+    def __init__(self, raw_data: Iterable[dict[K_co, V_co]], /, transform_data: Callable[[dict[K_co, V_co]], T]) -> None:
+        self._transform_data: Callable[[dict[K_co, V_co]], T] = transform_data
+        super().__init__(cast(list[T], raw_data))
 
     def _transform_at(self, index: SupportsIndex) -> T:
         # Transforms the data at the index.
         data = super().__getitem__(index)
         if isinstance(data, dict):
             # Narrow the type of data to Dict[str, Any]
-            raw_data: Dict[K_co, V_co] = data
+            raw_data: dict[K_co, V_co] = data
             result = self._transform_data(raw_data)
             super().__setitem__(index, result)
         else:
@@ -72,7 +76,7 @@ class TransformerListProxy(Generic[T, K_co, V_co], List[T]):
     def _transform_all(self):
         for index, entry in enumerate(self):
             if isinstance(entry, dict):
-                raw_data: Dict[K_co, V_co] = entry
+                raw_data: dict[K_co, V_co] = entry
                 result = self._transform_data(raw_data)
                 super().__setitem__(index, result)
 
@@ -86,9 +90,9 @@ class TransformerListProxy(Generic[T, K_co, V_co], List[T]):
     def __getitem__(self, index: SupportsIndex) -> T: ...
 
     @overload
-    def __getitem__(self, index: slice) -> List[T]: ...
+    def __getitem__(self, index: slice) -> list[T]: ...
 
-    def __getitem__(self, index: Union[SupportsIndex, slice]) -> Union[List[T], T]:
+    def __getitem__(self, index: SupportsIndex | slice) -> list[T] | T:
         if isinstance(index, slice):
             # This is a slice, so we need to handle each item in the slice and set it to the transformed data.
             # For each index in the slice, transform the data at that index then update the item list
@@ -113,19 +117,19 @@ class TransformerListProxy(Generic[T, K_co, V_co], List[T]):
         return super().__reversed__()
 
     # For all the comparison methods, we need to transform all the data so that the comparison is correct.
-    def __gt__(self, value: List[T]) -> bool:
+    def __gt__(self, value: list[T]) -> bool:
         self._transform_all()
         return super().__gt__(value)
 
-    def __ge__(self, value: List[T]) -> bool:
+    def __ge__(self, value: list[T]) -> bool:
         self._transform_all()
         return super().__ge__(value)
 
-    def __lt__(self, value: List[T]) -> bool:
+    def __lt__(self, value: list[T]) -> bool:
         self._transform_all()
         return super().__lt__(value)
 
-    def __le__(self, value: List[T]) -> bool:
+    def __le__(self, value: list[T]) -> bool:
         self._transform_all()
         return super().__le__(value)
 

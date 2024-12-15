@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 import pytest
 
@@ -33,14 +33,14 @@ from fortnite_api.http import HTTPClient
 
 
 @pytest.fixture
-def sample_account_data() -> Dict[str, Any]:
+def sample_account_data() -> dict[str, Any]:
     return {
         'id': '123',
         'name': 'Test Account',
     }
 
 
-def test_account_initialization(sample_account_data: Dict[str, Any]):
+def test_account_initialization(sample_account_data: dict[str, Any]):
     account = Account(data=sample_account_data, http=HTTPClient())
 
     assert account.id == '123'
@@ -48,13 +48,13 @@ def test_account_initialization(sample_account_data: Dict[str, Any]):
     assert account.to_dict() == sample_account_data
 
 
-def test_account_str(sample_account_data: Dict[str, Any]):
+def test_account_str(sample_account_data: dict[str, Any]):
     account = Account(data=sample_account_data, http=HTTPClient())
 
     assert str(account) == 'Test Account'
 
 
-def test_account_repr(sample_account_data: Dict[str, Any]):
+def test_account_repr(sample_account_data: dict[str, Any]):
     account = Account(data=sample_account_data, http=HTTPClient())
 
     assert repr(account) == "<Account id='123', name='Test Account'>"

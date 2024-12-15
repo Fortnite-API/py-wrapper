@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
@@ -35,10 +35,10 @@ if TYPE_CHECKING:
     import datetime
 
 
-__all__: Tuple[str, ...] = ('PlaylistImages', 'Playlist')
+__all__: tuple[str, ...] = ('PlaylistImages', 'Playlist')
 
 
-class PlaylistImages(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class PlaylistImages(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.PlaylistImages
 
@@ -53,19 +53,19 @@ class PlaylistImages(ReconstructAble[Dict[str, Any], HTTPClientT]):
         A mission icon for the playlist, if any.
     """
 
-    __slots__: Tuple[str, ...] = ('showcase', 'mission_icon')
+    __slots__: tuple[str, ...] = ('showcase', 'mission_icon')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         _showcase = data.get('showcase')
-        self.showcase: Optional[Asset[HTTPClientT]] = _showcase and Asset(url=_showcase, http=http)
+        self.showcase: Asset[HTTPClientT] | None = _showcase and Asset(url=_showcase, http=http)
 
         _mission_icon = data.get('missionIcon')
-        self.mission_icon: Optional[Asset[HTTPClientT]] = _mission_icon and Asset(url=_mission_icon, http=http)
+        self.mission_icon: Asset[HTTPClientT] | None = _mission_icon and Asset(url=_mission_icon, http=http)
 
 
-class Playlist(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class Playlist(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.Playlist
 
@@ -117,7 +117,7 @@ class Playlist(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         The time the playlist was added.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         'id',
         'name',
         'sub_name',
@@ -140,15 +140,15 @@ class Playlist(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         'added',
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
         self.id: str = data['id']
         self.name: str = data['name']
-        self.sub_name: Optional[str] = data.get('subName')
-        self.description: Optional[str] = data.get('description')
+        self.sub_name: str | None = data.get('subName')
+        self.description: str | None = data.get('description')
 
-        self.game_type: Optional[str] = data.get('gameType')  # TODO: Make this into an enum
-        self.rating_type: Optional[str] = data.get('ratingType')
+        self.game_type: str | None = data.get('gameType')  # TODO: Make this into an enum
+        self.rating_type: str | None = data.get('ratingType')
 
         self.min_players: int = data['minPlayers']
         self.max_players: int = data['maxPlayers']
@@ -164,9 +164,9 @@ class Playlist(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.accumulate_to_profile_stats: bool = data['accumulateToProfileStats']
 
         _images = data.get('images')
-        self.images: Optional[PlaylistImages[HTTPClientT]] = _images and PlaylistImages(data=_images, http=http)
+        self.images: PlaylistImages[HTTPClientT] | None = _images and PlaylistImages(data=_images, http=http)
 
-        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
         self.path: str = data['path']
 
         self.added: datetime.datetime = parse_time(data['added'])

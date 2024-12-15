@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
@@ -34,11 +34,11 @@ from .utils import get_with_fallback, parse_time, simple_repr
 if TYPE_CHECKING:
     import datetime
 
-__all__: Tuple[str, ...] = ("News", "GameModeNews", "NewsMotd", "NewsMessage")
+__all__: tuple[str, ...] = ("News", "GameModeNews", "NewsMotd", "NewsMessage")
 
 
 @simple_repr
-class News(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class News(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.News
 
@@ -61,23 +61,23 @@ class News(ReconstructAble[Dict[str, Any], HTTPClientT]):
         A list of Save the World news.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "br",
         "stw",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         _br = data.get("br")
-        self.br: Optional[GameModeNews[HTTPClientT]] = _br and GameModeNews(data=_br, http=http)
+        self.br: GameModeNews[HTTPClientT] | None = _br and GameModeNews(data=_br, http=http)
 
         _stw = data.get("stw")
-        self.stw: Optional[GameModeNews[HTTPClientT]] = _stw and GameModeNews(data=_stw, http=http)
+        self.stw: GameModeNews[HTTPClientT] | None = _stw and GameModeNews(data=_stw, http=http)
 
 
 @simple_repr
-class GameModeNews(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class GameModeNews(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.GameModeNews
 
@@ -106,26 +106,26 @@ class GameModeNews(ReconstructAble[Dict[str, Any], HTTPClientT]):
         A list of messages for the game mode.
     """
 
-    __slots__: Tuple[str, ...] = ("hash", "date", "image", "motds", "messages")
+    __slots__: tuple[str, ...] = ("hash", "date", "image", "motds", "messages")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.hash: str = data["hash"]
         self.date: datetime.datetime = parse_time(data["date"])
 
         _image = data.get("image")
-        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
+        self.image: Asset[HTTPClientT] | None = _image and Asset(http=http, url=_image)
 
         _motds = get_with_fallback(data, "motds", list)
-        self.motds: List[NewsMotd[HTTPClientT]] = [NewsMotd(data=motd, http=http) for motd in _motds]
+        self.motds: list[NewsMotd[HTTPClientT]] = [NewsMotd(data=motd, http=http) for motd in _motds]
 
         _messages = get_with_fallback(data, "messages", list)
-        self.messages: List[NewsMessage[HTTPClientT]] = [NewsMessage(data=message, http=http) for message in _messages]
+        self.messages: list[NewsMessage[HTTPClientT]] = [NewsMessage(data=message, http=http) for message in _messages]
 
 
 @simple_repr
-class NewsMotd(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class NewsMotd(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMotd
 
@@ -159,7 +159,7 @@ class NewsMotd(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         Whether the motd is hidden or not.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "id",
         "title",
         "tab_title",
@@ -170,7 +170,7 @@ class NewsMotd(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         "hidden",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
@@ -186,7 +186,7 @@ class NewsMotd(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class NewsMessage(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class NewsMessage(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewsMessage
 
@@ -213,12 +213,12 @@ class NewsMessage(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The adspace of the message.
     """
 
-    __slots__: Tuple[str, ...] = ("title", "body", "image", "adspace")
+    __slots__: tuple[str, ...] = ("title", "body", "image", "adspace")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.title: str = data["title"]
         self.body: str = data["body"]
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data["image"])
-        self.adspace: Optional[str] = data.get("adspace")
+        self.adspace: str | None = data.get("adspace")

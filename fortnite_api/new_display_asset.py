@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
@@ -32,7 +32,7 @@ from .enums import CosmeticCompatibleMode, ProductTag
 from .http import HTTPClientT
 from .utils import get_with_fallback
 
-__all__: Tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     "RenderImage",
     "MaterialInstanceImages",
     "MaterialInstanceColors",
@@ -41,7 +41,7 @@ __all__: Tuple[str, ...] = (
 )
 
 
-class RenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class RenderImage(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.RenderImage
 
@@ -63,9 +63,9 @@ class RenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The image of the render image.
     """
 
-    __slots__: Tuple[str, ...] = ("product_tag", "file_name", "image")
+    __slots__: tuple[str, ...] = ("product_tag", "file_name", "image")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.product_tag: ProductTag = ProductTag._from_str(data["productTag"])
@@ -73,7 +73,7 @@ class RenderImage(ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.image: Asset[HTTPClientT] = Asset(url=data["image"], http=http)
 
 
-class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
+class MaterialInstanceImages(dict[str, Asset[HTTPClientT]]):
     """
     .. attributetable:: fortnite_api.MaterialInstanceImages
 
@@ -98,20 +98,20 @@ class MaterialInstanceImages(Dict[str, Asset[HTTPClientT]]):
         for the Material instance.
     """
 
-    __slots__: Tuple[str, ...] = ("offer_image", "background")
+    __slots__: tuple[str, ...] = ("offer_image", "background")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         _offer_image = data.get("OfferImage")
-        self.offer_image: Optional[Asset[HTTPClientT]] = _offer_image and Asset(url=_offer_image, http=http)
+        self.offer_image: Asset[HTTPClientT] | None = _offer_image and Asset(url=_offer_image, http=http)
 
         _background = data.get("Background", None)
-        self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
+        self.background: Asset[HTTPClientT] | None = _background and Asset(url=_background, http=http)
 
         # Transform all remaining keys into assets, and pass this along to the dict constructor
         super().__init__({key: Asset(url=value, http=http) for key, value in data.items()})
 
 
-class MaterialInstanceColors(Dict[str, str]):
+class MaterialInstanceColors(dict[str, str]):
     """
     .. attributetable:: fortnite_api.MaterialInstanceColors
 
@@ -132,20 +132,20 @@ class MaterialInstanceColors(Dict[str, str]):
         The fall off color of the Material instance, if any.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "background_color_a",
         "background_color_b",
         "fall_off_color",
     )
 
-    def __init__(self, *, data: Dict[str, Any]) -> None:
-        self.background_color_a: Optional[str] = data.get("Background_Color_A")
-        self.background_color_b: Optional[str] = data.get("Background_Color_B")
-        self.fall_off_color: Optional[str] = data.get("FallOff_Color")
+    def __init__(self, *, data: dict[str, Any]) -> None:
+        self.background_color_a: str | None = data.get("Background_Color_A")
+        self.background_color_b: str | None = data.get("Background_Color_B")
+        self.fall_off_color: str | None = data.get("FallOff_Color")
         super().__init__(data)
 
 
-class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class MaterialInstance(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.MaterialInstance
 
@@ -188,7 +188,7 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
             This is always an empty dict, as there are no flags used at this time.
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         "id",
         "primary_mode",
         "product_tag",
@@ -198,7 +198,7 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         "flags",
     )
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
@@ -208,13 +208,13 @@ class MaterialInstance(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         self.images: MaterialInstanceImages[HTTPClientT] = MaterialInstanceImages(data=data["images"], http=http)
 
         _colors = data.get("colors")
-        self.colors: Optional[MaterialInstanceColors] = _colors and MaterialInstanceColors(data=_colors)
-        self.scalings: Dict[str, Any] = get_with_fallback(data, "scalings", dict)
+        self.colors: MaterialInstanceColors | None = _colors and MaterialInstanceColors(data=_colors)
+        self.scalings: dict[str, Any] = get_with_fallback(data, "scalings", dict)
 
-        self.flags: Dict[str, Any] = get_with_fallback(data, "flags", dict)  # This is always None at this time.
+        self.flags: dict[str, Any] = get_with_fallback(data, "flags", dict)  # This is always None at this time.
 
 
-class NewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
+class NewDisplayAsset(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.NewDisplayAsset
 
@@ -238,16 +238,16 @@ class NewDisplayAsset(Hashable, ReconstructAble[Dict[str, Any], HTTPClientT]):
         to better reflect its usage across the API.
     """
 
-    __slots__: Tuple[str, ...] = ("id", "cosmetic_id", "material_instances", "render_images")
+    __slots__: tuple[str, ...] = ("id", "cosmetic_id", "material_instances", "render_images")
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
-        self.cosmetic_id: Optional[str] = data.get("cosmeticId")
-        self.material_instances: List[MaterialInstance[HTTPClientT]] = [
+        self.cosmetic_id: str | None = data.get("cosmeticId")
+        self.material_instances: list[MaterialInstance[HTTPClientT]] = [
             MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, "materialInstances", list)
         ]
-        self.render_images: List[RenderImage[HTTPClientT]] = [
+        self.render_images: list[RenderImage[HTTPClientT]] = [
             RenderImage(data=instance, http=http) for instance in get_with_fallback(data, "renderImages", list)
         ]
