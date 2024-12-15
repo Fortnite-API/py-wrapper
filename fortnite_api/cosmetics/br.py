@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from ..abc import ReconstructAble
 from ..asset import Asset
@@ -33,7 +33,7 @@ from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time, simple_repr
 from .common import Cosmetic, CosmeticImages, CosmeticRarityInfo, CosmeticSeriesInfo, CosmeticTypeInfo
 
-__all__: Tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     'CosmeticBrSet',
     'CosmeticBrIntroduction',
     'CosmeticBrVariant',
@@ -43,7 +43,7 @@ __all__: Tuple[str, ...] = (
 
 
 @simple_repr
-class CosmeticBrSet(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticBrSet(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrSet
 
@@ -66,18 +66,18 @@ class CosmeticBrSet(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The backend value of this set.
     """
 
-    __slots__: Tuple[str, ...] = ('value', 'text', 'backend_value')
+    __slots__: tuple[str, ...] = ('value', 'text', 'backend_value')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.value: Optional[str] = data.get('value')
+        self.value: str | None = data.get('value')
         self.text: str = data['text']
         self.backend_value: str = data['backendValue']
 
 
 @simple_repr
-class CosmeticBrIntroduction(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticBrIntroduction(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrIntroduction
 
@@ -102,9 +102,9 @@ class CosmeticBrIntroduction(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The backend value of this introduction.
     """
 
-    __slots__: Tuple[str, ...] = ('chapter', 'season', 'text', 'backend_value')
+    __slots__: tuple[str, ...] = ('chapter', 'season', 'text', 'backend_value')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
         self.chapter: int = int(data['chapter'])
         self.season: str = data['season']
@@ -113,7 +113,7 @@ class CosmeticBrIntroduction(ReconstructAble[Dict[str, Any], HTTPClientT]):
 
 
 @simple_repr
-class CosmeticBrVariantOption(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticBrVariantOption(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrVariantOption
 
@@ -138,19 +138,19 @@ class CosmeticBrVariantOption(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The image of the variant option.
     """
 
-    __slots__: Tuple[str, ...] = ('tag', 'name', 'unlock_requirements', 'image')
+    __slots__: tuple[str, ...] = ('tag', 'name', 'unlock_requirements', 'image')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.tag: str = data['tag']
-        self.name: Optional[str] = data.get('name')
-        self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
+        self.name: str | None = data.get('name')
+        self.unlock_requirements: str | None = data.get('unlockRequirements')
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
 
 
 @simple_repr
-class CosmeticBrVariant(ReconstructAble[Dict[str, Any], HTTPClientT]):
+class CosmeticBrVariant(ReconstructAble[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBrVariant
 
@@ -173,21 +173,21 @@ class CosmeticBrVariant(ReconstructAble[Dict[str, Any], HTTPClientT]):
         The options for the variant, if any.
     """
 
-    __slots__: Tuple[str, ...] = ('channel', 'type', 'options')
+    __slots__: tuple[str, ...] = ('channel', 'type', 'options')
 
-    def __init__(self, *, data: Dict[str, Any], http: HTTPClientT) -> None:
+    def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
         self.channel: str = data['channel']
-        self.type: Optional[str] = data.get('type')
+        self.type: str | None = data.get('type')
 
-        self.options: List[CosmeticBrVariantOption[HTTPClientT]] = [
+        self.options: list[CosmeticBrVariantOption[HTTPClientT]] = [
             CosmeticBrVariantOption(data=option, http=http) for option in data['options']
         ]
 
 
 @simple_repr
-class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
+class CosmeticBr(Cosmetic[dict[str, Any], HTTPClientT]):
     """
     .. attributetable:: fortnite_api.CosmeticBr
 
@@ -263,7 +263,7 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
         .. opt-in:: INCLUDE_SHOP_HISTORY
     """
 
-    __slots__: Tuple[str, ...] = (
+    __slots__: tuple[str, ...] = (
         'name',
         'description',
         'exclusive_description',
@@ -292,63 +292,63 @@ class CosmeticBr(Cosmetic[Dict[str, Any], HTTPClientT]):
     def __init__(
         self,
         *,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         http: HTTPClientT,
     ) -> None:
         super().__init__(http=http, data=data)
 
         self.name: str = data['name']
         self.description: str = data['description']
-        self.exclusive_description: Optional[str] = data.get('exclusiveDescription')
-        self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
-        self.custom_exclusive_callout: Optional[str] = data.get('customExclusiveCallout')
+        self.exclusive_description: str | None = data.get('exclusiveDescription')
+        self.unlock_requirements: str | None = data.get('unlockRequirements')
+        self.custom_exclusive_callout: str | None = data.get('customExclusiveCallout')
 
         _type = data.get('type')
-        self.type: Optional[CosmeticTypeInfo[HTTPClientT]] = _type and CosmeticTypeInfo(data=_type, http=http)
+        self.type: CosmeticTypeInfo[HTTPClientT] | None = _type and CosmeticTypeInfo(data=_type, http=http)
 
         rarity = data.get('rarity')
-        self.rarity: Optional[CosmeticRarityInfo[HTTPClientT]] = rarity and CosmeticRarityInfo(data=rarity, http=http)
+        self.rarity: CosmeticRarityInfo[HTTPClientT] | None = rarity and CosmeticRarityInfo(data=rarity, http=http)
 
         series = data.get('series')
-        self.series: Optional[CosmeticSeriesInfo[HTTPClientT]] = series and CosmeticSeriesInfo(http=http, data=series)
+        self.series: CosmeticSeriesInfo[HTTPClientT] | None = series and CosmeticSeriesInfo(http=http, data=series)
 
         _set = data.get('set')
-        self.set: Optional[CosmeticBrSet[HTTPClientT]] = _set and CosmeticBrSet(data=_set, http=http)
+        self.set: CosmeticBrSet[HTTPClientT] | None = _set and CosmeticBrSet(data=_set, http=http)
 
         introduction = data.get('introduction')
-        self.introduction: Optional[CosmeticBrIntroduction[HTTPClientT]] = introduction and CosmeticBrIntroduction(
+        self.introduction: CosmeticBrIntroduction[HTTPClientT] | None = introduction and CosmeticBrIntroduction(
             data=introduction, http=http
         )
 
         images = data.get('images')
-        self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages(http=http, data=images)
+        self.images: CosmeticImages[HTTPClientT] | None = images and CosmeticImages(http=http, data=images)
 
-        variants: List[Dict[str, Any]] = get_with_fallback(data, 'variants', list)
-        self.variants: List[CosmeticBrVariant[HTTPClientT]] = [
+        variants: list[dict[str, Any]] = get_with_fallback(data, 'variants', list)
+        self.variants: list[CosmeticBrVariant[HTTPClientT]] = [
             CosmeticBrVariant(data=variant, http=http) for variant in variants
         ]
 
-        built_in_emote_ids: List[str] = get_with_fallback(data, 'builtInEmoteId', list)
-        self.built_in_emote_ids: List[str] = built_in_emote_ids
+        built_in_emote_ids: list[str] = get_with_fallback(data, 'builtInEmoteId', list)
+        self.built_in_emote_ids: list[str] = built_in_emote_ids
 
-        self.search_tags: List[str] = get_with_fallback(data, 'searchTags', list)
+        self.search_tags: list[str] = get_with_fallback(data, 'searchTags', list)
 
-        self.gameplay_tags: List[str] = get_with_fallback(data, 'gameplayTags', list)
-        self.meta_tags: List[str] = get_with_fallback(data, 'metaTags', list)
+        self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
+        self.meta_tags: list[str] = get_with_fallback(data, 'metaTags', list)
 
-        self.showcase_video_id: Optional[str] = data.get('showcaseVideo')
-        self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId')
-        self.item_preview_hero_path: Optional[str] = data.get('itemPreviewHeroPath')
-        self.display_asset_path: Optional[str] = data.get('displayAssetPath')
-        self.definition_path: Optional[str] = data.get('definitionPath')
-        self.path: Optional[str] = data.get('path')
+        self.showcase_video_id: str | None = data.get('showcaseVideo')
+        self.dynamic_pak_id: str | None = data.get('dynamicPakId')
+        self.item_preview_hero_path: str | None = data.get('itemPreviewHeroPath')
+        self.display_asset_path: str | None = data.get('displayAssetPath')
+        self.definition_path: str | None = data.get('definitionPath')
+        self.path: str | None = data.get('path')
 
-        self.shop_history: List[datetime.datetime] = [
+        self.shop_history: list[datetime.datetime] = [
             parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
         ]
 
     @property
-    def showcase_video_url(self) -> Optional[str]:
+    def showcase_video_url(self) -> str | None:
         """Optional[:class:`str`]: The URL of the YouTube showcase video of the cosmetic, if any."""
         _id = self.showcase_video_id
         if not _id:

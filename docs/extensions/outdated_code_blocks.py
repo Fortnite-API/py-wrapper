@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import ClassVar, List
+from typing import ClassVar
 
 from docutils.nodes import Element, Node, TextElement
 from docutils.parsers.rst import directives
@@ -117,12 +117,12 @@ class OutdatedCodeBlock(CodeBlock):
         'name': directives.unchanged,
     }
 
-    def run(self) -> List[Node]:
+    def run(self) -> list[Node]:
 
         # Create the main node that holds the code block and warning
         root = OutdatedCodeBlockNode()
 
-        code_block: List[Node] = super().run()
+        code_block: list[Node] = super().run()
         root += code_block
 
         # Create the underlying warning node
