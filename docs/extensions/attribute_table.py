@@ -27,8 +27,8 @@ from __future__ import annotations
 import importlib
 import inspect
 import re
-from typing import TYPE_CHECKING, ClassVar, NamedTuple
 from collections.abc import Sequence
+from typing import TYPE_CHECKING, ClassVar, NamedTuple
 
 from docutils import nodes
 from sphinx import addnodes
