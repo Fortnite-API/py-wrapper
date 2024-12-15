@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from ..http import HTTPClientT
 from ..utils import get_with_fallback, parse_time, simple_repr
@@ -78,15 +78,15 @@ class CosmeticLegoKit(Cosmetic[dict[str, Any], HTTPClientT]):
         self.name: str = data['name']
 
         _type = data.get('type')
-        self.type: Optional[CosmeticTypeInfo[HTTPClientT]] = _type and CosmeticTypeInfo(data=_type, http=http)
+        self.type: CosmeticTypeInfo[HTTPClientT] | None = _type and CosmeticTypeInfo(data=_type, http=http)
 
         _series = data.get('series')
-        self.series: Optional[CosmeticSeriesInfo[HTTPClientT]] = _series and CosmeticSeriesInfo(data=_series, http=http)
+        self.series: CosmeticSeriesInfo[HTTPClientT] | None = _series and CosmeticSeriesInfo(data=_series, http=http)
 
         self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
 
         _images = data.get('images')
-        self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=http)
+        self.images: CosmeticImages[HTTPClientT] | None = _images and CosmeticImages(data=_images, http=http)
 
-        self.path: Optional[str] = data.get('path')
+        self.path: str | None = data.get('path')
         self.shop_history = [parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)]

@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Optional
+from typing import Any
 
 from ..abc import ReconstructAble
 from ..asset import Asset
@@ -71,7 +71,7 @@ class CosmeticBrSet(ReconstructAble[dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.value: Optional[str] = data.get('value')
+        self.value: str | None = data.get('value')
         self.text: str = data['text']
         self.backend_value: str = data['backendValue']
 
@@ -144,8 +144,8 @@ class CosmeticBrVariantOption(ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.tag: str = data['tag']
-        self.name: Optional[str] = data.get('name')
-        self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
+        self.name: str | None = data.get('name')
+        self.unlock_requirements: str | None = data.get('unlockRequirements')
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data['image'])
 
 
@@ -179,7 +179,7 @@ class CosmeticBrVariant(ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.channel: str = data['channel']
-        self.type: Optional[str] = data.get('type')
+        self.type: str | None = data.get('type')
 
         self.options: list[CosmeticBrVariantOption[HTTPClientT]] = [
             CosmeticBrVariantOption(data=option, http=http) for option in data['options']
@@ -299,29 +299,29 @@ class CosmeticBr(Cosmetic[dict[str, Any], HTTPClientT]):
 
         self.name: str = data['name']
         self.description: str = data['description']
-        self.exclusive_description: Optional[str] = data.get('exclusiveDescription')
-        self.unlock_requirements: Optional[str] = data.get('unlockRequirements')
-        self.custom_exclusive_callout: Optional[str] = data.get('customExclusiveCallout')
+        self.exclusive_description: str | None = data.get('exclusiveDescription')
+        self.unlock_requirements: str | None = data.get('unlockRequirements')
+        self.custom_exclusive_callout: str | None = data.get('customExclusiveCallout')
 
         _type = data.get('type')
-        self.type: Optional[CosmeticTypeInfo[HTTPClientT]] = _type and CosmeticTypeInfo(data=_type, http=http)
+        self.type: CosmeticTypeInfo[HTTPClientT] | None = _type and CosmeticTypeInfo(data=_type, http=http)
 
         rarity = data.get('rarity')
-        self.rarity: Optional[CosmeticRarityInfo[HTTPClientT]] = rarity and CosmeticRarityInfo(data=rarity, http=http)
+        self.rarity: CosmeticRarityInfo[HTTPClientT] | None = rarity and CosmeticRarityInfo(data=rarity, http=http)
 
         series = data.get('series')
-        self.series: Optional[CosmeticSeriesInfo[HTTPClientT]] = series and CosmeticSeriesInfo(http=http, data=series)
+        self.series: CosmeticSeriesInfo[HTTPClientT] | None = series and CosmeticSeriesInfo(http=http, data=series)
 
         _set = data.get('set')
-        self.set: Optional[CosmeticBrSet[HTTPClientT]] = _set and CosmeticBrSet(data=_set, http=http)
+        self.set: CosmeticBrSet[HTTPClientT] | None = _set and CosmeticBrSet(data=_set, http=http)
 
         introduction = data.get('introduction')
-        self.introduction: Optional[CosmeticBrIntroduction[HTTPClientT]] = introduction and CosmeticBrIntroduction(
+        self.introduction: CosmeticBrIntroduction[HTTPClientT] | None = introduction and CosmeticBrIntroduction(
             data=introduction, http=http
         )
 
         images = data.get('images')
-        self.images: Optional[CosmeticImages[HTTPClientT]] = images and CosmeticImages(http=http, data=images)
+        self.images: CosmeticImages[HTTPClientT] | None = images and CosmeticImages(http=http, data=images)
 
         variants: list[dict[str, Any]] = get_with_fallback(data, 'variants', list)
         self.variants: list[CosmeticBrVariant[HTTPClientT]] = [
@@ -336,19 +336,19 @@ class CosmeticBr(Cosmetic[dict[str, Any], HTTPClientT]):
         self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
         self.meta_tags: list[str] = get_with_fallback(data, 'metaTags', list)
 
-        self.showcase_video_id: Optional[str] = data.get('showcaseVideo')
-        self.dynamic_pak_id: Optional[str] = data.get('dynamicPakId')
-        self.item_preview_hero_path: Optional[str] = data.get('itemPreviewHeroPath')
-        self.display_asset_path: Optional[str] = data.get('displayAssetPath')
-        self.definition_path: Optional[str] = data.get('definitionPath')
-        self.path: Optional[str] = data.get('path')
+        self.showcase_video_id: str | None = data.get('showcaseVideo')
+        self.dynamic_pak_id: str | None = data.get('dynamicPakId')
+        self.item_preview_hero_path: str | None = data.get('itemPreviewHeroPath')
+        self.display_asset_path: str | None = data.get('displayAssetPath')
+        self.definition_path: str | None = data.get('definitionPath')
+        self.path: str | None = data.get('path')
 
         self.shop_history: list[datetime.datetime] = [
             parse_time(time) for time in get_with_fallback(data, 'shopHistory', list)
         ]
 
     @property
-    def showcase_video_url(self) -> Optional[str]:
+    def showcase_video_url(self) -> str | None:
         """Optional[:class:`str`]: The URL of the YouTube showcase video of the cosmetic, if any."""
         _id = self.showcase_video_id
         if not _id:

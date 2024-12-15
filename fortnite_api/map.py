@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 from collections.abc import Generator
-from typing import Any, Optional
+from typing import Any
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
@@ -156,7 +156,7 @@ class POI(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
-        self.name: Optional[str] = data.get("name")
+        self.name: str | None = data.get("name")
         self.location: POILocation[HTTPClientT] = POILocation(data=data["location"], http=http)
 
 
@@ -209,7 +209,7 @@ class POILocation(ReconstructAble[dict[str, Any], HTTPClientT]):
 
     # __iter__ method to allow for easy unpacking of the coordinates
     # and to allow tuple(loc) to work
-    def __iter__(self) -> Generator[float, None, None]:
+    def __iter__(self) -> Generator[float]:
         yield self.x
         yield self.y
         yield self.z

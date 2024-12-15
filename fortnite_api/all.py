@@ -166,7 +166,7 @@ class CosmeticsAll(ReconstructAble[dict[str, Any], HTTPClientT]):
 
         yield from self.lego_kits
 
-    def __len__(self) -> int:
+    def __len__(self):
         return (
             len(self.br)
             + len(self.tracks)

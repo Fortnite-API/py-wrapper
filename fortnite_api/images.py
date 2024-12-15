@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from .abc import ReconstructAble
 from .asset import Asset
@@ -64,7 +64,7 @@ class Images(ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         small_icon = data.get('smallIcon')
-        self.small_icon: Optional[Asset[HTTPClientT]] = small_icon and Asset(http=http, url=small_icon)
+        self.small_icon: Asset[HTTPClientT] | None = small_icon and Asset(http=http, url=small_icon)
 
         icon = data.get('icon')
-        self.icon: Optional[Asset[HTTPClientT]] = icon and Asset(http=http, url=icon)
+        self.icon: Asset[HTTPClientT] | None = icon and Asset(http=http, url=icon)

@@ -89,7 +89,7 @@ async def test_reconstruct(api_key: str) -> None:
                 # (4) check that the original object and the reconstructed object are the same
                 # we can't always use __eq__ because not every object has it implemented
                 assert deconstructed == reconstructed.to_dict()
-                assert type(narrowed) == type(reconstructed)
+                assert type(narrowed) is type(reconstructed)
 
 
 class DummyData(TypedDict):
@@ -121,5 +121,5 @@ def test_dummy_reconstruction() -> None:
     assert dummy == reconstructed
     assert dummy.to_dict() == reconstructed.to_dict()
     assert dummy.to_dict() == deconstructed
-    assert type(dummy) == type(reconstructed)
+    assert type(dummy) is type(reconstructed)
     assert isinstance(reconstructed, DummyReconstruct)

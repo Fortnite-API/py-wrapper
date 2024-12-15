@@ -28,7 +28,7 @@ import importlib
 import inspect
 import re
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, ClassVar, NamedTuple, Optional
+from typing import TYPE_CHECKING, ClassVar, NamedTuple
 
 from docutils import nodes
 from sphinx import addnodes
@@ -207,7 +207,7 @@ def build_lookup_table(env: BuildEnvironment) -> dict[str, list[str]]:
 class TableElement(NamedTuple):
     fullname: str
     label: str
-    badge: Optional[attributetablebadge]
+    badge: attributetablebadge | None
 
 
 def process_attributetable(app: Sphinx, doctree: nodes.Node, fromdocname: str) -> None:

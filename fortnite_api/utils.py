@@ -25,14 +25,10 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import TYPE_CHECKING, Any, Callable, TypeVar, Union
-
-K_co = TypeVar('K_co', bound='Hashable', covariant=True)
-V_co = TypeVar('V_co', covariant=True)
-T = TypeVar('T')
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 if TYPE_CHECKING:
-    from collections.abc import Hashable
+    from typing import Hashable
 
 try:
     import orjson  # type: ignore
@@ -42,6 +38,10 @@ except ImportError:
     import json
 
     _has_orjson: bool = False
+
+K_co = TypeVar('K_co', bound='Hashable', covariant=True)
+V_co = TypeVar('V_co', covariant=True)
+T = TypeVar('T')
 
 __all__: tuple[str, ...] = ('parse_time', 'copy_doc', 'prepend_doc', 'to_json', 'MISSING')
 
@@ -69,12 +69,12 @@ MISSING: Any = _MissingSentinel()
 
 if _has_orjson:
 
-    def to_json(string: Union[str, bytes]) -> dict[Any, Any]:
+    def to_json(string: str | bytes) -> dict[Any, Any]:
         return orjson.loads(string)  # type: ignore
 
 else:
 
-    def to_json(string: Union[str, bytes]) -> dict[Any, Any]:
+    def to_json(string: str | bytes) -> dict[Any, Any]:
         return json.loads(string)  # type: ignore
 
 

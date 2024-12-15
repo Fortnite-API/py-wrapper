@@ -27,14 +27,14 @@ from __future__ import annotations
 import datetime
 import re
 from collections.abc import Generator
-from typing import Any, Optional
+from typing import Any
 
 from typing_extensions import Self
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
 from .cosmetics import Cosmetic, CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
-from .enums import BannerIntensity, try_enum
+from .enums import BannerIntensity
 from .http import HTTPClientT
 from .new_display_asset import NewDisplayAsset
 from .proxies import TransformerListProxy
@@ -74,9 +74,9 @@ class TileSize:
     Parameters
     ----------
     width: :class:`int`
-        The width of the tile.
+        The width of the tile. This value will be -1 if the tile size is invalid.
     height: :class:`int`
-        The height of the tile.
+        The height of the tile. This value will be -1 if the tile size is invalid.
     internal: :class:`str`
         The internal representation of the tile size. This can be the default Epic API value
         in the format ``Size_<width>_x_<height>``.
@@ -84,9 +84,9 @@ class TileSize:
     Attributes
     ----------
     width: :class:`int`
-        The width of the tile. This value will be -1 if the tile size is invalid.
+        The width of the tile.
     height: :class:`int`
-        The height of the tile. This value will be -1 if the tile size is invalid.
+        The height of the tile.
     internal: :class:`str`
         The internal representation of the tile size. This can be the default Epic API value
         in the format ``Size_<width>_x_<height>``.
@@ -115,8 +115,6 @@ class TileSize:
         ``Size_<width>_x_<height>``. It has been exposed in the case that
         the user wants to construct a tile size from a custom value.
 
-        If an invalid value is passed, the tile size defaults to a width and height of -1.
-
         Parameters
         ----------
         value: :class:`str`
@@ -132,7 +130,7 @@ class TileSize:
         if not match:
             # Epic may change the format or messes up the value.
             # In one such case, this value was "ERROR BAD SIZE".
-            raise cls(width=-1, height=-1, internal=value)
+            return cls(width=-1, height=-1, internal=value)
 
         return cls(
             width=int(match.group("width")),
@@ -213,7 +211,7 @@ class ShopEntryBanner(ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.value: str = data["value"]
-        self.intensity: BannerIntensity = try_enum(BannerIntensity, data["intensity"])
+        self.intensity: BannerIntensity = BannerIntensity(data["intensity"])
         self.backend_value: str = data["backendValue"]
 
 
@@ -263,16 +261,16 @@ class ShopEntryLayout(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
 
         self.id: str = data["id"]
         self.name: str = data["name"]
-        self.category: Optional[str] = data.get("category")
+        self.category: str | None = data.get("category")
         self.index: int = data["index"]
         self.rank: int = data["rank"]
         self.show_ineligible_offers: str = data["showIneligibleOffers"]
 
         _background = data.get("background")
-        self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
+        self.background: Asset[HTTPClientT] | None = _background and Asset(url=_background, http=http)
 
         self.use_wide_preview: bool = data.get('useWidePreview', False)
-        self.display_type: Optional[str] = data.get('displayType')
+        self.display_type: str | None = data.get('displayType')
         # Billboards include textureMetadata, stringMetadata and textMetadata
 
 
@@ -300,9 +298,9 @@ class ShopEntryColors(ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.color1: str = data['color1']
-        self.color2: Optional[str] = data.get('color2')
+        self.color2: str | None = data.get('color2')
         self.color3: str = data['color3']
-        self.text_background_color: Optional[str] = data.get('textBackgroundColor')
+        self.text_background_color: str | None = data.get('textBackgroundColor')
 
 
 class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
@@ -429,15 +427,13 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.out_date: datetime.datetime = parse_time(data["outDate"])
 
         _offer_tag = data.get("offerTag")
-        self.offer_tag: Optional[ShopEntryOfferTag[HTTPClientT]] = _offer_tag and ShopEntryOfferTag(
-            data=_offer_tag, http=http
-        )
+        self.offer_tag: ShopEntryOfferTag[HTTPClientT] | None = _offer_tag and ShopEntryOfferTag(data=_offer_tag, http=http)
 
         _bundle = data.get("bundle")
-        self.bundle: Optional[ShopEntryBundle[HTTPClientT]] = _bundle and ShopEntryBundle(data=_bundle, http=http)
+        self.bundle: ShopEntryBundle[HTTPClientT] | None = _bundle and ShopEntryBundle(data=_bundle, http=http)
 
         _banner = data.get("banner")
-        self.banner: Optional[ShopEntryBanner[HTTPClientT]] = _banner and ShopEntryBanner(data=_banner, http=http)
+        self.banner: ShopEntryBanner[HTTPClientT] | None = _banner and ShopEntryBanner(data=_banner, http=http)
 
         self.giftable: bool = data["giftable"]
         self.refundable: bool = data["refundable"]
@@ -445,23 +441,23 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.layout_id: str = data["layoutId"]
 
         _layout = data.get("layout")
-        self.layout: Optional[ShopEntryLayout[HTTPClientT]] = _layout and ShopEntryLayout(data=_layout, http=http)
+        self.layout: ShopEntryLayout[HTTPClientT] | None = _layout and ShopEntryLayout(data=_layout, http=http)
 
         self.dev_name: str = data["devName"]
         self.offer_id: str = data["offerId"]
-        self.display_asset_path: Optional[str] = data.get("displayAssetPath")
+        self.display_asset_path: str | None = data.get("displayAssetPath")
 
         self.tile_size: TileSize = TileSize.from_value(data["tileSize"])
 
-        self.new_display_asset_path: Optional[str] = data.get("newDisplayAssetPath")
+        self.new_display_asset_path: str | None = data.get("newDisplayAssetPath")
 
         _new_display_asset = data.get("newDisplayAsset")
-        self.new_display_asset: Optional[NewDisplayAsset[HTTPClientT]] = _new_display_asset and NewDisplayAsset(
+        self.new_display_asset: NewDisplayAsset[HTTPClientT] | None = _new_display_asset and NewDisplayAsset(
             data=data["newDisplayAsset"], http=http
         )
 
         _colors = data.get("colors")
-        self.colors: Optional[ShopEntryColors[HTTPClientT]] = _colors and ShopEntryColors(data=_colors, http=http)
+        self.colors: ShopEntryColors[HTTPClientT] | None = _colors and ShopEntryColors(data=_colors, http=http)
 
         self.br: list[CosmeticBr[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "brItems", list),

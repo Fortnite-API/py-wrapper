@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
@@ -102,10 +102,10 @@ class MaterialInstanceImages(dict[str, Asset[HTTPClientT]]):
 
     def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         _offer_image = data.get("OfferImage")
-        self.offer_image: Optional[Asset[HTTPClientT]] = _offer_image and Asset(url=_offer_image, http=http)
+        self.offer_image: Asset[HTTPClientT] | None = _offer_image and Asset(url=_offer_image, http=http)
 
         _background = data.get("Background", None)
-        self.background: Optional[Asset[HTTPClientT]] = _background and Asset(url=_background, http=http)
+        self.background: Asset[HTTPClientT] | None = _background and Asset(url=_background, http=http)
 
         # Transform all remaining keys into assets, and pass this along to the dict constructor
         super().__init__({key: Asset(url=value, http=http) for key, value in data.items()})
@@ -139,9 +139,9 @@ class MaterialInstanceColors(dict[str, str]):
     )
 
     def __init__(self, *, data: dict[str, Any]) -> None:
-        self.background_color_a: Optional[str] = data.get("Background_Color_A")
-        self.background_color_b: Optional[str] = data.get("Background_Color_B")
-        self.fall_off_color: Optional[str] = data.get("FallOff_Color")
+        self.background_color_a: str | None = data.get("Background_Color_A")
+        self.background_color_b: str | None = data.get("Background_Color_B")
+        self.fall_off_color: str | None = data.get("FallOff_Color")
         super().__init__(data)
 
 
@@ -208,7 +208,7 @@ class MaterialInstance(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
         self.images: MaterialInstanceImages[HTTPClientT] = MaterialInstanceImages(data=data["images"], http=http)
 
         _colors = data.get("colors")
-        self.colors: Optional[MaterialInstanceColors] = _colors and MaterialInstanceColors(data=_colors)
+        self.colors: MaterialInstanceColors | None = _colors and MaterialInstanceColors(data=_colors)
         self.scalings: dict[str, Any] = get_with_fallback(data, "scalings", dict)
 
         self.flags: dict[str, Any] = get_with_fallback(data, "flags", dict)  # This is always None at this time.
@@ -244,7 +244,7 @@ class NewDisplayAsset(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.id: str = data["id"]
-        self.cosmetic_id: Optional[str] = data.get("cosmeticId")
+        self.cosmetic_id: str | None = data.get("cosmeticId")
         self.material_instances: list[MaterialInstance[HTTPClientT]] = [
             MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, "materialInstances", list)
         ]

@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from .abc import Hashable, ReconstructAble
 from .http import HTTPClientT
@@ -114,7 +114,7 @@ class Banner(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
         self.name: str = data["name"]
         self.dev_name: str = data["devName"]
         self.description: str = data["description"]
-        self.category: Optional[str] = data.get("category")
+        self.category: str | None = data.get("category")
         self.full_usage_rights: bool = data["fullUsageRights"]
 
         self.images: Images[HTTPClientT] = Images(data=data, http=http)
