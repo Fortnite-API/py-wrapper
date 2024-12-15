@@ -4,7 +4,7 @@ name: Docs
 on:
   push:
   pull_request:
-    types: [ opened, reopened, synchronize ]
+    types: [opened, reopened, synchronize]
   workflow_dispatch:
 
 jobs:
