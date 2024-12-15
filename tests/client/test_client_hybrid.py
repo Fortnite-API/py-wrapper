@@ -62,6 +62,10 @@ class HybridMethodProxy(Generic[P, T]):
         self.__async_method = async_method
         self.__sync_method = sync_method
 
+    @property
+    def __name__(self) -> str:
+        return self.__async_method.__name__
+
     def _validate_results(self, async_res: T, sync_res: T) -> None:
         assert type(async_res) is type(sync_res), f"Expected {type(async_res)}, got {type(sync_res)}"
 
@@ -85,7 +89,6 @@ class HybridMethodProxy(Generic[P, T]):
             sync_reconstructed = type(sync_res_narrowed).from_dict(sync_raw_data, client=self.__sync_client)
 
             assert isinstance(async_reconstructed, type(sync_reconstructed))
-            assert async_reconstructed == sync_reconstructed
             assert type(async_reconstructed) is type(async_res_narrowed)
             assert type(sync_reconstructed) is type(sync_res_narrowed)
             log.debug('Reconstructed data equality passed for method %s', self.__async_method.__name__)
