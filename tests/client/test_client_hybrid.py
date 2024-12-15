@@ -117,7 +117,6 @@ class ClientHybrid(fortnite_api.Client):
         kwargs.pop('session', None)
         session = requests.Session()
         self.__sync_client: fortnite_api.SyncClient = fortnite_api.SyncClient(*args, session=session, **kwargs)
-        logging.info('Injecting hybrid methods.')
         self.__inject_hybrid_methods()
 
     def __inject_hybrid_methods(self) -> None:
