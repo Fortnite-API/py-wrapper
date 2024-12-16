@@ -132,7 +132,7 @@ class TileSize:
         if not match:
             # Epic may change the format or messes up the value.
             # In one such case, this value was "ERROR BAD SIZE".
-            raise cls(width=-1, height=-1, internal=value)
+            return cls(width=-1, height=-1, internal=value)
 
         return cls(
             width=int(match.group("width")),
