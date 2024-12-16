@@ -13,6 +13,7 @@ v3.3.1
 Bug Fixes
 ~~~~~~~~~
 - Fixed an issue due a change from Epic that causes :class:`fortnite_api.VariantBean` to not have a :class:`fortnite_api.CustomGender`. It now uses in such case :attr:`fortnite_api.CustomGender.UNKNOWN` instead of raising an exception.
+- Fixed typo within fallback system for :class:`fortnite_api.TileSize` as ``raise`` keyword was used instead of ``return``.
 
 
 .. _vp3p2p0:
