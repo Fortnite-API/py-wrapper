@@ -539,6 +539,8 @@ class CustomGender(Enum):
         A female character.
     MALE
         A male character.
+    UNKNOWN
+        The character's gender is unknown.
     """
 
     FEMALE = 'EFortCustomGender::Female'
