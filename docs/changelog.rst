@@ -5,6 +5,16 @@
 Changelog
 =========
 
+.. _vp3p3p1:
+
+v3.3.1
+-------
+
+Bug Fixes
+~~~~~~~~~
+- Fixed an issue due a change from Epic that causes :class:`fortnite_api.VariantBean` to not have a :class:`fortnite_api.CustomGender`. It now uses in such case :attr:`fortnite_api.CustomGender.UNKNOWN` instead of raising an exception.
+
+
 .. _vp3p2p0:
 
 v3.2.0

@@ -76,7 +76,7 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
 
         self.cosmetic_id: Optional[str] = data.get('cosmetic_id')
         self.name: str = data['name']
-        self.gender: CustomGender = try_enum(CustomGender, data['gender'])
+        self.gender: CustomGender = try_enum(CustomGender, data['gender'] if 'gender' in data else 'Unknown')
         self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplay_tags', list)
 
         _images = data.get('images')

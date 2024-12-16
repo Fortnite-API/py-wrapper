@@ -543,6 +543,7 @@ class CustomGender(Enum):
 
     FEMALE = 'EFortCustomGender::Female'
     MALE = 'EFortCustomGender::Male'
+    UNKNOWN = 'Unknown'
 
 
 class ProductTag(Enum):
