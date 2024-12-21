@@ -37,7 +37,15 @@ from typing_extensions import Concatenate, ParamSpec, Self
 from .aes import Aes
 from .all import CosmeticsAll
 from .banner import Banner, BannerColor
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantBean, VariantLego
+from .cosmetics import (
+    CosmeticBr,
+    CosmeticCar,
+    CosmeticInstrument,
+    CosmeticLegoKit,
+    CosmeticTrack,
+    VariantBean,
+    VariantLego,
+)
 from .creator_code import CreatorCode
 from .enums import *
 from .errors import BetaAccessNotEnabled, BetaUnknownException, MissingAPIKey
