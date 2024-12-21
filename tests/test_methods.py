@@ -177,7 +177,7 @@ async def test_fetch_news(api_key: str):
     assert news.to_dict()
 
 
-def _test_game_mode_news(news: fortnite_api.GameModeNews[Any]):
+def _validate_game_mode_news(news: fortnite_api.GameModeNews[Any]):
     assert news.hash
     assert news.date
 
@@ -213,19 +213,19 @@ async def test_fetch_news_methods(api_key: str):
         try:
             news_br = await client.fetch_news_br()
             assert isinstance(news_br, fortnite_api.GameModeNews)
-            _test_game_mode_news(news_br)
+            _validate_game_mode_news(news_br)
         except fortnite_api.NotFound:
             pass
 
         try:
             news_stw = await client.fetch_news_stw()
             assert isinstance(news_stw, fortnite_api.GameModeNews)
-            _test_game_mode_news(news_stw)
+            _validate_game_mode_news(news_stw)
         except fortnite_api.NotFound:
             pass
 
 
-def _test_playlist(playlist: fortnite_api.Playlist[Any]):
+def _validate_playlist(playlist: fortnite_api.Playlist[Any]):
     assert isinstance(playlist, fortnite_api.Playlist)
     assert playlist.name
     assert playlist.min_players
@@ -256,7 +256,7 @@ async def test_fetch_playlists(api_key: str):
         playlists = await client.fetch_playlists()
 
     for playlist in playlists:
-        _test_playlist(playlist)
+        _validate_playlist(playlist)
 
 
 @pytest.mark.asyncio
@@ -267,7 +267,7 @@ async def test_fetch_playlist_by_id(api_key: str):
         playlist = await client.fetch_playlist(TEST_PLAYLIST_ID)
 
     assert playlist.id == TEST_PLAYLIST_ID
-    _test_playlist(playlist)
+    _validate_playlist(playlist)
 
 
 @pytest.mark.asyncio

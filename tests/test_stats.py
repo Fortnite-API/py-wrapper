@@ -40,7 +40,7 @@ from .conftest import (
 )
 
 
-def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
+def _validate_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
     assert player_stats.user
 
     if player_stats.battle_pass:
@@ -87,7 +87,7 @@ async def test_fetch_br_stats_by_name(api_key: str):
         stats = await client.fetch_br_stats(name=TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
-    _test_stats(stats)
+    _validate_stats(stats)
 
 
 @pytest.mark.asyncio
@@ -98,4 +98,4 @@ async def test_fetch_br_stats_by_account_id(api_key: str):
         stats = await client.fetch_br_stats(account_id=TEST_STAT_ACCOUNT_ID, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
-    _test_stats(stats)
+    _validate_stats(stats)
