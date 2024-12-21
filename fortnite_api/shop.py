@@ -33,7 +33,14 @@ from typing_extensions import Self
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
-from .cosmetics import Cosmetic, CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack
+from .cosmetics import (
+    Cosmetic,
+    CosmeticBr,
+    CosmeticCar,
+    CosmeticInstrument,
+    CosmeticLegoKit,
+    CosmeticTrack,
+)
 from .enums import BannerIntensity
 from .http import HTTPClientT
 from .new_display_asset import NewDisplayAsset
@@ -74,9 +81,9 @@ class TileSize:
     Parameters
     ----------
     width: :class:`int`
-        The width of the tile. This value will be -1 if the tile size is invalid.
+        The width of the tile.
     height: :class:`int`
-        The height of the tile. This value will be -1 if the tile size is invalid.
+        The height of the tile.
     internal: :class:`str`
         The internal representation of the tile size. This can be the default Epic API value
         in the format ``Size_<width>_x_<height>``.
@@ -84,9 +91,9 @@ class TileSize:
     Attributes
     ----------
     width: :class:`int`
-        The width of the tile.
+        The width of the tile. This value will be ``-1`` if the tile size is invalid.
     height: :class:`int`
-        The height of the tile.
+        The height of the tile. This value will be ``-1`` if the tile size is invalid.
     internal: :class:`str`
         The internal representation of the tile size. This can be the default Epic API value
         in the format ``Size_<width>_x_<height>``.
@@ -267,10 +274,12 @@ class ShopEntryLayout(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
         self.show_ineligible_offers: str = data["showIneligibleOffers"]
 
         _background = data.get("background")
-        self.background: Asset[HTTPClientT] | None = _background and Asset(url=_background, http=http)
+        self.background: Asset[HTTPClientT] | None = _background and Asset(
+            url=_background, http=http
+        )
 
-        self.use_wide_preview: bool = data.get('useWidePreview', False)
-        self.display_type: str | None = data.get('displayType')
+        self.use_wide_preview: bool = data.get("useWidePreview", False)
+        self.display_type: str | None = data.get("displayType")
         # Billboards include textureMetadata, stringMetadata and textMetadata
 
 
@@ -297,10 +306,10 @@ class ShopEntryColors(ReconstructAble[dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.color1: str = data['color1']
-        self.color2: str | None = data.get('color2')
-        self.color3: str = data['color3']
-        self.text_background_color: str | None = data.get('textBackgroundColor')
+        self.color1: str = data["color1"]
+        self.color2: str | None = data.get("color2")
+        self.color3: str = data["color3"]
+        self.text_background_color: str | None = data.get("textBackgroundColor")
 
 
 class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
@@ -427,13 +436,19 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.out_date: datetime.datetime = parse_time(data["outDate"])
 
         _offer_tag = data.get("offerTag")
-        self.offer_tag: ShopEntryOfferTag[HTTPClientT] | None = _offer_tag and ShopEntryOfferTag(data=_offer_tag, http=http)
+        self.offer_tag: ShopEntryOfferTag[HTTPClientT] | None = (
+            _offer_tag and ShopEntryOfferTag(data=_offer_tag, http=http)
+        )
 
         _bundle = data.get("bundle")
-        self.bundle: ShopEntryBundle[HTTPClientT] | None = _bundle and ShopEntryBundle(data=_bundle, http=http)
+        self.bundle: ShopEntryBundle[HTTPClientT] | None = _bundle and ShopEntryBundle(
+            data=_bundle, http=http
+        )
 
         _banner = data.get("banner")
-        self.banner: ShopEntryBanner[HTTPClientT] | None = _banner and ShopEntryBanner(data=_banner, http=http)
+        self.banner: ShopEntryBanner[HTTPClientT] | None = _banner and ShopEntryBanner(
+            data=_banner, http=http
+        )
 
         self.giftable: bool = data["giftable"]
         self.refundable: bool = data["refundable"]
@@ -441,7 +456,9 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.layout_id: str = data["layoutId"]
 
         _layout = data.get("layout")
-        self.layout: ShopEntryLayout[HTTPClientT] | None = _layout and ShopEntryLayout(data=_layout, http=http)
+        self.layout: ShopEntryLayout[HTTPClientT] | None = _layout and ShopEntryLayout(
+            data=_layout, http=http
+        )
 
         self.dev_name: str = data["devName"]
         self.offer_id: str = data["offerId"]
@@ -452,12 +469,15 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.new_display_asset_path: str | None = data.get("newDisplayAssetPath")
 
         _new_display_asset = data.get("newDisplayAsset")
-        self.new_display_asset: NewDisplayAsset[HTTPClientT] | None = _new_display_asset and NewDisplayAsset(
-            data=data["newDisplayAsset"], http=http
+        self.new_display_asset: NewDisplayAsset[HTTPClientT] | None = (
+            _new_display_asset
+            and NewDisplayAsset(data=data["newDisplayAsset"], http=http)
         )
 
         _colors = data.get("colors")
-        self.colors: ShopEntryColors[HTTPClientT] | None = _colors and ShopEntryColors(data=_colors, http=http)
+        self.colors: ShopEntryColors[HTTPClientT] | None = _colors and ShopEntryColors(
+            data=_colors, http=http
+        )
 
         self.br: list[CosmeticBr[HTTPClientT]] = TransformerListProxy(
             get_with_fallback(data, "brItems", list),
@@ -496,7 +516,13 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
         yield from self.lego_kits
 
     def __len__(self):
-        return len(self.br) + len(self.tracks) + len(self.instruments) + len(self.cars) + len(self.lego_kits)
+        return (
+            len(self.br)
+            + len(self.tracks)
+            + len(self.instruments)
+            + len(self.cars)
+            + len(self.lego_kits)
+        )
 
 
 class Shop(ReconstructAble[dict[str, Any], HTTPClientT]):
@@ -533,4 +559,6 @@ class Shop(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.vbuck_icon: Asset[HTTPClientT] = Asset(url=data["vbuckIcon"], http=http)
 
         _entries = get_with_fallback(data, "entries", list)
-        self.entries: list[ShopEntry[HTTPClientT]] = [ShopEntry(data=item, http=http) for item in _entries]
+        self.entries: list[ShopEntry[HTTPClientT]] = [
+            ShopEntry(data=item, http=http) for item in _entries
+        ]
