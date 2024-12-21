@@ -43,7 +43,7 @@ from fortnite_api.http import HTTPClient
 
 @pytest.mark.asyncio
 async def test_reconstruct(api_key: str) -> None:
-    methods_to_test: list[str] = [
+    methods_to_validate: list[str] = [
         'fetch_cosmetics_all',
         'fetch_cosmetics_br',
         'fetch_cosmetics_cars',
@@ -65,7 +65,7 @@ async def test_reconstruct(api_key: str) -> None:
     ]
 
     async with fortnite_api.Client(api_key=api_key) as client:
-        for method in methods_to_test:
+        for method in methods_to_validate:
             # (1) grab the method from the client
             coro = getattr(client, method)
 
