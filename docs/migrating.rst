@@ -4,19 +4,19 @@ Migrating
 =========
 
 The change from Version 2.x.x of the library (dubbed as "Version 2" from here on out) to Version 3 is a major change.
-Version 3 of the library has been rebuilt from the ground up to be more intuitive, more consistent, and more powerful. 
+Version 3 of the library has been rebuilt from the ground up to be more intuitive, more consistent, and more powerful.
 
 Don't worry though, we've got you covered. This document will help you migrate your code from the old version of the FortniteAPI Python
 wrapper to the new version, and in doing so, help you understand the changes that have been made.
 
 The documentation is key to understanding the changes that have been made. As you get reworking your code, you must work
-hand in hand with the documentation to ensure a smooth transition. 
+hand in hand with the documentation to ensure a smooth transition.
 
 *Any objects not touched upon in a specific section of this document are mentioned in* :ref:`the Additional Objects section <migrating-additional-objects>` *at the bottom.*
 
-Client 
+Client
 ------
-Before we dive into the specifics of the changes, it's important to understand the general changes that have been made 
+Before we dive into the specifics of the changes, it's important to understand the general changes that have been made
 to the client. The client is your main interface between your code and the Fortnite API. It is the single, most important
 object in this library. In Version 2, the client held all available endpoints in specific ``namespaces``. For example,
 
@@ -34,7 +34,7 @@ object in this library. In Version 2, the client held all available endpoints in
 The namespaces approach created obtuse code that was difficult to maintain, type-hint, and understand.
 
 In Version 3, however, the client now holds all available endpoints as direct methods.
-So for example, after creating an instance of the client, you simply call the methods directly on the client itself: 
+So for example, after creating an instance of the client, you simply call the methods directly on the client itself:
 
 .. code-block:: python3
 
@@ -46,16 +46,16 @@ So for example, after creating an instance of the client, you simply call the me
         # Method to fetch all playlists
         client.fetch_playlists()
 
-Notice the ``with`` statement? We'll touch on that in :ref:`creating-the-client`. 
+Notice the ``with`` statement? We'll touch on that in :ref:`creating-the-client`.
 
 The biggest key takeaway here is that
 the client now holds all available endpoints as direct methods. This makes the library more intuitive to use, and easier to maintain.
 
 Async and Sync Specific Classes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In Version 2, you could specify whether you wanted to use the client in an async or sync manner by passing a 
+In Version 2, you could specify whether you wanted to use the client in an async or sync manner by passing a
 ``run_async`` parameter to the client. In Version 3, the :class:`fortnite_api.Client` client only has async
-functions. Don't worry though, all synchronous functionality has been extended into the 
+functions. Don't worry though, all synchronous functionality has been extended into the
 :class:`fortnite_api.SyncClient` class with exactly the same interface as its async counterpart.
 
 .. _creating-the-client:
@@ -75,8 +75,8 @@ To create an async client, you use the :class:`fortnite_api.Client` class. This 
 
     async def main():
         async with fortnite_api.Client(api_key='') as client:
-            ... 
-    
+            ...
+
     asyncio.run(main())
 
 Sync client
@@ -105,7 +105,7 @@ Thus, when creating and using an instance of the client, it is recommended that 
     async with fortnite_api.Client(api_key='') as client: # Session created
         print('Client session is open for requests.')
         ... # Some operations with the client
-        
+
     print('Session is closed automatically.')
 
 .. code-block:: python3
@@ -116,7 +116,7 @@ Thus, when creating and using an instance of the client, it is recommended that 
 
     print('Session is closed automatically.')
 
-Although it is recommended you use the built in context managers, there may be a situation in which it is not possible. Don't worry, you are free to use both clients without the context manager if you choose. In that case, however, 
+Although it is recommended you use the built in context managers, there may be a situation in which it is not possible. Don't worry, you are free to use both clients without the context manager if you choose. In that case, however,
 you are in the driver's seat, and must be in charge of managing the HTTP session, ie. close the session when you're done with it.
 
 Async client without context manager
@@ -129,9 +129,9 @@ When using the async client without the context manager, you must pass the sessi
 
     async def main():
         session = aiohttp.ClientSession()
-        client = fortnite_api.Client(api_key='', session=session)    
+        client = fortnite_api.Client(api_key='', session=session)
         ...
-        
+
         await session.close()
 
     asyncio.run(main())
@@ -145,7 +145,7 @@ When using the sync client without the context manager, you must pass the sessio
     import requests
 
     session = requests.Session()
-    client = fortnite_api.SyncClient(api_key='', session=session)    
+    client = fortnite_api.SyncClient(api_key='', session=session)
     ...
 
     session.close()
@@ -153,7 +153,7 @@ When using the sync client without the context manager, you must pass the sessio
 Client Parameters
 ~~~~~~~~~~~~~~~~~
 In Version 3, the parameters that can be passed to a client have been given a refresh. Let's walk through the changes
-that have been made for both the async and sync clients, what they mean, and how they affect you. Note that all the 
+that have been made for both the async and sync clients, what they mean, and how they affect you. Note that all the
 parameters, except for the ``session`` parameter, are the same on both clients. We'll discuss the ``session`` parameter
 separately for both clients in the next section.
 
@@ -163,9 +163,9 @@ separately for both clients in the next section.
     *   - Parameter
         - Description
     *   - ``api_key``
-        - The API key to use for requests to the Fortnite API. This is not a required parameter for most endpoints however, it is required to use any stats endpoints. This is the same as in Version 2. 
+        - The API key to use for requests to the Fortnite API. This is not a required parameter for most endpoints however, it is required to use any stats endpoints. This is the same as in Version 2.
     *   - ``default_language``
-        - The client now boasts a default language parameter. For many endpoints in the Fortnite API, you can specify a language parameter to denote the language you want the response to be in. This parameter allows you to set a default language for all requests made by the client, for endpoints that support it, so that you don't have to specify it every time you make a request. The default language is :attr:`~fortnite_api.GameLanguage.ENGLISH` (``en``). 
+        - The client now boasts a default language parameter. For many endpoints in the Fortnite API, you can specify a language parameter to denote the language you want the response to be in. This parameter allows you to set a default language for all requests made by the client, for endpoints that support it, so that you don't have to specify it every time you make a request. The default language is :attr:`~fortnite_api.GameLanguage.ENGLISH` (``en``).
     *   - ``session``
         - The session parameter accepts an HTTP session into the client. By default this is an optional parameter. This parameter comes in useful if you want to manage a session yourself. In that case, it is a required parameter. This is different in the :class:`fortnite_api.Client` and :class:`fortnite_api.SyncClient` - so what is the difference? Below will discuss the differences between the two clients' initialization parameters.
     *   - ``beta``
@@ -206,13 +206,13 @@ See the documentation for these parameters in :class:`fortnite_api.SyncClient`.
 
 End of Client Introduction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-Welcome to the end of the introduction to the new Version 3 changes. You now have a solid understanding of the changes that have been made to the client, and how to create and use the client. The next sections will dive into the specifics of the changes that have been made to the library. Below is more of the "nitty gritty" of the changes that have been made, and choose to focus more on method renaming, object renaming, new objects, and any other small details that differ from Version 2 of the library.  
+Welcome to the end of the introduction to the new Version 3 changes. You now have a solid understanding of the changes that have been made to the client, and how to create and use the client. The next sections will dive into the specifics of the changes that have been made to the library. Below is more of the "nitty gritty" of the changes that have been made, and choose to focus more on method renaming, object renaming, new objects, and any other small details that differ from Version 2 of the library.
 
 It is recommended to read through the entire document to get a full understanding of the changes that have been made. However, if you are looking for a specific section, you can use the table of contents below to navigate to that section.
 
 Cosmetics
 ---------
-One of the biggest elements of the library, Fortnite Cosmetics. These endpoints, classes, and 
+One of the biggest elements of the library, Fortnite Cosmetics. These endpoints, classes, and
 methods have been refactored to be more consistent, more intuitive, and more powerful. Let's dive into the specifics of the changes that have been made.
 
 Cosmetic Objects
@@ -220,12 +220,12 @@ Cosmetic Objects
 The naming convention for cosmetic objects have been refactored. Anything related to cosmetics
 has been prefixed with ``CosmeticX``. A complete mapping of this change is as follows:
 
-.. list-table:: 
+.. list-table::
     :header-rows: 1
 
     *   - Old Name
         - New Name
-    *   - ``Cosmetic`` 
+    *   - ``Cosmetic``
         - :class:`fortnite_api.Cosmetic`
     *   - ``BrCosmetic``
         - :class:`fortnite_api.CosmeticBr`
@@ -264,8 +264,8 @@ This may seem like a lot, but don't worry, the documentation has got you covered
 
 Fetching Cosmetics
 ~~~~~~~~~~~~~~~~~~~
-Version 2 previously held all cosmetic endpoints under the ``client.cosmetics`` namespace. 
-In Version 3, this is not the case. Instead, all cosmetic endpoints, as well as all endpoints, are now methods of 
+Version 2 previously held all cosmetic endpoints under the ``client.cosmetics`` namespace.
+In Version 3, this is not the case. Instead, all cosmetic endpoints, as well as all endpoints, are now methods of
 the client itself. This means that to fetch cosmetics, you no longer do:
 
 .. outdated-code-block:: python3
@@ -285,19 +285,19 @@ But rather, you do:
     >>> <fortnite_api.CosmeticsAll ...>
 
 This change has been made to ensure a consistent naming convention between all types of endpoints,
-and to make the library more intuitive to use. 
+and to make the library more intuitive to use.
 
 Fetching cosmetics method changes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 A complete mapping of the old methods and their new counterparts
 are as follows:
 
-.. list-table:: 
+.. list-table::
     :header-rows: 1
 
     *   - Old Method
         - New Method
-    *   - ``client.cosmetics.fetch()`` 
+    *   - ``client.cosmetics.fetch()``
         - :meth:`fortnite_api.Client.fetch_cosmetics_all`
     *   - ``client.cosmetics.fetch_br()``
         - :meth:`fortnite_api.Client.fetch_cosmetics_br`
@@ -320,7 +320,7 @@ are as follows:
     *   - ``client.cosmetics.search_first()``
         - :meth:`fortnite_api.Client.search_br_cosmetics`
 
-Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncClient` client instead.
 
 
@@ -328,7 +328,7 @@ Playlists
 ---------
 Playlist Objects
 ~~~~~~~~~~~~~~~~
-In Version 3, playlist objects remain mostly the same as they were in Version 2. A mapping of the old playlist 
+In Version 3, playlist objects remain mostly the same as they were in Version 2. A mapping of the old playlist
 objects to the new playlist objects is as follows:
 
 .. list-table::
@@ -346,7 +346,7 @@ Additionally, a new playlist object has been added to the library:
 
 Fetching Playlists
 ~~~~~~~~~~~~~~~~~~
-In Version 2, all playlist endpoints were contained under the ``client.playlist`` namespace. 
+In Version 2, all playlist endpoints were contained under the ``client.playlist`` namespace.
 In Version 3, this is not the case. Rather, the playlist endpoints are now methods of the client itself.
 Previously, you could fetch the playlists using,
 
@@ -387,7 +387,7 @@ Shop
 ----
 Shop Objects
 ~~~~~~~~~~~~
-Although the names of shop objects have changed, a majority of the shop functionality remains the same. A mapping of the old 
+Although the names of shop objects have changed, a majority of the shop functionality remains the same. A mapping of the old
 shop objects to the new shop objects is as follows:
 
 .. list-table::
@@ -429,7 +429,7 @@ shop objects to the new shop objects is as follows:
         - Depreciated.
     *   - ``BrShopMaterialInstance``
         - Depreciated.
-    
+
 As you can see, the `BrShop` objects have been depreciated in Version 3. This is because that endpoint has been depreciated. The current implementation shows the shop as a whole, rather than specifically for Battle Royale.
 
 Fetching Shop Data
@@ -443,7 +443,7 @@ In Version 3, the shop data is longer fetched using the ``client.shop`` namespac
     print(shop)
     >>> <fortnite_api.Shop ...>
 
-This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client. 
+This approach, however, is no longer valid in Version 3. Instead, you should use direct methods on the client.
 
 .. code-block:: python3
 
@@ -525,15 +525,15 @@ A complete mapping of the old methods and their new counterparts are as follows:
 Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncClient` client instead.
 
-News 
+News
 ----
-News Objects 
+News Objects
 ~~~~~~~~~~~~
 News objects remain the same in Version 3, with no significant changes made to them. A mapping of the old news objects to the new news objects is as follows:
 
 .. list-table::
     :header-rows: 1
-    
+
     *   - Old Name
         - New Name
     *   - ``News``
@@ -582,9 +582,9 @@ A complete mapping of the old methods and their new counterparts are as follows:
 Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncClient` client instead.
 
-Creator Code 
+Creator Code
 ------------
-Creator Code Objects 
+Creator Code Objects
 ~~~~~~~~~~~~~~~~~~~~
 The Creator Code objects are the same in Version 3 as they were in Version 2. A mapping of the old Creator Code objects to the new Creator Code objects is as follows:
 
@@ -652,7 +652,7 @@ For more information on exceptions, they are all listed in the :ref:`exceptions 
 
 BR Stats
 --------
-BR Stat Objects 
+BR Stat Objects
 ~~~~~~~~~~~~~~~~
 The objects for BR stats remain the same in Version 3 as they were in Version 2. A mapping of the old BR stat objects to the new BR stat objects is as follows:
 
@@ -705,12 +705,12 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - ``client.stats.fetch_by_id()``
         - Moved to the :meth:`fortnite_api.Client.fetch_br_stats` with a ``account_id`` parameter.
 
-Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncClient` client instead.
 
-Banners 
+Banners
 -------
-Banner Objects 
+Banner Objects
 ~~~~~~~~~~~~~~
 A majority of the Banner objects in Version 3 are the same as they were in Version 2. A mapping of the old Banner objects to the new Banner objects is as follows:
 
@@ -767,12 +767,12 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - ``client.banner.fetch_colors()``
         - :meth:`fortnite_api.Client.fetch_banner_colors`
 
-Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncClient` client instead.
 
-Map 
+Map
 ----
-Map Objects 
+Map Objects
 ~~~~~~~~~~~
 The Map Objects have received a facelift in Version 3. A mapping of the old Map objects to the new Map objects is as follows:
 
@@ -787,7 +787,7 @@ The Map Objects have received a facelift in Version 3. A mapping of the old Map 
         - :class:`fortnite_api.POI`
     *   - ``POILocation``
         - :class:`fortnite_api.POILocation`
-    
+
 There is a new object relating to maps. This is,
 
 - :class:`fortnite_api.MapImages`: Represents the image representation of the map. This is what you see when you open the map in game. It holds both a blank image and one that has the :class:`~fortnite_api.POI` locations named on it.
@@ -823,7 +823,7 @@ A complete mapping of the old methods and their new counterparts are as follows:
     *   - ``client.map.fetch()``
         - :meth:`fortnite_api.Client.fetch_map`
 
-Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and 
+Of course, the same applies to the SyncClient client. The methods are the same, but they are synchronous and
 under the :class:`fortnite_api.SyncClient` client instead.
 
 
@@ -890,9 +890,7 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.TimeWindow`: An enum that represents the time window for which to fetch BR stats. This is used as a parameter when fetching BR stats.
 
-- :class:`fortnite_api.StatsImageType`: An enum that represents which type of battle royale statistics image type should be returned from the API when fetching BR stats. This is used as a parameter when fetching BR stats. 
-
-- :class:`fortnite_api.CreatorCodeStatus`: An enum that represents if a creator code is active or not. This is used in a :class:`~fortnite_api.CreatorCode` object.
+- :class:`fortnite_api.StatsImageType`: An enum that represents which type of battle royale statistics image type should be returned from the API when fetching BR stats. This is used as a parameter when fetching BR stats.
 
 - :class:`fortnite_api.BannerIntensity`: An enum that represents the intensity of a banner color. This is used in the :class:`~fortnite_api.ShopEntryBanner` class to represent the intensity of a banner color.
 
@@ -902,7 +900,7 @@ work with the library and upgrade from Version 2. Every object not already menti
 
 - :class:`fortnite_api.MaterialInstance`: Represents a material instance in Fortnite. If you do not know what a material instance is, check the documentation for the object in the library. This is used when fetching material instances manually, or sometimes given in the :class:`~fortnite_api.NewDisplayAsset` object from the shop.
 
-- :class:`fortnite_api.MaterialInstanceImages`: A special class that represents the images of a material instance. It is given from the :class:`~fortnite_api.MaterialInstance` class. 
+- :class:`fortnite_api.MaterialInstanceImages`: A special class that represents the images of a material instance. It is given from the :class:`~fortnite_api.MaterialInstance` class.
 
 - :class:`fortnite_api.MaterialInstanceColors`: A class that holds the background gradient color of a material instance. This is commonly used to create a preview for the material instance in the shop. This is served from the :class:`~fortnite_api.MaterialInstance` object.
 
