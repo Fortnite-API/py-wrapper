@@ -21,20 +21,28 @@ Many tests in the main `/tests` directory are generic-related object-related tes
 
 ### Edge Case Library Tests
 
+Due to the library's complexity, especially considering that it fully supports both `async` and `sync` functionality,
+many edge cases are tested. Mainly, these tests are related to the `Client` and `SyncClient` classes, and the methods
+defined on them.
+
 #### Definition and Tests for the Hybrid Client
 
 ##### Test Client Hybrid: `test_client_hybrid.py`
 
-The tests define a custom `ClientHybrid` class (in `./client/test_client_hybrid.py`). This class wraps a `Client` to act as an intermediatory between a requested API call and the actual method. All tests that make API calls will import the `ClientHybrid`.
+The tests define a custom `ClientHybrid` class (in `./client/test_client_hybrid.py`). This class wraps a `Client` to act as an intermediatory between a requested API call and the actual method. When an API call is requested, the `ClientHybrid` will call **both** the async `Client` version and the `SyncClient` version of the method. The results are then compared to ensure that they are the same.
+
+Thus, all tests that make API calls will import and use the `ClientHybrid`.
 
 As an example, consider the user requesting to call `fetch_aes()` using the `ClientHybrid`:
 
+- The `ClientHybrid` class is initialized as a context manager, the same as you would with a `Client`.
+- The `fetch_aes()` method is called on the `ClientHybrid`.
 - The sync method of `fetch_aes()` is called on an internally held `SyncClient` class.
 - The async method of `fetch_aes()` is called on the `Client` itself.
 - The result, if reconstructable or comparable, is checked to ensure that both returned objects are the same.
 - The result of the async method call is returned as the final value.
 
-This approach, although "blocking" in nature, ensures that the results from both the `Client` and `SyncClient` are the same.
+This approach, although loop blocking in nature, ensures that the results from both the `Client` and `SyncClient` are the same.
 
 ##### Test Client: `test_client.py`
 
