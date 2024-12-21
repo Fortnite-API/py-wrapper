@@ -2,6 +2,7 @@
 MIT License
 
 Copyright (c) 2019-present Luc1412
+Portions of this code are Copyright (c) 2015-present Rapptz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +25,179 @@ SOFTWARE.
 
 from __future__ import annotations
 
-import enum
+import types
+from collections.abc import Iterator, Mapping
+from typing import TYPE_CHECKING, Any, ClassVar, NamedTuple, TypeVar
 
 from typing_extensions import Self
 
+__all__: tuple[str, ...] = (
+    "KeyFormat",
+    "GameLanguage",
+    "MatchMethod",
+    "CosmeticCategory",
+    "CosmeticRarity",
+    "CosmeticType",
+    "AccountType",
+    "TimeWindow",
+    "StatsImageType",
+    "CosmeticCompatibleMode",
+    "BannerIntensity",
+    "CustomGender",
+    "ProductTag",
+)
 
-class KeyFormat(enum.Enum):
+
+E = TypeVar("E", bound="Enum")
+OldValue = NewValue = Any
+
+
+def _create_value_cls(name: str, comparable: bool) -> type[NewValue]:
+    class _EnumValue(NamedTuple):
+        # Denotes an internal marker used to create the value class. The definition
+        # of this must be localized in this function because its methods
+        # are changed multiple times at runtime. This is exposed outside of this
+        # function as a type "NewValue", which denotes the type of the value class.
+        name: str
+        value: Any
+
+    cls = _EnumValue
+    cls.__name__ = "_EnumValue_" + name
+    cls.__repr__ = lambda self: f"<{name}.{self.name}: {self.value!r}>"
+    cls.__str__ = lambda self: f"{name}.{self.name}"
+    if comparable:
+        cls.__le__ = (
+            lambda self, other: isinstance(other, self.__class__)
+            and self.value <= other.value
+        )
+        cls.__ge__ = (
+            lambda self, other: isinstance(other, self.__class__)
+            and self.value >= other.value
+        )
+        cls.__lt__ = (
+            lambda self, other: isinstance(other, self.__class__)
+            and self.value < other.value
+        )
+        cls.__gt__ = (
+            lambda self, other: isinstance(other, self.__class__)
+            and self.value > other.value
+        )
+
+    return cls
+
+
+def _is_descriptor(obj: type[object]) -> bool:
+    return (
+        hasattr(obj, "__get__") or hasattr(obj, "__set__") or hasattr(obj, "__delete__")
+    )
+
+
+class EnumMeta(type):
+    def __new__(
+        cls,
+        name: str,
+        bases: tuple[type, ...],
+        attrs: dict[str, Any],
+        *,
+        comparable: bool = False,
+    ) -> EnumMeta:
+        value_mapping: dict[OldValue, NewValue] = {}
+        member_mapping: dict[str, NewValue] = {}
+        member_names: list[str] = []
+
+        value_cls = _create_value_cls(name, comparable)
+        for key, value in list(attrs.items()):
+            is_descriptor = _is_descriptor(value)
+            if key[0] == "_" and not is_descriptor:
+                continue
+
+            # Special case classmethod to just pass through
+            if isinstance(value, classmethod):
+                continue
+
+            if is_descriptor:
+                setattr(value_cls, key, value)
+                del attrs[key]
+                continue
+
+            try:
+                new_value = value_mapping[value]
+            except KeyError:
+                new_value = value_cls(name=key, value=value)
+                value_mapping[value] = new_value
+                member_names.append(key)
+
+            member_mapping[key] = new_value
+            attrs[key] = new_value
+
+        attrs["_enum_value_map_"] = value_mapping
+        attrs["_enum_member_map_"] = member_mapping
+        attrs["_enum_member_names_"] = member_names
+        attrs["_enum_value_cls_"] = value_cls
+        actual_cls = super().__new__(cls, name, bases, attrs)
+        value_cls._actual_enum_cls_ = actual_cls
+        return actual_cls
+
+    def __iter__(cls: type[Enum]) -> Iterator[Any]:
+        return (cls._enum_member_map_[name] for name in cls._enum_member_names_)
+
+    def __reversed__(cls: type[Enum]) -> Iterator[Any]:
+        return (
+            cls._enum_member_map_[name] for name in reversed(cls._enum_member_names_)
+        )
+
+    def __len__(cls: type[Enum]) -> int:
+        return len(cls._enum_member_names_)
+
+    def __repr__(cls) -> str:
+        return f"<enum {cls.__name__}>"
+
+    @property
+    def __members__(cls: type[Enum]) -> Mapping[str, Any]:
+        return types.MappingProxyType(cls._enum_member_map_)
+
+    def __call__(cls: type[Enum], value: str) -> Any:
+        try:
+            return cls._enum_value_map_[value]
+        except (KeyError, TypeError):
+            raise ValueError(f"{value!r} is not a valid {cls.__name__}")
+
+    def __getitem__(cls: type[Enum], key: str) -> Any:
+        return cls._enum_member_map_[key]
+
+    def __setattr__(cls, name: str, value: Any) -> None:
+        raise TypeError("Enums are immutable.")
+
+    def __delattr__(cls, attr: str) -> None:
+        raise TypeError("Enums are immutable")
+
+    def __instancecheck__(self, instance: Any) -> bool:
+        # isinstance(x, Y)
+        # -> __instancecheck__(Y, x)
+        try:
+            return instance._actual_enum_cls_ is self
+        except AttributeError:
+            return False
+
+
+class Enum(metaclass=EnumMeta):
+    if TYPE_CHECKING:
+        # Set in the metaclass when __new__ is called. The newly
+        # created cls has these attributes set.
+        _enum_member_names_: ClassVar[list[str]]
+        _enum_member_map_: ClassVar[dict[str, NewValue]]
+        _enum_value_map_: ClassVar[dict[OldValue, NewValue]]
+        _enum_value_cls_: ClassVar[type[NewValue]]
+
+    @classmethod
+    def try_value(cls, value: Any) -> Any:
+        try:
+            return cls._enum_value_map_[value]
+        except (KeyError, TypeError):
+            return value
+
+
+class KeyFormat(Enum):
     """Represents a return format type for the AES endpoint.
 
     Attributes
@@ -40,11 +208,11 @@ class KeyFormat(enum.Enum):
         Return the AES keys in base64 format.
     """
 
-    HEX = 'hex'
-    BASE64 = 'base64'
+    HEX = "hex"
+    BASE64 = "base64"
 
 
-class GameLanguage(enum.Enum):
+class GameLanguage(Enum):
     """Represents a language that Fortnite supports. This can be
     used to change the return language of many API calls.
 
@@ -82,24 +250,24 @@ class GameLanguage(enum.Enum):
         Traditional Chinese language.
     """
 
-    ARABIC = 'ar'
-    GERMAN = 'de'
-    ENGLISH = 'en'
-    SPANISH = 'es'
-    SPANISH_LATIN = 'es-419'
-    FRENCH = 'fr'
-    ITALIAN = 'it'
-    JAPANESE = 'ja'
-    KOREAN = 'ko'
-    POLISH = 'pl'
-    PORTUGUESE_BRASIL = 'pt-BR'
-    RUSSIAN = 'ru'
-    TURKISH = 'tr'
-    CHINESE_SIMPLIFIED = 'zh-CN'
-    CHINESE_TRADITIONAL = 'zh-Hant'
+    ARABIC = "ar"
+    GERMAN = "de"
+    ENGLISH = "en"
+    SPANISH = "es"
+    SPANISH_LATIN = "es-419"
+    FRENCH = "fr"
+    ITALIAN = "it"
+    JAPANESE = "ja"
+    KOREAN = "ko"
+    POLISH = "pl"
+    PORTUGUESE_BRASIL = "pt-BR"
+    RUSSIAN = "ru"
+    TURKISH = "tr"
+    CHINESE_SIMPLIFIED = "zh-CN"
+    CHINESE_TRADITIONAL = "zh-Hant"
 
 
-class MatchMethod(enum.Enum):
+class MatchMethod(Enum):
     """Represents a string matching method for some search methods in the API.
 
     Attributes
@@ -114,13 +282,13 @@ class MatchMethod(enum.Enum):
         Match if the string ends with the search string.
     """
 
-    FULL = 'full'
-    CONTAINS = 'contains'
-    STARTS = 'starts'
-    ENDS = 'ends'
+    FULL = "full"
+    CONTAINS = "contains"
+    STARTS = "starts"
+    ENDS = "ends"
 
 
-class CosmeticCategory(enum.Enum):
+class CosmeticCategory(Enum):
     """Represents the internal names for the types of a cosmetics in Fortnite.
 
     Attributes
@@ -150,7 +318,7 @@ class CosmeticCategory(enum.Enum):
     BEANS = "beans"
 
 
-class CosmeticRarity(enum.Enum):
+class CosmeticRarity(Enum):
     """Represents a rarity of a :class:`~fortnite_api.Cosmetic` object.
 
     Attributes
@@ -173,26 +341,26 @@ class CosmeticRarity(enum.Enum):
     COMMON
     """
 
-    FROZEN = 'frozen'
-    LAVA = 'lava'
-    LEGENDARY = 'legendary'
-    GAMING_LEGENDS = 'gaminglegends'
-    DARK = 'dark'
-    STARWARS = 'starwars'
-    MARVEL = 'marvel'
-    DC = 'dc'
-    ICON_SERIES = 'icon'
-    SHADOW = 'shadow'
-    SLURP = 'slurp'
-    EPIC = 'epic'
-    LAMBORGHINI = 'lamborghini'
-    RARE = 'rare'
-    UNCOMMON = 'uncommon'
-    COMMON = 'common'
-    MYTHIC = 'mythic'
+    FROZEN = "frozen"
+    LAVA = "lava"
+    LEGENDARY = "legendary"
+    GAMING_LEGENDS = "gaminglegends"
+    DARK = "dark"
+    STARWARS = "starwars"
+    MARVEL = "marvel"
+    DC = "dc"
+    ICON_SERIES = "icon"
+    SHADOW = "shadow"
+    SLURP = "slurp"
+    EPIC = "epic"
+    LAMBORGHINI = "lamborghini"
+    RARE = "rare"
+    UNCOMMON = "uncommon"
+    COMMON = "common"
+    MYTHIC = "mythic"
 
 
-class CosmeticType(enum.Enum):
+class CosmeticType(Enum):
     """Represents a type of a :class:`fortnite_api.CosmeticBr` cosmetic.
 
     Attributes
@@ -202,6 +370,7 @@ class CosmeticType(enum.Enum):
     PET
     PET_CARRIER
     PICKAXE
+    SHOES
     GLIDER
     CONTRAIL
     AURA
@@ -229,47 +398,48 @@ class CosmeticType(enum.Enum):
     SHOUT
     """
 
-    OUTFIT = 'outfit'
-    BACKPACK = 'backpack'
-    PET = 'pet'
-    PET_CARRIER = 'petcarrier'
-    PICKAXE = 'pickaxe'
-    GLIDER = 'glider'
-    CONTRAIL = 'contrail'
-    AURA = 'aura'
+    OUTFIT = "outfit"
+    BACKPACK = "backpack"
+    PET = "pet"
+    PET_CARRIER = "petcarrier"
+    PICKAXE = "pickaxe"
+    GLIDER = "glider"
+    SHOES = "shoe"
+    CONTRAIL = "contrail"
+    AURA = "aura"
 
-    EMOTE = 'emote'
-    EMOJI = 'emoji'
-    SPRAY = 'spray'
-    TOY = 'toy'
+    EMOTE = "emote"
+    EMOJI = "emoji"
+    SPRAY = "spray"
+    TOY = "toy"
 
-    WRAP = 'wrap'
+    WRAP = "wrap"
 
-    BANNER = 'banner'
-    MUSIC = 'music'
-    LOADING_SCREEN = 'loadingscreen'
+    BANNER = "banner"
+    MUSIC = "music"
+    LOADING_SCREEN = "loadingscreen"
 
-    GUITAR = 'guitar'
-    BASS = 'bass'
-    DRUMS = 'drum'
-    MICROPHONE = 'mic'
-    KEYTAR = 'keyboard'
+    GUITAR = "guitar"
+    BASS = "bass"
+    DRUMS = "drum"
+    MICROPHONE = "mic"
+    KEYTAR = "keyboard"
 
-    CAR_BODY = 'body'
-    DECAL = 'skin'
-    WHEELS = 'wheel'
-    TRAIL = 'drifttrail'
-    BOOST = 'booster'
+    CAR_BODY = "body"
+    DECAL = "skin"
+    WHEELS = "wheel"
+    TRAIL = "drifttrail"
+    BOOST = "booster"
 
-    JAM_TRACK = 'track'
+    JAM_TRACK = "track"
 
-    LEGO_BUILD = 'legoset'
-    LEGO_DECOR_BUNDLE = 'legoprop'
+    LEGO_BUILD = "legoset"
+    LEGO_DECOR_BUNDLE = "legoprop"
 
-    SHOUT = 'shout'
+    SHOUT = "shout"
 
 
-class AccountType(enum.Enum):
+class AccountType(Enum):
     """Represents the type of a :class:`fortnite_api.account.Account`.
 
     Attributes
@@ -282,12 +452,12 @@ class AccountType(enum.Enum):
         Xbox Live account.
     """
 
-    EPIC = 'epic'
-    PSN = 'psn'
-    XBL = 'xbl'
+    EPIC = "epic"
+    PSN = "psn"
+    XBL = "xbl"
 
 
-class TimeWindow(enum.Enum):
+class TimeWindow(Enum):
     """Represents a time window for statistics in the API.
 
     Attributes
@@ -298,11 +468,11 @@ class TimeWindow(enum.Enum):
         Denotes that the results should be for the lifetime of an account.
     """
 
-    SEASON = 'season'
-    LIFETIME = 'lifetime'
+    SEASON = "season"
+    LIFETIME = "lifetime"
 
 
-class StatsImageType(enum.Enum):
+class StatsImageType(Enum):
     """Represents the type of image that should be returned from the stats image endpoint.
 
     Attributes
@@ -319,29 +489,14 @@ class StatsImageType(enum.Enum):
         No image should be returned.
     """
 
-    ALL = 'all'
-    KEYBOARD_MOUSE = 'keyboardMouse'
-    GAMEPAD = 'gamepad'
-    TOUCH = 'touch'
-    NONE = 'none'
+    ALL = "all"
+    KEYBOARD_MOUSE = "keyboardMouse"
+    GAMEPAD = "gamepad"
+    TOUCH = "touch"
+    NONE = "none"
 
 
-class CreatorCodeStatus(enum.Enum):
-    """Represents the status of a creator code.
-
-    Attributes
-    ----------
-    ACTIVE
-        The creator code is active.
-    DISABLED
-        The creator code is disabled.
-    """
-
-    ACTIVE = 'active'
-    DISABLED = 'disabled'
-
-
-class CosmeticCompatibleMode(enum.Enum):
+class CosmeticCompatibleMode(Enum):
     """A class that represents the compatibility of a cosmetic :class:`fortnite_api.MaterialInstance` with other modes.
 
     Attributes
@@ -358,11 +513,11 @@ class CosmeticCompatibleMode(enum.Enum):
         The material instance is compatible with all modes.
     """
 
-    BATTLE_ROYALE = 'battleroyale'
-    LEGO = 'juno'
-    ROCKET_RACING = 'delmar'
-    FESTIVAL = 'sparks'
-    ALL = 'max'
+    BATTLE_ROYALE = "battleroyale"
+    LEGO = "juno"
+    ROCKET_RACING = "delmar"
+    FESTIVAL = "sparks"
+    ALL = "max"
 
     @classmethod
     def _from_str(cls: type[Self], string: str) -> Self:
@@ -370,11 +525,11 @@ class CosmeticCompatibleMode(enum.Enum):
         # with the same values, so we need to handle both.
         # To easily handle this, we'll remove the "ECosmeticCompatibleMode::" or "ECosmeticCompatibleModeLegacy::" prefix.
         # and then convert it to the enum.
-        trimmed = string.split('::')[-1]
-        return cls(trimmed.lower())
+        trimmed = string.split("::")[-1]
+        return try_enum(cls, trimmed)
 
 
-class BannerIntensity(enum.Enum):
+class BannerIntensity(Enum):
     """Denotes the intensity of a :class:`fortnite_api.ShopEntryBanner`.
 
     Attributes
@@ -385,11 +540,11 @@ class BannerIntensity(enum.Enum):
         High intensity.
     """
 
-    LOW = 'Low'
-    HIGH = 'High'
+    LOW = "Low"
+    HIGH = "High"
 
 
-class CustomGender(enum.Enum):
+class CustomGender(Enum):
     """Denotes the gender of a character in Fortnite.
 
     At the moment, this is only used on the :class:`fortnite_api.VariantBean` class.
@@ -400,13 +555,16 @@ class CustomGender(enum.Enum):
         A female character.
     MALE
         A male character.
+    UNKNOWN
+        The character's gender is unknown.
     """
 
-    FEMALE = 'EFortCustomGender::Female'
-    MALE = 'EFortCustomGender::Male'
+    FEMALE = "EFortCustomGender::Female"
+    MALE = "EFortCustomGender::Male"
+    UNKNOWN = "Unknown"
 
 
-class ProductTag(enum.Enum):
+class ProductTag(Enum):
     """A class that represents the tag of a product.
 
     Attributes
@@ -423,15 +581,32 @@ class ProductTag(enum.Enum):
         The product is for all modes.
     """
 
-    BATTLE_ROYALE = 'br'
-    LEGO = 'juno'
-    ROCKET_RACING = 'delmar'
-    FESTIVAL = 'sparks'
-    ALL = 'max'
+    BATTLE_ROYALE = "br"
+    LEGO = "juno"
+    ROCKET_RACING = "delmar"
+    FESTIVAL = "sparks"
+    ALL = "max"
 
     @classmethod
     def _from_str(cls: type[Self], string: str) -> Self:
         # The Epic Games API "Product" enums contains both lower case and capitalized values, so we need to handle both.
         # To easily handle this, we'll remove the "Product." prefix and convert it to lowercase.
-        trimmed = string.split('.')[-1]
-        return cls(trimmed.lower())
+        trimmed = string.split(".")[-1]
+        return try_enum(cls, trimmed.lower())
+
+
+def create_unknown_value(cls: type[E], val: Any) -> NewValue:
+    value_cls = cls._enum_value_cls_
+    name = f"UNKNOWN_{val}"
+    return value_cls(name=name, value=val)
+
+
+def try_enum(cls: type[E], val: Any) -> E:
+    """A function that tries to turn the value into enum ``cls``.
+
+    If it fails it returns a proxy invalid value instead.
+    """
+    try:
+        return cls._enum_value_map_[val]
+    except (KeyError, TypeError, AttributeError):
+        return create_unknown_value(cls, val)
