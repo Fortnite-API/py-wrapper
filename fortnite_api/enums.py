@@ -66,30 +66,16 @@ def _create_value_cls(name: str, comparable: bool) -> type[NewValue]:
     cls.__repr__ = lambda self: f"<{name}.{self.name}: {self.value!r}>"
     cls.__str__ = lambda self: f"{name}.{self.name}"
     if comparable:
-        cls.__le__ = (
-            lambda self, other: isinstance(other, self.__class__)
-            and self.value <= other.value
-        )
-        cls.__ge__ = (
-            lambda self, other: isinstance(other, self.__class__)
-            and self.value >= other.value
-        )
-        cls.__lt__ = (
-            lambda self, other: isinstance(other, self.__class__)
-            and self.value < other.value
-        )
-        cls.__gt__ = (
-            lambda self, other: isinstance(other, self.__class__)
-            and self.value > other.value
-        )
+        cls.__le__ = lambda self, other: isinstance(other, self.__class__) and self.value <= other.value
+        cls.__ge__ = lambda self, other: isinstance(other, self.__class__) and self.value >= other.value
+        cls.__lt__ = lambda self, other: isinstance(other, self.__class__) and self.value < other.value
+        cls.__gt__ = lambda self, other: isinstance(other, self.__class__) and self.value > other.value
 
     return cls
 
 
 def _is_descriptor(obj: type[object]) -> bool:
-    return (
-        hasattr(obj, "__get__") or hasattr(obj, "__set__") or hasattr(obj, "__delete__")
-    )
+    return hasattr(obj, "__get__") or hasattr(obj, "__set__") or hasattr(obj, "__delete__")
 
 
 class EnumMeta(type):
@@ -142,9 +128,7 @@ class EnumMeta(type):
         return (cls._enum_member_map_[name] for name in cls._enum_member_names_)
 
     def __reversed__(cls: type[Enum]) -> Iterator[Any]:
-        return (
-            cls._enum_member_map_[name] for name in reversed(cls._enum_member_names_)
-        )
+        return (cls._enum_member_map_[name] for name in reversed(cls._enum_member_names_))
 
     def __len__(cls: type[Enum]) -> int:
         return len(cls._enum_member_names_)

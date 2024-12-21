@@ -27,11 +27,12 @@ from __future__ import annotations
 import datetime
 import functools
 import inspect
-from typing import Any, Callable, Coroutine, Literal, TypeVar, cast, overload
+from collections.abc import Coroutine
+from typing import Any, Callable, Literal, TypeVar, cast, overload
 
 import aiohttp
 import requests
-from typing_extensions import Concatenate, ParamSpec
+from typing_extensions import Concatenate, ParamSpec, Self
 
 from .aes import Aes
 from .all import CosmeticsAll
@@ -52,11 +53,11 @@ from .shop import Shop
 from .stats import BrPlayerStats
 from .utils import MISSING, _transform_dict_for_get_request, copy_doc, remove_prefix
 
-T = TypeVar('T')
-TC = TypeVar('TC')
-P = ParamSpec('P')
-Client_T = TypeVar('Client_T', bound='Client')
-SyncClient_T = TypeVar('SyncClient_T', bound='SyncClient')
+T = TypeVar("T")
+TC = TypeVar("TC")
+P = ParamSpec("P")
+Client_T = TypeVar("Client_T", bound="Client")
+SyncClient_T = TypeVar("SyncClient_T", bound="SyncClient")
 
 FetchFunc = Callable[Concatenate[Client_T, P], Coroutine[Any, Any, T]]
 SyncFetchFunc = Callable[Concatenate[SyncClient_T, P], T]
@@ -67,12 +68,12 @@ def _remove_coro_doc(cls: T) -> T:
     # that has a docstring that starts with '|coro|' is removed
     for value in cls.__dict__.values():
         try:
-            doc = getattr(value, '__doc__')
+            doc = getattr(value, "__doc__")
         except AttributeError:
             continue
         else:
-            if doc and doc.startswith('|coro|'):
-                remove_prefix('|coro|')(value)
+            if doc and doc.startswith("|coro|"):
+                remove_prefix("|coro|")(value)
 
     return cls
 
@@ -82,11 +83,13 @@ def beta_method(func: FetchFunc[Client_T, P, T]) -> FetchFunc[Client_T, P, T]: .
 
 
 @overload
-def beta_method(func: SyncFetchFunc[SyncClient_T, P, T]) -> SyncFetchFunc[SyncClient_T, P, T]: ...
+def beta_method(
+    func: SyncFetchFunc[SyncClient_T, P, T],
+) -> SyncFetchFunc[SyncClient_T, P, T]: ...
 
 
 def beta_method(
-    func: FetchFunc[Client_T, P, T] | SyncFetchFunc[SyncClient_T, P, T]
+    func: FetchFunc[Client_T, P, T] | SyncFetchFunc[SyncClient_T, P, T],
 ) -> FetchFunc[Client_T, P, T] | SyncFetchFunc[SyncClient_T, P, T]:
     if inspect.iscoroutinefunction(func):
         # This is coroutine, so we need to wrap it in an async function
@@ -204,7 +207,10 @@ class Client:
 
     # COSMETICS
     async def fetch_cosmetics_all(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> CosmeticsAll:
         """|coro|
 
@@ -235,7 +241,10 @@ class Client:
         return CosmeticsAll(data=data, http=self.http)
 
     async def fetch_cosmetics_br(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticBr]:
         """|coro|
 
@@ -269,7 +278,10 @@ class Client:
         )
 
     async def fetch_cosmetics_cars(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticCar]:
         """|coro|
 
@@ -303,7 +315,10 @@ class Client:
         )
 
     async def fetch_cosmetics_instruments(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticInstrument]:
         """|coro|
 
@@ -337,7 +352,10 @@ class Client:
         )
 
     async def fetch_cosmetics_lego_kits(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticLegoKit]:
         """|coro|
 
@@ -371,7 +389,10 @@ class Client:
         )
 
     async def fetch_variants_lego(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[VariantLego]:
         """|coro|
 
@@ -406,7 +427,10 @@ class Client:
         )
 
     async def fetch_variants_beans(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[VariantBean]:
         """|coro|
 
@@ -442,7 +466,10 @@ class Client:
         )
 
     async def fetch_cosmetics_tracks(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticTrack]:
         """|coro|
 
@@ -523,7 +550,10 @@ class Client:
     # NEW COSMETICS
 
     async def fetch_cosmetics_new(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> NewCosmetics:
         """|coro|
 
@@ -727,15 +757,15 @@ class Client:
         NotFound
             No cosmetics were found with the search criteria.
         """
-        multiple = kwargs.pop('multiple', False)
+        multiple = kwargs.pop("multiple", False)
 
-        kwargs['language'] = self._resolve_default_language_value(kwargs.pop('language', MISSING))
-        kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.pop('search_language', MISSING))
-        kwargs['responseFlags'] = self._resolve_response_flags_value(kwargs.pop('response_flags', MISSING))
+        kwargs["language"] = self._resolve_default_language_value(kwargs.pop("language", MISSING))
+        kwargs["searchLanguage"] = self._resolve_default_language_value(kwargs.pop("search_language", MISSING))
+        kwargs["responseFlags"] = self._resolve_response_flags_value(kwargs.pop("response_flags", MISSING))
 
-        match_method = kwargs.pop('match_method', None)
+        match_method = kwargs.pop("match_method", None)
         if match_method is not None:
-            kwargs['matchMethod'] = match_method.value
+            kwargs["matchMethod"] = match_method.value
 
         payload = _transform_dict_for_get_request(kwargs)
         if multiple is True:
@@ -1046,7 +1076,9 @@ class Client:
 
         if account_id is not None:
             data = await self.http.get_br_stats_by_id(
-                account_id=account_id, time_window=time_window and time_window.value, image=image and image.value
+                account_id=account_id,
+                time_window=time_window and time_window.value,
+                image=image and image.value,
             )
             return BrPlayerStats(data=data, http=self.http)
 
@@ -1063,7 +1095,11 @@ class Client:
 
     # SHOP
     async def fetch_shop(
-        self, /, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        /,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> Shop:
         """|coro|
 
@@ -1282,7 +1318,10 @@ class SyncClient:
     # COSMETICS
     @copy_doc(Client.fetch_cosmetics_all)
     def fetch_cosmetics_all(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> CosmeticsAll[SyncHTTPClient]:
         data = self.http.get_cosmetics_all(
             language=self._resolve_default_language_value(language),
@@ -1292,7 +1331,10 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_br)
     def fetch_cosmetics_br(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticBr[SyncHTTPClient]]:
         data = self.http.get_cosmetics_br(
             language=self._resolve_default_language_value(language),
@@ -1305,7 +1347,10 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_cars)
     def fetch_cosmetics_cars(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticCar[SyncHTTPClient]]:
         data = self.http.get_cosmetics_cars(
             language=self._resolve_default_language_value(language),
@@ -1318,7 +1363,10 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_instruments)
     def fetch_cosmetics_instruments(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticInstrument[SyncHTTPClient]]:
         data = self.http.get_cosmetics_instruments(
             language=self._resolve_default_language_value(language),
@@ -1331,7 +1379,10 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_lego_kits)
     def fetch_cosmetics_lego_kits(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticLegoKit[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego_kits(
             language=self._resolve_default_language_value(language),
@@ -1344,7 +1395,10 @@ class SyncClient:
 
     @copy_doc(Client.fetch_variants_lego)
     def fetch_variants_lego(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[VariantLego[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego(
             language=self._resolve_default_language_value(language),
@@ -1357,7 +1411,10 @@ class SyncClient:
 
     @copy_doc(Client.fetch_variants_beans)
     def fetch_variants_beans(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[VariantBean[SyncHTTPClient]]:
         data = self.http.get_cosmetics_beans(
             language=self._resolve_default_language_value(language),
@@ -1370,7 +1427,10 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_tracks)
     def fetch_cosmetics_tracks(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> list[CosmeticTrack[SyncHTTPClient]]:
         data = self.http.get_cosmetics_tracks(
             language=self._resolve_default_language_value(language),
@@ -1401,7 +1461,10 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_new)
     def fetch_cosmetics_new(
-        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> NewCosmetics[SyncHTTPClient]:
         data = self.http.get_cosmetics_new(
             language=self._resolve_default_language_value(language),
@@ -1493,15 +1556,15 @@ class SyncClient:
 
     @copy_doc(Client.search_br_cosmetics)
     def search_br_cosmetics(self, **kwargs: Any) -> CosmeticBr[SyncHTTPClient] | list[CosmeticBr[SyncHTTPClient]]:
-        multiple = kwargs.pop('multiple', False)
+        multiple = kwargs.pop("multiple", False)
 
-        kwargs['language'] = self._resolve_default_language_value(kwargs.pop('language', MISSING))
-        kwargs['searchLanguage'] = self._resolve_default_language_value(kwargs.pop('search_language', MISSING))
-        kwargs['responseFlags'] = self._resolve_response_flags_value(kwargs.pop('response_flags', MISSING))
+        kwargs["language"] = self._resolve_default_language_value(kwargs.pop("language", MISSING))
+        kwargs["searchLanguage"] = self._resolve_default_language_value(kwargs.pop("search_language", MISSING))
+        kwargs["responseFlags"] = self._resolve_response_flags_value(kwargs.pop("response_flags", MISSING))
 
-        match_method = kwargs.pop('match_method', None)
+        match_method = kwargs.pop("match_method", None)
         if match_method is not None:
-            kwargs['matchMethod'] = match_method.value
+            kwargs["matchMethod"] = match_method.value
 
         payload = _transform_dict_for_get_request(kwargs)
         if multiple is True:
@@ -1601,7 +1664,9 @@ class SyncClient:
 
         if account_id is not None:
             data = self.http.get_br_stats_by_id(
-                account_id=account_id, time_window=time_window and time_window.value, image=image and image.value
+                account_id=account_id,
+                time_window=time_window and time_window.value,
+                image=image and image.value,
             )
             return BrPlayerStats(data=data, http=self.http)
 
@@ -1638,7 +1703,11 @@ class SyncClient:
 
     @copy_doc(Client.fetch_shop)
     def fetch_shop(
-        self, /, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
+        self,
+        /,
+        *,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> Shop[SyncHTTPClient]:
         data = self.http.get_shop(
             language=self._resolve_default_language_value(language),

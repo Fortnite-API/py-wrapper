@@ -75,14 +75,10 @@ class VariantLego(Cosmetic[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         self.cosmetic_id: str = data["cosmeticId"]
-        self.sound_library_tags: list[str] = get_with_fallback(
-            data, "soundLibraryTags", list
-        )
+        self.sound_library_tags: list[str] = get_with_fallback(data, "soundLibraryTags", list)
 
         _images = data.get("images")
-        self.images: CosmeticImages[HTTPClientT] | None = _images and CosmeticImages(
-            data=_images, http=http
-        )
+        self.images: CosmeticImages[HTTPClientT] | None = _images and CosmeticImages(data=_images, http=http)
         self.path: str | None = data.get("path")
 
     @overload
@@ -91,13 +87,9 @@ class VariantLego(Cosmetic[dict[str, Any], HTTPClientT]):
     ) -> Coroutine[Any, Any, CosmeticBr]: ...
 
     @overload
-    def fetch_cosmetic_br(
-        self: VariantLego[SyncHTTPClient], *, language: GameLanguage | None = None
-    ) -> CosmeticBr: ...
+    def fetch_cosmetic_br(self: VariantLego[SyncHTTPClient], *, language: GameLanguage | None = None) -> CosmeticBr: ...
 
-    def fetch_cosmetic_br(
-        self, *, language: GameLanguage | None = None
-    ) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
+    def fetch_cosmetic_br(self, *, language: GameLanguage | None = None) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
         """|coro|
 
         Fetches the Battle Royale cosmetic that this lego cosmetic variant is based on.
@@ -112,6 +104,4 @@ class VariantLego(Cosmetic[dict[str, Any], HTTPClientT]):
         :class:`fortnite_api.CosmeticBr`
             The Battle Royale cosmetic that this lego cosmetic variant is based on.
         """
-        return self._http.get_cosmetic_br(
-            self.cosmetic_id, language=language and language.value
-        )
+        return self._http.get_cosmetic_br(self.cosmetic_id, language=language and language.value)

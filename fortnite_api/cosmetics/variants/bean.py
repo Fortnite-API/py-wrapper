@@ -78,9 +78,7 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
         self.gameplay_tags: list[str] = get_with_fallback(data, "gameplay_tags", list)
 
         _images = data.get("images")
-        self.images: CosmeticImages[HTTPClientT] | None = _images and CosmeticImages(
-            data=_images, http=http
-        )
+        self.images: CosmeticImages[HTTPClientT] | None = _images and CosmeticImages(data=_images, http=http)
         self.path: str | None = data.get("path")
 
     @overload
@@ -89,13 +87,9 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
     ) -> Coroutine[Any, Any, CosmeticBr]: ...
 
     @overload
-    def fetch_cosmetic_br(
-        self: VariantBean[SyncHTTPClient], *, language: GameLanguage | None = None
-    ) -> CosmeticBr: ...
+    def fetch_cosmetic_br(self: VariantBean[SyncHTTPClient], *, language: GameLanguage | None = None) -> CosmeticBr: ...
 
-    def fetch_cosmetic_br(
-        self, *, language: GameLanguage | None = None
-    ) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
+    def fetch_cosmetic_br(self, *, language: GameLanguage | None = None) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
         """|coro|
 
         Fetches the Battle Royale cosmetic that this bean variant is based on.
@@ -118,10 +112,6 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
         """
         cosmetic_id = self.cosmetic_id
         if cosmetic_id is None:
-            raise ValueError(
-                "This bean variant does not have a corresponding Battle Royale cosmetic."
-            )
+            raise ValueError("This bean variant does not have a corresponding Battle Royale cosmetic.")
 
-        return self._http.get_cosmetic_br(
-            cosmetic_id, language=language and language.value
-        )
+        return self._http.get_cosmetic_br(cosmetic_id, language=language and language.value)
