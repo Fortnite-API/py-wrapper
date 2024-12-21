@@ -28,7 +28,7 @@ import datetime
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 if TYPE_CHECKING:
-    from typing import Hashable
+    from collections.abc import Hashable
 
 try:
     import orjson  # type: ignore
