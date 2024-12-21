@@ -29,7 +29,7 @@ from typing import Any, Generic, TypeVar
 
 from ..abc import DictT, Hashable, ReconstructAble
 from ..asset import Asset
-from ..enums import CosmeticRarity, CosmeticType
+from ..enums import CosmeticRarity, CosmeticType, try_enum
 from ..http import HTTPClientT
 from ..images import Images
 from ..utils import get_with_fallback, parse_time, simple_repr
@@ -125,7 +125,7 @@ class CosmeticTypeInfo(ReconstructAble[dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.value: CosmeticType = CosmeticType(data["value"])
+        self.value: CosmeticType = try_enum(CosmeticType, data["value"])
         self.raw_value: str = data["value"]
 
         self.display_value: str = data["displayValue"]
