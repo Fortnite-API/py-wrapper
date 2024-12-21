@@ -16,7 +16,6 @@ Many tests in the main `/tests` directory are generic-related object-related tes
 | `test_beta.py`        | Ensures that a user with the `beta` flag disabled on a `Client` cannot call beta methods. This validates that the beta flag decorator works as expected.                               |
 | `test_proxy.py`       | Ensures that the `TransformerListProxy` class initializes properly, transforms to expected objects as needed, and has the same interface as a typical `py.List` would.                 |
 | `test_ratelimits.py`  | Ensures that the library's handling of rate limits is correct, and related exceptions are raised as expected.                                                                          |
-| `test_reconstruct.py` | Ensures that the `Reconstructable` class correctly recreates the class it wraps.                                                                                                       |
 | `test_repr.py`        | The library uses a dynamic decorator to create the `__repr__` dunder by taking advantage of the `__slots__` on a class. This test ensures that the dynamic function works as expected. |
 | `test_methods.py`     | The handling of all the functions on the `Client` and `SyncClient` class. See Edge Cases below for more information. |
 
