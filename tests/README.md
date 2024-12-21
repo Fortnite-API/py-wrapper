@@ -48,7 +48,7 @@ This approach, although loop blocking in nature, ensures that the results from b
 
 The tests defined here ensure that the client's behavior surrounding initialization work as expected. This is, but is not limited to, context manager use, custom passed HTTP session management, etc.
 
-#### Tests for the Methods on the Client
+#### Tests for the Methods on the Client: `test_methods.py`
 
 Every method, except for those defined in `test_stats.py` and `cosmetics/*.py` (more on this directory after) on the `Client` is tested here. This uses the `ClientHybrid`, as described above.
 
