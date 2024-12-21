@@ -116,51 +116,39 @@ class CosmeticsAll(ReconstructAble[dict[str, Any], HTTPClientT]):
         )
 
         _tracks = get_with_fallback(data, "tracks", list)
-        self.tracks: TransformerListProxy[CosmeticTrack[HTTPClientT]] = (
-            TransformerListProxy(
-                _tracks,
-                lambda x: CosmeticTrack(data=x, http=self._http),
-            )
+        self.tracks: TransformerListProxy[CosmeticTrack[HTTPClientT]] = TransformerListProxy(
+            _tracks,
+            lambda x: CosmeticTrack(data=x, http=self._http),
         )
 
         _instruments = get_with_fallback(data, "instruments", list)
-        self.instruments: TransformerListProxy[CosmeticInstrument[HTTPClientT]] = (
-            TransformerListProxy(
-                _instruments,
-                lambda x: CosmeticInstrument(data=x, http=self._http),
-            )
+        self.instruments: TransformerListProxy[CosmeticInstrument[HTTPClientT]] = TransformerListProxy(
+            _instruments,
+            lambda x: CosmeticInstrument(data=x, http=self._http),
         )
 
         _cars = get_with_fallback(data, "cars", list)
-        self.cars: TransformerListProxy[CosmeticCar[HTTPClientT]] = (
-            TransformerListProxy(
-                _cars,
-                lambda x: CosmeticCar(data=x, http=self._http),
-            )
+        self.cars: TransformerListProxy[CosmeticCar[HTTPClientT]] = TransformerListProxy(
+            _cars,
+            lambda x: CosmeticCar(data=x, http=self._http),
         )
 
         _lego = get_with_fallback(data, "lego", list)
-        self.lego: TransformerListProxy[VariantLego[HTTPClientT]] = (
-            TransformerListProxy(
-                _lego,
-                lambda x: VariantLego(data=x, http=self._http),
-            )
+        self.lego: TransformerListProxy[VariantLego[HTTPClientT]] = TransformerListProxy(
+            _lego,
+            lambda x: VariantLego(data=x, http=self._http),
         )
 
         _lego_kits = get_with_fallback(data, "legoKits", list)
-        self.lego_kits: TransformerListProxy[CosmeticLegoKit[HTTPClientT]] = (
-            TransformerListProxy(
-                _lego_kits,
-                lambda x: CosmeticLegoKit(data=x, http=self._http),
-            )
+        self.lego_kits: TransformerListProxy[CosmeticLegoKit[HTTPClientT]] = TransformerListProxy(
+            _lego_kits,
+            lambda x: CosmeticLegoKit(data=x, http=self._http),
         )
 
         _beans = get_with_fallback(data, "beans", list)
-        self.beans: TransformerListProxy[VariantBean[HTTPClientT]] = (
-            TransformerListProxy(
-                _beans,
-                lambda x: VariantBean(data=x, http=self._http),
-            )
+        self.beans: TransformerListProxy[VariantBean[HTTPClientT]] = TransformerListProxy(
+            _beans,
+            lambda x: VariantBean(data=x, http=self._http),
         )
 
     def __iter__(self) -> Generator[Cosmetic[dict[str, Any], HTTPClientT], None, None]:
