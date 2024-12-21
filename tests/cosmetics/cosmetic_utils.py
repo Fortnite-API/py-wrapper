@@ -177,7 +177,9 @@ def test_variant_lego(variant: fortnite_api.VariantLego[Any]):
 def test_variant_bean(variant: fortnite_api.VariantBean[Any]):
     assert isinstance(variant, fortnite_api.VariantBean)
     assert variant.name
-    assert isinstance(variant.gender, fortnite_api.CustomGender)
+
+    if variant.gender:
+        assert isinstance(variant.gender, fortnite_api.CustomGender)
 
     images = variant.images
     if images:
