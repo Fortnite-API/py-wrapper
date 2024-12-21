@@ -543,9 +543,10 @@ class CustomGender(Enum):
         The character's gender is unknown.
     """
 
-    FEMALE = "EFortCustomGender::Female"
-    MALE = "EFortCustomGender::Male"
-    UNKNOWN = "Unknown"
+    FEMALE = 'EFortCustomGender::Female'
+    MALE = 'EFortCustomGender::Male'
+    UNKNOWN = 'Unknown'
+
 
 
 class ProductTag(Enum):
