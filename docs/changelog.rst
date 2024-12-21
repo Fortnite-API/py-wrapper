@@ -12,9 +12,21 @@ v3.3.0
 
 Bug Fixes
 ~~~~~~~~~
-- Fixed an issue that caused a :class:`KeyError` to be raised when using :meth:`fortnite_api.Client.search_br_cosmetics` or :meth:`fortnite_api.SyncClient.search_br_cosmetics` without `multiple` parameter.
 - Fixed an issue that caused :class:`fortnite_api.Asset.resize` to raise :class:`TypeError` instead of :class:`ValueError` when the given size isn't a power of 2.
 - Fixed an issue that caused :class:`fortnite_api.ServiceUnavailable` to be raised with a static message as a fallback for all unhandled http status codes. Instead :class:`fortnite_api.HTTPException` is raised with the proper error message.
+- Merged the internal tests for ``test_sync_methods`` and ``test_async_methods`` into a single test class to avoid code duplication.
+
+
+.. _vp3p2p1:
+
+v3.2.1
+-------
+
+Bug Fixes
+~~~~~~~~~
+- Fixed an issue due a change from Epic that causes :class:`fortnite_api.VariantBean` to not have a :class:`fortnite_api.CustomGender`. It now uses :attr:`fortnite_api.CustomGender.UNKNOWN` in such case instead of raising an exception.
+- Fixed typo within fallback system for :class:`fortnite_api.TileSize` as ``raise`` keyword was used instead of ``return``.
+- Fixed an issue that caused a :class:`KeyError` to be raised when using :meth:`fortnite_api.Client.search_br_cosmetics` or :meth:`fortnite_api.SyncClient.search_br_cosmetics` without ``multiple`` parameter.
 
 
 .. _vp3p2p0:
