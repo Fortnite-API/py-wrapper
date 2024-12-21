@@ -73,7 +73,6 @@ async def test_fetch_cosmetic_types(api_key: str, response_flags: fortnite_api.R
             client.fetch_cosmetics_tracks: test_cosmetic_track,
         }
 
-    async with ClientHybrid(api_key=api_key, response_flags=response_flags) as client:
         for cosmetic_fetcher, validator in FETCHER_VALIDATOR_MAPPING.items():
             try:
                 cosmetics = await cosmetic_fetcher()
