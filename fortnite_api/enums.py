@@ -548,7 +548,6 @@ class CustomGender(Enum):
     UNKNOWN = 'Unknown'
 
 
-
 class ProductTag(Enum):
     """A class that represents the tag of a product.
 
