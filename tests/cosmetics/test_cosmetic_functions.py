@@ -36,13 +36,13 @@ import fortnite_api
 from ..client.test_client_hybrid import ClientHybrid
 from ..conftest import TEST_COSMETIC_ID, TEST_INVALID_COSMETIC_ID
 from .cosmetic_utils import (
-    test_cosmetic_br,
-    test_cosmetic_car,
-    test_cosmetic_instrument,
-    test_cosmetic_lego_kit,
-    test_cosmetic_track,
-    test_variant_bean,
-    test_variant_lego,
+    validate_cosmetic_br,
+    validate_cosmetic_car,
+    validate_cosmetic_instrument,
+    validate_cosmetic_lego_kit,
+    validate_cosmetic_track,
+    validate_variant_bean,
+    validate_variant_lego,
 )
 
 P = ParamSpec('P')
@@ -64,13 +64,13 @@ async def test_fetch_cosmetic_types(api_key: str, response_flags: fortnite_api.R
         # Pyright can't seem to narrow CosmeticBr[Any] to fortnite_api.Cosmetic[Any, Any], but
         # Callable[[Any], None] is actually requesting that an instance of AnyCosmetic is passed.
         FETCHER_VALIDATOR_MAPPING: dict[CoroFunc[..., Iterable[AnyCosmetic]], Callable[[Any], None]] = {
-            client.fetch_cosmetics_br: test_cosmetic_br,
-            client.fetch_cosmetics_cars: test_cosmetic_car,
-            client.fetch_cosmetics_instruments: test_cosmetic_instrument,
-            client.fetch_cosmetics_lego_kits: test_cosmetic_lego_kit,
-            client.fetch_variants_lego: test_variant_lego,
-            client.fetch_variants_beans: test_variant_bean,
-            client.fetch_cosmetics_tracks: test_cosmetic_track,
+            client.fetch_cosmetics_br: validate_cosmetic_br,
+            client.fetch_cosmetics_cars: validate_cosmetic_car,
+            client.fetch_cosmetics_instruments: validate_cosmetic_instrument,
+            client.fetch_cosmetics_lego_kits: validate_cosmetic_lego_kit,
+            client.fetch_variants_lego: validate_variant_lego,
+            client.fetch_variants_beans: validate_variant_bean,
+            client.fetch_cosmetics_tracks: validate_cosmetic_track,
         }
 
         for cosmetic_fetcher, validator in FETCHER_VALIDATOR_MAPPING.items():

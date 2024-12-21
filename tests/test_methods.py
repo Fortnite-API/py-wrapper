@@ -43,11 +43,11 @@ from .conftest import (
     TEST_PLAYLIST_ID,
 )
 from .cosmetics.cosmetic_utils import (
-    test_cosmetic_br,
-    test_cosmetic_car,
-    test_cosmetic_instrument,
-    test_cosmetic_lego_kit,
-    test_cosmetic_track,
+    validate_cosmetic_br,
+    validate_cosmetic_car,
+    validate_cosmetic_instrument,
+    validate_cosmetic_lego_kit,
+    validate_cosmetic_track,
 )
 
 
@@ -403,11 +403,11 @@ async def test_fetch_shop(api_key: str):
             assert isinstance(colors.color3, str)
 
         COSMETIC_TYPE_MAPPING: dict[type[fortnite_api.Cosmetic[Any]], Callable[..., Any]] = {
-            fortnite_api.CosmeticBr: test_cosmetic_br,
-            fortnite_api.CosmeticInstrument: test_cosmetic_instrument,
-            fortnite_api.CosmeticCar: test_cosmetic_car,
-            fortnite_api.CosmeticLegoKit: test_cosmetic_lego_kit,
-            fortnite_api.CosmeticTrack: test_cosmetic_track,
+            fortnite_api.CosmeticBr: validate_cosmetic_br,
+            fortnite_api.CosmeticInstrument: validate_cosmetic_instrument,
+            fortnite_api.CosmeticCar: validate_cosmetic_car,
+            fortnite_api.CosmeticLegoKit: validate_cosmetic_lego_kit,
+            fortnite_api.CosmeticTrack: validate_cosmetic_track,
         }
 
         for cosmetic in entry.br + entry.tracks + entry.instruments + entry.cars + entry.lego_kits:

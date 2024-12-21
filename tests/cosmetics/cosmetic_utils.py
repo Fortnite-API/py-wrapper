@@ -29,7 +29,7 @@ from typing import Any
 import fortnite_api
 
 
-def test_cosmetic_type_info(type_info: fortnite_api.CosmeticTypeInfo[Any]):
+def validate_cosmetic_type_info(type_info: fortnite_api.CosmeticTypeInfo[Any]):
     assert isinstance(type_info, fortnite_api.CosmeticTypeInfo)
     assert isinstance(type_info.value, fortnite_api.CosmeticType)
     assert type_info.raw_value
@@ -37,36 +37,36 @@ def test_cosmetic_type_info(type_info: fortnite_api.CosmeticTypeInfo[Any]):
     assert type_info.backend_value
 
 
-def test_cosmetic_rarity_info(rarity_info: fortnite_api.CosmeticRarityInfo[Any]):
+def validate_cosmetic_rarity_info(rarity_info: fortnite_api.CosmeticRarityInfo[Any]):
     assert isinstance(rarity_info, fortnite_api.CosmeticRarityInfo)
     assert isinstance(rarity_info.value, fortnite_api.CosmeticRarity)
     assert rarity_info.display_value
     assert rarity_info.backend_value
 
 
-def test_cosmetic_series_info(series_info: fortnite_api.CosmeticSeriesInfo[Any]):
+def validate_cosmetic_series_info(series_info: fortnite_api.CosmeticSeriesInfo[Any]):
     assert isinstance(series_info, fortnite_api.CosmeticSeriesInfo)
     assert series_info.value
     assert series_info.backend_value
     assert series_info.colors
 
 
-def test_cosmetic_br(cosmetic: fortnite_api.CosmeticBr[Any]):
+def validate_cosmetic_br(cosmetic: fortnite_api.CosmeticBr[Any]):
     assert isinstance(cosmetic, fortnite_api.CosmeticBr)
     assert cosmetic.name
     assert cosmetic.description
 
     type_info = cosmetic.type
     if type_info:
-        test_cosmetic_type_info(type_info)
+        validate_cosmetic_type_info(type_info)
 
     rarity_info = cosmetic.rarity
     if rarity_info:
-        test_cosmetic_rarity_info(rarity_info)
+        validate_cosmetic_rarity_info(rarity_info)
 
     series_info = cosmetic.series
     if series_info:
-        test_cosmetic_series_info(series_info)
+        validate_cosmetic_series_info(series_info)
 
     _set = cosmetic.set
     if _set:
@@ -102,7 +102,7 @@ def test_cosmetic_br(cosmetic: fortnite_api.CosmeticBr[Any]):
     assert isinstance(cosmetic.meta_tags, list)
 
 
-def test_cosmetic_car(cosmetic: fortnite_api.CosmeticCar[Any]):
+def validate_cosmetic_car(cosmetic: fortnite_api.CosmeticCar[Any]):
     assert isinstance(cosmetic, fortnite_api.CosmeticCar)
     assert cosmetic.vehicle_id
     assert cosmetic.name
@@ -110,11 +110,11 @@ def test_cosmetic_car(cosmetic: fortnite_api.CosmeticCar[Any]):
 
     type_info = cosmetic.type
     if type_info:
-        test_cosmetic_type_info(type_info)
+        validate_cosmetic_type_info(type_info)
 
     rarity_info = cosmetic.rarity
     if rarity_info:
-        test_cosmetic_rarity_info(rarity_info)
+        validate_cosmetic_rarity_info(rarity_info)
 
     images = cosmetic.images
     if images:
@@ -122,21 +122,21 @@ def test_cosmetic_car(cosmetic: fortnite_api.CosmeticCar[Any]):
 
     series_info = cosmetic.series
     if series_info:
-        test_cosmetic_series_info(series_info)
+        validate_cosmetic_series_info(series_info)
 
 
-def test_cosmetic_instrument(cosmetic: fortnite_api.CosmeticInstrument[Any]):
+def validate_cosmetic_instrument(cosmetic: fortnite_api.CosmeticInstrument[Any]):
     assert isinstance(cosmetic, fortnite_api.CosmeticInstrument)
     assert cosmetic.name
     assert cosmetic.description
 
     type_info = cosmetic.type
     if type_info:
-        test_cosmetic_type_info(type_info)
+        validate_cosmetic_type_info(type_info)
 
     rarity_info = cosmetic.rarity
     if rarity_info:
-        test_cosmetic_rarity_info(rarity_info)
+        validate_cosmetic_rarity_info(rarity_info)
 
     images = cosmetic.images
     if images:
@@ -144,27 +144,27 @@ def test_cosmetic_instrument(cosmetic: fortnite_api.CosmeticInstrument[Any]):
 
     series_info = cosmetic.series
     if series_info:
-        test_cosmetic_series_info(series_info)
+        validate_cosmetic_series_info(series_info)
 
 
-def test_cosmetic_lego_kit(cosmetic: fortnite_api.CosmeticLegoKit[Any]):
+def validate_cosmetic_lego_kit(cosmetic: fortnite_api.CosmeticLegoKit[Any]):
     assert isinstance(cosmetic, fortnite_api.CosmeticLegoKit)
     assert cosmetic.name
 
     type_info = cosmetic.type
     if type_info:
-        test_cosmetic_type_info(type_info)
+        validate_cosmetic_type_info(type_info)
 
     series_info = cosmetic.series
     if series_info:
-        test_cosmetic_series_info(series_info)
+        validate_cosmetic_series_info(series_info)
 
     images = cosmetic.images
     if images:
         assert isinstance(images, fortnite_api.CosmeticImages)
 
 
-def test_variant_lego(variant: fortnite_api.VariantLego[Any]):
+def validate_variant_lego(variant: fortnite_api.VariantLego[Any]):
     assert isinstance(variant, fortnite_api.VariantLego)
     assert variant.cosmetic_id
     assert isinstance(variant.sound_library_tags, list)
@@ -174,7 +174,7 @@ def test_variant_lego(variant: fortnite_api.VariantLego[Any]):
         assert isinstance(images, fortnite_api.CosmeticImages)
 
 
-def test_variant_bean(variant: fortnite_api.VariantBean[Any]):
+def validate_variant_bean(variant: fortnite_api.VariantBean[Any]):
     assert isinstance(variant, fortnite_api.VariantBean)
     assert variant.name
 
@@ -186,7 +186,7 @@ def test_variant_bean(variant: fortnite_api.VariantBean[Any]):
         assert isinstance(images, fortnite_api.CosmeticImages)
 
 
-def test_cosmetic_track(cosmetic: fortnite_api.CosmeticTrack[Any]):
+def validate_cosmetic_track(cosmetic: fortnite_api.CosmeticTrack[Any]):
     assert isinstance(cosmetic, fortnite_api.CosmeticTrack)
     assert cosmetic.dev_name
     assert cosmetic.title
