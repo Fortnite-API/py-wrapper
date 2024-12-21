@@ -1,5 +1,5 @@
 .. currentmodule:: fortnite_api
-    
+
 Objects
 =======
 
@@ -101,7 +101,7 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 .. autoclass:: fortnite_api.ShopEntryColors
     :members:
 
-.. autoclass:: fortnite_api.ShopEntry 
+.. autoclass:: fortnite_api.ShopEntry
     :members:
 
 .. autoclass:: fortnite_api.Shop
@@ -129,7 +129,7 @@ The API has many objects that represent different parts of the Fortnite API. Bel
 Cosmetic Objects
 ----------------
 
-.. autoclass:: fortnite_api.Cosmetic 
+.. autoclass:: fortnite_api.Cosmetic
     :members:
 
 .. autoclass:: fortnite_api.CosmeticTypeInfo
@@ -138,7 +138,7 @@ Cosmetic Objects
 .. autoclass:: fortnite_api.CosmeticRarityInfo
     :members:
 
-.. autoclass:: fortnite_api.CosmeticSeriesInfo 
+.. autoclass:: fortnite_api.CosmeticSeriesInfo
     :members:
 
 .. autoclass:: fortnite_api.CosmeticImages
@@ -150,7 +150,7 @@ Cosmetic Objects
 .. autoclass:: fortnite_api.CosmeticBrIntroduction
     :members:
 
-.. autoclass:: fortnite_api.CosmeticBrVariant 
+.. autoclass:: fortnite_api.CosmeticBrVariant
     :members:
 
 .. autoclass:: fortnite_api.CosmeticBrVariantOption
@@ -168,7 +168,7 @@ Cosmetic Objects
     :members:
     :inherited-members:
 
-.. autoclass:: fortnite_api.CosmeticLegoKit 
+.. autoclass:: fortnite_api.CosmeticLegoKit
     :members:
     :inherited-members:
 
@@ -222,11 +222,8 @@ Enumerations
 
 .. autoclass:: fortnite_api.TimeWindow
     :members:
-    
-.. autoclass:: fortnite_api.StatsImageType
-    :members:
 
-.. autoclass:: fortnite_api.CreatorCodeStatus
+.. autoclass:: fortnite_api.StatsImageType
     :members:
 
 .. autoclass:: fortnite_api.CosmeticCompatibleMode
