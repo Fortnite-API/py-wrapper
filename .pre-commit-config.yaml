@@ -1,7 +1,7 @@
 # Black formatter pre commit hook
 repos:
   - repo: https://github.com/psf/black
-    rev: stable
+    rev: 24.10.0
     hooks:
       - id: black
 
