@@ -31,6 +31,7 @@ import pytest
 
 import fortnite_api
 
+from .client.test_client_hybrid import ClientHybrid
 from .conftest import (
     TEST_INVALID_STAT_ACCOUNT_ID,
     TEST_INVALID_STAT_ACCOUNT_NAME,
@@ -39,7 +40,7 @@ from .conftest import (
 )
 
 
-def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
+def _validate_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
     assert player_stats.user
 
     if player_stats.battle_pass:
@@ -79,42 +80,22 @@ def _test_stats(player_stats: fortnite_api.BrPlayerStats[Any]) -> None:
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_br_stats_by_name(api_key: str):
-    async with fortnite_api.Client(api_key=api_key) as client:
+async def test_fetch_br_stats_by_name(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         with pytest.raises(fortnite_api.NotFound):
             await client.fetch_br_stats(name=TEST_INVALID_STAT_ACCOUNT_NAME)
         stats = await client.fetch_br_stats(name=TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
-    _test_stats(stats)
+    _validate_stats(stats)
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_br_stats_by_account_id(api_key: str):
-    async with fortnite_api.Client(api_key=api_key) as client:
+async def test_fetch_br_stats_by_account_id(api_key: str):
+    async with ClientHybrid(api_key=api_key) as client:
         with pytest.raises(fortnite_api.NotFound):
             await client.fetch_br_stats(name=TEST_INVALID_STAT_ACCOUNT_ID)
         stats = await client.fetch_br_stats(account_id=TEST_STAT_ACCOUNT_ID, image=fortnite_api.StatsImageType.ALL)
 
     assert stats is not None
-    _test_stats(stats)
-
-
-def test_sync_fetch_br_stats_by_name(api_key: str):
-    with fortnite_api.SyncClient(api_key=api_key) as client:
-        with pytest.raises(fortnite_api.NotFound):
-            client.fetch_br_stats(name=TEST_INVALID_STAT_ACCOUNT_NAME)
-        stats = client.fetch_br_stats(name=TEST_STAT_ACCOUNT_NAME, image=fortnite_api.StatsImageType.ALL)
-
-    assert stats is not None
-    _test_stats(stats)
-
-
-def test_sync_fetch_br_stats_by_account_id(api_key: str):
-    with fortnite_api.SyncClient(api_key=api_key) as client:
-        with pytest.raises(fortnite_api.NotFound):
-            client.fetch_br_stats(name=TEST_INVALID_STAT_ACCOUNT_ID)
-        stats = client.fetch_br_stats(account_id=TEST_STAT_ACCOUNT_ID, image=fortnite_api.StatsImageType.ALL)
-
-    assert stats is not None
-    _test_stats(stats)
+    _validate_stats(stats)
