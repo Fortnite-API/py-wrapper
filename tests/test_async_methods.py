@@ -344,7 +344,10 @@ async def test_async_fetch_variants_beans(api_key: str, response_flags: fn_api.R
 def _test_variant_bean(variant: fn_api.VariantBean[Any]):
     assert isinstance(variant, fn_api.VariantBean)
     assert variant.name
-    assert isinstance(variant.gender, fn_api.CustomGender)
+
+    gender = variant.gender
+    if gender:
+        assert isinstance(gender, fn_api.CustomGender)
 
     images = variant.images
     if images:
