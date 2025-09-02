@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Generic, TypeVar, Union
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 from typing_extensions import Self
 
@@ -118,7 +118,7 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
     # still keeping the correct HTTPClient type.
 
     @classmethod
-    def from_dict(cls: type[Self], data: DictT, *, client: Union[Client, SyncClient]) -> Self:
+    def from_dict(cls: type[Self], data: DictT, *, client: Client | SyncClient) -> Self:
         """Reconstructs this class from a raw dictionary object. This is useful for when you
         store the raw data and want to reconstruct the object later on.
 

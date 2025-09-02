@@ -66,13 +66,13 @@ class Asset(Generic[HTTPClientT]):
 
     __slots__: tuple[str, ...] = ('_http', '_url', '_max_size', '_size')
 
-    def __init__(self, *, http: HTTPClientT, url: str, max_size: Optional[int] = MISSING, size: int = MISSING) -> None:
+    def __init__(self, *, http: HTTPClientT, url: str, max_size: int | None = MISSING, size: int = MISSING) -> None:
         self._http: HTTPClientT = http
         self._url: str = url
 
         # The maximum size of the asset, if any. If provided, the url's default size is the maximum size.
         # MISSING for not supported, None for no max size, int for max size.
-        self._max_size: Optional[int] = max_size
+        self._max_size: int | None = max_size
 
         # The current size of this asset. Will only be set if the asset was resized.
         self._size: int = size
@@ -112,7 +112,7 @@ class Asset(Generic[HTTPClientT]):
         return self._max_size is not MISSING
 
     @property
-    def max_size(self) -> Optional[int]:
+    def max_size(self) -> int | None:
         """
         Returns
         --------
@@ -161,7 +161,7 @@ class Asset(Generic[HTTPClientT]):
     @overload
     def read(self: Asset[SyncHTTPClient], /) -> bytes: ...
 
-    def read(self) -> Union[Coroutine[Any, Any, bytes], bytes]:
+    def read(self) -> Coroutine[Any, Any, bytes] | bytes:
         """|maybecoro|
 
         Retrieves the content of this asset as a :class:`bytes` object. This is only a coroutine if the client is

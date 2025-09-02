@@ -11,7 +11,7 @@ To install the Fortnite-API Python library, you can use pip. Run the following c
 
 .. note::
 
-   Note that Python 3.9 and greater is required to use this library.
+   Note that Python 3.10 and greater is required to use this library.
 
 .. code-block:: bash
 

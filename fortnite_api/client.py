@@ -27,12 +27,12 @@ from __future__ import annotations
 import datetime
 import functools
 import inspect
-from collections.abc import Coroutine
-from typing import Any, Callable, Literal, Optional, TypeVar, Union, cast, overload
+from collections.abc import Callable, Coroutine
+from typing import Any, Concatenate, Literal, TypeVar, cast, overload
 
 import aiohttp
 import requests
-from typing_extensions import Concatenate, ParamSpec, Self
+from typing_extensions import ParamSpec, Self
 
 from .aes import Aes
 from .all import CosmeticsAll
@@ -92,8 +92,8 @@ def beta_method(func: SyncFetchFunc[SyncClient_T, P, T]) -> SyncFetchFunc[SyncCl
 
 
 def beta_method(
-    func: Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]]
-) -> Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]]:
+    func: FetchFunc[Client_T, P, T] | SyncFetchFunc[SyncClient_T, P, T],
+) -> FetchFunc[Client_T, P, T] | SyncFetchFunc[SyncClient_T, P, T]:
     if inspect.iscoroutinefunction(func):
         # This is coroutine, so we need to wrap it in an async function
         @functools.wraps(func)
@@ -169,10 +169,10 @@ class Client:
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
         *,
         default_language: GameLanguage = GameLanguage.ENGLISH,
-        session: Optional[aiohttp.ClientSession] = None,
+        session: aiohttp.ClientSession | None = None,
         beta: bool = False,
         response_flags: ResponseFlags = ResponseFlags.INCLUDE_NOTHING,
     ) -> None:
@@ -190,7 +190,7 @@ class Client:
     async def __aexit__(self, *args: Any) -> None:
         await self.http.close()
 
-    def _resolve_default_language_value(self, language: Optional[GameLanguage] = MISSING) -> Optional[str]:
+    def _resolve_default_language_value(self, language: GameLanguage | None = MISSING) -> str | None:
         if language is None:
             # This user has specifically passed None, so they want to omit
             # a language parameter completely.
@@ -199,7 +199,7 @@ class Client:
         lang = self.default_language if language is MISSING else language
         return lang.value
 
-    def _resolve_response_flags_value(self, flags: Optional[ResponseFlags] = MISSING) -> Optional[int]:
+    def _resolve_response_flags_value(self, flags: ResponseFlags | None = MISSING) -> int | None:
         if flags is None:
             # This user has specifically passed None, so they want to omit
             # a response flags parameter completely.
@@ -210,7 +210,7 @@ class Client:
 
     # COSMETICS
     async def fetch_cosmetics_all(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> CosmeticsAll:
         """|coro|
 
@@ -241,7 +241,7 @@ class Client:
         return CosmeticsAll(data=data, http=self.http)
 
     async def fetch_cosmetics_br(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticBr]:
         """|coro|
 
@@ -275,7 +275,7 @@ class Client:
         )
 
     async def fetch_cosmetics_cars(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticCar]:
         """|coro|
 
@@ -309,7 +309,7 @@ class Client:
         )
 
     async def fetch_cosmetics_instruments(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticInstrument]:
         """|coro|
 
@@ -343,7 +343,7 @@ class Client:
         )
 
     async def fetch_cosmetics_lego_kits(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticLegoKit]:
         """|coro|
 
@@ -377,7 +377,7 @@ class Client:
         )
 
     async def fetch_variants_lego(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[VariantLego]:
         """|coro|
 
@@ -412,7 +412,7 @@ class Client:
         )
 
     async def fetch_variants_beans(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[VariantBean]:
         """|coro|
 
@@ -448,7 +448,7 @@ class Client:
         )
 
     async def fetch_cosmetics_tracks(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticTrack]:
         """|coro|
 
@@ -487,8 +487,8 @@ class Client:
         /,
         cosmetic_id: str,
         *,
-        language: Optional[GameLanguage] = MISSING,
-        response_flags: Optional[ResponseFlags] = MISSING,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> CosmeticBr:
         """|coro|
 
@@ -529,7 +529,7 @@ class Client:
     # NEW COSMETICS
 
     async def fetch_cosmetics_new(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> NewCosmetics:
         """|coro|
 
@@ -564,40 +564,40 @@ class Client:
         self,
         *,
         multiple: Literal[True] = True,
-        language: Optional[GameLanguage] = MISSING,
-        response_flags: Optional[ResponseFlags] = MISSING,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
         search_language: GameLanguage = GameLanguage.ENGLISH,
         match_method: MatchMethod = MatchMethod.FULL,
-        id: Optional[str] = ...,
-        name: Optional[str] = ...,
-        description: Optional[str] = ...,
-        type: Optional[CosmeticType] = ...,
-        type_display: Optional[str] = ...,
-        type_backend: Optional[str] = ...,
-        rarity: Optional[CosmeticRarity] = ...,
-        rarity_display: Optional[str] = ...,
-        rarity_backend: Optional[str] = ...,
-        has_series: Optional[bool] = ...,
-        series: Optional[str] = ...,
-        series_backend: Optional[str] = ...,
-        has_set: Optional[bool] = ...,
-        set: Optional[str] = ...,
-        set_text: Optional[str] = ...,
-        set_backend: Optional[str] = ...,
-        has_introduction: Optional[bool] = ...,
-        introduction_backend: Optional[str] = ...,
-        introduction_chapter: Optional[str] = ...,
-        introduction_season: Optional[str] = ...,
-        has_featured_image: Optional[bool] = ...,
-        has_variants: Optional[bool] = ...,
-        gameplay_tag: Optional[str] = ...,
-        has_meta_tags: Optional[bool] = ...,
-        has_dynamic_pak_id: Optional[bool] = ...,
-        dynamic_pak_id: Optional[str] = ...,
-        added: Optional[datetime.datetime] = ...,
-        added_since: Optional[datetime.datetime] = ...,
-        unseen_for: Optional[int] = ...,
-        last_appearance: Optional[datetime.datetime] = ...,
+        id: str | None = ...,
+        name: str | None = ...,
+        description: str | None = ...,
+        type: CosmeticType | None = ...,
+        type_display: str | None = ...,
+        type_backend: str | None = ...,
+        rarity: CosmeticRarity | None = ...,
+        rarity_display: str | None = ...,
+        rarity_backend: str | None = ...,
+        has_series: bool | None = ...,
+        series: str | None = ...,
+        series_backend: str | None = ...,
+        has_set: bool | None = ...,
+        set: str | None = ...,
+        set_text: str | None = ...,
+        set_backend: str | None = ...,
+        has_introduction: bool | None = ...,
+        introduction_backend: str | None = ...,
+        introduction_chapter: str | None = ...,
+        introduction_season: str | None = ...,
+        has_featured_image: bool | None = ...,
+        has_variants: bool | None = ...,
+        gameplay_tag: str | None = ...,
+        has_meta_tags: bool | None = ...,
+        has_dynamic_pak_id: bool | None = ...,
+        dynamic_pak_id: str | None = ...,
+        added: datetime.datetime | None = ...,
+        added_since: datetime.datetime | None = ...,
+        unseen_for: int | None = ...,
+        last_appearance: datetime.datetime | None = ...,
     ) -> list[CosmeticBr]: ...
 
     @overload
@@ -605,43 +605,43 @@ class Client:
         self,
         *,
         multiple: Literal[False] = False,
-        language: Optional[GameLanguage] = MISSING,
-        response_flags: Optional[ResponseFlags] = MISSING,
-        search_language: Optional[GameLanguage] = MISSING,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
+        search_language: GameLanguage | None = MISSING,
         match_method: MatchMethod = MatchMethod.FULL,
-        id: Optional[str] = ...,
-        name: Optional[str] = ...,
-        description: Optional[str] = ...,
-        type: Optional[CosmeticType] = ...,
-        type_display: Optional[str] = ...,
-        type_backend: Optional[str] = ...,
-        rarity: Optional[CosmeticRarity] = ...,
-        rarity_display: Optional[str] = ...,
-        rarity_backend: Optional[str] = ...,
-        has_series: Optional[bool] = ...,
-        series: Optional[str] = ...,
-        series_backend: Optional[str] = ...,
-        has_set: Optional[bool] = ...,
-        set: Optional[str] = ...,
-        set_text: Optional[str] = ...,
-        set_backend: Optional[str] = ...,
-        has_introduction: Optional[bool] = ...,
-        introduction_backend: Optional[str] = ...,
-        introduction_chapter: Optional[str] = ...,
-        introduction_season: Optional[str] = ...,
-        has_featured_image: Optional[bool] = ...,
-        has_variants: Optional[bool] = ...,
-        gameplay_tag: Optional[str] = ...,
-        has_meta_tags: Optional[bool] = ...,
-        has_dynamic_pak_id: Optional[bool] = ...,
-        dynamic_pak_id: Optional[str] = ...,
-        added: Optional[datetime.datetime] = ...,
-        added_since: Optional[datetime.datetime] = ...,
-        unseen_for: Optional[int] = ...,
-        last_appearance: Optional[datetime.datetime] = ...,
+        id: str | None = ...,
+        name: str | None = ...,
+        description: str | None = ...,
+        type: CosmeticType | None = ...,
+        type_display: str | None = ...,
+        type_backend: str | None = ...,
+        rarity: CosmeticRarity | None = ...,
+        rarity_display: str | None = ...,
+        rarity_backend: str | None = ...,
+        has_series: bool | None = ...,
+        series: str | None = ...,
+        series_backend: str | None = ...,
+        has_set: bool | None = ...,
+        set: str | None = ...,
+        set_text: str | None = ...,
+        set_backend: str | None = ...,
+        has_introduction: bool | None = ...,
+        introduction_backend: str | None = ...,
+        introduction_chapter: str | None = ...,
+        introduction_season: str | None = ...,
+        has_featured_image: bool | None = ...,
+        has_variants: bool | None = ...,
+        gameplay_tag: str | None = ...,
+        has_meta_tags: bool | None = ...,
+        has_dynamic_pak_id: bool | None = ...,
+        dynamic_pak_id: str | None = ...,
+        added: datetime.datetime | None = ...,
+        added_since: datetime.datetime | None = ...,
+        unseen_for: int | None = ...,
+        last_appearance: datetime.datetime | None = ...,
     ) -> CosmeticBr: ...
 
-    async def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr, list[CosmeticBr]]:
+    async def search_br_cosmetics(self, **kwargs: Any) -> CosmeticBr | list[CosmeticBr]:
         """|coro|
 
         Searches all Battle Royale cosmetics available in Fortnite and returns
@@ -775,7 +775,7 @@ class Client:
         return Aes(data=data, http=self.http)
 
     # BANNERS
-    async def fetch_banners(self, *, language: Optional[GameLanguage] = MISSING) -> list[Banner]:
+    async def fetch_banners(self, *, language: GameLanguage | None = MISSING) -> list[Banner]:
         """|coro|
 
         Fetch all banners available in Fortnite.
@@ -842,7 +842,7 @@ class Client:
 
     # MAPS
 
-    async def fetch_map(self, *, language: Optional[GameLanguage] = MISSING) -> Map:
+    async def fetch_map(self, *, language: GameLanguage | None = MISSING) -> Map:
         """|coro|
 
         Fetches the current map of Fortnite.
@@ -865,7 +865,7 @@ class Client:
 
     # NEWS
 
-    async def fetch_news(self, *, language: Optional[GameLanguage] = MISSING) -> News:
+    async def fetch_news(self, *, language: GameLanguage | None = MISSING) -> News:
         """|coro|
 
         Fetch the news for Fortnite. This includes all news for all game modes.
@@ -886,7 +886,7 @@ class Client:
         data = await self.http.get_news(language=self._resolve_default_language_value(language))
         return News(data=data, http=self.http)
 
-    async def fetch_news_br(self, *, language: Optional[GameLanguage] = MISSING) -> GameModeNews:
+    async def fetch_news_br(self, *, language: GameLanguage | None = MISSING) -> GameModeNews:
         """|coro|
 
         Fetches the current Battle Royale news.
@@ -912,7 +912,7 @@ class Client:
         data = await self.http.get_news_br(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
-    async def fetch_news_stw(self, *, language: Optional[GameLanguage] = MISSING) -> GameModeNews:
+    async def fetch_news_stw(self, *, language: GameLanguage | None = MISSING) -> GameModeNews:
         """|coro|
 
         Fetches the current Save the World news.
@@ -940,7 +940,7 @@ class Client:
 
     # PLAYLISTS
 
-    async def fetch_playlists(self, /, *, language: Optional[GameLanguage] = MISSING) -> list[Playlist]:
+    async def fetch_playlists(self, /, *, language: GameLanguage | None = MISSING) -> list[Playlist]:
         """|coro|
 
         Fetches a list of current playlists available in Fortnite.
@@ -964,7 +964,7 @@ class Client:
             lambda x: Playlist(data=x, http=self.http),
         )
 
-    async def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = MISSING) -> Playlist:
+    async def fetch_playlist(self, id: str, /, *, language: GameLanguage | None = MISSING) -> Playlist:
         """|coro|
 
         Fetch a specific playlist by its ID.
@@ -997,8 +997,8 @@ class Client:
     async def fetch_br_stats(
         self,
         *,
-        name: Optional[str] = None,
-        account_id: Optional[str] = None,
+        name: str | None = None,
+        account_id: str | None = None,
         type: AccountType = AccountType.EPIC,
         time_window: TimeWindow = TimeWindow.LIFETIME,
         image: StatsImageType = StatsImageType.NONE,
@@ -1071,7 +1071,7 @@ class Client:
 
     # SHOP
     async def fetch_shop(
-        self, /, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, /, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> Shop:
         """|coro|
 
@@ -1247,10 +1247,10 @@ class SyncClient:
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
         *,
         default_language: GameLanguage = GameLanguage.ENGLISH,
-        session: Optional[requests.Session] = None,
+        session: requests.Session | None = None,
         beta: bool = False,
         response_flags: ResponseFlags = ResponseFlags.INCLUDE_NOTHING,
     ) -> None:
@@ -1269,7 +1269,7 @@ class SyncClient:
     def __exit__(self, *args: Any) -> None:
         self.http.close()
 
-    def _resolve_default_language_value(self, language: Optional[GameLanguage] = MISSING) -> Optional[str]:
+    def _resolve_default_language_value(self, language: GameLanguage | None = MISSING) -> str | None:
         if language is None:
             # This user has specifically passed None, so they want to omit
             # a language parameter completely.
@@ -1278,7 +1278,7 @@ class SyncClient:
         lang = self.default_language if language is MISSING else language
         return lang.value
 
-    def _resolve_response_flags_value(self, flags: Optional[ResponseFlags] = MISSING) -> Optional[int]:
+    def _resolve_response_flags_value(self, flags: ResponseFlags | None = MISSING) -> int | None:
         if flags is None:
             # This user has specifically passed None, so they want to omit
             # a response flags parameter completely.
@@ -1290,7 +1290,7 @@ class SyncClient:
     # COSMETICS
     @copy_doc(Client.fetch_cosmetics_all)
     def fetch_cosmetics_all(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> CosmeticsAll[SyncHTTPClient]:
         data = self.http.get_cosmetics_all(
             language=self._resolve_default_language_value(language),
@@ -1300,7 +1300,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_br)
     def fetch_cosmetics_br(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticBr[SyncHTTPClient]]:
         data = self.http.get_cosmetics_br(
             language=self._resolve_default_language_value(language),
@@ -1313,7 +1313,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_cars)
     def fetch_cosmetics_cars(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticCar[SyncHTTPClient]]:
         data = self.http.get_cosmetics_cars(
             language=self._resolve_default_language_value(language),
@@ -1326,7 +1326,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_instruments)
     def fetch_cosmetics_instruments(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticInstrument[SyncHTTPClient]]:
         data = self.http.get_cosmetics_instruments(
             language=self._resolve_default_language_value(language),
@@ -1339,7 +1339,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_lego_kits)
     def fetch_cosmetics_lego_kits(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticLegoKit[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego_kits(
             language=self._resolve_default_language_value(language),
@@ -1352,7 +1352,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_variants_lego)
     def fetch_variants_lego(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[VariantLego[SyncHTTPClient]]:
         data = self.http.get_cosmetics_lego(
             language=self._resolve_default_language_value(language),
@@ -1365,7 +1365,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_variants_beans)
     def fetch_variants_beans(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[VariantBean[SyncHTTPClient]]:
         data = self.http.get_cosmetics_beans(
             language=self._resolve_default_language_value(language),
@@ -1378,7 +1378,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_tracks)
     def fetch_cosmetics_tracks(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> list[CosmeticTrack[SyncHTTPClient]]:
         data = self.http.get_cosmetics_tracks(
             language=self._resolve_default_language_value(language),
@@ -1395,8 +1395,8 @@ class SyncClient:
         /,
         cosmetic_id: str,
         *,
-        language: Optional[GameLanguage] = MISSING,
-        response_flags: Optional[ResponseFlags] = MISSING,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
     ) -> CosmeticBr[SyncHTTPClient]:
         data = self.http.get_cosmetic_br(
             cosmetic_id,
@@ -1409,7 +1409,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_cosmetics_new)
     def fetch_cosmetics_new(
-        self, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> NewCosmetics[SyncHTTPClient]:
         data = self.http.get_cosmetics_new(
             language=self._resolve_default_language_value(language),
@@ -1422,40 +1422,40 @@ class SyncClient:
         self,
         *,
         multiple: Literal[True] = True,
-        language: Optional[GameLanguage] = MISSING,
-        response_flags: Optional[ResponseFlags] = MISSING,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
         search_language: GameLanguage = GameLanguage.ENGLISH,
         match_method: MatchMethod = MatchMethod.FULL,
-        id: Optional[str] = ...,
-        name: Optional[str] = ...,
-        description: Optional[str] = ...,
-        type: Optional[CosmeticType] = ...,
-        type_display: Optional[str] = ...,
-        type_backend: Optional[str] = ...,
-        rarity: Optional[CosmeticRarity] = ...,
-        rarity_display: Optional[str] = ...,
-        rarity_backend: Optional[str] = ...,
-        has_series: Optional[bool] = ...,
-        series: Optional[str] = ...,
-        series_backend: Optional[str] = ...,
-        has_set: Optional[bool] = ...,
-        set: Optional[str] = ...,
-        set_text: Optional[str] = ...,
-        set_backend: Optional[str] = ...,
-        has_introduction: Optional[bool] = ...,
-        introduction_backend: Optional[str] = ...,
-        introduction_chapter: Optional[str] = ...,
-        introduction_season: Optional[str] = ...,
-        has_featured_image: Optional[bool] = ...,
-        has_variants: Optional[bool] = ...,
-        gameplay_tag: Optional[str] = ...,
-        has_meta_tags: Optional[bool] = ...,
-        has_dynamic_pak_id: Optional[bool] = ...,
-        dynamic_pak_id: Optional[str] = ...,
-        added: Optional[datetime.datetime] = ...,
-        added_since: Optional[datetime.datetime] = ...,
-        unseen_for: Optional[int] = ...,
-        last_appearance: Optional[datetime.datetime] = ...,
+        id: str | None = ...,
+        name: str | None = ...,
+        description: str | None = ...,
+        type: CosmeticType | None = ...,
+        type_display: str | None = ...,
+        type_backend: str | None = ...,
+        rarity: CosmeticRarity | None = ...,
+        rarity_display: str | None = ...,
+        rarity_backend: str | None = ...,
+        has_series: bool | None = ...,
+        series: str | None = ...,
+        series_backend: str | None = ...,
+        has_set: bool | None = ...,
+        set: str | None = ...,
+        set_text: str | None = ...,
+        set_backend: str | None = ...,
+        has_introduction: bool | None = ...,
+        introduction_backend: str | None = ...,
+        introduction_chapter: str | None = ...,
+        introduction_season: str | None = ...,
+        has_featured_image: bool | None = ...,
+        has_variants: bool | None = ...,
+        gameplay_tag: str | None = ...,
+        has_meta_tags: bool | None = ...,
+        has_dynamic_pak_id: bool | None = ...,
+        dynamic_pak_id: str | None = ...,
+        added: datetime.datetime | None = ...,
+        added_since: datetime.datetime | None = ...,
+        unseen_for: int | None = ...,
+        last_appearance: datetime.datetime | None = ...,
     ) -> list[CosmeticBr[SyncHTTPClient]]: ...
 
     @overload
@@ -1463,44 +1463,44 @@ class SyncClient:
         self,
         *,
         multiple: Literal[False] = False,
-        language: Optional[GameLanguage] = MISSING,
-        response_flags: Optional[ResponseFlags] = MISSING,
-        search_language: Optional[GameLanguage] = MISSING,
+        language: GameLanguage | None = MISSING,
+        response_flags: ResponseFlags | None = MISSING,
+        search_language: GameLanguage | None = MISSING,
         match_method: MatchMethod = MatchMethod.FULL,
-        id: Optional[str] = ...,
-        name: Optional[str] = ...,
-        description: Optional[str] = ...,
-        type: Optional[CosmeticType] = ...,
-        type_display: Optional[str] = ...,
-        type_backend: Optional[str] = ...,
-        rarity: Optional[CosmeticRarity] = ...,
-        rarity_display: Optional[str] = ...,
-        rarity_backend: Optional[str] = ...,
-        has_series: Optional[bool] = ...,
-        series: Optional[str] = ...,
-        series_backend: Optional[str] = ...,
-        has_set: Optional[bool] = ...,
-        set: Optional[str] = ...,
-        set_text: Optional[str] = ...,
-        set_backend: Optional[str] = ...,
-        has_introduction: Optional[bool] = ...,
-        introduction_backend: Optional[str] = ...,
-        introduction_chapter: Optional[str] = ...,
-        introduction_season: Optional[str] = ...,
-        has_featured_image: Optional[bool] = ...,
-        has_variants: Optional[bool] = ...,
-        gameplay_tag: Optional[str] = ...,
-        has_meta_tags: Optional[bool] = ...,
-        has_dynamic_pak_id: Optional[bool] = ...,
-        dynamic_pak_id: Optional[str] = ...,
-        added: Optional[datetime.datetime] = ...,
-        added_since: Optional[datetime.datetime] = ...,
-        unseen_for: Optional[int] = ...,
-        last_appearance: Optional[datetime.datetime] = ...,
+        id: str | None = ...,
+        name: str | None = ...,
+        description: str | None = ...,
+        type: CosmeticType | None = ...,
+        type_display: str | None = ...,
+        type_backend: str | None = ...,
+        rarity: CosmeticRarity | None = ...,
+        rarity_display: str | None = ...,
+        rarity_backend: str | None = ...,
+        has_series: bool | None = ...,
+        series: str | None = ...,
+        series_backend: str | None = ...,
+        has_set: bool | None = ...,
+        set: str | None = ...,
+        set_text: str | None = ...,
+        set_backend: str | None = ...,
+        has_introduction: bool | None = ...,
+        introduction_backend: str | None = ...,
+        introduction_chapter: str | None = ...,
+        introduction_season: str | None = ...,
+        has_featured_image: bool | None = ...,
+        has_variants: bool | None = ...,
+        gameplay_tag: str | None = ...,
+        has_meta_tags: bool | None = ...,
+        has_dynamic_pak_id: bool | None = ...,
+        dynamic_pak_id: str | None = ...,
+        added: datetime.datetime | None = ...,
+        added_since: datetime.datetime | None = ...,
+        unseen_for: int | None = ...,
+        last_appearance: datetime.datetime | None = ...,
     ) -> CosmeticBr[SyncHTTPClient]: ...
 
     @copy_doc(Client.search_br_cosmetics)
-    def search_br_cosmetics(self, **kwargs: Any) -> Union[CosmeticBr[SyncHTTPClient], list[CosmeticBr[SyncHTTPClient]]]:
+    def search_br_cosmetics(self, **kwargs: Any) -> CosmeticBr[SyncHTTPClient] | list[CosmeticBr[SyncHTTPClient]]:
         multiple = kwargs.pop('multiple', False)
 
         kwargs['language'] = self._resolve_default_language_value(kwargs.pop('language', MISSING))
@@ -1531,7 +1531,7 @@ class SyncClient:
 
     # BANNERS
     @copy_doc(Client.fetch_banners)
-    def fetch_banners(self, *, language: Optional[GameLanguage] = MISSING) -> list[Banner[SyncHTTPClient]]:
+    def fetch_banners(self, *, language: GameLanguage | None = MISSING) -> list[Banner[SyncHTTPClient]]:
         data = self.http.get_banners(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
@@ -1556,31 +1556,31 @@ class SyncClient:
     # MAPS
 
     @copy_doc(Client.fetch_map)
-    def fetch_map(self, *, language: Optional[GameLanguage] = MISSING) -> Map[SyncHTTPClient]:
+    def fetch_map(self, *, language: GameLanguage | None = MISSING) -> Map[SyncHTTPClient]:
         data = self.http.get_map(language=self._resolve_default_language_value(language))
         return Map(data=data, http=self.http)
 
     # NEWS
 
     @copy_doc(Client.fetch_news)
-    def fetch_news(self, *, language: Optional[GameLanguage] = MISSING) -> News[SyncHTTPClient]:
+    def fetch_news(self, *, language: GameLanguage | None = MISSING) -> News[SyncHTTPClient]:
         data = self.http.get_news(language=self._resolve_default_language_value(language))
         return News(data=data, http=self.http)
 
     @copy_doc(Client.fetch_news_br)
-    def fetch_news_br(self, *, language: Optional[GameLanguage] = MISSING) -> GameModeNews[SyncHTTPClient]:
+    def fetch_news_br(self, *, language: GameLanguage | None = MISSING) -> GameModeNews[SyncHTTPClient]:
         data = self.http.get_news_br(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     @copy_doc(Client.fetch_news_stw)
-    def fetch_news_stw(self, *, language: Optional[GameLanguage] = MISSING) -> GameModeNews[SyncHTTPClient]:
+    def fetch_news_stw(self, *, language: GameLanguage | None = MISSING) -> GameModeNews[SyncHTTPClient]:
         data = self.http.get_news_stw(language=self._resolve_default_language_value(language))
         return GameModeNews(data=data, http=self.http)
 
     # PLAYLISTS
 
     @copy_doc(Client.fetch_playlists)
-    def fetch_playlists(self, /, *, language: Optional[GameLanguage] = MISSING) -> list[Playlist[SyncHTTPClient]]:
+    def fetch_playlists(self, /, *, language: GameLanguage | None = MISSING) -> list[Playlist[SyncHTTPClient]]:
         data = self.http.get_playlists(language=self._resolve_default_language_value(language))
         return TransformerListProxy(
             data,
@@ -1588,7 +1588,7 @@ class SyncClient:
         )
 
     @copy_doc(Client.fetch_playlist)
-    def fetch_playlist(self, id: str, /, *, language: Optional[GameLanguage] = MISSING) -> Playlist[SyncHTTPClient]:
+    def fetch_playlist(self, id: str, /, *, language: GameLanguage | None = MISSING) -> Playlist[SyncHTTPClient]:
         data = self.http.get_playlist(id, language=self._resolve_default_language_value(language))
         return Playlist(data=data, http=self.http)
 
@@ -1598,8 +1598,8 @@ class SyncClient:
     def fetch_br_stats(
         self,
         *,
-        name: Optional[str] = None,
-        account_id: Optional[str] = None,
+        name: str | None = None,
+        account_id: str | None = None,
         type: AccountType = AccountType.EPIC,
         time_window: TimeWindow = TimeWindow.LIFETIME,
         image: StatsImageType = StatsImageType.NONE,
@@ -1646,7 +1646,7 @@ class SyncClient:
 
     @copy_doc(Client.fetch_shop)
     def fetch_shop(
-        self, /, *, language: Optional[GameLanguage] = MISSING, response_flags: Optional[ResponseFlags] = MISSING
+        self, /, *, language: GameLanguage | None = MISSING, response_flags: ResponseFlags | None = MISSING
     ) -> Shop[SyncHTTPClient]:
         data = self.http.get_shop(
             language=self._resolve_default_language_value(language),

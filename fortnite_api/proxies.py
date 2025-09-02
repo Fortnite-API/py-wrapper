@@ -24,8 +24,8 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Iterator
-from typing import TYPE_CHECKING, Callable, Generic, SupportsIndex, Union, cast, overload
+from collections.abc import Callable, Iterable, Iterator
+from typing import TYPE_CHECKING, Generic, SupportsIndex, cast, overload
 
 from typing_extensions import Self, TypeVar
 
@@ -92,7 +92,7 @@ class TransformerListProxy(Generic[T, K_co, V_co], list[T]):
     @overload
     def __getitem__(self, index: slice) -> list[T]: ...
 
-    def __getitem__(self, index: Union[SupportsIndex, slice]) -> Union[list[T], T]:
+    def __getitem__(self, index: SupportsIndex | slice) -> list[T] | T:
         if isinstance(index, slice):
             # This is a slice, so we need to handle each item in the slice and set it to the transformed data.
             # For each index in the slice, transform the data at that index then update the item list

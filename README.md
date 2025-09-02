@@ -13,7 +13,7 @@ The library's focus is to provide a simple and easy-to-use interface to interact
 
 ## Installation
 
-Note that **Python 3.9 or higher is required.**
+Note that **Python 3.10 or higher is required.**
 
 ```sh
 # Linux/macOS

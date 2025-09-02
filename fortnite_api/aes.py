@@ -27,7 +27,7 @@ from __future__ import annotations
 import dataclasses
 import re
 from collections.abc import Generator
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 from .abc import ReconstructAble
 from .http import HTTPClientT
@@ -155,11 +155,11 @@ class Aes(ReconstructAble[dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: dict[str, Any], http: HTTPClientT):
         super().__init__(data=data, http=http)
 
-        self.main_key: Optional[str] = data.get("mainKey")
+        self.main_key: str | None = data.get("mainKey")
         self.build: str = data["build"]
 
         # In the case that the API gives us an invalid version, we will set it to None
-        self.version: Optional[Version] = None
+        self.version: Version | None = None
         version_info = VERSION_REGEX.findall(self.build)
         if version_info and len(version_info[0]) == 2:
             major, minor = version_info[0]
@@ -240,7 +240,7 @@ class DynamicKey(ReconstructAble[dict[str, Any], HTTPClientT]):
     def __hash__(self) -> int:
         return hash((self.pak_filename, self.pak_guid, self.key))
 
-    def __eq__(self, o: Union[object, DynamicKey]) -> bool:
+    def __eq__(self, o: object | DynamicKey) -> bool:
         if not isinstance(o, DynamicKey):
             return False
 
