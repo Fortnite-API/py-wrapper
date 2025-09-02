@@ -30,7 +30,7 @@ import logging
 import sys
 import time
 from collections.abc import Coroutine
-from typing import Any, ClassVar, Literal, TypeAlias, Union
+from typing import Any, ClassVar, Literal, TypeAlias
 from urllib.parse import quote as _uriquote
 
 import aiohttp
@@ -44,7 +44,7 @@ from .utils import now, parse_time, to_json
 T = TypeVar('T', bound='Any')
 AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
 
-HTTPClientT = TypeVar('HTTPClientT', bound='Union[HTTPClient, SyncHTTPClient]', default='HTTPClient')
+HTTPClientT = TypeVar('HTTPClientT', bound='HTTPClient | SyncHTTPClient', default='HTTPClient')
 
 _log = logging.getLogger(__name__)
 
