@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, Generic, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, Generic, overload
 
 from typing_extensions import Self
 
