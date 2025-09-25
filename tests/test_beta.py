@@ -46,7 +46,6 @@ async def test_async_cannot_call_beta_method():
 
 # A mock of the SyncClient beta function that raises an error
 class MockSyncFortniteAPI(fortnite_api.SyncClient):
-
     @beta_method
     def beta_mock_call(self):
         raise ValueError('Mock error')
@@ -54,7 +53,6 @@ class MockSyncFortniteAPI(fortnite_api.SyncClient):
 
 # A mock of the Client beta function that raises an error
 class MockFortniteAPI(fortnite_api.Client):
-
     @beta_method
     async def beta_mock_call(self):
         raise ValueError('Mock error')

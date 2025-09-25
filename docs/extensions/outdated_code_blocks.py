@@ -118,7 +118,6 @@ class OutdatedCodeBlock(CodeBlock):
     }
 
     def run(self) -> list[Node]:
-
         # Create the main node that holds the code block and warning
         root = OutdatedCodeBlockNode()
 
@@ -144,7 +143,8 @@ def setup(app: Sphinx):
     app.add_node(OutdatedCodeBlockNode, html=(visit_outdated_code_block_node, depart_outdated_code_block_node))  # type: ignore
     app.add_node(OutdatedCodeBlockWarning, html=(visit_outdated_code_block_warning, depart_outdated_code_block_warning))  # type: ignore
     app.add_node(  # type: ignore
-        OutdatedCodeBlockWarningText, html=(visit_outdated_code_block_warning_text, depart_outdated_code_block_warning_text)
+        OutdatedCodeBlockWarningText,
+        html=(visit_outdated_code_block_warning_text, depart_outdated_code_block_warning_text),
     )
 
     app.add_directive('outdated-code-block', OutdatedCodeBlock)

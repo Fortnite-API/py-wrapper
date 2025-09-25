@@ -89,11 +89,10 @@ class Route:
 
 
 class HTTPMixin(abc.ABC):
-
     def __init__(self, *, token: Optional[str] = None) -> None:
         self.token: Optional[str] = token
 
-        self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {0}) Python/{1[0]}.{1[1]}'.format(
+        self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {0}) Python/{1[0]}.{1[1]}'.format(  # noqa: UP032
             __version__, sys.version_info
         )
 

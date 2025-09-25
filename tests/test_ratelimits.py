@@ -95,7 +95,6 @@ async def test_async_rate_limit_handling(async_client: HTTPClient):
     # Make a request
     route = Route('GET', 'https://example.com')
     with pytest.raises(RateLimited) as excinfo:
-
         # This will try 5 times to request, and each time get a 429 response. After it
         # should raise the RateLimited error. Any subsequent requests with the same route
         # should immediately raise the RateLimited error.

@@ -72,7 +72,7 @@ docs = [
     'furo',
     'sphinx-copybutton',
 ]
-dev = ['black', 'isort', 'discord.py', 'pyright', 'pre-commit']
+dev = ['ruff==0.13.2', 'discord.py', 'pyright', 'pre-commit']
 speed = ['orjson']
 
 [project.urls]
@@ -91,13 +91,6 @@ log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
 log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
-# Black formatting
-
-[tool.black]
-line-length = 125
-skip-string-normalization = true
-force-exclude = "LICENSE|requirements.txt|pyproject.toml|README.md"
-
 # Pyright configuration
 
 [tool.pyright]
@@ -109,11 +102,24 @@ reportPrivateUsage = "none"
 exclude = ["**/__pycache__", "build", "dist", "docs"]
 include = ["fortnite_api/", "tests/", "examples/"]
 
-# Isort configuration
+# Ruff formatting
 
-[tool.isort]
-profile = "black"
-combine_as_imports = true
-combine_star = true
-line_length = 125
-src_paths = ["fortnite_api/", "tests/", "examples/"]
+[tool.ruff]
+# Allow lines to be as long as 120.
+line-length = 120
+
+[tool.ruff.format]
+# Prefer single quotes over double quotes.
+quote-style = "preserve"
+
+[tool.ruff.lint]
+select = [
+    "I",  # Isort
+    "UP",  # Pyupgrade
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true

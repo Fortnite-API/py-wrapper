@@ -56,7 +56,9 @@ class TransformerListProxy(Generic[T, K_co, V_co], list[T]):
     to ensure that the data is always in a consistent state.
     """
 
-    def __init__(self, raw_data: Iterable[dict[K_co, V_co]], /, transform_data: Callable[[dict[K_co, V_co]], T]) -> None:
+    def __init__(
+        self, raw_data: Iterable[dict[K_co, V_co]], /, transform_data: Callable[[dict[K_co, V_co]], T]
+    ) -> None:
         self._transform_data: Callable[[dict[K_co, V_co]], T] = transform_data
         super().__init__(cast(list[T], raw_data))
 

@@ -272,7 +272,6 @@ async def test_fetch_playlist_by_id(api_key: str):
 
 @pytest.mark.asyncio
 async def test_beta_fetch_new_display_assets(api_key: str):
-
     # Ensure you cannot call this without beta=True
     with pytest.raises(fortnite_api.BetaAccessNotEnabled):
         await ClientHybrid().beta_fetch_new_display_assets()
@@ -300,7 +299,6 @@ async def test_beta_fetch_new_display_assets(api_key: str):
 
 @pytest.mark.asyncio
 async def test_beta_fetch_material_instances(api_key: str):
-
     # Ensure you cannot call this without beta=True
     with pytest.raises(fortnite_api.BetaAccessNotEnabled):
         await ClientHybrid().beta_fetch_material_instances()

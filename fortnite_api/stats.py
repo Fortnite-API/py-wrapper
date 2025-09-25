@@ -325,7 +325,9 @@ class BrPlayerStats(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.user: Account[HTTPClientT] = Account(data=_user, http=http)
 
         _battle_pass = data.get("battlePass")
-        self.battle_pass: Optional[BrBattlePass[HTTPClientT]] = _battle_pass and BrBattlePass(data=_battle_pass, http=http)
+        self.battle_pass: Optional[BrBattlePass[HTTPClientT]] = _battle_pass and BrBattlePass(
+            data=_battle_pass, http=http
+        )
 
         _image = data.get("image")
         self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
