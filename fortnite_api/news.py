@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset
@@ -70,10 +70,10 @@ class News(ReconstructAble[dict[str, Any], HTTPClientT]):
         super().__init__(data=data, http=http)
 
         _br = data.get("br")
-        self.br: Optional[GameModeNews[HTTPClientT]] = _br and GameModeNews(data=_br, http=http)
+        self.br: GameModeNews[HTTPClientT] | None = _br and GameModeNews(data=_br, http=http)
 
         _stw = data.get("stw")
-        self.stw: Optional[GameModeNews[HTTPClientT]] = _stw and GameModeNews(data=_stw, http=http)
+        self.stw: GameModeNews[HTTPClientT] | None = _stw and GameModeNews(data=_stw, http=http)
 
 
 @simple_repr
@@ -115,7 +115,7 @@ class GameModeNews(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.date: datetime.datetime = parse_time(data["date"])
 
         _image = data.get("image")
-        self.image: Optional[Asset[HTTPClientT]] = _image and Asset(http=http, url=_image)
+        self.image: Asset[HTTPClientT] | None = _image and Asset(http=http, url=_image)
 
         _motds = get_with_fallback(data, "motds", list)
         self.motds: list[NewsMotd[HTTPClientT]] = [NewsMotd(data=motd, http=http) for motd in _motds]
@@ -221,4 +221,4 @@ class NewsMessage(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.title: str = data["title"]
         self.body: str = data["body"]
         self.image: Asset[HTTPClientT] = Asset(http=http, url=data["image"])
-        self.adspace: Optional[str] = data.get("adspace")
+        self.adspace: str | None = data.get("adspace")
