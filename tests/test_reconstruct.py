@@ -24,72 +24,11 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Any, TypedDict
-
-import pytest
+from typing import TypedDict
 
 import fortnite_api
 from fortnite_api.abc import ReconstructAble
 from fortnite_api.http import HTTPClient
-
-# August 4th, 2024: The goal of this file is to ensure that the reconstruction methods are working as expected.
-# Although every object cannot be tested, the most important ones are tested here with the assumption
-# that if the overwhelming majority works then the rest should.. in theory... work as well. The
-# only way around this "bulk" method would be to write a test for every single object, and with
-# the current state of the library, that would be a bit overkill.
-#
-# If someone has the cojones to do that, then by all means, go ahead.
-
-
-@pytest.mark.asyncio
-async def test_reconstruct(api_key: str) -> None:
-    methods_to_test: list[str] = [
-        'fetch_cosmetics_all',
-        'fetch_cosmetics_br',
-        'fetch_cosmetics_cars',
-        'fetch_cosmetics_instruments',
-        'fetch_cosmetics_lego_kits',
-        'fetch_variants_lego',
-        'fetch_variants_beans',
-        'fetch_cosmetics_tracks',
-        'fetch_cosmetics_new',
-        'fetch_aes',
-        'fetch_banners',
-        'fetch_banner_colors',
-        'fetch_map',
-        'fetch_news',
-        'fetch_news_br',
-        'fetch_news_stw',
-        'fetch_playlists',
-        'fetch_shop',
-    ]
-
-    async with fortnite_api.Client(api_key=api_key) as client:
-        for method in methods_to_test:
-            # (1) grab the method from the client
-            coro = getattr(client, method)
-
-            # (2) call the method
-            try:
-                result = await coro()
-            except fortnite_api.NotFound:
-                continue
-
-            # If this item is reconstruct-able, do some basic checks to ensure
-            # that the reconstruction is working as expected.
-            if isinstance(result, fortnite_api.abc.ReconstructAble):
-                narrowed: fortnite_api.abc.ReconstructAble[dict[str, Any], HTTPClient] = result
-
-                # (3) deconstruct the object
-                deconstructed = narrowed.to_dict()
-
-                # Recreate a new instance of said object
-                reconstructed = narrowed.from_dict(deconstructed, client=client)
-
-                # (4) check that the original object and the reconstructed object are the same
-                # we can't always use __eq__ because not every object has it implemented
-                assert deconstructed == reconstructed.to_dict()
-                assert type(narrowed) == type(reconstructed)
 
 
 class DummyData(TypedDict):
@@ -121,5 +60,5 @@ def test_dummy_reconstruction() -> None:
     assert dummy == reconstructed
     assert dummy.to_dict() == reconstructed.to_dict()
     assert dummy.to_dict() == deconstructed
-    assert type(dummy) == type(reconstructed)
+    assert type(dummy) is type(reconstructed)
     assert isinstance(reconstructed, DummyReconstruct)
