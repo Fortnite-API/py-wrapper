@@ -91,7 +91,9 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
     @overload
     def fetch_cosmetic_br(self: VariantBean[SyncHTTPClient], *, language: GameLanguage | None = None) -> CosmeticBr: ...
 
-    def fetch_cosmetic_br(self, *, language: GameLanguage | None = None) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
+    def fetch_cosmetic_br(
+        self, *, language: GameLanguage | None = None
+    ) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
         """|coro|
 
         Fetches the Battle Royale cosmetic that this bean variant is based on.

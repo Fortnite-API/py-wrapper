@@ -246,7 +246,8 @@ class NewDisplayAsset(Hashable, ReconstructAble[dict[str, Any], HTTPClientT]):
         self.id: str = data["id"]
         self.cosmetic_id: str | None = data.get("cosmeticId")
         self.material_instances: list[MaterialInstance[HTTPClientT]] = [
-            MaterialInstance(data=instance, http=http) for instance in get_with_fallback(data, "materialInstances", list)
+            MaterialInstance(data=instance, http=http)
+            for instance in get_with_fallback(data, "materialInstances", list)
         ]
         self.render_images: list[RenderImage[HTTPClientT]] = [
             RenderImage(data=instance, http=http) for instance in get_with_fallback(data, "renderImages", list)

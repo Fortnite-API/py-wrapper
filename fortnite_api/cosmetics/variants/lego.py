@@ -89,7 +89,9 @@ class VariantLego(Cosmetic[dict[str, Any], HTTPClientT]):
     @overload
     def fetch_cosmetic_br(self: VariantLego[SyncHTTPClient], *, language: GameLanguage | None = None) -> CosmeticBr: ...
 
-    def fetch_cosmetic_br(self, *, language: GameLanguage | None = None) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
+    def fetch_cosmetic_br(
+        self, *, language: GameLanguage | None = None
+    ) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
         """|coro|
 
         Fetches the Battle Royale cosmetic that this lego cosmetic variant is based on.

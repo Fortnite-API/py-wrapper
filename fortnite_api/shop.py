@@ -429,7 +429,9 @@ class ShopEntry(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.out_date: datetime.datetime = parse_time(data["outDate"])
 
         _offer_tag = data.get("offerTag")
-        self.offer_tag: ShopEntryOfferTag[HTTPClientT] | None = _offer_tag and ShopEntryOfferTag(data=_offer_tag, http=http)
+        self.offer_tag: ShopEntryOfferTag[HTTPClientT] | None = _offer_tag and ShopEntryOfferTag(
+            data=_offer_tag, http=http
+        )
 
         _bundle = data.get("bundle")
         self.bundle: ShopEntryBundle[HTTPClientT] | None = _bundle and ShopEntryBundle(data=_bundle, http=http)

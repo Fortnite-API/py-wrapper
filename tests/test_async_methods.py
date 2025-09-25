@@ -558,7 +558,6 @@ async def test_async_fetch_playlist_by_id(api_key: str):
 
 @pytest.mark.asyncio
 async def test_async_beta_fetch_new_display_assets(api_key: str):
-
     # Ensure you cannot call this without beta=True
     with pytest.raises(fn_api.BetaAccessNotEnabled):
         await fn_api.Client().beta_fetch_new_display_assets()
@@ -586,7 +585,6 @@ async def test_async_beta_fetch_new_display_assets(api_key: str):
 
 @pytest.mark.asyncio
 async def test_async_beta_fetch_material_instances(api_key: str):
-
     # Ensure you cannot call this without beta=True
     with pytest.raises(fn_api.BetaAccessNotEnabled):
         await fn_api.Client().beta_fetch_material_instances()

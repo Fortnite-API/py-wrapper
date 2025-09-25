@@ -108,7 +108,9 @@ class CosmeticInstrument(Cosmetic[dict[str, Any], HTTPClientT]):
         self.images: CosmeticImages[HTTPClientT] | None = _images and CosmeticImages(data=_images, http=http)
 
         _series = data.get('series')
-        self.series: CosmeticSeriesInfo[HTTPClientT] | None = _series and CosmeticSeriesInfo(data=_series, http=self._http)
+        self.series: CosmeticSeriesInfo[HTTPClientT] | None = _series and CosmeticSeriesInfo(
+            data=_series, http=self._http
+        )
 
         self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
         self.path: str | None = data.get('path')
