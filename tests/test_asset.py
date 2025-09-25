@@ -33,7 +33,6 @@ V_BUCK_ICON_URL: str = "https://fortnite-api.com/images/vbuck.png"
 
 def test_sync_asset_reading():
     with fortnite_api.SyncClient() as client:
-
         mock_asset = fortnite_api.Asset(http=client.http, url=V_BUCK_ICON_URL)
 
         # Read the asset and ensure it is bytes
@@ -44,7 +43,6 @@ def test_sync_asset_reading():
 @pytest.mark.asyncio
 async def test_async_asset_reading():
     async with fortnite_api.Client() as client:
-
         mock_asset = fortnite_api.Asset(http=client.http, url=V_BUCK_ICON_URL)
 
         # Read the asset and ensure it is bytes
@@ -54,7 +52,6 @@ async def test_async_asset_reading():
 
 def test_asset():
     with fortnite_api.SyncClient() as client:
-
         mock_asset = fortnite_api.Asset(http=client.http, url=V_BUCK_ICON_URL)
 
     assert mock_asset.url == V_BUCK_ICON_URL
