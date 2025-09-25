@@ -27,11 +27,11 @@ from __future__ import annotations
 import inspect
 import logging
 from collections.abc import Callable, Coroutine
-from typing import TYPE_CHECKING, Any, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Concatenate, Generic, TypeAlias, TypeVar
 
 import pytest
 import requests
-from typing_extensions import Concatenate, ParamSpec, TypeAlias
+from typing_extensions import ParamSpec
 
 import fortnite_api
 from fortnite_api import ReconstructAble

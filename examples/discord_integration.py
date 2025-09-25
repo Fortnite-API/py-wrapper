@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import asyncio
 import os
-from typing import Optional
 
 import discord
 from discord.ext import commands
@@ -73,7 +72,7 @@ class FortniteCog(commands.Cog):
 
         # (3.1) The main AES key is marked as optional in the documentation, so we must
         # handle the case where it is None.
-        main_key: Optional[str] = aes.main_key
+        main_key: str | None = aes.main_key
 
         # (4) and send a message back to the user.
         if main_key is None:

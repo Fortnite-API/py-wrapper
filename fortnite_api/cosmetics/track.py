@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Optional
+from typing import Any
 
 from ..abc import ReconstructAble
 from ..asset import Asset
@@ -147,7 +147,7 @@ class CosmeticTrack(Cosmetic[dict[str, Any], HTTPClientT]):
         self.dev_name: str = data['devName']
         self.title: str = data['title']
         self.artist: str = data['artist']
-        self.album: Optional[str] = data.get('album')
+        self.album: str | None = data.get('album')
         self.release_year: int = data['releaseYear']
         self.bpm: int = data['bpm']
         self.duration: int = data['duration']

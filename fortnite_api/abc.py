@@ -127,7 +127,7 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
     ) -> ReconstructAble[DictT, HTTPClient]: ...
 
     @classmethod
-    def from_dict(cls, data: DictT, *, client: Union[Client, SyncClient]) -> Any:
+    def from_dict(cls, data: DictT, *, client: Client | SyncClient) -> Any:
         """Reconstructs this class from a raw dictionary object. This is useful for when you
         store the raw data and want to reconstruct the object later on.
 

@@ -30,12 +30,12 @@ import logging
 import sys
 import time
 from collections.abc import Coroutine
-from typing import Any, ClassVar, Literal, Optional, Union
+from typing import Any, ClassVar, Literal, TypeAlias
 from urllib.parse import quote as _uriquote
 
 import aiohttp
 import requests
-from typing_extensions import TypeAlias, TypeVar
+from typing_extensions import TypeVar
 
 from . import __version__
 from .errors import *
@@ -44,7 +44,7 @@ from .utils import now, parse_time, to_json
 T = TypeVar('T', bound='Any')
 AsyncResponse: TypeAlias = Coroutine[Any, Any, T]
 
-HTTPClientT = TypeVar('HTTPClientT', bound='Union[HTTPClient, SyncHTTPClient]', default='HTTPClient')
+HTTPClientT = TypeVar('HTTPClientT', bound='HTTPClient | SyncHTTPClient', default='HTTPClient')
 
 _log = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ class Route:
     def __init__(self, method: str, path: str, **params: Any) -> None:
         self.method: str = method
         self.path: str = path
-        self.params: Optional[dict[str, Any]] = params
+        self.params: dict[str, Any] | None = params
 
         url = self.BASE_URL + path
         if params:
@@ -89,8 +89,8 @@ class Route:
 
 
 class HTTPMixin(abc.ABC):
-    def __init__(self, *, token: Optional[str] = None) -> None:
-        self.token: Optional[str] = token
+    def __init__(self, *, token: str | None = None) -> None:
+        self.token: str | None = token
 
         self.user_agent = 'FortniteApi (https://github.com/Fortnite-API/py-wrapper {0}) Python/{1[0]}.{1[1]}'.format(  # noqa: UP032
             __version__, sys.version_info
@@ -103,9 +103,9 @@ class HTTPMixin(abc.ABC):
     @abc.abstractmethod
     def request(self, route: Route, **kwargs: Any) -> Any: ...
 
-    def get_cosmetics_br(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_br(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/br')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -115,9 +115,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_cars(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_cars(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/cars')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -127,9 +127,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_instruments(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_instruments(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/instruments')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -139,9 +139,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_lego_kits(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_lego_kits(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/lego/kits')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -151,9 +151,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_tracks(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_tracks(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/tracks')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -163,9 +163,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_lego(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_lego(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/lego')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -175,9 +175,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_beans(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_beans(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/beans')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -187,9 +187,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_new(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_new(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/new')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -199,9 +199,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetic_br(self, id: str, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetic_br(self, id: str, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics/br/{id}', id=id)
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -211,9 +211,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_cosmetics_all(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_cosmetics_all(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/cosmetics')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -228,7 +228,7 @@ class HTTPMixin(abc.ABC):
         params: dict[str, str] = {'keyFormat': key_format}
         return self.request(r, params=params)
 
-    def get_banners(self, language: Optional[str] = None):
+    def get_banners(self, language: str | None = None):
         r: Route = Route('GET', '/v1/banners')
         params: dict[str, str] = {}
 
@@ -255,7 +255,7 @@ class HTTPMixin(abc.ABC):
         params: dict[str, str] = {'name': name}
         return self.request(r, params=params)
 
-    def get_map(self, language: Optional[str] = None):
+    def get_map(self, language: str | None = None):
         r: Route = Route('GET', '/v1/map')
         params: dict[str, str] = {}
 
@@ -264,7 +264,7 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_news(self, language: Optional[str] = None):
+    def get_news(self, language: str | None = None):
         r: Route = Route('GET', '/v2/news')
         params: dict[str, str] = {}
 
@@ -273,7 +273,7 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_news_br(self, language: Optional[str] = None):
+    def get_news_br(self, language: str | None = None):
         r: Route = Route('GET', '/v2/news/br')
         params: dict[str, str] = {}
 
@@ -282,7 +282,7 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_news_stw(self, language: Optional[str] = None):
+    def get_news_stw(self, language: str | None = None):
         r: Route = Route('GET', '/v2/news/stw')
         params: dict[str, str] = {}
 
@@ -291,7 +291,7 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_playlists(self, language: Optional[str] = None):
+    def get_playlists(self, language: str | None = None):
         r: Route = Route('GET', '/v1/playlists')
         params: dict[str, str] = {}
 
@@ -300,7 +300,7 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_playlist(self, id: str, language: Optional[str] = None):
+    def get_playlist(self, id: str, language: str | None = None):
         r: Route = Route('GET', '/v1/playlists/{id}', id=id)
         params: dict[str, str] = {}
 
@@ -309,9 +309,9 @@ class HTTPMixin(abc.ABC):
 
         return self.request(r, params=params)
 
-    def get_shop(self, language: Optional[str] = None, response_flags: Optional[int] = None):
+    def get_shop(self, language: str | None = None, response_flags: int | None = None):
         r: Route = Route('GET', '/v2/shop')
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
 
         if language:
             params['language'] = language
@@ -354,15 +354,15 @@ class HTTPMixin(abc.ABC):
 
 
 class HTTPClient(HTTPMixin):
-    def __init__(self, *args: Any, session: Optional[aiohttp.ClientSession] = None, **kwargs: Any) -> None:
-        self.session: Optional[aiohttp.ClientSession] = session
+    def __init__(self, *args: Any, session: aiohttp.ClientSession | None = None, **kwargs: Any) -> None:
+        self.session: aiohttp.ClientSession | None = session
         super().__init__(*args, **kwargs)
 
     async def close(self) -> None:
         if self.session is not None:
             await self.session.close()
 
-    async def _parse_async_response(self, response: aiohttp.ClientResponse) -> Union[dict[str, Any], str, bytes]:
+    async def _parse_async_response(self, response: aiohttp.ClientResponse) -> dict[str, Any] | str | bytes:
         try:
             text = await response.text()
         except UnicodeDecodeError:
@@ -380,7 +380,7 @@ class HTTPClient(HTTPMixin):
                 'aiohttp.ClientSession is not set. Must either pass session to Client constructor or use the async context manager.'
             )
 
-        response: Optional[aiohttp.ClientResponse] = None
+        response: aiohttp.ClientResponse | None = None
         data = None
         error = None
 
@@ -442,15 +442,15 @@ class HTTPClient(HTTPMixin):
 
 
 class SyncHTTPClient(HTTPMixin):
-    def __init__(self, *args: Any, session: Optional[requests.Session] = None, **kwargs: Any) -> None:
-        self.session: Optional[requests.Session] = session
+    def __init__(self, *args: Any, session: requests.Session | None = None, **kwargs: Any) -> None:
+        self.session: requests.Session | None = session
         super().__init__(*args, **kwargs)
 
     def close(self) -> None:
         if self.session is not None:
             self.session.close()
 
-    def _parse_sync_response(self, response: requests.Response) -> Union[dict[str, Any], str, bytes]:
+    def _parse_sync_response(self, response: requests.Response) -> dict[str, Any] | str | bytes:
         content_type = response.headers.get('Content-Type')
         if content_type and content_type.startswith('image/'):
             return response.content
@@ -471,7 +471,7 @@ class SyncHTTPClient(HTTPMixin):
                 'requests.Session is not set. Must either pass session to Client constructor or use the context manager.'
             )
 
-        response: Optional[requests.Response] = None
+        response: requests.Response | None = None
         data = None
         error = None
         for tries in range(5):

@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, overload
 
 from ...enums import GameLanguage
 from ...http import HTTPClientT
@@ -78,22 +78,20 @@ class VariantLego(Cosmetic[dict[str, Any], HTTPClientT]):
         self.sound_library_tags: list[str] = get_with_fallback(data, 'soundLibraryTags', list)
 
         _images = data.get('images')
-        self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=http)
-        self.path: Optional[str] = data.get('path')
+        self.images: CosmeticImages[HTTPClientT] | None = _images and CosmeticImages(data=_images, http=http)
+        self.path: str | None = data.get('path')
 
     @overload
     def fetch_cosmetic_br(
-        self: VariantLego[HTTPClient], *, language: Optional[GameLanguage] = None
+        self: VariantLego[HTTPClient], *, language: GameLanguage | None = None
     ) -> Coroutine[Any, Any, CosmeticBr]: ...
 
     @overload
-    def fetch_cosmetic_br(
-        self: VariantLego[SyncHTTPClient], *, language: Optional[GameLanguage] = None
-    ) -> CosmeticBr: ...
+    def fetch_cosmetic_br(self: VariantLego[SyncHTTPClient], *, language: GameLanguage | None = None) -> CosmeticBr: ...
 
     def fetch_cosmetic_br(
-        self, *, language: Optional[GameLanguage] = None
-    ) -> Union[Coroutine[Any, Any, CosmeticBr], CosmeticBr]:
+        self, *, language: GameLanguage | None = None
+    ) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
         """|coro|
 
         Fetches the Battle Royale cosmetic that this lego cosmetic variant is based on.

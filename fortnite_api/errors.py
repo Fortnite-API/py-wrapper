@@ -24,7 +24,7 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     import aiohttp
@@ -75,11 +75,9 @@ class HTTPException(FortniteAPIException):
         The raw data that was returned from the API.
     """
 
-    def __init__(
-        self, message: Optional[str], response: Union[aiohttp.ClientResponse, requests.Response], data: Any, /
-    ) -> None:
-        self.message: Optional[str] = message
-        self.response: Union[aiohttp.ClientResponse, requests.Response] = response
+    def __init__(self, message: str | None, response: aiohttp.ClientResponse | requests.Response, data: Any, /) -> None:
+        self.message: str | None = message
+        self.response: aiohttp.ClientResponse | requests.Response = response
         self.data: Any = data
         super().__init__(message)
 
