@@ -152,7 +152,9 @@ class CosmeticTrack(Cosmetic[dict[str, Any], HTTPClientT]):
         self.bpm: int = data['bpm']
         self.duration: int = data['duration']
 
-        self.difficulty: CosmeticTrackDifficulty[HTTPClientT] = CosmeticTrackDifficulty(data=data['difficulty'], http=http)
+        self.difficulty: CosmeticTrackDifficulty[HTTPClientT] = CosmeticTrackDifficulty(
+            data=data['difficulty'], http=http
+        )
         self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplayTags', list)
         self.genres: list[str] = get_with_fallback(data, 'genres', list)
         self.album_art: Asset[HTTPClientT] = Asset(http=http, url=data['albumArt'])

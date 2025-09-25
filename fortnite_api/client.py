@@ -37,7 +37,15 @@ from typing_extensions import Concatenate, ParamSpec, Self
 from .aes import Aes
 from .all import CosmeticsAll
 from .banner import Banner, BannerColor
-from .cosmetics import CosmeticBr, CosmeticCar, CosmeticInstrument, CosmeticLegoKit, CosmeticTrack, VariantBean, VariantLego
+from .cosmetics import (
+    CosmeticBr,
+    CosmeticCar,
+    CosmeticInstrument,
+    CosmeticLegoKit,
+    CosmeticTrack,
+    VariantBean,
+    VariantLego,
+)
 from .creator_code import CreatorCode
 from .enums import *
 from .errors import BetaAccessNotEnabled, BetaUnknownException, MissingAPIKey
@@ -92,7 +100,7 @@ def beta_method(func: SyncFetchFunc[SyncClient_T, P, T]) -> SyncFetchFunc[SyncCl
 
 
 def beta_method(
-    func: Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]]
+    func: Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]],
 ) -> Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]]:
     if inspect.iscoroutinefunction(func):
         # This is coroutine, so we need to wrap it in an async function

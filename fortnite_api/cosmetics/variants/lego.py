@@ -87,7 +87,9 @@ class VariantLego(Cosmetic[dict[str, Any], HTTPClientT]):
     ) -> Coroutine[Any, Any, CosmeticBr]: ...
 
     @overload
-    def fetch_cosmetic_br(self: VariantLego[SyncHTTPClient], *, language: Optional[GameLanguage] = None) -> CosmeticBr: ...
+    def fetch_cosmetic_br(
+        self: VariantLego[SyncHTTPClient], *, language: Optional[GameLanguage] = None
+    ) -> CosmeticBr: ...
 
     def fetch_cosmetic_br(
         self, *, language: Optional[GameLanguage] = None

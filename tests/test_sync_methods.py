@@ -317,7 +317,6 @@ def test_sync_fetch_playlist_by_id(api_key: str):
 
 
 def test_sync_beta_fetch_new_display_assets(api_key: str):
-
     # Ensure you cannot call this without beta=True
     with pytest.raises(fn_api.BetaAccessNotEnabled):
         fn_api.SyncClient().beta_fetch_new_display_assets()
