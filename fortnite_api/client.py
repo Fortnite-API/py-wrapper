@@ -92,7 +92,7 @@ def beta_method(func: SyncFetchFunc[SyncClient_T, P, T]) -> SyncFetchFunc[SyncCl
 
 
 def beta_method(
-    func: Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]]
+    func: Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]],
 ) -> Union[FetchFunc[Client_T, P, T], SyncFetchFunc[SyncClient_T, P, T]]:
     if inspect.iscoroutinefunction(func):
         # This is coroutine, so we need to wrap it in an async function
