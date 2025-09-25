@@ -55,8 +55,8 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
         The ID of the cosmetic that this bean represents, if any.
     name: :class:`str`
         The name of this bean.
-    gender: :class:`fortnite_api.CustomGender`
-        Denotes the gender of this bean.
+    gender: Optional[:class:`fortnite_api.CustomGender`]
+        Denotes the gender of this bean. Can be ``None`` if no gender is assigned.
     gameplay_tags: List[:class:`str`]
         The gameplay tags associated with this bean.
 
@@ -76,7 +76,9 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
 
         self.cosmetic_id: Optional[str] = data.get('cosmetic_id')
         self.name: str = data['name']
-        self.gender: CustomGender = try_enum(CustomGender, data['gender'] if 'gender' in data else 'Unknown')
+
+        _gender = data.get("gender")
+        self.gender: Optional[CustomGender] = _gender and try_enum(CustomGender, _gender)
         self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplay_tags', list)
 
         _images = data.get('images')
