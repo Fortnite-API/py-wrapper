@@ -96,6 +96,7 @@ class EnumMeta(type):
         _enum_member_names_: ClassVar[list[str]]
         _enum_member_map_: ClassVar[dict[str, NewValue]]
         _enum_value_map_: ClassVar[dict[OldValue, NewValue]]
+        _enum_value_cls_: ClassVar[type[NewValue]]
 
     def __new__(
         cls,
