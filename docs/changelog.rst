@@ -19,6 +19,7 @@ Bug Fixes
 ~~~~~~~~~
 - Fixed an issue that caused :class:`fortnite_api.Asset.resize` to raise :class:`TypeError` instead of :class:`ValueError` when the given size isn't a power of 2.
 - Fixed an issue that caused :class:`fortnite_api.ServiceUnavailable` to be raised with a static message as a fallback for all unhandled http status codes. Instead :class:`fortnite_api.HTTPException` is raised with the proper error message.
+- Fixed typing of our internal "Enum-like" classes. They are now typed as a :class:`py:enum.Enum`.
 
 
 .. _vp3p2p1:
