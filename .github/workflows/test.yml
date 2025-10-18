@@ -9,6 +9,9 @@ on:
     types: [ opened, reopened, synchronize ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   pytest:
     name: Pytest
