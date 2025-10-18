@@ -21,6 +21,10 @@ Bug Fixes
 - Fixed an issue that caused :class:`fortnite_api.ServiceUnavailable` to be raised with a static message as a fallback for all unhandled http status codes. Instead :class:`fortnite_api.HTTPException` is raised with the proper error message.
 
 
+Miscellaneous
+~~~~~~~~~~~~~
+- Added offical support for Python 3.14.
+
 .. _vp3p2p1:
 
 v3.2.1
