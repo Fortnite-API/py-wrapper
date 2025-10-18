@@ -87,15 +87,15 @@ def _create_value_cls(name: str, comparable: bool) -> type[NewValue]:
     return EnumValue
 
 
-def _is_descriptor(obj: type[object]):
+def _is_descriptor(obj: type[object]) -> bool:
     return hasattr(obj, '__get__') or hasattr(obj, '__set__') or hasattr(obj, '__delete__')
 
 
 class EnumMeta(type):
     if TYPE_CHECKING:
         _enum_member_names_: ClassVar[list[str]]
-        _enum_member_map_: ClassVar[dict[str, Any]]
-        _enum_value_map_: ClassVar[dict[Any, Any]]
+        _enum_member_map_: ClassVar[dict[str, NewValue]]
+        _enum_value_map_: ClassVar[dict[OldValue, NewValue]]
 
     def __new__(
         cls,
