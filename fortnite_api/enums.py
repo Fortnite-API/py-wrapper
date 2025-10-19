@@ -189,7 +189,7 @@ else:
 
     class Enum(metaclass=EnumMeta):
         @classmethod
-        def try_value(cls, value):
+        def try_value(cls, value: Any) -> Any:
             try:
                 return cls._enum_value_map_[value]
             except (KeyError, TypeError):
