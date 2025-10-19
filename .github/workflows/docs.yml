@@ -1,5 +1,5 @@
 # This workflow builds the Sphinx documentation, and in doing so - checks for errors in the documentation.
-name: Docs
+name: docs
 
 on:
   push:
@@ -12,25 +12,20 @@ permissions:
 
 jobs:
   docs:
-    name: Test Docs
+    name: test docs
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
+      - uses: actions/checkout@v5
       - name: Setup Python 3.10
         uses: actions/setup-python@v6
         with:
           python-version: "3.10"
           cache: "pip" # Cache the pip packages to speed up the workflow
-
+      - name: Set up UV
+        uses: astral-sh/setup-uv@v6
       - name: Install Dependencies and Package
-        run: |
-          python -m pip install -U pip setuptools
-          pip install -U -r requirements.txt
-          pip install -e .[docs]
-
+        run: uv sync --extra docs
       - name: Build Documentation
         run: |
           cd docs
