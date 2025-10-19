@@ -10,8 +10,7 @@ permissions:
 
 jobs:
   ruff:
-    permissions:
-      contents: read
+    name: ruff linter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
