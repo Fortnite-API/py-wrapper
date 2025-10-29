@@ -25,9 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import copy
-from typing import TYPE_CHECKING, Generic, TypeVar
-
-from typing_extensions import Self
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, Union, overload
 
 from .http import HTTPClient, HTTPClientT, SyncHTTPClient
 
@@ -35,7 +33,6 @@ DictT = TypeVar('DictT', bound='Mapping[Any, Any]')
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
-    from typing import Any
 
     from .client import Client, SyncClient
 
@@ -117,8 +114,20 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
     # method is overloaded to allow for both the async and sync clients to be passed, whilst
     # still keeping the correct HTTPClient type.
 
+    @overload
     @classmethod
-    def from_dict(cls: type[Self], data: DictT, *, client: Client | SyncClient) -> Self:
+    def from_dict(
+        cls: type[ReconstructAble[Any, SyncHTTPClient]], data: DictT, *, client: SyncClient
+    ) -> ReconstructAble[DictT, SyncHTTPClient]: ...
+
+    @overload
+    @classmethod
+    def from_dict(
+        cls: type[ReconstructAble[Any, HTTPClient]], data: DictT, *, client: Client
+    ) -> ReconstructAble[DictT, HTTPClient]: ...
+
+    @classmethod
+    def from_dict(cls, data: DictT, *, client: Client | SyncClient) -> Any:
         """Reconstructs this class from a raw dictionary object. This is useful for when you
         store the raw data and want to reconstruct the object later on.
 
@@ -129,16 +138,10 @@ class ReconstructAble(Generic[DictT, HTTPClientT]):
         client: Union[:class:`fortnite_api.Client`, :class:`fortnite_api.SyncClient`]
             The currently used client to reconstruct the object with. Can either be a sync or async client.
         """
-        if isinstance(client.http, SyncHTTPClient):
-            # Whenever the client is a SyncClient, we can safely assume that the http
-            # attribute is a SyncHTTPClient, as this is the only HTTPClientT possible.
-            sync_http: SyncHTTPClient = client.http
-            return cls(data=data, http=sync_http)  # type: ignore # Pyright cannot infer the type of cls
-        else:
-            # Whenever the client is a Client, we can safely assume that the http
-            # attribute is a HTTPClient, as this is the only HTTPClientT possible.
-            http: HTTPClient = client.http
-            return cls(data=data, http=http)  # type: ignore # Pyright cannot infer the type of cls
+        # Even if we did an instance check here, Pyright cannot understand the narrowing of "http"
+        # from the "client" parameter. We must ignore this error.
+        http: HTTPClientT = client.http  # type: ignore
+        return cls(data=data, http=http)
 
     def to_dict(self) -> DictT:
         """Turns this object into a raw dictionary object. This is useful for when you
