@@ -571,7 +571,7 @@ class Client:
     async def search_br_cosmetics(
         self,
         *,
-        multiple: Literal[True] = True,
+        multiple: Literal[True],
         language: GameLanguage | None = MISSING,
         response_flags: ResponseFlags | None = MISSING,
         search_language: GameLanguage = GameLanguage.ENGLISH,
@@ -1429,7 +1429,7 @@ class SyncClient:
     def search_br_cosmetics(
         self,
         *,
-        multiple: Literal[True] = True,
+        multiple: Literal[True],
         language: GameLanguage | None = MISSING,
         response_flags: ResponseFlags | None = MISSING,
         search_language: GameLanguage = GameLanguage.ENGLISH,

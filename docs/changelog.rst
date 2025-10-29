@@ -14,12 +14,14 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 - Drop support for Python 3.9. The minimum supported Python version is now 3.10.
 
-
 Bug Fixes
 ~~~~~~~~~
 - Fixed an issue that caused :class:`fortnite_api.Asset.resize` to raise :class:`TypeError` instead of :class:`ValueError` when the given size isn't a power of 2.
 - Fixed an issue that caused :class:`fortnite_api.ServiceUnavailable` to be raised with a static message as a fallback for all unhandled http status codes. Instead :class:`fortnite_api.HTTPException` is raised with the proper error message.
 
+Miscellaneous
+~~~~~~~~~~~~~
+- Added official support for Python 3.14.
 
 .. _vp3p2p1:
 
