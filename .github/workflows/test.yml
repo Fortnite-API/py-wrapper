@@ -29,6 +29,8 @@ jobs:
           cache: "pip" # Cache the pip packages to speed up the workflow
       - name: Set up UV
         uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
       - name: Install Dependencies and Package
         run: uv sync --extra tests
       - name: Run Pytest Checks
