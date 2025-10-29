@@ -34,12 +34,13 @@ import requests
 from typing_extensions import ParamSpec
 
 import fortnite_api
-from fortnite_api import ReconstructAble
 
 P = ParamSpec('P')
 T = TypeVar('T')
 
 if TYPE_CHECKING:
+    import fortnite_api.http
+
     Client: TypeAlias = fortnite_api.Client
     SyncClient = fortnite_api.SyncClient
 
@@ -77,8 +78,8 @@ class HybridMethodProxy(Generic[P, T]):
         if isinstance(async_res, fortnite_api.ReconstructAble):
             assert isinstance(sync_res, fortnite_api.ReconstructAble)
 
-            sync_res_narrowed: ReconstructAble[Any, fortnite_api.SyncHTTPClient] = sync_res
-            async_res_narrowed: ReconstructAble[Any, fortnite_api.HTTPClient] = async_res
+            sync_res_narrowed: fortnite_api.ReconstructAble[Any, fortnite_api.http.SyncHTTPClient] = sync_res
+            async_res_narrowed: fortnite_api.ReconstructAble[Any, fortnite_api.http.HTTPClient] = async_res
 
             async_raw_data = sync_res_narrowed.to_dict()
             sync_raw_data = sync_res_narrowed.to_dict()
