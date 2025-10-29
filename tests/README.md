@@ -8,16 +8,16 @@ outlines how the tests are laid such that all these edge cases are handled.
 
 Many tests in the main `/tests` directory are generic-related object-related tests. These ensure basic functionality surrounding how the more-complex objects of the library are constructed and function.
 
-| Test File             | Purpose and Logic                                                                                                                                                                      |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `test_account.py`     | Ensures that an `Account` object is created properly and its dunder methods work as expected.                                                                                          |
-| `test_aes.py`         | Ensures that `Aes` object initializes properly by checking known dynamic keys and hashes.                                                                                              |
-| `test_asset.py`       | Ensures that the rules regulating `Asset` resizing are correct and that the asset reading functions function correctly.                                                                |
-| `test_beta.py`        | Ensures that a user with the `beta` flag disabled on a `Client` cannot call beta methods. This validates that the beta flag decorator works as expected.                               |
-| `test_proxy.py`       | Ensures that the `TransformerListProxy` class initializes properly, transforms to expected objects as needed, and has the same interface as a typical `py.List` would.                 |
-| `test_ratelimits.py`  | Ensures that the library's handling of rate limits is correct, and related exceptions are raised as expected.                                                                          |
-| `test_repr.py`        | The library uses a dynamic decorator to create the `__repr__` dunder by taking advantage of the `__slots__` on a class. This test ensures that the dynamic function works as expected. |
-| `test_methods.py`     | The handling of all the functions on the `Client` and `SyncClient` class. See Edge Cases below for more information. |
+| Test File                                     | Purpose and Logic                                                                                                                                                                      |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`test_account.py`](test_account.py)          | Ensures that an `Account` object is created properly and its dunder methods work as expected.                                                                                          |
+| [`test_aes.py`](test_aes.py)                  | Ensures that `Aes` object initializes properly by checking known dynamic keys and hashes.                                                                                              |
+| [`test_asset.py`](test_asset.py)              | Ensures that the rules regulating `Asset` resizing are correct and that the asset reading functions function correctly.                                                                |
+| [`test_beta.py`](test_beta.py)                | Ensures that a user with the `beta` flag disabled on a `Client` cannot call beta methods. This validates that the beta flag decorator works as expected.                               |
+| [`test_proxy.py`](test_proxy.py)              | Ensures that the `TransformerListProxy` class initializes properly, transforms to expected objects as needed, and has the same interface as a typical `py.List` would.                 |
+| [`test_ratelimits.py`](test_ratelimits.py)    | Ensures that the library's handling of rate limits is correct, and related exceptions are raised as expected.                                                                          |
+| [`test_repr.py`](test_repr.py)                | The library uses a dynamic decorator to create the `__repr__` dunder by taking advantage of the `__slots__` on a class. This test ensures that the dynamic function works as expected. |
+| [`test_methods.py`](test_methods.py)          | The handling of all the functions on the `Client` and `SyncClient` class. See Edge Cases below for more information.                                                                   |
 
 ### Edge Case Library Tests
 
@@ -29,7 +29,7 @@ defined on them.
 
 ##### Test Client Hybrid: `test_client_hybrid.py`
 
-The tests define a custom `ClientHybrid` class (in `./client/test_client_hybrid.py`). This class wraps a `Client` to act as an intermediatory between a requested API call and the actual method. When an API call is requested, the `ClientHybrid` will call **both** the async `Client` version and the `SyncClient` version of the method. The results are then compared to ensure that they are the same.
+The tests define a custom `ClientHybrid` class in [`client/test_client_hybrid.py`](client/test_client_hybrid.py). This class wraps a `Client` to act as an intermediatory between a requested API call and the actual method. When an API call is requested, the `ClientHybrid` will call **both** the async `Client` version and the `SyncClient` version of the method. The results are then compared to ensure that they are the same.
 
 Thus, all tests that make API calls will import and use the `ClientHybrid`.
 
