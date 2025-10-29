@@ -88,3 +88,6 @@ fabric.properties
 # Development Test Files
 _.py
 .env
+
+# Build files
+/build/*

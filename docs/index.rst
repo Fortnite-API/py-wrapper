@@ -25,7 +25,7 @@ To install the Fortnite-API Python library, you can use pip. Run the following c
 To install the latest development version of the library, you can use the following command:
 
 .. code-block:: bash
-   
+
    git clone https://github.com/Fortnite-API/py-wrapper
    cd py-wrapper
    python3 -m pip install .
@@ -36,7 +36,7 @@ Optional Dependencies
 - `speed`: An optional dependency that installs `orjson <https://github.com/ijl/orjson>`_ for faster JSON serialization and deserialization.
 
 .. code-block:: bash
-   
+
    # Linux/macOS
    python3 -m pip install fortnite-api[speed]
 
@@ -68,9 +68,9 @@ You can generate an API key on `the dashboard <https://dash.fortnite-api.com/acc
 
 View Documentation
 ------------------
-The entirety of the public API is documented here. If you're looking for a specific method, class, or module, the search bar at the top right is your friend. 
+The entirety of the public API is documented here. If you're looking for a specific method, class, or module, the search bar at the top right is your friend.
 
-If you're not sure where to start, check out the :class:`fortnite_api.Client` class for a list of all available methods you can use to interact with the API. 
+If you're not sure where to start, check out the :class:`fortnite_api.Client` class for a list of all available methods you can use to interact with the API.
 
 .. toctree::
    :maxdepth: 3
@@ -94,7 +94,7 @@ The changelog contains a list of all changes made to the Fortnite-API Python lib
 
 .. toctree::
    :maxdepth: 3
-   
+
    changelog
 
 
