@@ -67,7 +67,7 @@ class TransformerListProxy(Generic[T, K_co, V_co], list[T]):
         data = super().__getitem__(index)
         if isinstance(data, dict):
             # Narrow the type of data to Dict[str, Any]
-            raw_data: dict[K_co, V_co] = data
+            raw_data = cast(dict[K_co, V_co], data)
             result = self._transform_data(raw_data)
             super().__setitem__(index, result)
         else:
@@ -78,7 +78,7 @@ class TransformerListProxy(Generic[T, K_co, V_co], list[T]):
     def _transform_all(self):
         for index, entry in enumerate(self):
             if isinstance(entry, dict):
-                raw_data: dict[K_co, V_co] = entry
+                raw_data = cast(dict[K_co, V_co], entry)
                 result = self._transform_data(raw_data)
                 super().__setitem__(index, result)
 

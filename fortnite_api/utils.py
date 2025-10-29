@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 K_co = TypeVar('K_co', bound='Hashable', covariant=True)
 V_co = TypeVar('V_co', covariant=True)
@@ -201,7 +201,7 @@ def _transform_dict_for_get_request(data: dict[str, Any]) -> dict[str, Any]:
             updated[key] = str(value).lower()
 
         elif isinstance(value, dict):
-            inner: dict[str, Any] = value  # narrow the dict type to pass it along (should always be [str, Any])
+            inner = cast(dict[str, Any], value)  # narrow the dict type to pass it along (should always be [str, Any])
             updated[key] = _transform_dict_for_get_request(inner)
 
         if '_' in key:
