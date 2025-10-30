@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from collections.abc import Hashable
 
 try:
-    import orjson  # type: ignore
+    import orjson
 
     _has_orjson: bool = True
 except ImportError:
