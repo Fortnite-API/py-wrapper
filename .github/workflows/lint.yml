@@ -46,4 +46,4 @@ jobs:
         with:
           version: '1.1.407'
           annotate: ${{ matrix.python-version != '3.x' }}
-          venv-path: .venv
+          python-path: '.venv/bin/python'
