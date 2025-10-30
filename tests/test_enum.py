@@ -47,9 +47,9 @@ def test_dummy_enum():
 
     # Test immutability
     with pytest.raises(TypeError):
-        DummyEnum.FOO = "new"
+        DummyEnum.FOO = "new"  # type: ignore # This should raise an error
     with pytest.raises(TypeError):
-        del DummyEnum.FOO
+        del DummyEnum.FOO  # type: ignore  # This should raise an error
 
     # Test try_enum functionality
     valid_value = "foo"
