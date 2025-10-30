@@ -42,8 +42,8 @@ jobs:
       - name: Install Dependencies and Package
         run: uv sync --all-extras
       - name: Run Pyright
-        uses: jakebailey/pyright-action@v1
+        uses: jakebailey/pyright-action@v2
         with:
-          version: '1.1.394'
-          warnings: false
-          no-comments: ${{ matrix.python-version != '3.x' }}
+          version: '1.1.407'
+          annotate: ${{ matrix.python-version != '3.x' }}
+          venv-path: .venv
