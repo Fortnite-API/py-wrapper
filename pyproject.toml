@@ -72,7 +72,7 @@ docs = [
     'furo',
     'sphinx-copybutton',
 ]
-dev = ['ruff==0.13.2', 'discord.py', 'pyright', 'pre-commit']
+dev = ['ruff==0.14.3', 'discord.py', 'pyright', 'pre-commit']
 speed = ['orjson']
 
 [project.urls]
