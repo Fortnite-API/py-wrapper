@@ -58,21 +58,20 @@ classifiers = [
 
 [project.optional-dependencies]
 tests = [
-    'pytest',
-    'pytest-asyncio',
-    'pytest-cov',
-    'python-dotenv',
-    'pytest-mock',
+    'pytest~=8.4',
+    'pytest-asyncio~=1.2',
+    'pytest-cov~=7.0',
+    'python-dotenv~=1.2',
+    'pytest-mock~=3.15',
 ]
 docs = [
-    'sphinx',
-    'sphinxcontrib_trio',
-    'sphinxcontrib-websupport',
-    'typing-extensions',
-    'furo',
-    'sphinx-copybutton',
+    'sphinx~=8.1',
+    'sphinx-copybutton~=0.5.0',
+    'sphinxcontrib-trio~=1.1',
+    'sphinxcontrib-websupport~=2.0',
+    'furo~=2025.9',
 ]
-dev = ['ruff==0.14.3', 'discord.py', 'pyright', 'pre-commit']
+dev = ['ruff==0.14.3', 'discord.py~=2.6', 'pyright~=1.1.407', 'pre-commit~=4.3']
 speed = ['orjson']
 
 [project.urls]
