@@ -10,17 +10,16 @@ permissions:
 
 jobs:
   ruff:
-    permissions:
-      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
 
-      - name: Get Ruff Version
+      - name: Get Ruff version
         id: ruff-version
         run: echo "version=$(grep -Po '(?<=ruff==)[0-9]+\.[0-9]+\.[0-9]+' pyproject.toml)" >> $GITHUB_OUTPUT
-  
-      - uses: astral-sh/ruff-action@v3
+
+      - name: Run Ruff linter
+        uses: astral-sh/ruff-action@v3
         with:
           version: ${{ steps.ruff-version.outputs.version }}
   pyright:
