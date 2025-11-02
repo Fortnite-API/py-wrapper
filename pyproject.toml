@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 # Load setuptools info and dynamic version
@@ -30,7 +30,7 @@ authors = [
 description = "A python wrapper for Fortnite-API.com"
 readme = "README.md"
 requires-python = ">=3.10.0"
-license = { file = "LICENSE" }
+license = "MIT"
 keywords = [
     'fortnite',
     'fortnite-api.com',
@@ -40,7 +40,6 @@ keywords = [
     'fortnite shop',
 ]
 classifiers = [
-    'License :: OSI Approved :: MIT License',
     'Intended Audience :: Developers',
     'Natural Language :: English',
     'Operating System :: OS Independent',
