@@ -14,6 +14,10 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 - Drop support for Python 3.9. The minimum supported Python version is now 3.10.
 
+New Features
+~~~~~~~~~~~~
+- Added support for :attr:`fortnite_api.CosmeticType.SIDEKICK`.
+
 Bug Fixes
 ~~~~~~~~~
 - Fixed an issue that caused :class:`fortnite_api.Asset.resize` to raise :class:`TypeError` instead of :class:`ValueError` when the given size isn't a power of 2.

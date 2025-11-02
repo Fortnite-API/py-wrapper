@@ -412,6 +412,8 @@ class CosmeticType(Enum):
     SPRAY = 'spray'
     TOY = 'toy'
 
+    SIDEKICK = 'sidekick'
+
     WRAP = 'wrap'
 
     BANNER = 'banner'
