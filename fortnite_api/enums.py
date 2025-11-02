@@ -377,6 +377,7 @@ class CosmeticType(Enum):
     EMOJI
     SPRAY
     TOY
+    SIDEKICK
     WRAP
     BANNER
     MUSIC
