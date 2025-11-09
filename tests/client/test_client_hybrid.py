@@ -27,11 +27,10 @@ from __future__ import annotations
 import inspect
 import logging
 from collections.abc import Callable, Coroutine
-from typing import TYPE_CHECKING, Any, Concatenate, Generic, TypeAlias, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Concatenate, Generic, ParamSpec, TypeAlias, TypeVar, cast
 
 import pytest
 import requests
-from typing_extensions import ParamSpec
 
 import fortnite_api
 
