@@ -196,6 +196,13 @@ class Client:
         return self
 
     async def __aexit__(self, *args: Any) -> None:
+        await self.close()
+
+    async def close(self) -> None:
+        """|coro|
+
+        Closes the client's HTTP session.
+        """
         await self.http.close()
 
     def _resolve_default_language_value(self, language: GameLanguage | None = MISSING) -> str | None:
@@ -1275,6 +1282,10 @@ class SyncClient:
         return self
 
     def __exit__(self, *args: Any) -> None:
+        self.close()
+
+    @copy_doc(Client.close)
+    def close(self) -> None:
         self.http.close()
 
     def _resolve_default_language_value(self, language: GameLanguage | None = MISSING) -> str | None:

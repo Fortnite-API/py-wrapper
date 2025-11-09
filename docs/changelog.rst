@@ -5,6 +5,15 @@
 Changelog
 =========
 
+.. _vp3p4p0:
+
+v3.4.0
+-------
+
+New Features
+~~~~~~~~~~~~
+- Added :meth:`fortnite_api.Client.close` and :meth:`fortnite_api.SyncClient.close` methods to close the client's HTTP session when not using a context manager.
+
 .. _vp3p3p0:
 
 v3.3.0
