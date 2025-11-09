@@ -99,6 +99,8 @@ pythonVersion = "3.10"
 reportPrivateUsage = "none"
 exclude = ["**/__pycache__", "build", "dist", "docs"]
 include = ["fortnite_api/", "tests/", "examples/"]
+venvPath = "."
+venv = ".venv"
 
 # Ruff formatting
 
