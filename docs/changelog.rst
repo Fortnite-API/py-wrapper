@@ -5,6 +5,16 @@
 Changelog
 =========
 
+.. _vp4p0p0:
+
+v4.0.0
+-------
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+- If :attr:`fortnite_api.VariantBean.gender` isn't present, it's now ``None``, instead of ``CustomGender.UNKNOWN``.
+- ``CustomGender.UNKNOWN`` has been removed, hence it's not used anymore.
+
 .. _vp3p4p0:
 
 v3.4.0
@@ -44,7 +54,7 @@ v3.2.1
 
 Bug Fixes
 ~~~~~~~~~
-- Fixed an issue due a change from Epic that causes :class:`fortnite_api.VariantBean` to not have a :class:`fortnite_api.CustomGender`. It now uses :attr:`fortnite_api.CustomGender.UNKNOWN` in such case instead of raising an exception.
+- Fixed an issue due a change from Epic that causes :class:`fortnite_api.VariantBean` to not have a :class:`fortnite_api.CustomGender`. It now uses ``CustomGender.UNKNOWN`` in such case instead of raising an exception.
 - Fixed typo within fallback system for :class:`fortnite_api.TileSize` as ``raise`` keyword was used instead of ``return``.
 - Fixed an issue that caused a :class:`KeyError` to be raised when using :meth:`fortnite_api.Client.search_br_cosmetics` or :meth:`fortnite_api.SyncClient.search_br_cosmetics` without ``multiple`` parameter.
 
