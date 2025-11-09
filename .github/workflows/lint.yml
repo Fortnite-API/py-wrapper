@@ -2,21 +2,48 @@ name: lint
 
 on:
   push:
+    branches: [ master ]
   pull_request:
     types: [ opened, reopened, synchronize ]
 
+permissions:
+  contents: read
+
 jobs:
   ruff:
-    permissions:
-      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
 
-      - name: Get Ruff Version
+      - name: Get Ruff version
         id: ruff-version
         run: echo "version=$(grep -Po '(?<=ruff==)[0-9]+\.[0-9]+\.[0-9]+' pyproject.toml)" >> $GITHUB_OUTPUT
-  
-      - uses: astral-sh/ruff-action@v3
+
+      - name: Run Ruff linter
+        uses: astral-sh/ruff-action@v3
         with:
           version: ${{ steps.ruff-version.outputs.version }}
+  pyright:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.10', '3.x' ]
+    name: pyright ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip" # Cache the pip packages to speed up the workflow
+      - name: Set up UV
+        uses: astral-sh/setup-uv@v6
+      - name: Install Dependencies and Package
+        run: uv sync --all-extras
+      - name: Run Pyright
+        uses: jakebailey/pyright-action@v2
+        with:
+          version: '1.1.407'
+          annotate: ${{ matrix.python-version != '3.x' }}
+          python-path: '.venv/bin/python'

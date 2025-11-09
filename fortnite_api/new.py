@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Generic, Optional
+from typing import Any, Generic, cast
 
 from .abc import ReconstructAble
 from .cosmetics import (
@@ -90,13 +90,13 @@ class NewCosmetic(Generic[CosmeticT]):
         self,
         *,
         type: CosmeticCategory,
-        hash: Optional[str] = None,
-        last_addition: Optional[datetime.datetime] = None,
+        hash: str | None = None,
+        last_addition: datetime.datetime | None = None,
         items: list[CosmeticT],
     ) -> None:
         self.type: CosmeticCategory = type
-        self.hash: Optional[str] = hash
-        self.last_addition: Optional[datetime.datetime] = last_addition
+        self.hash: str | None = hash
+        self.last_addition: datetime.datetime | None = last_addition
         self.items: list[CosmeticT] = items
 
 
@@ -208,10 +208,10 @@ class NewCosmetics(ReconstructAble[dict[str, Any], HTTPClientT]):
         internal_key: str,
         cosmetic_class: type[CosmeticT],
     ) -> NewCosmetic[CosmeticT]:
-        cosmetic_items: list[dict[str, Any]] = get_with_fallback(self._items, internal_key, list)
+        cosmetic_items = cast(list[dict[str, Any]], get_with_fallback(self._items, internal_key, list))
 
         last_addition_str = self._last_additions[internal_key]
-        last_addition: Optional[datetime.datetime] = last_addition_str and parse_time(last_addition_str)
+        last_addition: datetime.datetime | None = last_addition_str and parse_time(last_addition_str)
 
         return NewCosmetic(
             type=cosmetic_type,

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 # Load setuptools info and dynamic version
@@ -29,8 +29,8 @@ authors = [
 ]
 description = "A python wrapper for Fortnite-API.com"
 readme = "README.md"
-requires-python = ">=3.9.0"
-license = { file = "LICENSE" }
+requires-python = ">=3.10.0"
+license = "MIT"
 keywords = [
     'fortnite',
     'fortnite-api.com',
@@ -40,15 +40,14 @@ keywords = [
     'fortnite shop',
 ]
 classifiers = [
-    'License :: OSI Approved :: MIT License',
     'Intended Audience :: Developers',
     'Natural Language :: English',
     'Operating System :: OS Independent',
-    'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
     'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
     'Topic :: Internet',
     'Topic :: Software Development :: Libraries',
     'Topic :: Software Development :: Libraries :: Python Modules',
@@ -58,21 +57,20 @@ classifiers = [
 
 [project.optional-dependencies]
 tests = [
-    'pytest',
-    'pytest-asyncio',
-    'pytest-cov',
-    'python-dotenv',
-    'pytest-mock',
+    'pytest~=8.4',
+    'pytest-asyncio~=1.2',
+    'pytest-cov~=7.0',
+    'python-dotenv~=1.2',
+    'pytest-mock~=3.15',
 ]
 docs = [
-    'sphinx',
-    'sphinxcontrib_trio',
-    'sphinxcontrib-websupport',
-    'typing-extensions',
-    'furo',
-    'sphinx-copybutton',
+    'sphinx~=8.1',
+    'sphinx-copybutton~=0.5.0',
+    'sphinxcontrib-trio~=1.1',
+    'sphinxcontrib-websupport~=2.0',
+    'furo~=2025.9',
 ]
-dev = ['ruff==0.13.2', 'discord.py', 'pyright', 'pre-commit']
+dev = ['ruff==0.14.3', 'discord.py~=2.6', 'pyright~=1.1.407', 'pre-commit~=4.3']
 speed = ['orjson']
 
 [project.urls]
@@ -86,6 +84,10 @@ Documentation = "https://fortnite-api.readthedocs.io/en/rewrite/"
 asyncio_mode = "strict"
 testpaths = ["tests"]
 addopts = "--import-mode=importlib"
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
 # Pyright configuration
 
@@ -97,6 +99,8 @@ pythonVersion = "3.10"
 reportPrivateUsage = "none"
 exclude = ["**/__pycache__", "build", "dist", "docs"]
 include = ["fortnite_api/", "tests/", "examples/"]
+venvPath = "."
+venv = ".venv"
 
 # Ruff formatting
 

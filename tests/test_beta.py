@@ -32,7 +32,7 @@ from fortnite_api.client import beta_method
 
 def test_sync_cannot_call_beta_method():
     client = fortnite_api.SyncClient(beta=False)
-    with client, pytest.raises(fortnite_api.BetaAccessNotEnabled):
+    with client, pytest.raises(expected_exception=fortnite_api.BetaAccessNotEnabled):
         client.beta_fetch_new_display_assets()
 
 

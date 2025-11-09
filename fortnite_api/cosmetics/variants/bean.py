@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, overload
 
 from ...enums import CustomGender, GameLanguage, try_enum
 from ...http import HTTPClientT
@@ -74,30 +74,28 @@ class VariantBean(Cosmetic[dict[str, Any], HTTPClientT]):
     def __init__(self, *, data: dict[str, Any], http: HTTPClientT) -> None:
         super().__init__(data=data, http=http)
 
-        self.cosmetic_id: Optional[str] = data.get('cosmetic_id')
+        self.cosmetic_id: str | None = data.get('cosmetic_id')
         self.name: str = data['name']
 
         _gender = data.get("gender")
-        self.gender: Optional[CustomGender] = _gender and try_enum(CustomGender, _gender)
+        self.gender: CustomGender | None = _gender and try_enum(CustomGender, _gender)
         self.gameplay_tags: list[str] = get_with_fallback(data, 'gameplay_tags', list)
 
         _images = data.get('images')
-        self.images: Optional[CosmeticImages[HTTPClientT]] = _images and CosmeticImages(data=_images, http=http)
-        self.path: Optional[str] = data.get('path')
+        self.images: CosmeticImages[HTTPClientT] | None = _images and CosmeticImages(data=_images, http=http)
+        self.path: str | None = data.get('path')
 
     @overload
     def fetch_cosmetic_br(
-        self: VariantBean[HTTPClient], *, language: Optional[GameLanguage] = None
+        self: VariantBean[HTTPClient], *, language: GameLanguage | None = None
     ) -> Coroutine[Any, Any, CosmeticBr]: ...
 
     @overload
-    def fetch_cosmetic_br(
-        self: VariantBean[SyncHTTPClient], *, language: Optional[GameLanguage] = None
-    ) -> CosmeticBr: ...
+    def fetch_cosmetic_br(self: VariantBean[SyncHTTPClient], *, language: GameLanguage | None = None) -> CosmeticBr: ...
 
     def fetch_cosmetic_br(
-        self, *, language: Optional[GameLanguage] = None
-    ) -> Union[Coroutine[Any, Any, CosmeticBr], CosmeticBr]:
+        self, *, language: GameLanguage | None = None
+    ) -> Coroutine[Any, Any, CosmeticBr] | CosmeticBr:
         """|coro|
 
         Fetches the Battle Royale cosmetic that this bean variant is based on.

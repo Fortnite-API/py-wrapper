@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Generic, Optional, TypeVar
+from typing import Any, Generic, TypeVar
 
 from ..abc import DictT, Hashable, ReconstructAble
 from ..asset import Asset
@@ -207,7 +207,7 @@ class CosmeticSeriesInfo(ReconstructAble[dict[str, Any], HTTPClientT]):
         self.backend_value: str = data["backendValue"]
 
         image = data.get("image")
-        self.image: Optional[Asset[HTTPClientT]] = image and Asset(http=http, url=image)
+        self.image: Asset[HTTPClientT] | None = image and Asset(http=http, url=image)
 
         self.colors: list[str] = get_with_fallback(data, "colors", list)
 
@@ -267,28 +267,28 @@ class CosmeticImages(Images[HTTPClientT]):
         super().__init__(data=data, http=http)
 
         featured = data.get("featured")
-        self.featured: Optional[Asset[HTTPClientT]] = featured and Asset(http=http, url=featured)
+        self.featured: Asset[HTTPClientT] | None = featured and Asset(http=http, url=featured)
 
         lego = data.get("lego")
-        self.lego: Optional[Asset[HTTPClientT]] = lego and Asset(http=http, url=lego)
+        self.lego: Asset[HTTPClientT] | None = lego and Asset(http=http, url=lego)
 
         bean = data.get("bean")
-        self.bean: Optional[Asset[HTTPClientT]] = bean and Asset(http=http, url=bean)
+        self.bean: Asset[HTTPClientT] | None = bean and Asset(http=http, url=bean)
 
         small = data.get("small")
-        self.small: Optional[Asset[HTTPClientT]] = small and Asset(http=http, url=small)
+        self.small: Asset[HTTPClientT] | None = small and Asset(http=http, url=small)
 
         large = data.get("large")
-        self.large: Optional[Asset[HTTPClientT]] = large and Asset(http=http, url=large)
+        self.large: Asset[HTTPClientT] | None = large and Asset(http=http, url=large)
 
         wide = data.get("wide")
-        self.wide: Optional[Asset[HTTPClientT]] = wide and Asset(http=http, url=wide)
+        self.wide: Asset[HTTPClientT] | None = wide and Asset(http=http, url=wide)
 
         self._other: dict[str, str] = get_with_fallback(data, "other", dict)
         self._http: HTTPClientT = http
 
     @property
-    def background(self) -> Optional[Asset[HTTPClientT]]:
+    def background(self) -> Asset[HTTPClientT] | None:
         """
         Optional[:class:`~fortnite_api.Asset`]: The background image of the cosmetic, if available.
         """
@@ -299,7 +299,7 @@ class CosmeticImages(Images[HTTPClientT]):
         return Asset(http=self._http, url=url)
 
     @property
-    def coverart(self) -> Optional[Asset[HTTPClientT]]:
+    def coverart(self) -> Asset[HTTPClientT] | None:
         """
         Optional[:class:`~fortnite_api.Asset`]: The cover art image of the cosmetic, if available.
         """
@@ -310,7 +310,7 @@ class CosmeticImages(Images[HTTPClientT]):
         return Asset(http=self._http, url=url)
 
     @property
-    def decal(self) -> Optional[Asset[HTTPClientT]]:
+    def decal(self) -> Asset[HTTPClientT] | None:
         """
         Optional[:class:`~fortnite_api.Asset`]: The decal image of the cosmetic, if available.
         """

@@ -13,7 +13,7 @@ The library's focus is to provide a simple and easy-to-use interface to interact
 
 ## Installation
 
-Note that **Python 3.9 or higher is required.**
+Note that **Python 3.10 or higher is required.**
 
 ```sh
 # Linux/macOS
@@ -70,14 +70,14 @@ You can generate an API key on <https://dash.fortnite-api.com/account> by loggin
 
 ```python
 import asyncio
-import fortnite_api 
+import fortnite_api
 
 async def main() -> None:
     async with fortnite_api.Client() as client:
         all_cosmetics: fortnite_api.CosmeticsAll = await client.fetch_cosmetics_all()
 
         for br_cosmetic in all_cosmetics.br:
-            print(br_cosmetic.name) 
+            print(br_cosmetic.name)
 
 if __name__ == "__main__":
     asyncio.run(main())

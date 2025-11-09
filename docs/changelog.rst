@@ -5,9 +5,9 @@
 Changelog
 =========
 
-.. _vp3p3p0:
+.. _vp4p0p0:
 
-v3.3.0
+v4.0.0
 -------
 
 Breaking Changes
@@ -15,11 +15,37 @@ Breaking Changes
 - If :attr:`fortnite_api.VariantBean.gender` isn't present, it's now ``None``, instead of ``CustomGender.UNKNOWN``.
 - ``CustomGender.UNKNOWN`` has been removed, hence it's not used anymore.
 
+.. _vp3p4p0:
+
+v3.4.0
+-------
+
+New Features
+~~~~~~~~~~~~
+- Added :meth:`fortnite_api.Client.close` and :meth:`fortnite_api.SyncClient.close` methods to close the client's HTTP session when not using a context manager.
+
+.. _vp3p3p0:
+
+v3.3.0
+-------
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+- Drop support for Python 3.9. The minimum supported Python version is now 3.10.
+
+New Features
+~~~~~~~~~~~~
+- Added support for :attr:`fortnite_api.CosmeticType.SIDEKICK`.
+
 Bug Fixes
 ~~~~~~~~~
 - Fixed an issue that caused :class:`fortnite_api.Asset.resize` to raise :class:`TypeError` instead of :class:`ValueError` when the given size isn't a power of 2.
 - Fixed an issue that caused :class:`fortnite_api.ServiceUnavailable` to be raised with a static message as a fallback for all unhandled http status codes. Instead :class:`fortnite_api.HTTPException` is raised with the proper error message.
+- Fixed typing of our internal "Enum-like" classes. They are now typed as a :class:`py:enum.Enum`.
 
+Miscellaneous
+~~~~~~~~~~~~~
+- Added official support for Python 3.14.
 
 .. _vp3p2p1:
 

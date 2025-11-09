@@ -25,7 +25,8 @@ SOFTWARE.
 from __future__ import annotations
 
 import datetime
-from typing import TYPE_CHECKING, Any, Callable, TypeVar, Union
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 K_co = TypeVar('K_co', bound='Hashable', covariant=True)
 V_co = TypeVar('V_co', covariant=True)
@@ -35,7 +36,7 @@ if TYPE_CHECKING:
     from collections.abc import Hashable
 
 try:
-    import orjson  # type: ignore
+    import orjson
 
     _has_orjson: bool = True
 except ImportError:
@@ -69,12 +70,12 @@ MISSING: Any = _MissingSentinel()
 
 if _has_orjson:
 
-    def to_json(string: Union[str, bytes]) -> dict[Any, Any]:
+    def to_json(string: str | bytes) -> dict[Any, Any]:
         return orjson.loads(string)  # type: ignore
 
 else:
 
-    def to_json(string: Union[str, bytes]) -> dict[Any, Any]:
+    def to_json(string: str | bytes) -> dict[Any, Any]:
         return json.loads(string)  # type: ignore
 
 
@@ -200,7 +201,7 @@ def _transform_dict_for_get_request(data: dict[str, Any]) -> dict[str, Any]:
             updated[key] = str(value).lower()
 
         elif isinstance(value, dict):
-            inner: dict[str, Any] = value  # narrow the dict type to pass it along (should always be [str, Any])
+            inner = cast(dict[str, Any], value)  # narrow the dict type to pass it along (should always be [str, Any])
             updated[key] = _transform_dict_for_get_request(inner)
 
         if '_' in key:
