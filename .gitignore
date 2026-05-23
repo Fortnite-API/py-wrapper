@@ -91,3 +91,6 @@ _.py
 
 # Build files
 /build/*
+
+# MacOS
+.DS_Store
