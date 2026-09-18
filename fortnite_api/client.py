@@ -28,11 +28,10 @@ import datetime
 import functools
 import inspect
 from collections.abc import Callable, Coroutine
-from typing import Any, Concatenate, Literal, ParamSpec, TypeVar, cast, overload
+from typing import Any, Concatenate, Literal, ParamSpec, Self, TypeVar, cast, overload
 
 import aiohttp
 import requests
-from typing_extensions import Self
 
 from .aes import Aes
 from .all import CosmeticsAll

@@ -25,9 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, Generic, overload
-
-from typing_extensions import Self
+from typing import TYPE_CHECKING, Any, Generic, Self, overload
 
 from .http import HTTPClientT, Route
 from .utils import MISSING

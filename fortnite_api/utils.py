@@ -82,7 +82,7 @@ else:
 def parse_time(timestamp: str) -> datetime.datetime:
     # This can happen when the API is supposed to return a timestamp but there is no timestamp to give, so it yields an improper timestamp without a UTC offset.
     if timestamp == BACKUP_TIMESTAMP:
-        return datetime.datetime.fromisoformat(timestamp).replace(tzinfo=datetime.timezone.utc)
+        return datetime.datetime.fromisoformat(timestamp).replace(tzinfo=datetime.UTC)
 
     # If the timestamp str contains ms or us, strptime with them. If not, fallback
     # to default strptime.
@@ -94,7 +94,7 @@ def parse_time(timestamp: str) -> datetime.datetime:
 
 def now() -> datetime.datetime:
     # Returns the current time in the same format as the API
-    return datetime.datetime.now(datetime.timezone.utc)
+    return datetime.datetime.now(datetime.UTC)
 
 
 def copy_doc(obj: Any) -> Callable[[T], T]:

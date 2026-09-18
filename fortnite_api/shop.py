@@ -27,9 +27,7 @@ from __future__ import annotations
 import datetime
 import re
 from collections.abc import Generator
-from typing import Any
-
-from typing_extensions import Self
+from typing import Any, Self
 
 from .abc import Hashable, ReconstructAble
 from .asset import Asset

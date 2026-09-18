@@ -25,8 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import enum
-
-from typing_extensions import Self
+from typing import Self
 
 __all__: tuple[str, ...] = ('ResponseFlags',)
 

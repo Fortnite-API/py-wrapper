@@ -27,9 +27,7 @@ from __future__ import annotations
 
 import types
 from collections.abc import Iterator, Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, TypeVar
-
-from typing_extensions import Self
+from typing import TYPE_CHECKING, Any, ClassVar, Self, TypeVar
 
 __all__: tuple[str, ...] = (
     'KeyFormat',

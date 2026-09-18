@@ -25,9 +25,9 @@ SOFTWARE.
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Iterator
-from typing import TYPE_CHECKING, Generic, SupportsIndex, cast, overload
+from typing import TYPE_CHECKING, Generic, Self, SupportsIndex, cast, overload
 
-from typing_extensions import Self, TypeVar
+from typing_extensions import TypeVar
 
 T = TypeVar('T')
 K_co = TypeVar('K_co', covariant=True, default='str')
