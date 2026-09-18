@@ -10,9 +10,17 @@ Changelog
 v3.4.0
 -------
 
+Breaking Changes
+~~~~~~~~~~~~~~~~
+- Drop support for Python 3.10. The minimum supported Python version is now 3.11.
+
 New Features
 ~~~~~~~~~~~~
 - Added :meth:`fortnite_api.Client.close` and :meth:`fortnite_api.SyncClient.close` methods to close the client's HTTP session when not using a context manager.
+
+Miscellaneous
+~~~~~~~~~~~~~
+- Added official support for Python 3.15.
 
 .. _vp3p3p0:
 
